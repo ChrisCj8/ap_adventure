@@ -1,0 +1,12 @@
+"apadventure"
+{
+    "base"  "sandbox"
+    "title" "apAdventure"
+    "maps" "^apadv_"
+    "category"  "pve"
+    "menusystem" "1"
+
+    "settings" {
+        
+    }
+}

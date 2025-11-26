@@ -1,0 +1,2 @@
+
+apAdventure = apAdventure or {}

@@ -1,0 +1,4 @@
+VertexLitGeneric {
+    $color2 "[1 1 1]"
+    $lightwarptexture "apadventure/models/frame_lightwarp"
+}
