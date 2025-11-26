@@ -63,16 +63,11 @@ class GMADVMap:
 def reachtest(canreach: set,checked: set):
     done = True
     newreach = canreach.copy()
-    #print(f"current reach: {str(canreach)}")
     for reg in canreach:
         if not reg in checked:
             done = False
             for exit in reg.exits:
                 newreach.add(exit.connected_region)
-                #print(f"{reg} is connected to {exit.connected_region}")
-            """ for targetreg in reg.onewayouts.values():
-                newreach.add(targetreg)
-                print(f"{reg} is connected to {targetreg}") """
             checked.add(reg)
     if done:
         return newreach
@@ -96,10 +91,6 @@ class GMADVWorld(World):
     duplicate_item_names = processout[3]
     map_table = processout[4]
     location_name_to_id = processout[5]
-
-    #item_name_to_id = {}
-
-    #location_name_to_id = {}
 
     locs = int(0)
     itemtypes = int(1)
@@ -157,103 +148,12 @@ class GMADVWorld(World):
         for gr in cfggroups:
             print(gr)
 
-        #chosencfgr = self.options.config_groups
-
         self.bhop = self.options.bhop
 
         if self.bhop ==  1:
             self.bhop_logic = False
         else:
             self.bhop_logic = self.options.bhop_logic
-
-        #foundgroups = 0
-
-        """ for gr in chosencfgr:
-            grdir = cfgdir+gr
-            if os.path.isdir(grdir):
-                print("found group "+gr+" at "+grdir)
-                foundgroups += 1
-        
-                groupmaps = os.listdir(grdir)
-
-                for map in groupmaps:
-                    if map in self.maps:
-                        print("map "+map+" already processed, skipping")
-                        continue
-
-                    print("processing "+map)
-
-                    newmap = GMADVMap(map,gr)
-                    mapdir = grdir+"/"+map
-                    if not os.path.isfile(mapdir+"/sav.json"):
-                        self.add_warning(f"could not find serverside save for {map} from {gr}")
-                        continue
-                    if not os.path.isfile(mapdir+"/sav_cl.json"):
-                        self.add_warning(f"could not find clientside save for {map} from {gr}")
-                        continue
-                    cljson = json.load(open(mapdir+"/sav_cl.json"))
-
-                    if "info" in cljson:
-                        newmap.info = cljson["info"]
-
-                    for k,v in cljson["reg"].items():
-                        v["lctns"] = dict()
-                        newmap.regions[k] = v
-
-                    if not newmap.regions:
-                        self.add_warning(f"map {map} from {gr} has no regions, discarded")
-                        continue
-                    
-                    newmap.internalConnections = cljson["connect"]
-
-                    svjson = json.load(open(mapdir+"/sav.json"))
-
-                    for k,v in svjson["entr"].items():
-                        if v in newmap.regions:
-                            newmap.entrances[k] = v
-                            print("adding entrace "+k+" to map "+map)
-                        else: 
-                            self.add_warning(f"map {map} from {gr} has an entrance placed in non-existing region \"{k}\"")
-
-                    if not newmap.entrances:
-                        self.add_warning(f"map {map} from {gr} has no entrances, discarded")
-                        continue
-                    
-                    for k,v in svjson["exit"].items():
-                        if v in newmap.regions:
-                            newmap.exits[k] = v
-                        else: 
-                            self.add_warning(f"map {map} from {gr} has an exit placed in non-existing region \"{k}\"")
-
-                    if "lctn" in svjson and isinstance(svjson["lctn"], dict): # should probably have these removed completely if they're empty so i don't have to check if they're a dict
-                        for k,v in svjson["lctn"].items():
-                            if k in newmap.regions:
-                                newmap.regions[k]["lctns"] = v
-                            else:
-                                self.add_warning(f"map {map} from {gr} has locations assigned to non-existing region \"{k}\"")
-
-                    if "start" in svjson:                    
-                        for k,v in svjson["start"].items():
-                            if k in newmap.regions:
-                                newmap.regions[k]["startcandidate"] = True
-                            else:
-                                self.add_warning(f"map {map} from {gr} has starts defined for non-existing region \"{k}\"")
-
-                    if "item" in cljson:
-                        newmap.items = cljson["item"]
-
-                    self.maps[map] = newmap
-                    del newmap, cljson, svjson
-            else:
-                print("couldn't find group "+gr+" at "+grdir)
-
-        if foundgroups == 0:
-            raise RuntimeError(self.player_name+" has no valid config groups in their yaml")
-
-        for k,map in self.maps.items():
-            print(f"{map.bspname}\tRegions: {str(len(map.regions))}\tEntrances: {str(len(map.entrances))}\tExits: {str(len(map.exits))}")
-            for k,v in map.entrances.items():
-                print(k,v) """
 
     def create_item(self, name):
         data = self.item_table[name]
@@ -298,10 +198,7 @@ class GMADVWorld(World):
                     newreg = Region(f"{map.group} - {map.bspname} - {k}",self.player,self.multiworld)
                     reglocs = list()
                     for ik,iv in v["lctns"].items():
-                        #self.__class__.locs += 1
                         newlocname = f"{map.group} - {map.bspname} - {ik}"
-                        #self.location_name_to_id[newlocname] =  self.locs
-                        
                         reglocs.append(GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],newreg))
                         self.locallocs += 1
                     newreg.priotize_entrances = False
@@ -330,13 +227,10 @@ class GMADVWorld(World):
 
                     print("creating region "+map.bspname+" - "+ k)
 
-                
-
                 for k,v in map.entrances.items():
                     reg = mapregs[v]
                     reg.has_entr = True
                     name = reg.name+" - "+k
-                    #entr = reg.create_exit(name)
                     entrs[name] = reg
                     reg.onewayins[name] = reg
                     print("adding exit "+k+" to "+v)
@@ -345,11 +239,6 @@ class GMADVWorld(World):
                     reg = mapregs[v]
                     reg.has_exit = True
                     name = reg.name+" - "+k
-                    #exit = reg.create_er_target(name)
-                    if name in entrs:
-                        pass
-                        #entrs[name].randomization = 2
-                        #exit.randomization_type = 2
                     if name in reg.onewayins:
                         del reg.onewayins[name]
                         reg.twoways[name] = reg
@@ -358,13 +247,6 @@ class GMADVWorld(World):
 
 
                 for k,v in mapregs.items():
-                    """ print(self.locs,len(self.location_name_to_id))
-                    self.__class__.locs += 1
-                    newlocname = map.bspname+" - "+str(self.locs)
-                    self.location_name_to_id[self.locs] = newlocname
-                    print("locs: "+str(self.locs),len(self.location_name_to_id))
-                    v.locations = [GMADVLocation(self.player,newlocname,None,v)]
-                    self.locallocs += 1 """
                     self.multiworld.regions.append(v)
 
                 for k,v in map.internalConnections.items():
@@ -409,72 +291,10 @@ class GMADVWorld(World):
             while i < info["amt"]:
                 itempool.append(self.create_item(iname))
                 i += 1
-                
-        """ gmodpath = get_settings().gmadv_options.gmodpath
-        defdir = gmodpath+"/garrysmod/data/apadventure/itemdefs/" """
 
         chosenisets = self.options.item_sets
 
         for isetname in chosenisets:
-
-            """ if not iset in self.registereditemsets:
-                setpath = defdir+iset+".json"
-                if os.path.isfile(setpath):
-                    setjson = json.load(open(setpath))
-                    setname = setjson["name"]
-                    newiset = GMADVItemSet(iset,setname)
-                    if "items" in setjson and isinstance(setjson["items"], dict):
-                        for iname, idef in setjson["items"].items():
-                            self.__class__.itemtypes += 1
-                            newitemname = f"{iname} - {setname}"
-                            itemclass = 0
-                            if "ammocapab" in idef or "capab" in idef:
-                                itemclass = itemclass | 1
-
-                             if newitemname in self.item_name_to_id:
-                                newitemname = f"{iname} - {setname}" 
-                            self.item_name_to_id[newitemname] = self.itemtypes
-                            self.item_table[newitemname] = (self.itemtypes,ItemClassification(itemclass))
-                            newitem = SetItem(self.itemtypes,newitemname,idef)
-                            print("added item "+newitemname)
-                            newiset.items.append(newitem)
-
-                            
-                    self.registereditemsets[iset] = newiset
- """
-            """ if iset in self.registereditemsets:        
-                for item in self.registereditemsets[iset].items:
-                    if "wgt" in item.info:
-                        self.fillers[item.name] = item.info["wgt"]
-                        self.filleramt += 1
-                    if "min" in item.info and item.info["min"] > 0:
-                        i = 0
-                        while i < item.info["min"]:
-                            itempool.append(self.create_item(item.name))
-                            i += 1
-                    if "capab" in item.info:
-                        finalcapabs = set()
-                        for capab in item.info["capab"]:
-                            finalcapabs.add(capab)
-                            if capab in impliedcapabilities:
-                                for cap in impliedcapabilities[capab]:
-                                    finalcapabs.add(cap)
-                        capabentry = CapabTblEntry(item.name,finalcapabs)
-                        for capab in finalcapabs:
-                            if not capab in self.capabilitytbl:
-                                self.capabilitytbl[capab] = list()
-                            
-                            self.capabilitytbl[capab].append(capabentry)
-                    if "ammocapab" in item.info:
-                        print(item.info["ammocapab"])
-                        for ammotype,capabs in item.info["ammocapab"].items():
-                            if not ammotype in self.ammocapabilitytbl:
-                                self.ammocapabilitytbl[ammotype] = dict()
-                            self.ammocapabilitytbl[ammotype][item.name] = capabs
-
-                self.loadeditemsets.append(iset)
-            else:
-                self.add_warning(f"itemset {iset} could not be loaded") """
             
             if isetname in self.item_set_table:        
                 iset = self.item_set_table[isetname]
@@ -519,10 +339,6 @@ class GMADVWorld(World):
                 self.loadeditemsets.append(isetname)
             else:
                 self.add_warning(f"itemset {isetname} could not be loaded")
-                
-            
-                        
-            
 
         if len(itempool) < self.locallocs:
             missingitems = self.locallocs - len(itempool)
@@ -697,225 +513,6 @@ class GMADVWorld(World):
 
         self.debuglog(f"dead ends left after first placements: {str(deadends)}")
 
-        """ conngroup = startpick.region.connectiongroup
-        unplacedconnectiongroups.discard(conngroup)
-        for entr, reg in conngroup.entr.items():
-            unconnectedentrs[entr] = reg
-        for exit, reg in conngroup.exit.items():
-            unconnectedexits[exit] = reg
-        for twoway, reg in conngroup.twoway.items():
-            unconnectedtwoways[twoway] = reg """
-
-        """ need_multi_entr = dict()
-        highest_entr_req = 1
-        entr_reqs = set()
-        multientrsleft = 0
-        deadends = list()
-        #noreturndeadends = list()
-        straights = list()
-        junctions = list()
-
-        for conngroup in unplacedconnectiongroups:
-            openingreq = conngroup.openings_needed
-            entrcount = len(conngroup.entr)
-            exitcount = len(conngroup.exit)
-            twowaycount = len(conngroup.twoway)
-            #outcount = exitcount + twowaycount
-            incount = entrcount + twowaycount
-            if openingreq > 1:
-                if not openingreq in need_multi_entr:
-                    need_multi_entr[openingreq] = list()
-                    entr_reqs.add(openingreq)
-                need_multi_entr[openingreq].append
-                multientrsleft += 1
-                if highest_entr_req < openingreq:
-                    highest_entr_req = openingreq
-
-
-            elif incount == 1 and exitcount == 0:
-               # if twowaycount == 1:
-                    deadends.append(conngroup)
-                #else:
-                #    noreturndeadends.append(conngroup)
-            elif (twowaycount == 1 and exitcount == 1) or (twowaycount == 2 and exitcount == 0):
-                straights.append(conngroup)
-            else:
-                junctions.append(conngroup)
-
-        conngroupsleft = len(unplacedconnectiongroups)
-
-        done = False
-
-        
-
-        failedactions = set()
-
-        while not done:
-            availabletwoways = len(unconnectedtwoways)
-            availableexits = len(unconnectedexits)
-            connectables = availabletwoways + availableexits
-            
-            deadendsleft = len(deadends)
-            junctionsleft = len(junctions)
-            straightsleft = len(straights)
-            action = "done"
-            
-            possibleactions = set()
-
-            if connectables < highest_entr_req:
-                if junctionsleft > 0 and not "junction" in failedactions:
-                    action = "junction"
-                else:
-                    if highest_entr_req == 1:
-                        if straightsleft > 0 and not "straight" in failedactions:
-                            action = "straight"
-                        elif deadendsleft > 0 and not "deadend" in failedactions:
-                            action = "deadend"
-
-            elif connectables == highest_entr_req:
-                if junctionsleft > 0 and not "junction" in failedactions:
-                    possibleactions.add("junction")
-                if straightsleft > 0 and not "straight" in failedactions:
-                    possibleactions.add("straight")
-
-            else:
-                if multientrsleft > 0 and not "multentr" in failedactions:
-                    possibleactions.add("multientr")
-                if junctionsleft > 0 and not "junction" in failedactions:
-                    possibleactions.add("junction")
-                if straightsleft > 0 and not "straight" in failedactions:
-                    possibleactions.add("straight")
-                if deadendsleft > 0 and not "deadend" in failedactions:
-                    possibleactions.add("deadend")
-                    
-            if action != "done" and len(possibleactions) != 0:
-                action = rand.choice(list(possibleactions))
-            
-            action2block = {
-                "junction":junctions,
-                "straight":straights,
-                "deadend":deadends,
-            }
-
-            self.add_warning(f"action: {action}")
-
-            match action:
-                case "junction" | "straight" | "deadend":
-                    unfinished = True
-                    untried = action2block[action].copy()
-                    untriedamt = len(untried) - 1
-                    while unfinished:
-                        pick = 0 
-                        if untriedamt > 0:
-                            pick = rand.randint(0,untriedamt)
-                        print(pick,untried)
-                        block = untried[pick]
-                        untried.pop(pick)
-                        untriedamt -= 1
-                        
-
-                        if availabletwoways > 0 and block.connectfirst.twoways:
-                            connfirst: Region = block.connectfirst
-                            key1 = rand.choice(list(unconnectedtwoways.keys()))
-                            key2 = rand.choice(list(connfirst.twoways.keys()))
-
-                            reg1: Region = unconnectedtwoways[key1]
-                            reg2: Region = connfirst
-
-                            reg1.connect(reg2)
-                            reg2.connect(reg1)
-                            self.entranceinfo.append((key1,key2))
-                            self.entranceinfo.append((key2,key1))
-                            self.add_warning(f"{key1} connected to {key2}")
-
-                            del unconnectedtwoways[key1]
-                            del block.twoway[key2]
-
-                            for entr, reg in block.entr.items():
-                                unconnectedentrs[entr] = reg
-                            for exit, reg in block.exit.items():
-                                unconnectedexits[exit] = reg
-                            for twoway, reg in block.twoway.items():
-                                unconnectedtwoways[twoway] = reg
-
-                            action2block[action].remove(block)
-                            unplacedconnectiongroups.remove(block)
-                            #junctionsleft -= 1
-                            unfinished = False
-                            failedactions = set()
-                        elif availableexits > 0 and block.connectfirst.onewayins:
-                            connfirst: Region = block.connectfirst
-                            key1 = rand.choice(list(unconnectedexits.keys()))
-                            key2 = rand.choice(list(connfirst.onewayins.keys()))
-
-                            reg1 = unconnectedexits[key1]
-                            reg2 = connfirst
-
-                            reg1.connect(reg2)
-                            self.entranceinfo.append((key1,key2))
-
-                            del unconnectedexits[key1]
-                            del block.entr[key2]
-
-                            for entr, reg in block.entr.items():
-                                unconnectedentrs[entr] = reg
-                            for exit, reg in block.exit.items():
-                                unconnectedexits[exit] = reg
-                            for entr, reg in block.entr.items():
-                                unconnectedtwoways[entr] = reg
-
-                            action2block[action].remove(block)
-                            #junctionsleft -= 1
-                            unfinished = False
-                            failedactions = set()
-                        elif availableexits > 0 and block.connectfirst.twoways:
-                            connfirst: Region = block.connectfirst
-                            key1 = rand.choice(list(unconnectedexits.keys()))
-                            key2 = rand.choice(list(connfirst.twoways.keys()))
-
-                            reg1 = unconnectedexits[key1]
-                            reg2 = connfirst
-
-                            reg1.connect(reg2)
-                            self.entranceinfo.append((key1,key2))
-
-                            del unconnectedexits[key1]
-                            del block.twoway[key2]
-
-                            for entr, reg in block.entr.items():
-                                unconnectedentrs[entr] = reg
-                            for exit, reg in block.exit.items():
-                                unconnectedexits[exit] = reg
-                            for entr, reg in block.entr.items():
-                                unconnectedtwoways[entr] = reg
-
-                            action2block[action].remove(block)
-                            #junctionsleft -= 1
-                            unfinished = False
-                            failedactions = set()
-                        
-                        if untriedamt <= 0:
-                            failedactions.add(action)
-                            unfinished = False                    
-                case "done":
-                    done = True
-
-
-            if conngroupsleft == 0:
-                done = True
-            
-
-        for conngroup in unplacedconnectiongroups:
-            for entr, reg in conngroup.entr.items():
-                unconnectedentrs[entr] = reg
-            for exit, reg in conngroup.exit.items():
-                unconnectedexits[exit] = reg
-            for twoway, reg in conngroup.twoway.items():
-                unconnectedtwoways[twoway] = reg
-
-
-         """
-
         self.add_warning(f"Unconnected Entrances: {str(unconnectedentrs)}")
         self.add_warning(f"Unconnected Exits: {str(unconnectedexits)}")
         self.add_warning(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
@@ -969,18 +566,6 @@ class GMADVWorld(World):
             entrsleft -= 1
             exitsleft -= 1
 
-
-        """ for entr, reg in unconnectedentrs.items():
-            reg.create_exit(entr)
-        for exit, reg in unconnectedexits.items():
-            reg.create_er_target(exit)
-        for twoway, reg in unconnectedtwoways.items():
-            reg.create_exit(twoway)
-            reg.create_er_target(twoway) """
-
-        """ self.add_warning(f"Dead Ends: {str(deadends)}")
-        self.add_warning(f"Straights: {str(straights)}")
-        self.add_warning(f"Junctions: {str(junctions)}") """
         self.add_warning(f"Unconnected Entrances: {str(unconnectedentrs)}")
         self.add_warning(f"Unconnected Exits: {str(unconnectedexits)}")
         self.add_warning(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
@@ -991,8 +576,6 @@ class GMADVWorld(World):
         print("connecting ",startreg, menu)
         startreg.connect(menu)
         menu.connect(startreg)
-
-        #self.ERPlacements = randomize_entrances(self,True,{0:[0]})
 
         
 
@@ -1012,7 +595,6 @@ class GMADVWorld(World):
         slotdata = {
             "bhop":int(self.bhop),
             "skill":int(self.options.skill),
-            #"entrances":self.ERPlacements.pairings,
             "entrances":self.entranceinfo,
             "cfgs":cfgs,
             "itemsets":self.loadeditemsets,

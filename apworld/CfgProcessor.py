@@ -187,11 +187,6 @@ def ProcessCfgs(settings):
 
     if foundgroups == 0:
         raise RuntimeError("could not find any valid config groups")
-
-    """ for k,map in self.maps.items():
-        print(f"{map.bspname}\tRegions: {str(len(map.regions))}\tEntrances: {str(len(map.entrances))}\tExits: {str(len(map.exits))}")
-        for k,v in map.entrances.items():
-            print(k,v) """
     
     print(str(item_set_table))
     
