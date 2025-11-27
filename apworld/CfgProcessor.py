@@ -4,10 +4,8 @@ import json
 from BaseClasses import ItemClassification
 
 
-def ProcessCfgs(settings):
-    print("processing stuff")
-    #gmodpath = settings.gmadv_options.gmodpath
-    gmodpath = "P:/SteamLibrary/steamapps/common/GarrysMod"
+def ProcessCfgs():
+    gmodpath = get_settings().gmod_apadv_options["gmodpath"]
 
     defdir = gmodpath+"/garrysmod/data/apadventure/itemdefs/"
     defgroups = os.listdir(defdir)

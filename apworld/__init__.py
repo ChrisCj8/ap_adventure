@@ -81,7 +81,7 @@ class GMADVWorld(World):
 
     game = "gmAdventure"
 
-    processout = ProcessCfgs(get_settings())
+    processout = ProcessCfgs()
 
     # i hate this
 
@@ -140,13 +140,6 @@ class GMADVWorld(World):
             self.debuginfo = list()
         else:
             self.dodebug = False
-
-        gmodpath = get_settings().gmadv_options.gmodpath
-        cfgdir = gmodpath+"/garrysmod/data/apadventure/cfgs/ap/"
-        cfggroups = os.listdir(cfgdir)
-
-        for gr in cfggroups:
-            print(gr)
 
         self.bhop = self.options.bhop
 
