@@ -70,6 +70,8 @@ local dp_loaded = dp_loaded or false
 
 function ApAdvDPLoad(slot,datapackage)
     dp_loaded = true
+    APADV_DATAPACK = datapackage
+    APADV_DATAPACK_LOCAL = datapackage.games.gmAdventure
     if APADV_SLOT.slotData and !handlers_registered then
         ApAdvRegisterItemHandlers()
     end
