@@ -40,23 +40,25 @@ function ApAdvRegisterItemHandlers()
         for ik,iv in ipairs(setfiles) do
             local itemtbl = include(setpath.."/"..iv)
             local itemid = toID[itemtbl.Name.." - "..setdata.Name]
-            if itemtbl.OneUse then
-                handle[itemid] = function(iList)
-                    if !APADV_ITEMSUSED[itemid] or APADV_ITEMSUSED[itemid] < #iList then
-                        local redeem = itemtbl.RedeemCheck()
-                        print(itemtbl.Name,"redeem:",redeem)
-                        if redeem == true then
-                            itemtbl.Redeem()
-                            APADV_ITEMSUSED[itemid] = (APADV_ITEMSUSED[itemid] or 0) + 1
-                            handle[itemid](iList)
-                        elseif isnumber(redeem) then
-                            timer.Simple(redeem,function() handle[itemid](iList) end)
+            if itemid then
+                if itemtbl.OneUse then
+                    handle[itemid] = function(iList)
+                        if !APADV_ITEMSUSED[itemid] or APADV_ITEMSUSED[itemid] < #iList then
+                            local redeem = itemtbl.RedeemCheck()
+                            print(itemtbl.Name,"redeem:",redeem)
+                            if redeem == true then
+                                itemtbl.Redeem()
+                                APADV_ITEMSUSED[itemid] = (APADV_ITEMSUSED[itemid] or 0) + 1
+                                handle[itemid](iList)
+                            elseif isnumber(redeem) then
+                                timer.Simple(redeem,function() handle[itemid](iList) end)
+                            end
                         end
                     end
-                end
-            elseif itemtbl.Weapon then
-                handle[itemid] = function(iList)
-                    ApAdvWeps.SetAvailable(itemtbl.Class,iList[1] != nil)
+                elseif itemtbl.Weapon then
+                    handle[itemid] = function(iList)
+                        ApAdvWeps.SetAvailable(itemtbl.Class,iList[1] != nil)
+                    end
                 end
             end
         end
