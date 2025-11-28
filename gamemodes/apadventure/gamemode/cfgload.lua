@@ -76,12 +76,24 @@ function LoadCfg(group)
             timer.Simple(2,function() exit:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name].map) end) 
         end
     end
+
+    local loclist = APADV_SLOT.Locations
+    local locnametoid
+    if APADV_DATAPACK_LOCAL and APADV_SLOT.Connected and loclist then 
+        locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+    end
+
     for k,v in pairs(cfg.lctn) do
-        local loc = ents.Create("apadventure_location")
-        loc:SetPos(v.pos)
-        loc:SetAngles(v.ang)
-        loc.LocationName = group .. " - " .. map .. " - " .. v.name
-        loc:Spawn()
+        local locname = group .. " - " .. map .. " - " .. v.name
+        -- prevents already checked locations from being placed, but this only works if we're connected when the config is loaded
+        -- so this doesn't work all the time since the gamemode doesn't wait for the slot to reconnect when doing a map transition
+        if !locnametoid or !loclist[locnametoid[locname]] then 
+            local loc = ents.Create("apadventure_location")
+            loc:SetPos(v.pos)
+            loc:SetAngles(v.ang)
+            loc.LocationName = locname
+            loc:Spawn()
+        end
     end
 
     for k,v in ipairs(player.GetAll()) do
