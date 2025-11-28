@@ -36,6 +36,8 @@ util.AddNetworkString("APAdvAreaPortalInfo")
 
 local editcfg = apAdventure.EditCfg
 
+local playingApAdv = engine.ActiveGamemode() == "apadventure"
+
 function apAdventure.DelMark(ent,state)
     local cID = ent:MapCreationID()
     if cID == -1 then return false end
@@ -328,8 +330,8 @@ local patchchangelevelcvar = CreateConVar("apadventure_patch_changelevel",0,FCVA
 
 local function UseCapturedKeyVals()
     --PrintTable(changelevelinfo)
-    for k,v in pairs(changelevelinfo) do
-        if v.classname == "trigger_changelevel" and patchchangelevelcvar:GetBool() then
+    if patchchangelevelcvar:GetBool() or playingApAdv then
+        for k,v in pairs(changelevelinfo) do
             local oldpos = k:GetPos()
             local oldang = k:GetAngles() -- not sure if copying angles is actually necessary, but just in case
             k:Remove()
