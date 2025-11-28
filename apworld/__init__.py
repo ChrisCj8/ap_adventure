@@ -8,7 +8,7 @@ from .Options import GMADVGameOptions
 from .JsonRule import eval_json_rule
 from settings import get_settings
 from entrance_rando import randomize_entrances
-from .ImpliedCapabilities import impliedcapabilities
+from .ImpliedCapabilities import ProcessCapabs
 #from .CfgProcessor import item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table
 from .CfgProcessor import ProcessCfgs
 
@@ -311,12 +311,7 @@ class GMADVWorld(World):
                             itempool.append(self.create_item(item.name))
                             i += 1
                     if "capab" in item.info:
-                        finalcapabs = set()
-                        for capab in item.info["capab"]:
-                            finalcapabs.add(capab)
-                            if capab in impliedcapabilities:
-                                for cap in impliedcapabilities[capab]:
-                                    finalcapabs.add(cap)
+                        finalcapabs = ProcessCapabs(set(item.info["capab"]))
                         capabentry = CapabTblEntry(name,finalcapabs)
                         for capab in finalcapabs:
                             if not capab in self.capabilitytbl:
@@ -328,7 +323,7 @@ class GMADVWorld(World):
                         for ammotype,capabs in item.info["ammocapab"].items():
                             if not ammotype in self.ammocapabilitytbl:
                                 self.ammocapabilitytbl[ammotype] = dict()
-                            self.ammocapabilitytbl[ammotype][name] = capabs
+                            self.ammocapabilitytbl[ammotype][name] = ProcessCapabs(set(capabs))
                 self.loadeditemsets.append(isetname)
             else:
                 self.add_warning(f"itemset {isetname} could not be loaded")
