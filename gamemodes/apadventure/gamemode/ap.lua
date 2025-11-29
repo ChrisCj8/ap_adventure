@@ -42,8 +42,9 @@ function ApAdvRegisterItemHandlers()
             local itemid = toID[itemtbl.Name.." - "..setdata.Name]
             if itemid then
                 if itemtbl.OneUse then
+                    APADV_ITEMSUSED[itemid] = APADV_ITEMSUSED[itemid] or 0
                     handle[itemid] = function(iList)
-                        if !APADV_ITEMSUSED[itemid] or APADV_ITEMSUSED[itemid] < #iList then
+                        if APADV_ITEMSUSED[itemid] < #iList then
                             local redeem = itemtbl.RedeemCheck()
                             print(itemtbl.Name,"redeem:",redeem)
                             if redeem == true then
@@ -65,6 +66,12 @@ function ApAdvRegisterItemHandlers()
     end
 
     handlers_registered = true
+
+    local empty = {} -- kinda hacky but this means item handlers don't have to do nil checks
+
+    for k,v in pairs(handle) do
+        v(APADV_SLOT.Items[k] or empty)
+    end
 end
 
 local dp_loaded = dp_loaded or false
