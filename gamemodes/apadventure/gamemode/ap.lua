@@ -119,16 +119,14 @@ end
 local function OnRunID(packet)
     PrintTable(packet)
     local runid = packet.value
-    if APADV_RUNID == runid then
-        
-    else
+    if APADV_RUNID != runid then
         
         local slotdata = APADV_SLOT.slotData
         local room = APADV_SLOT.Room
 
         APADV.InitSaveData(runid)
-
-        if !APADV_TRANSITIONED then
+        
+        if APADV_RUNID or !next(ApAdv_LastMapTbl) then
             local map = game.GetMap()
             if map == slotdata.startmap then
                 APADV_USESTART = slotdata.startregion
