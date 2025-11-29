@@ -20,7 +20,20 @@ APADV_EXITENTS = APADV_EXITENTS or {}
 
 function DoMapTransition(map,group,entrname)
     local curmap = game.GetMap()
+    local slotdata
+    if APADV_SLOT and APADV_SLOT.slotData then
+        slotdata = APADV_SLOT.slotData
+    end
     if map == curmap then
+        if entrname then
+            ApAdv_EntrName = entrname
+            APADV_USESTART = nil
+        else
+            if slotdata then
+                APADV_USESTART = slotdata.startregion
+            end
+            ApAdv_EntrName = nil
+        end
         LoadCfg(group)
         return
     end
@@ -31,7 +44,7 @@ function DoMapTransition(map,group,entrname)
         addr = APADV_SLOT.address,
         name = APADV_SLOT.slotName,
         pw = APADV_SLOT.password, 
-        sd = APADV_SLOT.slotData
+        sd = slotdata
     }
     ApAdv_NextMapTbl.loadcfg = {
         m = map,
@@ -44,6 +57,8 @@ function DoMapTransition(map,group,entrname)
         APADV_SAVEDATA.visited[map] = APADV_SAVEDATA.visited[map] or {}
         APADV_SAVEDATA.visited[map][group] = APADV_SAVEDATA.visited[map][group] or {}
         APADV_SAVEDATA.visited[map][group][entrname] = true 
+    elseif slotdata and slotdata.start == curmap then
+        ApAdv_NextMapTbl.SentToStart = slotdata.startregion
     end
 
     game.SetGlobalCounter("ApAdvLevelTrans",checknum)
@@ -56,7 +71,6 @@ if file.Exists("apadventure/leveltransdata.json","DATA") then
     if checknum != 0 then
         local lastmaptbl = util.JSONToTable(file.Read("apadventure/leveltransdata.json","DATA"))
         if lastmaptbl.checknum == checknum then
-            APADV_TRANSITIONED = true
             ApAdv_LastMapTbl = lastmaptbl
 
             if lastmaptbl.SentToStart then
