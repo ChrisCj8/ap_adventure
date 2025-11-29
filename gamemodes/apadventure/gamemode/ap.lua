@@ -161,10 +161,13 @@ local function OnRunID(packet)
             }
         end
 
-        for k,v in pairs(APADV_EXITENTS) do
-            if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v] then 
-                -- the Advanced Color Tool throws errors if this isn't wrapped in a timer
-                timer.Simple(1,function() k:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v].map) end)
+        if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] then
+            local mapexits = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]
+            for k,v in pairs(APADV_EXITENTS) do
+                if mapexits[v] then 
+                    -- the Advanced Color Tool throws errors if this isn't wrapped in a timer
+                    timer.Simple(1,function() k:SetMapIcon(mapexits[v].map) end)
+                end
             end
         end
 
