@@ -450,6 +450,7 @@ return function(window)
                     curnode.tbl.nodes[newkey] = tbl
                     node.tbl = tbl
                     node.tblkey = newkey
+                    curnode:ExpandRecurse(true)
                 end
             end
 
@@ -480,6 +481,7 @@ return function(window)
                         v:Remove()
                     end
                     addnodes(parentnode,newtbl)
+                    parentnode:ExpandRecurse(true)
                 end
             end
 
@@ -527,6 +529,7 @@ return function(window)
                 basenode.tbl = access
                 if access.nodes then
                     addnodes(basenode,access.nodes)
+                    basenode:ExpandRecurse(true)
                 end
             end
         end
