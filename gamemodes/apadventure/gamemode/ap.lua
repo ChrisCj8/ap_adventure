@@ -9,6 +9,28 @@ function ApAdvItemHandler(slot,id,itemlist)
     
 end
 
+APADV_LOCENTS = APADV_LOCENTS or {}
+
+local function ApAdvLocationHandler(slot,id,state)
+    local locname = APADV_DATAPACK_LOCAL.location_id_to_name[id]
+    if !locname then 
+        ErrorNoHalt("Received a Location update for an ID that's not in the DataPackage")
+        return 
+    end
+    local loctbl = APADV_LOCENTS[locname]
+    if loctbl and state then
+        for k,v in pairs(loctbl) do
+            if IsValid(k) then
+                k:Remove()
+            end
+            loctbl[k] = nil
+        end
+        if !next(loctbl) then
+            APADV_LOCENTS[locname] = nil
+        end
+    end
+end
+
 local handlers_registered = handlers_registered or false
 
 APADV_ITEMSUSED = APADV_ITEMSUSED or {}
@@ -118,6 +140,7 @@ function ApAdvCreateApSlot(addr,slotn,pw,slotdata)
 
         APADV_SLOT.OnItemUpdate = ApAdvItemHandler
         APADV_SLOT.OnDataPackageLoad = ApAdvDPLoad
+        APADV_SLOT.OnLocationUpdate = ApAdvLocationHandler
 
         APADV_SLOT:Connect()
     end

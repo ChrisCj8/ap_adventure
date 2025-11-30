@@ -91,7 +91,7 @@ function LoadCfg(group)
             local loc = ents.Create("apadventure_location")
             loc:SetPos(v.pos)
             loc:SetAngles(v.ang)
-            loc.LocationName = locname
+            loc:SetupLocation(locname)
             loc:Spawn()
         end
     end

@@ -4,6 +4,8 @@ ENT.PrintName = "apAdventure Location"
 
 DEFINE_BASECLASS("base_gmodentity")
 
+APADV_LOCENTS = APADV_LOCENTS or {}
+
 function ENT:Initialize()
     BaseClass.Initialize(self)
     self:SetModel("models/hunter/blocks/cube05x05x05.mdl")
@@ -38,6 +40,23 @@ function ENT:StartTouch(ent)
     if !collecttouch then return end
     local sent = ApAdvSendLocation(self.LocationName)
     if sent then self:Remove() end
+end
+
+--removing old location entity table entries might be a little overkill since
+--there's not really any scenario in which they should exist but whatever
+function ENT:SetupLocation(lctnname)
+    local oldloc = self.LocationName
+    local oldloctbl = APADV_LOCENTS[oldloc] 
+    if oldloctbl and oldloctbl[self] then
+        oldloctbl[self] = nil
+        if !next(oldloctbl) then
+            APADV_LOCENTS[oldloc] = nil
+        end
+    end
+
+    self.LocationName = lctnname
+    APADV_LOCENTS[lctnname] = APADV_LOCENTS[lctnname] or {}
+    APADV_LOCENTS[lctnname][self] = true
 end
 
 --[[ function ENT:EndTouch(ent)
