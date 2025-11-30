@@ -22,7 +22,7 @@ function ENT:Initialize()
     self:SetTrigger(true) ]]
 end
 
-local function IsCollector() end
+local IsCollector
 
 local function IsCollector(ent)
     if !IsValid(ent) then return false end
