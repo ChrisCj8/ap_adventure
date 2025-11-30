@@ -437,7 +437,7 @@ return function(window)
                 print(curnode,nodename,nodedata,nodetype)
                 if !IsValid(curnode) then
                     local rootnode = conaccesstree:Root()
-                    if !rootnode then return else
+                    if !rootnode or rootnode:GetChildNodeCount() > 0 then return else
                         local node = conaccesstree:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
                         local tbl = nodetype.InitNode()
                         node.tbl = tbl
