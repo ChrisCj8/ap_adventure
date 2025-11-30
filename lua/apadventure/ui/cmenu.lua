@@ -413,6 +413,21 @@ return function(window)
                 conaccessnodeselect:AddChoice(k,k)
             end
 
+            local addnodes
+
+            function addnodes(base,tbl)
+                --print("adding nodes")
+                --PrintTable(tbl)
+                for k,v in ipairs(tbl) do
+                    local node = base:AddNode(v.type,nodetypes[v.type].Icon or "icon16/bullet_black.png")
+                    node.tbl = v
+                    node.tblkey = k
+                    if v.nodes then
+                        addnodes(node,v.nodes)
+                    end
+                end
+            end
+
             local conaccessaddbtn = ImageButton(coneditpnl,"icon16/add.png")
             function conaccessaddbtn:DoClick()
                 local curnode = conaccesstree:GetSelectedItem()
@@ -431,24 +446,40 @@ return function(window)
                 elseif nodetypes[curnode.tbl.type].SubNodes then
                     local node = curnode:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
                     local tbl = nodetype.InitNode()
-                    curnode.tbl.nodes[#curnode.tbl.nodes+1] = tbl
+                    local newkey =  #curnode.tbl.nodes+1
+                    curnode.tbl.nodes[newkey] = tbl
                     node.tbl = tbl
+                    node.tblkey = newkey
                 end
             end
 
             local conaccessdelbtn = ImageButton(coneditpnl,"icon16/delete.png")
-
-            local addnodes
-
-            function addnodes(base,tbl)
-                print("adding nodes")
-                PrintTable(tbl)
-                for k,v in ipairs(tbl) do
-                    local node = base:AddNode(v.type,nodetypes[v.type].Icon or "icon16/bullet_black.png")
-                    node.tbl = v
-                    if v.nodes then
-                        addnodes(node,v.nodes)
+            function conaccessdelbtn:DoClick()
+                local curnode = conaccesstree:GetSelectedItem()
+                if !IsValid(curnode) then return end
+                local parentnode = curnode:GetParentNode()
+                --print("trying to delete node"..tostring(curnode),parentnode:IsRootNode())
+                --PrintTable(curnode.tbl)
+                if parentnode:IsRootNode() then
+                    curnode:Remove()
+                    curcon.access = nil
+                else
+                    --PrintTable(parentnode:GetChildNodes())
+                    local parenttbl = parentnode.tbl
+                    local newtbl = {}
+                    local curnodekey = curnode.tblkey
+                    i = 1
+                    for k,v in ipairs(parenttbl.nodes) do
+                        if k != curnodekey then
+                            newtbl[i] = v 
+                            i = i + 1
+                        end
                     end
+                    parentnode.tbl.nodes = newtbl
+                    for k,v in ipairs(parentnode:GetChildNodes()) do
+                        v:Remove()
+                    end
+                    addnodes(parentnode,newtbl)
                 end
             end
 
