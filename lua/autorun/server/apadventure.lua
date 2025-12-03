@@ -290,6 +290,7 @@ apAdventure.AreaPortalInfo = apAdventure.AreaPortalInfo or {}
 local areaportalinfo = apAdventure.AreaPortalInfo
 
 local changelevelinfo = {}
+local loadsavedinfo = {}
 
 local kvloggers = {
     func_areaportal = function(ent,key,val)
@@ -300,8 +301,11 @@ local kvloggers = {
     trigger_changelevel = function(ent,key,val)
         changelevelinfo[ent] = changelevelinfo[ent] or {}
         changelevelinfo[ent][key] = val
+    end,
+    player_loadsaved = function(ent,key,val)
+        loadsavedinfo[ent] = loadsavedinfo[ent] or {}
+        loadsavedinfo[ent][key] = val
     end
-    
 }
 
 hook.Add("EntityKeyValue","ApAdvKeyValLogger",function(ent,key,val)
@@ -327,6 +331,9 @@ end) ]]
 local patchchangelevelcvar = CreateConVar("apadventure_patch_changelevel",0,FCVAR_ARCHIVE,
     "Determines if apAdventure should replace trigger_changelevel entities with its own custom version outside of the actual gamemode. This may be useful to prevent you from accidentally triggering a level transition while editing.",
     0,1)
+local patchloadsavedcvar = CreateConVar("apadventure_patch_loadsaved",0,FCVAR_ARCHIVE,
+    "Determines if apAdventure should replace player_loadsaved entities with its own custom version outside of the actual gamemode. This may be useful to because the original entity may try to load an old save, causing you to lose unsaved changes to your config.",
+    0,1)
 
 local function UseCapturedKeyVals()
     --PrintTable(changelevelinfo)
@@ -348,6 +355,23 @@ local function UseCapturedKeyVals()
     end
     
     changelevelinfo = {}
+
+    if patchloadsavedcvar:GetBool() or playingApAdv then
+        for k,v in pairs(loadsavedinfo) do
+            local newent = ents.Create("player_loadsaved_apadventure")
+            newent:SetPos(k:GetPos())
+            newent:SetName(k:GetName())
+            k:Remove()
+            local col = string.explode(" ",v.rendercolor)
+            newent.FadeColor = Color(tonumber(col[1]),tonumber(col[2]),tonumber(col[3]),tonumber(v.renderamt))
+            newent.FadeTime = tonumber(v.duration)
+            newent.HoldTime = tonumber(v.holdtime)
+            newent.LoadDelay = tonumber(v.loadtime)
+            newent:Spawn()
+        end
+    end
+
+    loadsavedinfo = {}
 
     local areaportaljson = util.TableToJSON(apAdventure.AreaPortalInfo)
     local sent = false
