@@ -231,7 +231,23 @@ hook.Add("AP_Connect","APADV",function(slotID)
 
     local room = APADV_SLOT.Room
 
+    net.Start("ApAdvConnectionState")
+        net.WriteBool(true)
+    net.Broadcast()
+
     APADV_SLOT:DataStoreSet("gmadv_runid",room.seed_name.."_"..math.floor(room.time),OnRunID,{{operation="default",value=""}})
+
+end)
+
+hook.Add("AP_Disconnect","APADV",function(slotID) 
+
+    if slotID != "APADV" then return end
+
+    local room = APADV_SLOT.Room
+
+    net.Start("ApAdvConnectionState")
+        net.WriteBool(false)
+    net.Broadcast()
 
 end)
 

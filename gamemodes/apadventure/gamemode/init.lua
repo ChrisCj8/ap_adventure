@@ -12,6 +12,7 @@ include("wephandler.lua")
 include("ap.lua")
 
 util.AddNetworkString("apAdvConnectionInfo")
+util.AddNetworkString("ApAdvConnectionState")
 
 ApAdv_LastMapTbl = ApAdv_LastMapTbl or {}
 ApAdv_NextMapTbl = ApAdv_NextMapTbl or {}

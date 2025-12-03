@@ -51,6 +51,13 @@ function GM:PlayerSpawn(ply,trans)
     end
 end
 
+function GM:PlayerInitialSpawn(ply)
+    local connected = tobool(APADV_SLOT and APADV_SLOT.Connected)
+    net.Start("ApAdvConnectionState")
+        net.WriteBool(connected)
+    net.Send(ply) 
+end
+
 function GM:PlayerLoadout(ply)
     if !APADV_WEPS then return true end
 
