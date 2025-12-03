@@ -7,7 +7,7 @@ end)
 list.Set("DesktopWindows","apAdventureConnect",{
     icon = "icon16/connect.png",
     title = "apAdventure Connection",
-    width = 800,
+    width = 400,
     height = 500,
     init = function(icon, window)
         include("apadventure/gamemode/ui/connect.lua")(window)
