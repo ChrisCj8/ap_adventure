@@ -216,6 +216,15 @@ function ApAdvSendLocation(lctn)
     return true
 end
 
+function ApAdvSendMapLocation(lctn)
+    if !APADV_SLOT or !APADV_SLOT.Connected or !APADV_DATAPACK_LOCAL or !APADV_MAPGROUP then return false end
+    local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
+    local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]   
+    if !ID then return false end
+    APADV_SLOT:SendLocation(ID)
+    return true
+end
+
 function ApAdvAddTracker(type,trackedID,hookID,method)
     GMAP.AddTracker("APADV",type,trackedID,hookID,method)
 end
