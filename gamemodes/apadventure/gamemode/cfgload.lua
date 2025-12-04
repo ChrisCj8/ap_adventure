@@ -100,4 +100,9 @@ function LoadCfg(group)
         --v:KillSilent()
         v:Spawn()
     end
+
+    local scriptpath = "apadventure/cfglua/"..group.."/"..map..".lua"
+    if file.Exists(scriptpath,"lsv") then
+        local scripts = include(scriptpath)
+    end
 end
