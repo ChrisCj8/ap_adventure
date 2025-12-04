@@ -23,7 +23,7 @@ function ApAdvWeps.SetAvailable(class,available)
     APADV_WEPS[class] = available
     for k,v in ipairs(player.GetAll()) do
         if available then
-            v:Give(class,true)
+            v:Give(class)
         else
             v:StripWeapon(class)
         end
