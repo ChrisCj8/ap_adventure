@@ -84,15 +84,17 @@ function LoadCfg(group)
     end
 
     for k,v in pairs(cfg.lctn) do
-        local locname = group .. " - " .. map .. " - " .. v.name
-        -- prevents already checked locations from being placed, but this only works if we're connected when the config is loaded
-        -- so this doesn't work all the time since the gamemode doesn't wait for the slot to reconnect when doing a map transition
-        if !locnametoid or !loclist[locnametoid[locname]] then 
-            local loc = ents.Create("apadventure_location")
-            loc:SetPos(v.pos)
-            loc:SetAngles(v.ang)
-            loc:SetupLocation(locname)
-            loc:Spawn()
+        if !v.dummy then
+            local locname = group .. " - " .. map .. " - " .. v.name
+            -- prevents already checked locations from being placed, but this only works if we're connected when the config is loaded
+            -- so this doesn't work all the time since the gamemode doesn't wait for the slot to reconnect when doing a map transition
+            if !locnametoid or !loclist[locnametoid[locname]] then 
+                local loc = ents.Create("apadventure_location")
+                loc:SetPos(v.pos)
+                loc:SetAngles(v.ang)
+                loc:SetupLocation(locname)
+                loc:Spawn()
+            end
         end
     end
 

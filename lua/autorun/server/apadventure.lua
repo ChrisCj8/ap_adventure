@@ -174,7 +174,8 @@ function apAdventure.StoreCfg(groupoverride)
             pos = v:GetPos(),
             ang = v:GetAngles(),
             reg = reg,
-            name = name
+            name = name,
+            dummy = v:GetIsDummy() or nil
         }
         lctn_ap[reg] = lctn_ap[reg] or {}
         lctn_ap[reg][name] = {
@@ -280,6 +281,7 @@ function apAdventure.LoadCfg(gname,dodelete)
         --ent:SetAngles(v.ang)
         ent:SetRegion(v.reg)
         ent:SetLctnName(v.name)
+        ent:SetIsDummy(v.dummy)
         ent:Spawn()
     end
 
