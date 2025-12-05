@@ -1,6 +1,6 @@
 
 if CLIENT then
-    TOOL.Name = "#tool.apadventure_save.name"
+    TOOL.Name = "#tool.apadventure_save.shortname"
     TOOL.Category = "apadventure.toolgroup"
 
     TOOL.Information = {

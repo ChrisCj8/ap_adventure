@@ -5,7 +5,7 @@ TOOL.ClientConVar = {
 }
 
 if CLIENT then
-    TOOL.Name = "#tool.apadventure_exit.name"
+    TOOL.Name = "#tool.apadventure_exit.shortname"
     TOOL.Category = "apadventure.toolgroup"
 
     TOOL.Information = {

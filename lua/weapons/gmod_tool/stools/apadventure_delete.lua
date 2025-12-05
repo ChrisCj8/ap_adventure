@@ -1,6 +1,6 @@
 
 if CLIENT then
-    TOOL.Name = "#tool.apadventure_delete.name"
+    TOOL.Name = "#tool.apadventure_delete.shortname"
     TOOL.Category = "apadventure.toolgroup"
 
     TOOL.Information = {
