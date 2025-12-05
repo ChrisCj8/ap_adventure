@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-ENT.PrintName = "AP Adventure Exit"
+ENT.PrintName = "#apadventure.entity.exit"
 ENT.Editable = true
 
 DEFINE_BASECLASS("base_gmodentity")

@@ -1,6 +1,6 @@
 AddCSLuaFile()
 
-ENT.PrintName = "AP Adventure Location"
+ENT.PrintName = "#apadventure.entity.location"
 ENT.Editable = true
 
 DEFINE_BASECLASS("base_gmodentity")
