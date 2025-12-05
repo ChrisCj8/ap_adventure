@@ -22,11 +22,12 @@ if CLIENT then
         cPnl:CheckBox("#tool.apadventure_location.isdummy","apadventure_location_isdummy")
         cPnl:Help("#tool.apadventure_location.isdummy_help")
     end
+
+    return
 end
 
 function TOOL:LeftClick(tr)
     if !tr.Hit then return end
-    if CLIENT then return end
     local ent = tr.Entity
     local region = self:GetClientInfo("region")
     local name = self:GetClientInfo("name")
@@ -52,20 +53,16 @@ function TOOL:LeftClick(tr)
     end
 end
 
-apAdventure = apAdventure or {}
-apAdventure.RegionCopying = apAdventure.RegionCopying or {}
-
-apAdventure.RegionCopying.apadventure_location_editor = true
-
 function TOOL:RightClick(tr)
     if !tr.Hit then return end
-    if CLIENT then return end
     local ent = tr.Entity
-    local class = ent:GetClass()
-    if apAdventure.RegionCopying[class] then
-        self:GetOwner():ConCommand("apadventure_location_region \""..ent:GetRegion().."\"")
+    if !IsValid(ent) then return end
+    local owner = self:GetOwner()
+    if isfunction(ent.CopyRegionName) then
+        owner:ConCommand("apadventure_location_region \""..ent:CopyRegionName().."\"")
     end
-    if class == "apadventure_location_editor" then
-        self:GetOwner():ConCommand("apadventure_location_name \""..ent:GetLctnName().."\"")
+    if ent:GetClass() == "apadventure_location_editor" then
+        owner:ConCommand("apadventure_location_name \""..ent:GetLctnName().."\"")
+        owner:ConCommand("apadventure_location_isdummy \""..(ent:GetIsDummy() and 1 or 0).."\"")
     end
 end

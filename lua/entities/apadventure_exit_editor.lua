@@ -15,4 +15,6 @@ function ENT:Initialize()
     self:SetModel("models/apadventure/frame.mdl")
     self:SetCollisionGroup( COLLISION_GROUP_WORLD )
     self:PhysicsInit(SOLID_VPHYSICS)
+    self.CopyRegionName = self.GetRegion
+    self.CopyConnectionName = self.GetExitName
 end

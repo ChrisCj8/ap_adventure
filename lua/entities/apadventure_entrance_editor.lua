@@ -17,11 +17,11 @@ function ENT:Initialize()
     self:SetCollisionGroup( COLLISION_GROUP_WORLD )
     self:PhysicsInitStatic( SOLID_VPHYSICS )
     self.boundmins, self.boundmaxs = self:GetCollisionBounds()
+    self.CopyRegionName = self.GetRegion
+    self.CopyConnectionName = self.GetEntrName
 end
 
 if CLIENT then
-
-    
 
     function ENT:Draw(fl)
         self:DrawModel(fl)
@@ -37,4 +37,5 @@ if CLIENT then
         --render.DepthRange(0,1)
     end
 
+    return
 end

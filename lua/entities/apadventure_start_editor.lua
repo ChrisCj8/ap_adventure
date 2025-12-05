@@ -14,6 +14,7 @@ function ENT:Initialize()
     self:SetModel("models/props_lab/huladoll.mdl")
     self:SetCollisionGroup( COLLISION_GROUP_WORLD )
     self:PhysicsInitStatic( SOLID_VPHYSICS )
+    self.CopyRegionName = self.GetRegion
 end
 
 if CLIENT then
@@ -36,4 +37,5 @@ if CLIENT then
         --render.DepthRange(0,1)
     end
 
+    return
 end

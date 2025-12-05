@@ -49,24 +49,15 @@ function TOOL:LeftClick(tr)
     end
 end
 
-apAdventure = apAdventure or {}
-apAdventure.RegionCopying = apAdventure.RegionCopying or {}
-
-apAdventure.RegionCopying.apadventure_exit_editor = true
-
-local cancopyname = {
-    apadventure_exit_editor = true,
-}
-
 function TOOL:RightClick(tr)
     if !tr.Hit then return end
     local ent = tr.Entity
     if !IsValid(ent) then return end
-    local class = ent:GetClass()
-    if apAdventure.RegionCopying[class] then
-        self:GetOwner():ConCommand("apadventure_exit_region \""..ent:GetRegion().."\"")
+    local owner = self:GetOwner()
+    if isfunction(ent.CopyRegionName) then
+        owner:ConCommand("apadventure_exit_region \""..ent:CopyRegionName().."\"")
     end
-    if cancopyname[class] then
-        self:GetOwner():ConCommand("apadventure_exit_name \""..ent:GetExitName().."\"")
+    if isfunction(ent.CopyConnectionName) then
+        owner:ConCommand("apadventure_exit_name \""..ent:CopyConnectionName().."\"")
     end
 end

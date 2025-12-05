@@ -10,6 +10,7 @@ if CLIENT then
 
     TOOL.Information = {
         {name="left",icon="gui/lmb.png"},
+        {name="right",icon="gui/rmb.png"},
         {name="reload",icon="gui/r.png"}
     }
 
@@ -36,7 +37,17 @@ function TOOL:LeftClick(tr)
         undo.Create("apadventure_start_editor")
             undo.AddEntity(ent)
             undo.SetPlayer(self:GetOwner())
-        undo.Finish()    
+        undo.Finish()
+    end
+end
+
+function TOOL:RightClick(tr)
+    if !tr.Hit then return end
+    local ent = tr.Entity
+    if !IsValid(ent) then return end
+    local owner = self:GetOwner()
+    if isfunction(ent.CopyRegionName) then
+        owner:ConCommand("apadventure_start_region \""..ent:CopyRegionName().."\"")
     end
 end
 
@@ -54,5 +65,5 @@ function TOOL:Reload()
     undo.Create("apadventure_start_editor")
         undo.AddEntity(ent)
         undo.SetPlayer(user)
-    undo.Finish()    
+    undo.Finish()
 end

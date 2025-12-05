@@ -18,11 +18,10 @@ function ENT:Initialize()
     self:PhysicsInitStatic( SOLID_BBOX )
     local phys = self:GetPhysicsObject()
     self.boundmins, self.boundmaxs = self:GetCollisionBounds()
+    self.CopyRegionName = self.GetRegion
 end
 
 if CLIENT then
-
-    
 
     function ENT:Draw(fl)
         local textfacing = apAdventure.TextFacing
@@ -34,4 +33,5 @@ if CLIENT then
         render.DrawWireframeBox(pos,angle_zero,self.boundmins,self.boundmaxs,color_white)
     end
 
+    return
 end

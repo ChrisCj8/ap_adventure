@@ -10,6 +10,7 @@ if CLIENT then
 
     TOOL.Information = {
         {name="left",icon="gui/lmb.png"},
+        {name="right",icon="gui/rmb.png"},
         {name="reload",icon="gui/r.png"}
     }
 
@@ -64,24 +65,15 @@ function TOOL:Reload()
     undo.Finish()    
 end
 
-apAdventure = apAdventure or {}
-apAdventure.RegionCopying = apAdventure.RegionCopying or {}
-
-apAdventure.RegionCopying.apadventure_entrance_editor = true
-
-local cancopyname = {
-    apadventure_entrance_editor = true,
-}
-
 function TOOL:RightClick(tr)
     if !tr.Hit then return end
     local ent = tr.Entity
     if !IsValid(ent) then return end
-    local class = ent:GetClass()
-    if apAdventure.RegionCopying[class] then
-        self:GetOwner():ConCommand("apadventure_entrance_region \""..ent:GetRegion().."\"")
+    local owner = self:GetOwner()
+    if isfunction(ent.CopyRegionName) then
+        owner:ConCommand("apadventure_entrance_region \""..ent:CopyRegionName().."\"")
     end
-    if cancopyname[class] then
-        self:GetOwner():ConCommand("apadventure_entrance_name \""..ent:GetEntrName().."\"")
+    if isfunction(ent.CopyConnectionName) then
+        owner:ConCommand("apadventure_entrance_name \""..ent:CopyConnectionName().."\"")
     end
 end
