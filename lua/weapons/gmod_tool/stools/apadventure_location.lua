@@ -1,7 +1,8 @@
 
 TOOL.ClientConVar = {
     region = "base",
-    name = "default"
+    name = "default",
+    isdummy = "0",
 }
 
 if CLIENT then
@@ -14,8 +15,12 @@ if CLIENT then
     }
 
     function TOOL.BuildCPanel(cPnl)
-        cPnl:TextEntry("Region","apadventure_location_region")
-        cPnl:TextEntry("Name","apadventure_location_name")
+        cPnl:TextEntry("#tool.apadventure_location.region","apadventure_location_region")
+        cPnl:Help("#tool.apadventure_location.region_help")
+        cPnl:TextEntry("#tool.apadventure_location.name_ui","apadventure_location_name")
+        cPnl:Help("#tool.apadventure_location.name_help")
+        cPnl:CheckBox("#tool.apadventure_location.isdummy","apadventure_location_isdummy")
+        cPnl:Help("#tool.apadventure_location.isdummy_help")
     end
 end
 
@@ -25,9 +30,11 @@ function TOOL:LeftClick(tr)
     local ent = tr.Entity
     local region = self:GetClientInfo("region")
     local name = self:GetClientInfo("name")
+    local isdummy = self:GetClientInfo("isdummy")
     if ent:GetClass() == "apadventure_location_editor" then
         ent:SetRegion(region)
         ent:SetLctnName(name)
+        ent:SetIsDummy(isdummy)
     else
         ent = ents.Create("apadventure_location_editor")
         if !IsValid(ent) then return end
@@ -37,6 +44,7 @@ function TOOL:LeftClick(tr)
         ent:SetPos(tr.HitPos+curpos-ent:NearestPoint(curpos-(tr.HitNormal*512)))
         ent:SetRegion(region)
         ent:SetLctnName(name)
+        ent:SetIsDummy(isdummy)
         undo.Create("apadventure_location_editor")
             undo.AddEntity(ent)
             undo.SetPlayer(self:GetOwner())
