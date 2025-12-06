@@ -15,8 +15,11 @@ if CLIENT then
     }
 
     function TOOL.BuildCPanel(cPnl)
-        cPnl:TextEntry("Region","apadventure_entrance_region")
-        cPnl:TextEntry("Name","apadventure_entrance_name")
+        cPnl:TextEntry("#apadventure.toolui.region","apadventure_entrance_region")
+        cPnl:Help("#tool.apadventure_entrance.region_help")
+        cPnl:TextEntry("#tool.apadventure_entrance.name_ui","apadventure_entrance_name")
+        cPnl:Help("#tool.apadventure_entrance.name_help")
+        cPnl:Help("#tool.apadventure_entrance.match_names_info")
     end
 
     return
