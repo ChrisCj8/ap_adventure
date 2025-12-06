@@ -135,7 +135,7 @@ def ProcessCfgs():
                 for k,v in svjson["entr"].items():
                     if v in newmap.regions:
                         newmap.entrances[k] = v
-                        print("adding entrace "+k+" to map "+map)
+                        print("adding entrance "+k+" to map "+map)
                     else: 
                         print(f"map {map} from {gr} has an entrance placed in non-existing region \"{k}\"")
 
