@@ -15,7 +15,9 @@ if CLIENT then
     }
 
     function TOOL.BuildCPanel(cPnl)
-        cPnl:TextEntry("Region","apadventure_start_region")
+        cPnl:TextEntry("#apadventure.toolui.region","apadventure_start_region")
+        cPnl:Help("#tool.apadventure_start.help1")
+        cPnl:Help("#tool.apadventure_start.help2")
     end
     return
 end
