@@ -19,6 +19,7 @@ if CLIENT then
         cPnl:TextEntry("#tool.apadventure_exit.name_ui","apadventure_exit_name")
         cPnl:Help("#tool.apadventure_exit.name_help")
         cPnl:Help("#tool.apadventure_exit.match_names_info")
+        cPnl:Help("#apadventure.toolui.twoway")
     end
 end
 
