@@ -6,13 +6,17 @@ if CLIENT then
     TOOL.Information = {
         {name="left",icon="gui/lmb.png"},
         {name="right",icon="gui/rmb.png"},
+        {name="reload",icon="gui/r.png"},
         {name="creationmode",op=0},
         {name="namemode",op=1},
     }
 
-    function TOOL:LeftClick(tr,forceray)
-        if forceray then return true end
+    function TOOL.BuildCPanel(cPnl)
+        cPnl:Help("#tool.apadventure_delete.help1")
+        cPnl:Help("#tool.apadventure_delete.help_cid")
+        cPnl:Help("#tool.apadventure_delete.help_targetname")
     end
+    return
 end
 
 local EntFilter = {
