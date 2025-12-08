@@ -4,9 +4,9 @@ if CLIENT then
     TOOL.Category = "apadventure.toolgroup"
 
     TOOL.Information = {
-        {name="left",icon="gui/lmb.png"},
-        {name="right",icon="gui/rmb.png"},
-        {name="reload",icon="gui/r.png"},
+        {name="left"},
+        {name="right"},
+        {name="reload"},
         {name="creationmode",op=0},
         {name="namemode",op=1},
     }

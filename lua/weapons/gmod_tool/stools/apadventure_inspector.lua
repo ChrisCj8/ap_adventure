@@ -4,8 +4,8 @@ if CLIENT then
     TOOL.Category = "apadventure.toolgroup"
 
     TOOL.Information = {
-        {name="left",icon="gui/lmb.png"},
-        {name="reload",icon="gui/r.png"}
+        {name="left"},
+        {name="reload"}
     }
 
     apAdventure.InspectorInfo = apAdventure.InspectorInfo or {}

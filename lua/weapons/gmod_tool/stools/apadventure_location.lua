@@ -10,8 +10,8 @@ if CLIENT then
     TOOL.Category = "apadventure.toolgroup"
 
     TOOL.Information = {
-        {name="left",icon="gui/lmb.png"},
-        {name="right",icon="gui/rmb.png"}
+        {name="left"},
+        {name="right"}
     }
 
     function TOOL.BuildCPanel(cPnl)
