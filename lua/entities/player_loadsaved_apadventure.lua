@@ -10,7 +10,7 @@ function ENT:AcceptInput(inName,activator,caller,params)
             timer.Simple(self.LoadDelay,function() v:ScreenFade(SCREENFADE.PURGE,color_white,0,0) end)
         end
         if APADV_MAPGROUP then
-            timer.Simple(self.LoadDelay,function() LoadCfg(APADV_MAPGROUP) end)
+            timer.Simple(self.LoadDelay,function() APADV.LoadCfg(APADV_MAPGROUP) end)
         end
     end
 end

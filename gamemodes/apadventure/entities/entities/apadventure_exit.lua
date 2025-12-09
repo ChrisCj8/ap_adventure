@@ -23,13 +23,13 @@ function ENT:Use(activator,caller,usetype,val)
     if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][self.ExitName] then 
         local entrtbl = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][self.ExitName]
         --PrintTable(entrtbl)
-        DoMapTransition(entrtbl.map,entrtbl.group,entrtbl.entr)
+        APADV.DoMapTransition(entrtbl.map,entrtbl.group,entrtbl.entr)
         return 
     elseif APADV_SLOT and APADV_SLOT.Connected then
         local slotdata = APADV_SLOT.slotData
         local start = slotdata.startmap
         local startgr = slotdata.startgroup
-        DoMapTransition(start,startgr)
+        APADV.DoMapTransition(start,startgr)
     end
 end
 

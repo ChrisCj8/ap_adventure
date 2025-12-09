@@ -107,7 +107,7 @@ local function ApAdvDPLoad(slot,datapackage)
     end
 end
 
-function ApAdvCreateApSlot(addr,slotn,pw,slotdata)
+function APADV.CreateApSlot(addr,slotn,pw,slotdata)
     local getslotdata = true
     
 
@@ -159,14 +159,14 @@ local function OnRunID(packet)
             local map = game.GetMap()
             if map == slotdata.startmap then
                 APADV_USESTART = slotdata.startregion
-                LoadCfg(slotdata.startgroup)
+                APADV.LoadCfg(slotdata.startgroup)
             elseif APADV_SAVEDATA.visited and APADV_SAVEDATA.visited[map] then
                 local groupname, grouptbl = next(APADV_SAVEDATA.visited[map])
                 APADV_ENTRNAME = next(grouptbl)
-                LoadCfg(groupname)
+                APADV.LoadCfg(groupname)
             else
                 APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
-                DoMapTransition(slotdata.startmap,slotdata.startgroup)
+                APADV.DoMapTransition(slotdata.startmap,slotdata.startgroup)
             end
         end
 
@@ -208,7 +208,7 @@ local function OnRunID(packet)
     end
 end
 
-function ApAdvSendLocation(lctn)
+function APADV.SendLocation(lctn)
     if !APADV_SLOT or !APADV_SLOT.Connected then return false end
 
     print("sending location",lctn)
@@ -216,7 +216,7 @@ function ApAdvSendLocation(lctn)
     return true
 end
 
-function ApAdvSendMapLocation(lctn)
+function APADV.SendMapLocation(lctn)
     if !APADV_SLOT or !APADV_SLOT.Connected or !APADV_DATAPACK_LOCAL or !APADV_MAPGROUP then return false end
     local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
     local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]   
@@ -225,11 +225,11 @@ function ApAdvSendMapLocation(lctn)
     return true
 end
 
-function ApAdvAddTracker(type,trackedID,hookID,method)
+function APADV.AddTracker(type,trackedID,hookID,method)
     GMAP.AddTracker("APADV",type,trackedID,hookID,method)
 end
 
-function ApAdvRemoveTracker(type,trackedID,hookID)
+function APADV.RemoveTracker(type,trackedID,hookID)
     GMAP.RemoveTracker("APADV",type,trackedID,hookID)
 end
 
@@ -266,5 +266,5 @@ net.Receive("apAdvConnectionInfo",function(len,ply)
 
     print("received connection info",addr,slotn,pw)
 
-    ApAdvCreateApSlot(addr,slotn,pw)
+    APADV.CreateApSlot(addr,slotn,pw)
 end)

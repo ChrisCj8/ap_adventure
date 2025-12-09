@@ -38,7 +38,7 @@ function ENT:StartTouch(ent)
     local collecttouch = IsCollector(ent)
     print(ent,"started touching",self,self.LocationName,IsCollector(ent))
     if !collecttouch then return end
-    local sent = ApAdvSendLocation(self.LocationName)
+    local sent = APADV.SendLocation(self.LocationName)
     if sent then self:Remove() end
 end
 

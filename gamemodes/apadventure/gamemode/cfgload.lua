@@ -1,5 +1,5 @@
 
-function LoadCfg(group)
+function APADV.LoadCfg(group)
     if group then
         APADV_MAPGROUP = group
     else
