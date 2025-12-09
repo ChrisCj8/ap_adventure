@@ -451,6 +451,25 @@ function apAdventure.ProcessItemdefs(groupname)
     end
 end
 
+util.AddNetworkString("ApAdvToolShot")
+
+if game.SinglePlayer() then
+    function apAdventure.SpoofToolShot()
+        return true
+    end
+else
+    function apAdventure.SpoofToolShot(tool,tr)
+        local wep = tool:GetWeapon()
+        local ply = tool:GetOwner()
+        wep:EmitSound(wep.ShootSound)
+        net.Start("ApAdvToolgunEffect")
+            net.WritePlayer(ply)
+            net.WriteVector(tr.HitPos)
+        net.Broadcast()
+        return true
+    end
+end
+
 concommand.Add("apadventure_editor_loadcfg",function(ply,_,args) 
     local arg = args[1]
     if !ply:IsListenServerHost() or !arg or arg == "" then return end

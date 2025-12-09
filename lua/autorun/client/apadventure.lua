@@ -163,3 +163,15 @@ net.Receive("APAdvAreaPortalInfo",function()
     end
 end)
 
+net.Receive("ApAdvToolShot",function()
+    local ply = net.ReadPlayer()
+    local hitpos = net.ReadVector()
+    if !ply then return end
+    local wep = ply:GetActiveWeapon()
+    if wep:GetClass() != "gmod_tool" then return end
+    wep:EmitSound(wep.ShootSound)
+    local effect = EffectData()
+    effect:SetOrigin(hitpos)
+    effect:SetStart(ply:GetShootPos())
+    util.Effect("ToolTracer",effect)
+end)
