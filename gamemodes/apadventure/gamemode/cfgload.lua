@@ -1,6 +1,11 @@
 
 function LoadCfg(group)
-    APADV_MAPGROUP = group
+    if group then
+        APADV_MAPGROUP = group
+    else
+        group = APADV_MAPGROUP
+    end
+    assert(group,"Cfg Loader was not passed a Group Name and could not find a previously used Map Group")
     local map = game.GetMap()
     APADV_MAP = map
     local path = "apadventure/cfgs/gm/"..group.."/group.json"
