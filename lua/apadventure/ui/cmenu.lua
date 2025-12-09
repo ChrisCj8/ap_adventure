@@ -39,61 +39,118 @@ local function LabelNumWangWithPreset(parent,locstr,presettbl)
     return label, numw, presetsel
 end
 
+local mapsettings = apAdventure.CfgSettings
+
+local numwdefaultcolor 
+local checkboxdefaultcolor = color_black
+local lightblue = Color(100,167,255)
+
 return function(window)
     local tabs = vgui.Create("DPropertySheet",window)
     tabs:SetPos(5,25)
 
+    local grouptbl = editcfg.GroupInfo
+    local infotbl = editcfg.Info
+
+    local infoinputs = {}
+
+    local groupcfgpnl = vgui.Create("DPanel")
+    tabs:AddSheet("Group Settings",groupcfgpnl)
+
+        local grouprulesplacegroups = {}
+        local groupruleselements = 0
+        
+        local grouppanelbuilders = {
+            numwpreset = function(tbl)
+                local valname = tbl.name
+                local default = tbl.default
+                local lbl, numw, pres = LabelNumWangWithPreset(groupcfgpnl,valname,tbl.presets)
+                numwdefaultcolor = numwdefaultcolor or numw:GetTextColor()
+                numw:SetMinMax(tbl.min,tbl.max)
+                local laststate
+                local oldvalue = grouptbl[valname] or default
+                function numw:OnValueChanged(val) 
+                    if val == default then
+                        grouptbl[valname] = nil
+                        if !laststate then
+                            laststate = true
+                            numw:SetTextColor(lightblue)
+                        end
+                    else    
+                        grouptbl[valname] = val
+                        if laststate then
+                            laststate = false
+                            numw:SetTextColor(numwdefaultcolor)
+                        end
+                    end
+                    local maprulein = infoinputs[valname]
+                    if IsValid(maprulein) and maprulein:GetValue() == oldvalue then
+                        maprulein:SetValue(val)
+                    end
+                    oldvalue = val
+                end
+                numw:SetValue(grouptbl[valname] or default)
+                groupruleselements = groupruleselements + 1
+                grouprulesplacegroups[groupruleselements] = {
+                    pnls = {
+                        { pnl = lbl, w = 100 },
+                        { pnl = numw, w = 50 },
+                        { pnl = pres }
+                    },
+                    h = 22
+                }
+            end,
+            check = function(tbl)
+                local valname = tbl.name
+                local check = vgui.Create("DCheckBoxLabel",groupcfgpnl)
+                check:SetText("#apadventure.editor."..valname..".label")
+                check:SetDark(true)
+                checkboxdefaultcolor = checkboxdefaultcolor or check.Label:GetTextColor()
+                local oldval = default
+                function check:OnChange(val)
+                    grouptbl[valname] = val
+                    local maprulein = infoinputs[valname]
+                    if IsValid(maprulein) and tobool(oldval) == maprulein:GetChecked() then
+                        maprulein:SetChecked(val)
+                    end
+                    oldval = val
+                end
+                check:SetValue(grouptbl[valname] or default)
+                groupruleselements = groupruleselements + 1
+                grouprulesplacegroups[groupruleselements] = {
+                    pnls = {
+                        {pnl=check}
+                    },
+                    h = 22
+                }
+            end
+        }
+
+        for k,v in ipairs(mapsettings) do
+            grouppanelbuilders[v.type](v)
+        end
+
+        function groupcfgpnl:PerformLayout(w,h)
+            
+            local curh = 5
+            for k,v in ipairs(grouprulesplacegroups) do
+                local curw = 5
+                for ik,iv in ipairs(v.pnls) do
+                    local iw = iv.w or (w - 10 - curw) 
+                    iv.pnl:SetPos(curw,curh)
+                    iv.pnl:SetSize(iw,v.h)
+                    curw = curw + iw + 5
+                end
+                curh = curh + (v.h or 22) + 5
+            end
+            
+        end
+
     local mapcfgpnl = vgui.Create("DPanel")
     tabs:AddSheet("Map Settings",mapcfgpnl)
 
-        local infotbl = editcfg.Info
-
         local maprulesplacegroups = {}
         local mapruleselements = 0
-
-        local function InfoCheck(parent,valname)
-            local check = vgui.Create("DCheckBoxLabel",parent)
-            check:SetText("#apadventure.editor."..valname..".label")
-            check:SetDark(true)
-            function check:OnChange(val)
-                if val then
-                    infotbl[valname] = true
-                else
-                    infotbl[valname] = nil
-                end
-            end
-            mapruleselements = mapruleselements + 1
-            maprulesplacegroups[mapruleselements] = {
-                pnls = {
-                    {pnl=check}
-                },
-                h = 22
-            }
-            return check
-        end
-
-        local function InfoNumwPreset(valname,presettbl,default,min,max)
-            local lbl, numw, pres = LabelNumWangWithPreset(mapcfgpnl,valname,presettbl)
-            numw:SetMinMax(min,max)
-            numw:SetValue(infotbl[valname] or default)
-            function numw:OnValueChanged(val) 
-                if val == default then
-                    infotbl[valname] = nil
-                else    
-                    infotbl[valname] = val 
-                end
-            end
-            mapruleselements = mapruleselements + 1
-            maprulesplacegroups[mapruleselements] = {
-                pnls = {
-                    { pnl = lbl, w = 100 },
-                    { pnl = numw, w = 50 },
-                    { pnl = pres }
-                },
-                h = 22
-            }
-            return lbl, numw, pres
-        end
 
         local mapnicenamelbl, mapnicenamein = LabelTextInput(mapcfgpnl,"nicename")
         mapnicenamein:SetValue(infotbl.nicename or "") 
@@ -114,81 +171,73 @@ return function(window)
             h = 22
         }
 
-        local speedpresets = {
-            {val=44,name="TF2 Heavy (Spun Up with Brass Beast)"},
-            {val=80,name="TF2 scoped Sniper, Soldier charging Mangler"},
-            {val=100,name="gMod Sandbox Default Walk Speed"},
-            {val=110,name="TF2 Heavy (Spun Up)"},
-            {val=150,name="HL2 Walk Speed"},
-            {val=160,name="TF2 Sniper with drawn Huntsman"},
-            {val=190,name="HL2 Run Speed"},
-            {val=200,name="gMod Sandbox Default Run Speed"},
-            {val=230,name="TF2 Heavy"},
-            {val=240,name="TF2 Soldier"},
-            {val=270,name="TF2 Engineer hauling a building"},
-            {val=280,name="TF2 Demoman"},
-            {val=300,name="TF2 Pyro, Engineer, Sniper"},
-            {val=308,name="TF2 Demoman with boots and shield"},
-            {val=320,name="HL2 Sprint Speed, TF2 Medic and Spy"},
-            {val=345,name="TF2 Pyro with Powerjack"},
-            {val=360,name="TF2 Scout with Baby Face's Blaster at 0% boost"},
-            {val=400,name="gMod Sandbox Default Sprint Speed, TF2 Scout "},
-            {val=520,name="TF2 Scout with Baby Face's Blaster at max boost"},
+        local rulespanelbuilders = {
+            numwpreset = function(tbl)
+                --InfoNumwPreset(tbl.name,tbl.presets,tbl.default,tbl.min,tbl.max)
+                local valname = tbl.name
+                local default = tbl.default
+                local lbl, numw, pres = LabelNumWangWithPreset(mapcfgpnl,valname,tbl.presets)
+                numw:SetMinMax(tbl.min,tbl.max)
+                numwdefaultcolor = numwdefaultcolor or numw:GetTextColor()
+                local laststate
+                function numw:OnValueChanged(val) 
+                    local groupval = grouptbl[valname]
+                    if val == groupval or (groupval == nil and val == default ) then
+                        infotbl[valname] = nil
+                        if !laststate then
+                            laststate = true
+                            numw:SetTextColor(lightblue)
+                        end
+                    else    
+                        infotbl[valname] = val 
+                        if laststate then
+                            laststate = false
+                            numw:SetTextColor(numwdefaultcolor)
+                        end
+                    end
+                end
+                numw:SetValue(infotbl[valname] or grouptbl[valname] or default)
+                mapruleselements = mapruleselements + 1
+                maprulesplacegroups[mapruleselements] = {
+                    pnls = {
+                        { pnl = lbl, w = 100 },
+                        { pnl = numw, w = 50 },
+                        { pnl = pres }
+                    },
+                    h = 22
+                }
+                infoinputs[valname] = numw
+            end,
+            check = function(tbl)
+                local valname = tbl.name
+                local check = vgui.Create("DCheckBoxLabel",mapcfgpnl)
+                check:SetText("#apadventure.editor."..valname..".label")
+                check:SetDark(true)
+                checkboxdefaultcolor = checkboxdefaultcolor or check.Label:GetTextColor()
+                function check:OnChange(val)
+                    if val == grouptbl[valname] then
+                        infotbl[valname] = nil
+                        self:SetTextColor(lightblue)
+                    else
+                        infotbl[valname] = val
+                        self:SetTextColor(checkboxdefaultcolor)
+                    end
+                end
+                check:SetValue(infotbl[valname] or grouptbl[valname] or default)
+                mapruleselements = mapruleselements + 1
+                maprulesplacegroups[mapruleselements] = {
+                    pnls = {
+                        {pnl=check}
+                    },
+                    h = 22
+                }
+                infoinputs[valname] = check
+            end
         }
 
-        
-        local mapwalkspdlbl, mapwalkspdin, mapwalkspdpres = InfoNumwPreset("walkspd",speedpresets,100,10,nil)
-        local maprunspdlbl, maprunspdin, maprunspdpres = InfoNumwPreset("runspd",speedpresets,200,10,nil)
-        local mapsprintspdlbl, mapsprintspdin, mapsprintspdpres = InfoNumwPreset("sprintspd",speedpresets,400,10,nil)
-
-        local jumppresets = {
-            {val=200,name="gMod Default"},
-            {val=math.sqrt(2*800*57),name="CS:S"}
-        }
-
-        local mapjumplbl, mapjumpin, mapjumppres = InfoNumwPreset("jump",jumppresets,200,10,nil)
-
-
-        local gravpresets = {
-            {val=600,name="gMod, HL2 Default"},
-            {val=800,name="TF2, gMod, cs:go, CS:S Default"},
-        }
-
-        local mapgravlbl, mapgravin, mapgravpres = InfoNumwPreset("grav",gravpresets,600,10,nil)
-
-        local frctnpresets = {
-            {val=4,name="CS:S, HL2 Default"},
-            {val=8,name="gMod Default"},
-        }
-
-        local mapfrctnlbl, mapfrctnin, mapfrctnpres = InfoNumwPreset("frctn",frctnpresets,8,1,nil)
-
-        local accelpresets = {
-            {val=5,name="Momentum Mod"},
-            {val=10,name="gMod, CS:S, HL2DM Default"},
-        }
-
-        local mapaccellbl, mapaccelin, mapaccelpres = InfoNumwPreset("accel",accelpresets,10,1,nil)
-
-        local airaccelpresets = {
-            {val=10,name="gMod, CS:S, HL2DM Default"},
-            {val=150,name="Commonly used for Surf maps"},
-            {val=1000,name="Commonly used for BHop maps"},
-        }
-
-        local mapairaccellbl, mapairaccelin, mapairaccelpres = InfoNumwPreset("airaccel",airaccelpresets,10,10,nil)
-
-        local stopspdpresets = {
-            {val=10,name="gMod Default"},
-            {val=100,name="CS:S, HL2DM Default"},
-        }
-
-        local mapstopspdlbl, mapstopspdin, mapstopspdpres = InfoNumwPreset("stopspd",stopspdpresets,10,10,nil)
-        
-        --[[ local mapstartcandidatecheck = InfoCheck(mapcfgpnl,"startcandidate")
-        mapstartcandidatecheck:SetPos(15,30) ]]    
-
-        local maphevtoggle = InfoCheck(mapcfgpnl,"hev")
+        for k,v in ipairs(mapsettings) do
+            rulespanelbuilders[v.type](v)
+        end
 
         function mapcfgpnl:PerformLayout(w,h)
             

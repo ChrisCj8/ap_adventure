@@ -13,6 +13,15 @@ end
 
 apAdventure.UpdateAccessNodeInfo()
 
+function apAdventure.UpdatePresetInfo()
+    local presetfiles = file.Find("apadventure/ui/settingpreset/*.lua","LUA")
+    for k,v in ipairs(presetfiles) do
+        AddCSLuaFile("apadventure/ui/settingpreset/"..v)
+    end
+end
+
+apAdventure.UpdatePresetInfo()
+
 apAdventure.EditCfg = apAdventure.EditCfg or {
     Saved = {},
     DelMark = {},

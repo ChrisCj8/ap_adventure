@@ -3,6 +3,9 @@ function LoadCfg(group)
     APADV_MAPGROUP = group
     local map = game.GetMap()
     APADV_MAP = map
+    local path = "apadventure/cfgs/gm/"..group.."/group.json"
+    local json = file.Read(path,"DATA")
+    if json then groupcfg = util.JSONToTable(json) end
     local path = "apadventure/cfgs/gm/"..group.."/"..map.."/sav.json"
     local json = assert(file.Read(path,"DATA"),"couldn't find config")
     local cfg = util.JSONToTable(json)
@@ -12,17 +15,34 @@ function LoadCfg(group)
     game.CleanUpMap()
 
     local infotbl = clcfg.info
+    local grouprules = {} 
+    if groupcfg then
+        grouprules = groupcfg.rules
+    end
 
-    RunConsoleCommand("sv_gravity",infotbl.grav or 600)
-    RunConsoleCommand("sv_accelerate",infotbl.accel or 10 )
-    RunConsoleCommand("sv_airaccelerate",infotbl.airaccel or 10 )
-    RunConsoleCommand("sv_friction",infotbl.frctn or 8)
-    RunConsoleCommand("sv_stopspeed",infotbl.stopspd or 10)
-    RunConsoleCommand("gmod_suit",infotbl.hev and 1 or 0)
-    ApAdvPly.SetWalkSpeed(infotbl.walkspd or 100)
-    ApAdvPly.SetRunSpeed(infotbl.runspd or 200)
-    ApAdvPly.SetSprintSpeed(infotbl.sprintspd or 400)
-    ApAdvPly.SetJumpPower(infotbl.jump or 200)
+    local settingstbl = apAdventure.CfgSettings
+
+    function cfginfo(valname)
+        local val = infotbl[valname]
+        if val != nil then return val end
+        val = grouprules[valname]
+        if val != nil then return val end
+        local settinginfo = settingstbl[valname]
+        if settinginfo then
+            return settinginfo.default
+        end
+    end
+
+    RunConsoleCommand("sv_gravity",cfginfo("grav"))
+    RunConsoleCommand("sv_accelerate",cfginfo("accel"))
+    RunConsoleCommand("sv_airaccelerate",cfginfo("airaccel"))
+    RunConsoleCommand("sv_friction",cfginfo("frctn"))
+    RunConsoleCommand("sv_stopspeed",cfginfo("stopspd"))
+    RunConsoleCommand("gmod_suit",cfginfo("hev") and 1 or 0)
+    ApAdvPly.SetWalkSpeed(cfginfo("walkspd"))
+    ApAdvPly.SetRunSpeed(cfginfo("runspd"))
+    ApAdvPly.SetSprintSpeed(cfginfo("sprintspd"))
+    ApAdvPly.SetJumpPower(cfginfo("jump"))
 
     if next(cfg.sav) then
         duplicator.Paste(nil,cfg.sav.Entities,cfg.sav.Constraints)

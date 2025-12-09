@@ -10,6 +10,7 @@ apAdventure.EditCfg = apAdventure.EditCfg or {
     Connections = {},
     MapItems = {},
     Info = {},
+    GroupInfo = {},
     Events = {},
 }
 
@@ -43,20 +44,30 @@ net.Receive("APAdvActiveCfgClear",function()
         Connections = {},
         MapItems = {},
         Info = {},
+        GroupInfo = {},
         Events = {},
     }
     editcfg = apAdventure.EditCfg
     apAdvHalos = {}
+    local groupjson = file.Read("apadventure/cfgs/gm/"..gname.."/group.json","DATA")
+    if groupjson then
+        local tbl = util.JSONToTable(groupjson)
+        if tbl then
+            editcfg.GroupInfo = tbl.rules
+        end
+    end
     local json = file.Read("apadventure/cfgs/gm/"..gname.."/"..game.GetMap().."/sav_cl.json","DATA")
     print(json)
-    if !json then return end
-    local tbl = util.JSONToTable(json)
-    PrintTable(tbl)
-    if !tbl then return end
-    editcfg.Regions = tbl.reg or {}
-    editcfg.Connections = tbl.connect or {}
-    editcfg.MapItems = tbl.item or {}
-    editcfg.Info = tbl.info or {}
+    if json then
+        local tbl = util.JSONToTable(json)
+        PrintTable(tbl)
+        if tbl then 
+            editcfg.Regions = tbl.reg or {}
+            editcfg.Connections = tbl.connect or {}
+            editcfg.MapItems = tbl.item or {}
+            editcfg.Info = tbl.info or {}
+         end
+    end
 end)
 
 net.Receive("APAdvSaveCfg",function() 
@@ -71,11 +82,16 @@ net.Receive("APAdvSaveCfg",function()
         info = editcfg.Info,
     }
     PrintTable(outtbl)
+    local groupout = {
+        rules = editcfg.GroupInfo
+    }
     local prettyprint = prettyprintcvar:GetBool()
-    local dir = "apadventure/cfgs/gm/"..gname.."/"..game.GetMap()
-    file.CreateDir(dir)
-    file.Write(dir.."/sav_cl.json",util.TableToJSON(outtbl,prettyprint))
-    dir = "apadventure/cfgs/ap/"..gname.."/"..game.GetMap()
+    local map = game.GetMap()
+    local dir = "apadventure/cfgs/gm/"..gname
+    file.CreateDir(dir.."/"..map)
+    file.Write(dir.."/group.json",util.TableToJSON(groupout,prettyprint))
+    file.Write(dir.."/"..map.."/sav_cl.json",util.TableToJSON(outtbl,prettyprint))
+    dir = "apadventure/cfgs/ap/"..gname.."/"..map
     file.CreateDir(dir)
     file.Write(dir.."/sav_cl.json",util.TableToJSON(outtbl,prettyprint))
 end)
