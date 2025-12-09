@@ -51,7 +51,9 @@ function apAdventure.DelMark(ent,state)
     local cID = ent:MapCreationID()
     if cID == -1 then return false end
     if state == false then state = nil end
-    apAdventure.EditCfg.DelMark[cID] = state
+    local delmarktbl = apAdventure.EditCfg.DelMark
+    if delmarktbl[cID] == state then return false end
+    delmarktbl[cID] = state
     net.Start("APAdvDelMark")
         net.WriteUInt(cID,14)
         net.WriteBool(state)
