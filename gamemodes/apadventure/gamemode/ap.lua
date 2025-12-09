@@ -155,17 +155,17 @@ local function OnRunID(packet)
 
         APADV.InitSaveData(runid)
         
-        if APADV_RUNID or !next(ApAdv_LastMapTbl) then
+        if APADV_RUNID or !next(APADV_LASTMAPTBL) then
             local map = game.GetMap()
             if map == slotdata.startmap then
                 APADV_USESTART = slotdata.startregion
                 LoadCfg(slotdata.startgroup)
             elseif APADV_SAVEDATA.visited and APADV_SAVEDATA.visited[map] then
                 local groupname, grouptbl = next(APADV_SAVEDATA.visited[map])
-                ApAdv_EntrName = next(grouptbl)
+                APADV_ENTRNAME = next(grouptbl)
                 LoadCfg(groupname)
             else
-                ApAdv_NextMapTbl.SentToStart = slotdata.startregion
+                APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
                 DoMapTransition(slotdata.startmap,slotdata.startgroup)
             end
         end

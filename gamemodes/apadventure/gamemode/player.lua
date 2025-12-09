@@ -23,7 +23,6 @@ function GM:PlayerSpawn(ply,trans)
     player_manager.SetPlayerClass(ply,"player_apadv")
     BASEGM.PlayerSpawn(self,ply,trans)
 
-    --if ApAdv_EntrName and ApAdv_Entrances[ApAdv_EntrName] and next(ApAdv_Entrances[ApAdv_EntrName]) then
     if APADV_SPAWNS and next(APADV_SPAWNS) then
         local boundmins, boundmaxs = ply:GetCollisionBounds()
         local spawnpick = false

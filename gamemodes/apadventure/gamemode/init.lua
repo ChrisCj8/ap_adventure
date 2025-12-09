@@ -14,9 +14,9 @@ include("ap.lua")
 util.AddNetworkString("apAdvConnectionInfo")
 util.AddNetworkString("ApAdvConnectionState")
 
-ApAdv_LastMapTbl = ApAdv_LastMapTbl or {}
-ApAdv_NextMapTbl = ApAdv_NextMapTbl or {}
-ApAdv_Entrances = ApAdv_Entrances or {}
+APADV_LASTMAPTBL = APADV_LASTMAPTBL or {}
+APADV_NEXTMAPTBL = APADV_NEXTMAPTBL or {}
+APADV_ENTRANCES = APADV_ENTRANCES or {}
 APADV_EXITENTS = APADV_EXITENTS or {}
 
 function DoMapTransition(map,group,entrname)
@@ -27,27 +27,27 @@ function DoMapTransition(map,group,entrname)
     end
     if map == curmap then
         if entrname then
-            ApAdv_EntrName = entrname
+            APADV_ENTRNAME = entrname
             APADV_USESTART = nil
         else
             if slotdata then
                 APADV_USESTART = slotdata.startregion
             end
-            ApAdv_EntrName = nil
+            APADV_ENTRNAME = nil
         end
         LoadCfg(group)
         return
     end
     local checknum = math.random(999999)
-    ApAdv_NextMapTbl.checknum = checknum
-    ApAdv_NextMapTbl.lastmap = game.GetMap()
-    ApAdv_NextMapTbl.apslot = {
+    APADV_NEXTMAPTBL.checknum = checknum
+    APADV_NEXTMAPTBL.lastmap = game.GetMap()
+    APADV_NEXTMAPTBL.apslot = {
         addr = APADV_SLOT.address,
         name = APADV_SLOT.slotName,
         pw = APADV_SLOT.password, 
         sd = slotdata
     }
-    ApAdv_NextMapTbl.loadcfg = {
+    APADV_NEXTMAPTBL.loadcfg = {
         m = map,
         g = group,
         e = entrname
@@ -59,11 +59,11 @@ function DoMapTransition(map,group,entrname)
         APADV_SAVEDATA.visited[map][group] = APADV_SAVEDATA.visited[map][group] or {}
         APADV_SAVEDATA.visited[map][group][entrname] = true 
     elseif slotdata and slotdata.start == curmap then
-        ApAdv_NextMapTbl.SentToStart = slotdata.startregion
+        APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
     end
 
     game.SetGlobalCounter("ApAdvLevelTrans",checknum)
-    file.Write("apadventure/leveltransdata.json",util.TableToJSON(ApAdv_NextMapTbl))
+    file.Write("apadventure/leveltransdata.json",util.TableToJSON(APADV_NEXTMAPTBL))
     RunConsoleCommand("changelevel",map)
 end
 
@@ -72,13 +72,13 @@ if file.Exists("apadventure/leveltransdata.json","DATA") then
     if checknum != 0 then
         local lastmaptbl = util.JSONToTable(file.Read("apadventure/leveltransdata.json","DATA"))
         if lastmaptbl.checknum == checknum then
-            ApAdv_LastMapTbl = lastmaptbl
+            APADV_LASTMAPTBL = lastmaptbl
 
             if lastmaptbl.SentToStart then
                 APADV_USESTART = lastmaptbl.SentToStart
             end
 
-            ApAdv_EntrName = lastmaptbl.loadcfg.e
+            APADV_ENTRNAME = lastmaptbl.loadcfg.e
 
             local sltbl = lastmaptbl.apslot
             if sltbl then

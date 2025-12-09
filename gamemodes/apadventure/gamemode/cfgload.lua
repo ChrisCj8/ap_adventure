@@ -73,18 +73,13 @@ function LoadCfg(group)
     else
         for k,v in ipairs(cfg.entr) do
             local i = 1
-            if ApAdv_EntrName == v.name then
+            if APADV_ENTRNAME == v.name then
                 APADV_SPAWNS[i] = {
                     pos = v.pos,
                     ang = v.ang
                 }
                 i = i+1
             end
-            --[[ ApAdv_Entrances[v.name] = ApAdv_Entrances[v.name] or {}
-            ApAdv_Entrances[v.name][#ApAdv_Entrances[v.name]+1] = {
-                pos = v.pos,
-                ang = v.ang,
-            } ]]
         end
     end
 
