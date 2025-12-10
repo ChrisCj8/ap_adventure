@@ -100,13 +100,13 @@ timer.Create("APAdvProcessHalos",1,0,function()
     apAdvHalos = {}
     local i=1
     for k,v in pairs(apAdventure.EditCfg.DelMark) do
-        if IsValid(v) then
-            apAdvHalos[i] = v
+        if IsValid(v.ent) then
+            apAdvHalos[i] = v.ent
             i=i+1
         else
             local idcheck = ents.GetMapCreatedEntity(k)
             if idcheck then
-                apAdventure.EditCfg.DelMark[k] = idcheck
+                apAdventure.EditCfg.DelMark[k].ent = idcheck
                 apAdvHalos[i] = idcheck
                 i=i+1
             end 
@@ -115,8 +115,24 @@ timer.Create("APAdvProcessHalos",1,0,function()
     timer.Stop("APAdvProcessHalos")
 end)
 
+timer.Create("APAdvUpdateDelMark",1,0,function()
+    if IsValid(apAdventure.DeleteByCIdList) then
+        apAdventure.DeleteByCIdList:ProcessDelMark()
+    end
+    timer.Stop("APAdvUpdateDelMark")
+end)
+timer.Stop("APAdvUpdateDelMark")
+
+net.Receive("APAdvClearDelMark", function()
+    apAdventure.EditCfg.DelMark = {}
+    timer.Start("APAdvProcessHalos")
+    timer.Start("APAdvUpdateDelMark")
+end)
+
 net.Receive("APAdvDelMark",function() 
     local id = net.ReadUInt(14)
+    local class = net.ReadString()
+    local name = net.ReadString()
     local mark = net.ReadBool()
     if mark then 
         local ent = ents.GetMapCreatedEntity(id) 
@@ -128,8 +144,17 @@ net.Receive("APAdvDelMark",function()
     else 
         mark = nil 
     end
-    apAdventure.EditCfg.DelMark[id] = mark
+    local entry
+    if mark then 
+        entry = {
+            ent = mark,
+            class = class,
+            name = name
+        }
+    end
+    apAdventure.EditCfg.DelMark[id] = entry
     timer.Start("APAdvProcessHalos")
+    timer.Start("APAdvUpdateDelMark")
 end)
 
 apAdvDoHalos = true

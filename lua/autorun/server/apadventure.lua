@@ -38,6 +38,7 @@ local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHI
 
 //if file.IsDir("apAdventure/")
 util.AddNetworkString("APAdvDelMark")
+util.AddNetworkString("APAdvClearDelMark")
 util.AddNetworkString("APAdvActiveCfgClear")
 util.AddNetworkString("APAdvRegion")
 util.AddNetworkString("APAdvSaveCfg")
@@ -47,19 +48,56 @@ local editcfg = apAdventure.EditCfg
 
 local playingApAdv = engine.ActiveGamemode() == "apadventure"
 
+local function senddelmark(cID,ent,state)
+    net.Start("APAdvDelMark")
+        net.WriteUInt(cID,14)
+        net.WriteString(ent:GetClass())
+        net.WriteString(ent:GetName())
+        net.WriteBool(state)
+    net.Broadcast()
+end
+
 function apAdventure.DelMark(ent,state)
-    local cID = ent:MapCreationID()
+    local cID
+    if isnumber(ent) then
+        cID = ent 
+        ent = ents.GetMapCreatedEntity(cID)
+    else
+        cID = ent:MapCreationID()
+    end
     if cID == -1 then return false end
-    if state == false then state = nil end
+    if state == false then 
+        state = nil 
+    else
+        state = ent
+    end
+    
     local delmarktbl = apAdventure.EditCfg.DelMark
     if delmarktbl[cID] == state then return false end
     delmarktbl[cID] = state
-    net.Start("APAdvDelMark")
-        net.WriteUInt(cID,14)
-        net.WriteBool(state)
-    net.Broadcast()
+    senddelmark(cID,ent,state)
     return true
 end
+
+function apAdventure.UpdateDelMarks(ply)
+    local send = net.send
+    if !ply then
+        send = net.Broadcast()
+    elseif !IsValid(ply) then
+        return
+    end
+    net.Start("APAdvClearDelMark")
+    send(ply)
+    for k,v in pairs(apAdventure.EditCfg.DelMark) do
+        senddelmark(k,v,true)
+    end
+end
+
+net.Receive("APAdvDelMark",function(len,ply)
+    local id = net.ReadUInt(14)
+    local state = net.ReadBool()
+    apAdventure.DelMark(id,state)
+end)
 
 --[[ function apAdventure.SendRegion(name)
     local region = editcfg.Regions[name]
@@ -246,11 +284,9 @@ function apAdventure.LoadCfg(gname,dodelete)
 
     local newdel = cfgtab.DelMark
     for k,v in ipairs(gtbl.del) do
-        net.Start("APAdvDelMark")
-            net.WriteUInt(v,14)
-            net.WriteBool(true)
-        net.Broadcast()
-        newdel[v] = ents.GetMapCreatedEntity(v)
+        local ent = ents.GetMapCreatedEntity(v)
+        senddelmark(v,ent,true)
+        newdel[v] = ent
         if dodelete then
             newdel[v]:Remove()
         end
@@ -491,19 +527,11 @@ end)
 concommand.Add("apadventure_editor_delete_mark_by_creationid",function(ply,_,args) 
     local arg = tonumber(args[1])
     if !ply:IsListenServerHost() or !arg then return end
-    apAdventure.EditCfg.DelMark[arg] = true
-    net.Start("APAdvDelMark")
-        net.WriteUInt(arg,14)
-        net.WriteBool(true)
-    net.Broadcast()
+    apAdventure.DelMark(arg,true)
 end)
 
 concommand.Add("apadventure_editor_remove_delete_mark_by_creationid",function(ply,_,args) 
     local arg = tonumber(args[1])
     if !ply:IsListenServerHost() or !arg then return end
-    apAdventure.EditCfg.DelMark[arg] = nil
-    net.Start("APAdvDelMark")
-        net.WriteUInt(arg,14)
-        net.WriteBool(false)
-    net.Broadcast()
+    apAdventure.DelMark(arg,false)
 end)
