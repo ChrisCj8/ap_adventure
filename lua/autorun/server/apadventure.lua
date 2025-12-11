@@ -82,7 +82,7 @@ end
 function apAdventure.UpdateDelMarks(ply)
     local send = net.send
     if !ply then
-        send = net.Broadcast()
+        send = net.Broadcast
     elseif !IsValid(ply) then
         return
     end
