@@ -49,10 +49,15 @@ local editcfg = apAdventure.EditCfg
 local playingApAdv = engine.ActiveGamemode() == "apadventure"
 
 local function senddelmark(cID,ent,state)
+    local class, name = "?","?"
+    if IsValid(ent) then
+        class = ent:GetClass()
+        name = ent:GetName()
+    end
     net.Start("APAdvDelMark")
         net.WriteUInt(cID,14)
-        net.WriteString(ent:GetClass())
-        net.WriteString(ent:GetName())
+        net.WriteString(class)
+        net.WriteString(name)
         net.WriteBool(state)
     net.Broadcast()
 end
