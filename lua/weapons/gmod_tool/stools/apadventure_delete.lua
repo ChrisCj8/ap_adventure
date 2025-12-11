@@ -95,13 +95,13 @@ function TOOL:LeftClick(tr)
     if !hitent or EntFilter[hitent:GetClass()] then return end
     local op = self:GetOperation()
     if op == 0 then
-        return apAdventure.DelMark(hitent,true)
+        if !apAdventure.DelMark(hitent,true) then return end
     else
         local name = hitent:GetName()
         if name == "" then return end
         apAdventure.EditCfg.DelName[name] = true
     end
-    return true
+    return apAdventure.SpoofToolShot(self,tr)
 end
 
 function TOOL:RightClick(tr)
@@ -109,13 +109,13 @@ function TOOL:RightClick(tr)
     if !hitent or EntFilter[hitent:GetClass()] or hitent:MapCreationID() == -1 then return end
     local op = self:GetOperation()
     if op == 0 then
-        return apAdventure.DelMark(hitent,false)
+        if !apAdventure.DelMark(hitent,false) then return end
     else
         local name = hitent:GetName()
         if name == "" then return end
         apAdventure.EditCfg.DelName[name] = nil
     end
-    return true
+    return apAdventure.SpoofToolShot(self,tr)
 end
 
 function TOOL:Reload()
