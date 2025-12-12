@@ -18,15 +18,17 @@ local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHI
     "When enabled, config .json files will generated with the prettyprint parameter enabled, which makes them more readable at the cost of taking slightly more storage space",
     0,1)
 
-list.Set("DesktopWindows","apAdventureEditor",{
-    icon = "icon32/folder.png",
-    title = "apAdventure Editor",
-    width = 800,
-    height = 500,
-    init = function(icon, window)
-        include("apadventure/ui/cmenu.lua")(window)
-    end
-})
+if LocalPlayer():IsListenServerHost() and engine.ActiveGamemode != "apAdventure" then
+    list.Set("DesktopWindows","apAdventureEditor",{
+        icon = "apadventure/apicon64.png",
+        title = "apAdventure Editor",
+        width = 800,
+        height = 500,
+        init = function(icon, window)
+            include("apadventure/ui/cmenu.lua")(window)
+        end
+    })
+end
 
 local editcfg = apAdventure.EditCfg
 

@@ -5,7 +5,7 @@ net.Receive("apAdv_BHopUpdate", function()
 end)
 
 list.Set("DesktopWindows","apAdventureConnect",{
-    icon = "icon16/connect.png",
+    icon = "apadventure/apicon64.png",
     title = "apAdventure Connection",
     width = 400,
     height = 500,
