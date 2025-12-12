@@ -503,7 +503,7 @@ else
         local wep = tool:GetWeapon()
         local ply = tool:GetOwner()
         wep:EmitSound(wep.ShootSound)
-        net.Start("ApAdvToolgunEffect")
+        net.Start("ApAdvToolShot")
             net.WritePlayer(ply)
             net.WriteVector(tr.HitPos)
         net.Broadcast()
