@@ -18,7 +18,7 @@ local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHI
     "When enabled, config .json files will generated with the prettyprint parameter enabled, which makes them more readable at the cost of taking slightly more storage space",
     0,1)
 
-if LocalPlayer():IsListenServerHost() and engine.ActiveGamemode != "apAdventure" then
+if engine.ActiveGamemode() == "sandbox" then
     list.Set("DesktopWindows","apAdventureEditor",{
         icon = "apadventure/apicon64.png",
         title = "apAdventure Editor",
