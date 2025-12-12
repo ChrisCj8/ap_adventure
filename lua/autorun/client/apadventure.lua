@@ -30,7 +30,8 @@ list.Set("DesktopWindows","apAdventureEditor",{
 
 local editcfg = apAdventure.EditCfg
 
-local apAdvHalos = {}
+local apAdvDelHalos = {}
+local apAdvSaveHalos = {}
 
 net.Receive("APAdvActiveCfgClear",function()
     local gname = net.ReadString()
@@ -48,7 +49,8 @@ net.Receive("APAdvActiveCfgClear",function()
         Events = {},
     }
     editcfg = apAdventure.EditCfg
-    apAdvHalos = {}
+    apAdvDelHalos = {}
+    apAdvSaveHalos = {}
     local groupjson = file.Read("apadventure/cfgs/gm/"..gname.."/group.json","DATA")
     if groupjson then
         local tbl = util.JSONToTable(groupjson)
@@ -96,23 +98,24 @@ net.Receive("APAdvSaveCfg",function()
     file.Write(dir.."/sav_cl.json",util.TableToJSON(outtbl,prettyprint))
 end)
 
-timer.Create("APAdvProcessHalos",1,0,function() 
-    apAdvHalos = {}
+
+timer.Create("APAdvProcessDelHalos",1,0,function() 
+    apAdvDelHalos = {}
     local i=1
     for k,v in pairs(apAdventure.EditCfg.DelMark) do
         if IsValid(v.ent) then
-            apAdvHalos[i] = v.ent
+            apAdvDelHalos[i] = v.ent
             i=i+1
         else
             local idcheck = ents.GetMapCreatedEntity(k)
             if idcheck then
                 apAdventure.EditCfg.DelMark[k].ent = idcheck
-                apAdvHalos[i] = idcheck
+                apAdvDelHalos[i] = idcheck
                 i=i+1
             end 
         end
     end
-    timer.Stop("APAdvProcessHalos")
+    timer.Stop("APAdvProcessDelHalos")
 end)
 
 timer.Create("APAdvUpdateDelMark",1,0,function()
@@ -125,7 +128,7 @@ timer.Stop("APAdvUpdateDelMark")
 
 net.Receive("APAdvClearDelMark", function()
     apAdventure.EditCfg.DelMark = {}
-    timer.Start("APAdvProcessHalos")
+    timer.Start("APAdvProcessDelHalos")
     timer.Start("APAdvUpdateDelMark")
 end)
 
@@ -153,17 +156,65 @@ net.Receive("APAdvDelMark",function()
         }
     end
     apAdventure.EditCfg.DelMark[id] = entry
-    timer.Start("APAdvProcessHalos")
+    timer.Start("APAdvProcessDelHalos")
     timer.Start("APAdvUpdateDelMark")
 end)
 
-apAdvDoHalos = true
+timer.Create("APAdvProcessSaveHalos",1,0,function() 
+    apAdvSaveHalos = {}
+    local i=1
+    for k,v in pairs(apAdventure.EditCfg.Saved) do
+        if IsValid(k) then
+            apAdvSaveHalos[i] = k
+            i=i+1
+        end
+    end
+    timer.Stop("APAdvProcessSaveHalos")
+end)
+
+net.Receive("APAdvSaveMark",function()
+    local ent = net.ReadEntity()
+    local state = net.ReadBool()
+    if state == false then state = nil end
+    apAdventure.EditCfg.Saved[ent] = state
+    timer.Start("APAdvProcessSaveHalos")
+end)
+
+net.Receive("APAdvClearSaveMark", function()
+    apAdventure.EditCfg.Saved = {}
+    timer.Start("APAdvProcessSaveHalos")
+end)
 
 local delmarkhalo = Color(200,10,10)
+local savmarkhalo = Color(10,200,10)
+
+local addhalo = halo.Add
+
+local delhaloconv = CreateClientConVar("apadventure_editor_show_delete_halos",1,true,false,
+    "Determines if the game should render red halos around entities marked for deletion via the Delete Marker Tool.",0,1)
+
+local doDelHalos = delhaloconv:GetBool()
+
+cvars.AddChangeCallback("apadventure_editor_show_delete_halos",function(_,_,val) 
+    doDelHalos = tobool(val)
+end)
+
+local savehaloconv = CreateClientConVar("apadventure_editor_show_save_halos",1,true,false,
+    "Determines if the game should render green halos around entities marked to be saved via the Save Marker Tool.",0,1)
+
+local doSaveHalos = savehaloconv:GetBool()
+
+cvars.AddChangeCallback("apadventure_editor_show_save_halos",function(_,_,val) 
+    doSaveHalos = tobool(val)
+end)
 
 hook.Add("PreDrawHalos","apAdventure",function() 
-    if !apAdvDoHalos then return end
-    halo.Add(apAdvHalos,delmarkhalo,2,2,1,true,true)
+    if doDelHalos then
+        addhalo(apAdvDelHalos,delmarkhalo,2,2,1,true,true)
+    end
+    if doSaveHalos then
+        addhalo(apAdvSaveHalos,savmarkhalo,2,2,1,true,true)
+    end
 end)
 
 apAdventure.TextFacing = Angle(0,0,90)

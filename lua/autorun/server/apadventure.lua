@@ -39,6 +39,8 @@ local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHI
 //if file.IsDir("apAdventure/")
 util.AddNetworkString("APAdvDelMark")
 util.AddNetworkString("APAdvClearDelMark")
+util.AddNetworkString("APAdvSaveMark")
+util.AddNetworkString("APAdvClearSaveMark")
 util.AddNetworkString("APAdvActiveCfgClear")
 util.AddNetworkString("APAdvRegion")
 util.AddNetworkString("APAdvSaveCfg")
@@ -103,6 +105,39 @@ net.Receive("APAdvDelMark",function(len,ply)
     local state = net.ReadBool()
     apAdventure.DelMark(id,state)
 end)
+
+local function sendsavemark(ent,state)
+    net.Start("APAdvSaveMark")
+        net.WriteEntity(ent)
+        net.WriteBool(state)
+    net.Broadcast()
+end
+
+function apAdventure.SaveMark(ent,state)
+    if ent:MapCreationID() != -1 then return end
+    if state == false then 
+        state = nil
+    end
+    local savtbl = apAdventure.EditCfg.Saved
+    if savtbl[ent] == state then return false end
+    savtbl[ent] = state
+    sendsavemark(ent,state)
+    return true
+end
+
+function apAdventure.UpdateSaveMarks(ply)
+    local send = net.Send
+    if !ply then
+        send = net.Broadcast
+    elseif !IsValid(ply) then
+        return
+    end
+    net.Start("APAdvClearSaveMark")
+    send(ply)
+    for k,v in pairs(apAdventure.EditCfg.Saved) do
+        sendsavemark(k,true)
+    end
+end
 
 --[[ function apAdventure.SendRegion(name)
     local region = editcfg.Regions[name]
@@ -338,6 +373,7 @@ function apAdventure.LoadCfg(gname,dodelete)
     end
 
     apAdventure.SetCfgTbl(cfgtab)
+    timer.Simple(.1,apAdventure.UpdateSaveMarks)
 end
 
 apAdventure.AreaPortalInfo = apAdventure.AreaPortalInfo or {}

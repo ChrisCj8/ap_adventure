@@ -82,6 +82,8 @@ if CLIENT then
             end
 
         apAdventure.DeleteByCIdList = cIdList
+
+        cPnl:CheckBox("#tool.apadventure_delete.dohalos","apadventure_editor_show_delete_halos")
     end
     return
 end
