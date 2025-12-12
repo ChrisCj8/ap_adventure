@@ -197,6 +197,8 @@ net.Receive("ApAdvToolShot",function()
     wep:EmitSound(wep.ShootSound)
     local effect = EffectData()
     effect:SetOrigin(hitpos)
-    effect:SetStart(ply:GetShootPos())
+    local at = wep
+    if ply == LocalPlayer() then at = ply:GetViewModel() end
+    effect:SetStart(at:GetAttachment(1).Pos)
     util.Effect("ToolTracer",effect)
 end)
