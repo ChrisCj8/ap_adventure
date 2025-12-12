@@ -8,6 +8,11 @@ if CLIENT then
         {name="reload"}
     }
 
+    function TOOL.BuildCPanel(cPnl)
+        cPnl:Help("#tool.apadventure_inspector.help1")
+        cPnl:Help("#tool.apadventure_inspector.help_point_template")
+    end
+
     apAdventure.InspectorInfo = apAdventure.InspectorInfo or {}
 
     local inspectorinfo = apAdventure.InspectorInfo
@@ -35,12 +40,22 @@ if CLIENT then
         PrintTable(inspectorinfo)
     end)
 
+    local drawcol = surface.SetDrawColor
+    local drawrect = surface.DrawRect
+    local drawtext = draw.DrawText
+
+    function TOOL:DrawToolScreen(w,h)
+        drawcol(color_black)
+        drawrect(0,0,w,h)
+
+        drawtext((apAdventureHideInspectorInfo and "Inactive" or "Active").."\n\n Found "..inspectorinfoamt.." entities","DermaLarge",w/2,h/4,color_white,TEXT_ALIGN_CENTER,TEXT_ALIGN_CENTER)
+    end
+
     apAdventureHideInspectorInfo = true
     local deletedicon = Material("icon16/bin.png")
     -- i think this should help reduce the amount of lookups and make the code run faster
     local setmat = surface.SetMaterial
     local drawtexrect = surface.DrawTexturedRect
-    local drawtext = draw.DrawText
     local start3d2d = cam.Start3D2D
     local end3d2d = cam.End3D2D
 
@@ -79,10 +94,6 @@ end
 
 if SERVER then
     util.AddNetworkString("APAdvInspectorInfo")
-
-   --[[  net.Receive("APAdvInspectorInfo",function(len,ply) 
-        
-    end) ]]
 
     function TOOL:Reload()
         local first = true
