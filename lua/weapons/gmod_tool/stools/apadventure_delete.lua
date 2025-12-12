@@ -15,6 +15,7 @@ if CLIENT then
         cPnl:Help("#tool.apadventure_delete.help1")
         cPnl:Help("#tool.apadventure_delete.help_cid")
         cPnl:Help("#tool.apadventure_delete.help_targetname")
+        cPnl:Help("#tool.apadventure_delete.help_point_template")
         local idlistcontainer = vgui.Create("DCollapsibleCategory",cPnl)
         idlistcontainer:SetLabel("#tool.apadventure_delete.idlist.label")
         cPnl:AddItem(idlistcontainer)
