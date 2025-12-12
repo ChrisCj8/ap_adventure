@@ -239,17 +239,21 @@ net.Receive("APAdvAreaPortalInfo",function()
     end
 end)
 
-net.Receive("ApAdvToolShot",function()
-    local ply = net.ReadPlayer()
-    local hitpos = net.ReadVector()
-    if !ply then return end
-    local wep = ply:GetActiveWeapon()
-    if wep:GetClass() != "gmod_tool" then return end
-    wep:EmitSound(wep.ShootSound)
-    local effect = EffectData()
-    effect:SetOrigin(hitpos)
-    local at = wep
-    if ply == LocalPlayer() then at = ply:GetViewModel() end
-    effect:SetStart(at:GetAttachment(1).Pos)
-    util.Effect("ToolTracer",effect)
-end)
+if !game.SinglePlayer() then
+
+    net.Receive("ApAdvToolShot",function()
+        local ply = net.ReadPlayer()
+        local hitpos = net.ReadVector()
+        if !ply then return end
+        local wep = ply:GetActiveWeapon()
+        if wep:GetClass() != "gmod_tool" then return end
+        wep:EmitSound(wep.ShootSound)
+        local effect = EffectData()
+        effect:SetOrigin(hitpos)
+        local at = wep
+        if ply == LocalPlayer() then at = ply:GetViewModel() end
+        effect:SetStart(at:GetAttachment(1).Pos)
+        util.Effect("ToolTracer",effect)
+    end)
+
+end

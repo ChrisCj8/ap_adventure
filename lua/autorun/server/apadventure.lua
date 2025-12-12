@@ -528,13 +528,13 @@ function apAdventure.ProcessItemdefs(groupname)
     end
 end
 
-util.AddNetworkString("ApAdvToolShot")
-
 if game.SinglePlayer() then
     function apAdventure.SpoofToolShot()
         return true
     end
 else
+    util.AddNetworkString("ApAdvToolShot")
+
     function apAdventure.SpoofToolShot(tool,tr)
         local wep = tool:GetWeapon()
         local ply = tool:GetOwner()
