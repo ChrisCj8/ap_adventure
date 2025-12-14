@@ -742,31 +742,6 @@ return function(window)
             mapitemeditpnl:SetSize(w-115,h-35)
         end
 
-    local eventpnl = vgui.Create("DPanel")
-    tabs:AddSheet("Events",eventpnl)
-
-        local eventtbl = editcfg.Events
-
-        local eventselect = vgui.Create("DComboBox",eventpnl)
-        eventselect:SetPos(5,5)
-
-        local eventparamin = vgui.Create("DTextEntry",eventpnl)
-
-        local eventaddbtn = ImageButton(eventpnl,"icon16/add.png")
-        local eventdelbtn = ImageButton(eventpnl,"icon16/delete.png")
-
-        function eventpnl:PerformLayout(w,h)
-
-            local selwidth = (w-10)/2
-            eventselect:SetSize(selwidth,22)
-
-            eventparamin:SetPos(selwidth+10, 5)
-            eventparamin:SetSize(w-selwidth-56,22)
-
-            eventaddbtn:SetPos(w-41,7)
-            eventdelbtn:SetPos(w-21,7)
-        end
-
     window:SetSizable(true)
     local oldlayout = window.PerformLayout
     function window:PerformLayout(width,height)
