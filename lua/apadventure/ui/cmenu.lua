@@ -5,6 +5,10 @@ local bool2yn = {
     [false] = "no"
 }
 
+local function LocStrExists(str)
+    return language.GetPhrase(str) != str
+end
+
 local function ImageButton(parent,image) 
     local btn = vgui.Create("DImageButton",parent)
     btn:SetImage(image)
@@ -37,6 +41,47 @@ local function LabelNumWangWithPreset(parent,locstr,presettbl)
         numw:SetValue(data)
     end
     return label, numw, presetsel
+end
+
+local helpbubble
+
+local helppnlclr = Color(255,255,205)
+
+local function HelpPopup(helptext,w,creator)
+
+    if !creator then return end
+
+    local h = 10
+
+    local pnl = vgui.Create("DPanel")
+    pnl:SetBackgroundColor(helppnlclr)
+    pnl.creator = creator
+    function pnl:Think()
+        local creator = self.creator
+        if !IsValid(creator) or vgui.GetHoveredPanel() != creator then
+            self:Remove()
+        end
+    end
+    
+    local text = vgui.Create("DLabel",pnl)
+    text:SetPos(5,5)
+    text:SetSize(w-10,10)
+    text:SetWrap(true)
+    text:SetAutoStretchVertical(true)
+    text:SetTextColor(color_black) -- set the color to black here rather than using set dark in case derma skins set it to something weird
+    text:SetText(helptext)
+    
+    local cursorx , cursory = gui.MousePos() 
+
+    timer.Simple(0,function() 
+        local _,texth = text:GetSize()
+        pnl:SetSize(w,texth+10)
+        pnl:SetPos(cursorx-w-30,cursory-(texth/2)-5)
+    end)
+
+    pnl:MakePopup()
+
+    return pnl
 end
 
 local mapsettings = apAdventure.CfgSettings
@@ -128,6 +173,15 @@ return function(window)
 
         for k,v in ipairs(mapsettings) do
             grouppanelbuilders[v.type](v)
+            local helpstr = "apadventure.editor."..v.name..".help"
+            if LocStrExists(helpstr) then
+                local help = ImageButton(groupcfgpnl,"icon16/help.png")
+                function help:DoClick()
+                    cfgw = groupcfgpnl:GetSize()
+                    HelpPopup("#"..helpstr,cfgw-100,self)
+                end
+                grouprulesplacegroups[groupruleselements].help = help
+            end
         end
 
         function groupcfgpnl:PerformLayout(w,h)
@@ -136,14 +190,19 @@ return function(window)
             for k,v in ipairs(grouprulesplacegroups) do
                 local curw = 5
                 for ik,iv in ipairs(v.pnls) do
-                    local iw = iv.w or (w - 10 - curw) 
+                    local iw = iv.w or (w - 26 - curw) 
                     iv.pnl:SetPos(curw,curh)
                     iv.pnl:SetSize(iw,v.h)
                     curw = curw + iw + 5
                 end
+
+                if v.help then
+                    v.help:SetPos(w-20,curh+2)
+                end
+
                 curh = curh + (v.h or 22) + 5
             end
-            
+
         end
 
     local mapcfgpnl = vgui.Create("DPanel")
@@ -237,6 +296,15 @@ return function(window)
 
         for k,v in ipairs(mapsettings) do
             rulespanelbuilders[v.type](v)
+            local helpstr = "apadventure.editor."..v.name..".help"
+            if LocStrExists(helpstr) then
+                local help = ImageButton(mapcfgpnl,"icon16/help.png")
+                function help:DoClick()
+                    cfgw = mapcfgpnl:GetSize()
+                    HelpPopup("#"..helpstr,cfgw-100,self)
+                end
+                maprulesplacegroups[mapruleselements].help = help
+            end
         end
 
         function mapcfgpnl:PerformLayout(w,h)
@@ -246,11 +314,16 @@ return function(window)
             for k,v in ipairs(maprulesplacegroups) do
                 local curw = 5
                 for ik,iv in ipairs(v.pnls) do
-                    local iw = iv.w or (w - 10 - curw) 
+                    local iw = iv.w or (w - 26 - curw) 
                     iv.pnl:SetPos(curw,curh)
                     iv.pnl:SetSize(iw,v.h)
                     curw = curw + iw + 5
                 end
+
+                if v.help then
+                    v.help:SetPos(w-20,curh+2)
+                end
+
                 curh = curh + (v.h or 22) + 5
             end
             
