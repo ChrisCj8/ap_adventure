@@ -16,11 +16,11 @@ if CLIENT then
 
     function TOOL.BuildCPanel(cPnl)
         cPnl:TextEntry("#apadventure.toolui.region","apadventure_location_region")
-        cPnl:Help("#tool.apadventure_location.region_help")
+        cPnl:ControlHelp("#tool.apadventure_location.region_help")
         cPnl:TextEntry("#tool.apadventure_location.name_ui","apadventure_location_name")
-        cPnl:Help("#tool.apadventure_location.name_help")
+        cPnl:ControlHelp("#tool.apadventure_location.name_help")
         cPnl:CheckBox("#tool.apadventure_location.isdummy","apadventure_location_isdummy")
-        cPnl:Help("#tool.apadventure_location.isdummy_help")
+        cPnl:ControlHelp("#tool.apadventure_location.isdummy_help")
     end
 
     return

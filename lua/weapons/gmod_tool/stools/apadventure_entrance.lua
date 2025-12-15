@@ -16,9 +16,9 @@ if CLIENT then
 
     function TOOL.BuildCPanel(cPnl)
         apAdventure.entrregnamepnl = cPnl:TextEntry("#apadventure.toolui.region","apadventure_entrance_region")
-        cPnl:Help("#tool.apadventure_entrance.region_help")
+        cPnl:ControlHelp("#tool.apadventure_entrance.region_help")
         apAdventure.entrnamepnl = cPnl:TextEntry("#tool.apadventure_entrance.name_ui","apadventure_entrance_name")
-        cPnl:Help("#tool.apadventure_entrance.name_help")
+        cPnl:ControlHelp("#tool.apadventure_entrance.name_help")
         cPnl:Help("#tool.apadventure_entrance.match_names_info")
         cPnl:Help("#apadventure.toolui.twoway")
     end

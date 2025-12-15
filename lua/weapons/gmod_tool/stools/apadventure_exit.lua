@@ -15,9 +15,9 @@ if CLIENT then
 
     function TOOL.BuildCPanel(cPnl)
         apAdventure.exitregnamepnl = cPnl:TextEntry("#apadventure.toolui.region","apadventure_exit_region")
-        cPnl:Help("#tool.apadventure_exit.region_help")
+        cPnl:ControlHelp("#tool.apadventure_exit.region_help")
         apAdventure.exitnamepnl = cPnl:TextEntry("#tool.apadventure_exit.name_ui","apadventure_exit_name")
-        cPnl:Help("#tool.apadventure_exit.name_help")
+        cPnl:ControlHelp("#tool.apadventure_exit.name_help")
         cPnl:Help("#tool.apadventure_exit.match_names_info")
         cPnl:Help("#apadventure.toolui.twoway")
     end
