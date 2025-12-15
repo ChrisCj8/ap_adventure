@@ -528,8 +528,6 @@ return function(window)
                 nodetypes[name] = include("apadventure/ui/accessnodes/"..v)
             end
 
-            PrintTable(nodetypes)
-
             local conaccesstree = vgui.Create("DTree",coneditpnl)
             conaccesstree:SetPos(5,60)
 
@@ -537,15 +535,12 @@ return function(window)
             conaccessnodeselect:SetPos(5,30)
 
             for k,v in pairs(nodetypes) do
-                print("adding node type "..k)
                 conaccessnodeselect:AddChoice(k,k)
             end
 
             local addnodes
 
             function addnodes(base,tbl)
-                --print("adding nodes")
-                --PrintTable(tbl)
                 for k,v in ipairs(tbl) do
                     local node = base:AddNode(v.type,nodetypes[v.type].Icon or "icon16/bullet_black.png")
                     node.tbl = v
