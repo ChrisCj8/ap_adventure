@@ -101,7 +101,8 @@ return function(window)
 
     local infoinputs = {}
 
-    local groupcfgpnl = vgui.Create("DPanel")
+    local groupcfgpnl = vgui.Create("DScrollPanel")
+    groupcfgpnl:SetPaintBackground(true)
     local newtab = tabs:AddSheet("Group Settings",groupcfgpnl)
     newtab.Tab.guide = "grouptab"
 
@@ -187,8 +188,11 @@ return function(window)
             end
         end
 
+        local oldlayout = groupcfgpnl.PerformLayout
         function groupcfgpnl:PerformLayout(w,h)
             
+            oldlayout(self,w,h)
+            w = self:InnerWidth()
             local curh = 5
             for k,v in ipairs(grouprulesplacegroups) do
                 local curw = 5
@@ -208,7 +212,8 @@ return function(window)
 
         end
 
-    local mapcfgpnl = vgui.Create("DPanel")
+    local mapcfgpnl = vgui.Create("DScrollPanel")
+    mapcfgpnl:SetPaintBackground(true)
     newtab = tabs:AddSheet("Map Settings",mapcfgpnl)
     newtab.Tab.guide = "maptab"
 
@@ -311,8 +316,11 @@ return function(window)
             end
         end
 
+        local oldlayout = mapcfgpnl.PerformLayout
         function mapcfgpnl:PerformLayout(w,h)
             
+            oldlayout(self,w,h)
+            w = self:InnerWidth()
             local curh = 5
             --mapstartcandidatecheck:SetSize(w-10,22)
             for k,v in ipairs(maprulesplacegroups) do
