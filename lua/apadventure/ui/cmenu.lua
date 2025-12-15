@@ -84,6 +84,8 @@ local function HelpPopup(helptext,w,creator)
     return pnl
 end
 
+local drawerconv = CreateClientConVar("apadventure_editor_help_drawer_state",1,true,false,"Used to save the state of the help drawer in the Editor UI.",0,1)
+
 local mapsettings = apAdventure.CfgSettings
 
 local numwdefaultcolor 
@@ -100,7 +102,8 @@ return function(window)
     local infoinputs = {}
 
     local groupcfgpnl = vgui.Create("DPanel")
-    tabs:AddSheet("Group Settings",groupcfgpnl)
+    local newtab = tabs:AddSheet("Group Settings",groupcfgpnl)
+    newtab.Tab.guide = "grouptab"
 
         local grouprulesplacegroups = {}
         local groupruleselements = 0
@@ -206,7 +209,8 @@ return function(window)
         end
 
     local mapcfgpnl = vgui.Create("DPanel")
-    tabs:AddSheet("Map Settings",mapcfgpnl)
+    newtab = tabs:AddSheet("Map Settings",mapcfgpnl)
+    newtab.Tab.guide = "maptab"
 
         local maprulesplacegroups = {}
         local mapruleselements = 0
@@ -330,7 +334,8 @@ return function(window)
         end
 
     local regpnl = vgui.Create("DPanel")
-    tabs:AddSheet("Regions",regpnl)
+    newtab = tabs:AddSheet("Regions",regpnl)
+    newtab.Tab.guide = "regiontab"
 
         local regtbl = editcfg.Regions
 
@@ -449,7 +454,8 @@ return function(window)
         end
 
     local connpnl = vgui.Create("DPanel")
-    tabs:AddSheet("Connections",connpnl)
+    newtab = tabs:AddSheet("Connections",connpnl)
+    newtab.Tab.guide = "connecttab"
     
         local conntbl = editcfg.Connections
 
@@ -673,7 +679,8 @@ return function(window)
         end
     
     local mapitempnl = vgui.Create("DPanel")
-    tabs:AddSheet("Map Items",mapitempnl)
+    newtab = tabs:AddSheet("Map Items",mapitempnl)
+    newtab.Tab.guide = "mapitemtab"
 
         local mapitemtbl = editcfg.MapItems
 
@@ -741,11 +748,70 @@ return function(window)
 
             mapitemeditpnl:SetSize(w-115,h-35)
         end
+    
+    local helpdrawer = vgui.Create("DDrawer",window)
+    helpdrawer:SetOpenSize(200)
+    if drawerconv:GetBool() then
+        helpdrawer:SetOpenTime(0)
+        helpdrawer:Open()
+    end
+    helpdrawer:SetOpenTime(.3)
+
+    local oldopen,oldclose = helpdrawer.Open,helpdrawer.Close
+    function helpdrawer:Open()
+        oldopen(self)
+        drawerconv:SetBool(true)
+    end
+    function helpdrawer:Close()
+        oldclose(self)
+        drawerconv:SetBool(false)
+    end
+
+    function helpdrawer:TestHover(scrx,scry)
+        local x, y = self:ScreenToLocal(scrx,scry)
+        if y < 0 then return end
+        local w,h = self:GetSize()
+        return (w-x)+(h-y) > 30
+    end
+        
+        local drawerpnl = vgui.Create("DHTML",helpdrawer)
+        drawerpnl:DockMargin(5,0,5,3)
+        drawerpnl:Dock(FILL)
+        drawerpnl:OpenURL("asset://garrysmod/apadv_guide/base.html")
+
+        local function loadguide(guide)
+            local text = ""
+            if guide then
+                local path = "apadv_guide/"..language.GetPhrase("apadventure.guidefolder").."/"..guide..".html"
+                local found
+                if file.Exists(path,"GAME") then
+                    found = true
+                else
+                    path = "apadv_guide/en/"..guide..".html"
+                    if file.Exists(path,"GAME") then
+                        found = true
+                    end
+                end
+
+                if found then
+                    text = string.JavascriptSafe(file.Read(path,"GAME"))
+                end
+            end
+            drawerpnl:QueueJavascript("loadcontent(\""..text.."\")")
+        end
+
+        loadguide(tabs:GetActiveTab().guide)
+
+    function tabs:OnActiveTabChanged(_,tab)
+        local guide = tab.guide
+        loadguide(guide)
+    end
 
     window:SetSizable(true)
     local oldlayout = window.PerformLayout
     function window:PerformLayout(width,height)
         oldlayout(self,width,height)
-        tabs:SetSize(width-10,height-30)
+        local _,drawerh = helpdrawer:GetSize()
+        tabs:SetSize(width-10,height-30-drawerh)
     end
 end

@@ -1,0 +1,51 @@
+<html>
+<head>
+    <style>
+        @font-face {
+            font-family: Roboto;
+            src: url(asset://garrysmod/resource/fonts/Roboto-Regular.ttf);
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        body {
+            font-family: Roboto;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+            overflow: visible;
+        }
+
+        #c {
+            box-sizing: border-box;
+            height: 100%;
+            margin: auto;
+            padding: 5px;
+            background-color: white;
+            border-radius: 5px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+        }
+    </style>
+</head>
+<body>
+    <div id="c">
+    </div>
+    <script>
+        
+        const container = document.getElementById("c")
+
+        function loadcontent(content) {
+            container.innerHTML = content
+        }
+
+    </script>
+</body>
+</html>
