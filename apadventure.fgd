@@ -1,0 +1,6 @@
+@PointClass base(Targetname) iconsprite("apadventure/editor/ap_icon.vmt") = logic_apadventure_map_item_count : "Outputs how many of a certain map item the current slot has."
+[
+    item(string) : "Item" : : "name of the item that should be counted"
+
+    output ItemCount(integer) : "how many of the item the slot owns"
+]

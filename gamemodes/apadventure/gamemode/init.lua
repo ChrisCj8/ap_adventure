@@ -1,4 +1,5 @@
 APADV = APADV or {}
+APADV.MapItemCounters = {}
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
@@ -18,6 +19,11 @@ APADV_LASTMAPTBL = APADV_LASTMAPTBL or {}
 APADV_NEXTMAPTBL = APADV_NEXTMAPTBL or {}
 APADV_ENTRANCES = APADV_ENTRANCES or {}
 APADV_EXITENTS = APADV_EXITENTS or {}
+APADV_MAPITEMCOUNTERS = APADV_MAPITEMCOUNTERS or {}
+
+function GM:PreCleanupMap()
+    APADV.MapItemCounters = {}
+end
 
 function APADV.DoMapTransition(map,group,entrname)
     local curmap = game.GetMap()
@@ -92,4 +98,3 @@ if file.Exists("apadventure/leveltransdata.json","DATA") then
     end
     file.Delete("apadventure/leveltransdata.json")
 end
-

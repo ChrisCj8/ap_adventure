@@ -99,8 +99,13 @@ function APADV.LoadCfg(group)
 
     local loclist = APADV_SLOT.Locations
     local locnametoid
-    if APADV_DATAPACK_LOCAL and APADV_SLOT.Connected and loclist then 
-        locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+    if APADV_DATAPACK_LOCAL and APADV_SLOT.Connected then
+        if loclist then 
+            locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+        end
+        APADV.RegisterMapItems(clcfg.item)
+    else
+        APADV.MapItemTbl = clcfg.item
     end
 
     for k,v in pairs(cfg.lctn) do

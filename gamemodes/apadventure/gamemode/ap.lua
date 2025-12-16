@@ -7,6 +7,18 @@ local function ApAdvItemHandler(slot,id,itemlist)
         APADV_ITEMHANDLERS[id](itemlist)
     end
     
+    print(id,APADV_MAPITEMCOUNTERS[id])
+
+    if APADV_MAPITEMCOUNTERS[id] then
+        PrintTable(APADV_MAPITEMCOUNTERS[id])
+        for k,v in pairs(APADV_MAPITEMCOUNTERS[id]) do
+            print(k,"finding ",v.target)
+            for ik,iv in ipairs(ents.FindByName(v.target)) do
+                print("firing ",iv,v.input,#itemlist,v.delay)
+                iv:Fire(v.input,#itemlist,v.delay)
+            end
+        end
+    end
 end
 
 APADV_LOCENTS = APADV_LOCENTS or {}
@@ -34,6 +46,33 @@ end
 local handlers_registered = handlers_registered or false
 
 APADV_ITEMSUSED = APADV_ITEMSUSED or {}
+
+function APADV.RegisterMapItems(itemtbl)
+    if !itemtbl then
+        itemtbl = APADV.MapItemTbl
+        APADV.MapItemTbl = nil
+    end
+
+    local map = game.GetMap()
+    local toID = APADV_DATAPACK_LOCAL.item_name_to_id
+    for k,v in pairs(APADV.MapItemCounters) do
+        local id = toID[APADV_MAPGROUP.." - "..map.." - "..k]
+        if id then
+            local outtbl = {}
+            for ik,iv in ipairs(v) do
+                outtbl[ik] = iv
+                for iik,iiv in ipairs(ents.FindByName(iv.target)) do
+                    iiv:Fire(iv.input,iv.param,iv.delay)
+                end
+            end
+            print("new mapitem table")
+            PrintTable(outtbl)
+            if next(outtbl) then
+                APADV_MAPITEMCOUNTERS[id] = outtbl
+            end
+        end 
+    end
+end
 
 local function ApAdvRegisterItemHandlers()
     local dp = APADV_SLOT.Room.DataPackage.games.gmAdventure
@@ -90,6 +129,10 @@ local function ApAdvRegisterItemHandlers()
     handlers_registered = true
 
     local empty = {} -- kinda hacky but this means item handlers don't have to do nil checks
+
+    if APADV.MapItemTbl then
+        APADV.RegisterMapItems()
+    end
 
     for k,v in pairs(handle) do
         v(APADV_SLOT.Items[k] or empty)
