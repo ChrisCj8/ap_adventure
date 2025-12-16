@@ -28,7 +28,7 @@ if CLIENT then
         self:DrawModel(fl)
         local pos = self:GetPos()
         cam.Start3D2D(pos,textfacing,.5)
-            draw.DrawText("Region: "..self:GetRegion().."\n Name: "..self:GetLctnName(),"BudgetLabel",0,-100,color_white,TEXT_ALIGN_CENTER)
+            draw.DrawText("Region: "..self:GetRegion().."\n Name: "..self:GetLctnName()..(self:GetIsDummy() and "\nDUMMY" or ""),"BudgetLabel",0,-100,color_white,TEXT_ALIGN_CENTER)
         cam.End3D2D()
         render.DrawWireframeBox(pos,angle_zero,self.boundmins,self.boundmaxs,color_white)
     end
