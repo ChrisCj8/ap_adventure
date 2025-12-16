@@ -31,7 +31,7 @@ function TOOL:LeftClick(tr)
     local ent = tr.Entity
     local region = self:GetClientInfo("region")
     local name = self:GetClientInfo("name")
-    local isdummy = self:GetClientInfo("isdummy")
+    local isdummy = self:GetClientBool("isdummy")
     if ent:GetClass() == "apadventure_location_editor" then
         ent:SetRegion(region)
         ent:SetLctnName(name)
