@@ -384,19 +384,6 @@ return function(window)
         local regeditpnl = vgui.Create("DScrollPanel",regpnl)
         regeditpnl:SetPos(160,30)
 
-            local regprioentrcheck = vgui.Create("DCheckBoxLabel",regeditpnl)
-            regprioentrcheck:SetText("#apadventure.editor.prioentr.label")
-            regprioentrcheck:SetDark(true)
-            regprioentrcheck:SetPos(5,5)
-            function regprioentrcheck:OnChange(val)
-                if !regeditpnl.curreg then return end 
-                if val then
-                    regeditpnl.curreg.prioentr = true
-                else
-                    regeditpnl.curreg.prioentr = nil
-                end
-            end
-
             local regammopnl = vgui.Create("DCollapsibleCategory",regeditpnl) 
             regammopnl:SetPos(5,30)
             regammopnl:SetLabel("#apadventure.editor.regammo.label")
