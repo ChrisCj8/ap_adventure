@@ -281,12 +281,23 @@ function apAdventure.StoreCfg(groupoverride)
         start = start,
         lctn = lctn
     }
-    if next(start_ap) == nil then start_ap = nil end
+    local start_list = {}
+    if next(start_ap) != nil then 
+        local i = 0
+        for k,v in pairs(start_ap) do
+            i=i+1
+            start_list[i] = k
+        end
+    end
+    if !next(start_list) then start_list = nil end
+    if !next(entr_ap) then entr_ap = nil end
+    if !next(exit_ap) then exit_ap = nil end
+    if !next(lctn_ap) then lctn_ap = nil end
     local outap = {
         entr = entr_ap,
         exit = exit_ap,
         lctn = lctn_ap,
-        start = start_ap
+        start = start_list
     }
 
     PrintTable(outtbl)

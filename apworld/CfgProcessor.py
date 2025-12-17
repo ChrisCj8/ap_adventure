@@ -132,24 +132,27 @@ def ProcessCfgs():
 
                 svjson = json.load(open(mapdir+"/sav.json"))
 
-                for k,v in svjson["entr"].items():
-                    if v in newmap.regions:
-                        newmap.entrances[k] = v
-                        print("adding entrance "+k+" to map "+map)
-                    else: 
-                        print(f"map {map} from {gr} has an entrance placed in non-existing region \"{k}\"")
+
+                if "entr" in svjson:
+                    for k,v in svjson["entr"].items():
+                        if v in newmap.regions:
+                            newmap.entrances[k] = v
+                            print("adding entrance "+k+" to map "+map)
+                        else: 
+                            print(f"map {map} from {gr} has an entrance placed in non-existing region \"{k}\"")
 
                 if not newmap.entrances:
                     print(f"map {map} from {gr} has no entrances, discarded")
                     continue
                 
-                for k,v in svjson["exit"].items():
-                    if v in newmap.regions:
-                        newmap.exits[k] = v
-                    else: 
-                        print(f"map {map} from {gr} has an exit placed in non-existing region \"{k}\"")
+                if "exit" in svjson:
+                    for k,v in svjson["exit"].items():
+                        if v in newmap.regions:
+                            newmap.exits[k] = v
+                        else: 
+                            print(f"map {map} from {gr} has an exit placed in non-existing region \"{k}\"")
 
-                if "lctn" in svjson and isinstance(svjson["lctn"], dict): # should probably have these removed completely if they're empty so i don't have to check if they're a dict
+                if "lctn" in svjson:
                     for k,v in svjson["lctn"].items():
                         if k in newmap.regions:
                             newmap.regions[k]["lctns"] = v
@@ -161,11 +164,11 @@ def ProcessCfgs():
                             print(f"map {map} from {gr} has locations assigned to non-existing region \"{k}\"")
 
                 if "start" in svjson:                    
-                    for k,v in svjson["start"].items():
-                        if k in newmap.regions:
-                            newmap.regions[k]["startcandidate"] = True
+                    for v in svjson["start"]:
+                        if v in newmap.regions:
+                            newmap.regions[v]["startcandidate"] = True
                         else:
-                            print(f"map {map} from {gr} has starts defined for non-existing region \"{k}\"")
+                            print(f"map {map} from {gr} has starts defined for non-existing region \"{v}\"")
 
                 if "item" in cljson:
                     mapitems = cljson["item"]
