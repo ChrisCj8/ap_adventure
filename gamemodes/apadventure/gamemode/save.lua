@@ -49,8 +49,8 @@ local function StorePlyData(ply)
 end
 
 hook.Add("ShutDown","apAdvStoreSaveData",function() 
-    if !APADV_RUNID then return end 
-    local savedir = "apadventure/sav/"..APADV_RUNID.."/"
+    if !APADV_SAVEID then return end 
+    local savedir = "apadventure/sav/"..APADV_SAVEID.."/"
 
     if APADV_ITEMSUSED and next(APADV_ITEMSUSED) != nil then
         APADV_SAVEDATA.itemsused = APADV_ITEMSUSED

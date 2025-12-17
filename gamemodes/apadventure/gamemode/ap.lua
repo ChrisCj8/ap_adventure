@@ -191,14 +191,15 @@ end
 local function OnRunID(packet)
     PrintTable(packet)
     local runid = packet.value
-    if APADV_RUNID != runid then
+    local saveid = runid.."_"..APADV_SLOT.slotName
+    if APADV_SAVEID != saveid then
         
         local slotdata = APADV_SLOT.slotData
         local room = APADV_SLOT.Room
 
-        APADV.InitSaveData(runid)
+        APADV.InitSaveData(saveid)
         
-        if APADV_RUNID or !next(APADV_LASTMAPTBL) then
+        if APADV_SAVEID or !next(APADV_LASTMAPTBL) then
             local map = game.GetMap()
             if map == slotdata.startmap then
                 APADV_USESTART = slotdata.startregion
@@ -247,7 +248,7 @@ local function OnRunID(packet)
             ApAdvRegisterItemHandlers()
         end
         
-        APADV_RUNID = runid
+        APADV_SAVEID = saveid
     end
 end
 
@@ -286,7 +287,7 @@ hook.Add("AP_Connect","APADV",function(slotID)
         net.WriteBool(true)
     net.Broadcast()
 
-    APADV_SLOT:DataStoreSet("gmadv_runid",room.seed_name.."_"..math.floor(room.time),OnRunID,{{operation="default",value=""}})
+    APADV_SLOT:DataStoreSet("gmadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
 
 end)
 
