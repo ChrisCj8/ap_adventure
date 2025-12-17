@@ -372,6 +372,14 @@ function apAdventure.LoadCfg(gname,dodelete)
         ent:Spawn()
     end
 
+    for k,v in ipairs(gtbl.start) do
+        local ent = ents.Create("apadventure_start_editor")
+        ent:SetPos(v.pos)
+        ent:SetAngles(v.ang)
+        ent:SetRegion(v.reg)
+        ent:Spawn()
+    end
+
     apAdventure.SetCfgTbl(cfgtab)
     timer.Simple(.1,apAdventure.UpdateSaveMarks)
 end
