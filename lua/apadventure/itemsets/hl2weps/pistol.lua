@@ -8,7 +8,7 @@ WEP.Groups = {
 WEP.MinAmt = 1
 WEP.Ammo = {"Pistol"}
 WEP.AmmoCapabilities = {
-    ["Pistol"] = {"DecentShortRange","WeakMidRange","WimpyLongRange","MidRangeSpray","BulletDamage","WeakDamage"}
+    ["Ammo_Pistol"] = {"DecentShortRange","WeakMidRange","WimpyLongRange","MidRangeSpray","BulletDamage","WeakDamage"}
 }
 
 WEP.Class = "weapon_pistol"

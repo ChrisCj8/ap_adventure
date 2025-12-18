@@ -8,7 +8,7 @@ ITEM.Groups = {
 }
 ITEM.MinAmt = 1
 ITEM.AmmoCapabilities = {
-    ["357"] = {"StrongShortRange","StrongMidRange","BulletDamage"}
+    ["Ammo_357"] = {"StrongShortRange","StrongMidRange","BulletDamage"}
 }
 
 ITEM.Class = "weapon_357"

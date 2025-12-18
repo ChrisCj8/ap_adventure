@@ -388,38 +388,71 @@ return function(window)
             regammopnl:SetPos(5,30)
             regammopnl:SetLabel("#apadventure.editor.regammo.label")
 
-            local ammotypes = game.GetAmmoTypes()
-            ammotypes[0] = "Props"            
+                local ammotypes = game.GetAmmoTypes()
 
-            local curpos = 25
+                local curammolist = {}
 
-            local ammochecks = {}
-            local i = 1
-
-            for k,v in pairs(ammotypes) do
-                local check = vgui.Create("DCheckBoxLabel",regammopnl)
-                check.AmmoType = v
-
-                check:SetPos(5,curpos)
-                check:SetText(v)
-                check:SetDark(true)
+                local ammochecks = {}
+                local i = 1
                 
-                --check:SetValue(regtbl.ammo[v])
+                local ammoselect = vgui.Create("DComboBox",regammopnl)
+                ammoselect:SetPos(5,25)
 
-                function check:OnChange(val)
-                    if !regeditpnl.curreg then return end 
-                    regeditpnl.curreg.ammo = regeditpnl.curreg.ammo or {}
-                    if val then
-                        regeditpnl.curreg.ammo[v] = true
-                    else
-                        regeditpnl.curreg.ammo[v] = nil
+                for k,v in ipairs(ammotypes) do
+                    ammoselect:AddChoice("Ammo_"..v)
+                end
+
+                local otherconds = {
+                    "Props"
+                }
+
+                for k,v in ipairs(otherconds) do
+                    ammoselect:AddChoice(v)
+                end
+
+                local ammoaddbtn = ImageButton(regammopnl,"icon16/add.png")
+                local ammodelbtn = ImageButton(regammopnl,"icon16/delete.png")
+
+                local ammolist = vgui.Create("DListView",regammopnl)
+                ammolist:SetPos(5,52)
+                ammolist:AddColumn("Type")
+
+                function ammoaddbtn:DoClick()
+                    local newcondtext, newconddata = ammoselect:GetSelected()
+                    local newcond = newcondtext or newconddata
+                    if newcond and !regeditpnl.curreg.ammo[newcond] then
+                        ammolist:AddLine(newcond)
+                        regeditpnl.curreg.ammo[newcond] = true
                     end
                 end
 
-                curpos = curpos + 25
-                ammochecks[i] = check
-                i = i + 1
-            end
+                function ammodelbtn:DoClick()
+                    for k,v in ipairs(ammolist:GetSelected()) do
+                        local cond = v:GetValue(1)
+                        ammolist:RemoveLine(v:GetID())
+                        regeditpnl.curreg.ammo[cond] = nil
+                    end
+                end
+
+                function ammolist:UpdateAmmo()
+                    for k,v in ipairs(self:GetLines()) do
+                        self:RemoveLine(v:GetID())
+                    end
+                    local ammotbl = regeditpnl.curreg.ammo
+                    for k,v in pairs(ammotbl) do
+                        self:AddLine(k)
+                    end
+                end
+
+                local oldlayout = regammopnl.PerformLayout
+                function regammopnl:PerformLayout(w,h)
+                    oldlayout(self,w,h)
+
+                    ammoaddbtn:SetPos(w-26-18,28)
+                    ammodelbtn:SetPos(w-26,28)
+                    ammoselect:SetSize(w-52,22)
+                    ammolist:SetSize(w-10,400)
+                end
 
             local oldlayout = regeditpnl.PerformLayout
             function regeditpnl:PerformLayout(w,h)
@@ -432,10 +465,7 @@ return function(window)
             local newtbl = regtbl[pnl:GetValue(1)]
             newtbl.ammo = newtbl.ammo or {}
             regeditpnl.curreg = newtbl
-            regprioentrcheck:SetChecked(newtbl.prioentr)
-            for k,v in ipairs(ammochecks) do
-                v:SetValue(newtbl.ammo[v.AmmoType])
-            end
+            ammolist:UpdateAmmo()
         end
 
 

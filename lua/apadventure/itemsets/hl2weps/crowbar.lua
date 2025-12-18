@@ -6,9 +6,7 @@ WEP.Groups = {
     "Melee Weapon"
 }
 WEP.MinAmt = 1
-WEP.Capabilities = {
-    "DecentMelee"
-}
+WEP.Capabilities = {"DecentMelee","ClubDamage"}
 
 WEP.Class = "weapon_crowbar"
 
