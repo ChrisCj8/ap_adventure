@@ -206,11 +206,9 @@ class GMADVWorld(World):
                     newreg.onewayins = dict()
                     newreg.onewayouts = dict()
                     newreg.twoways = dict()
-                    if "ammo" in v:
-                        if type(v["ammo"]) is list:
-                            newreg.ammo = set(v["ammo"])
-                        else:
-                            newreg.ammo = set(v["ammo"].keys()) # could also do this conversion when saving the config in lua to save the generator some work
+                    if "cond" in v:
+                        newreg.ammo = set(v["cond"])
+
 
                     mapregs[k] = newreg
 
