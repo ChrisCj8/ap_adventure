@@ -36,7 +36,7 @@ def eval_json_rule(rule,state : CollectionState,world,region):
                 return False
         case "mapitem":
             return state.has(f"{region.mapgroup} - {region.mapname} - {rule["item"]}",player,rule["count"])
-        case "weapon":
+        case "capab":
             capab = list(rule["capab"].keys()) # could probably speed this up by doing this conversion earlier 
             #print(capab)
             #print(world.capabilitytbl)
