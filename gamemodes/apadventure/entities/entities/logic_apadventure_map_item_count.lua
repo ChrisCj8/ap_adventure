@@ -32,6 +32,6 @@ function ENT:KeyValue(key,value)
     elseif key == "ItemCount" then
         self.OutputAmt = (self.OutputAmt or 0) + 1
         self.Outputs = self.Outputs or {}
-        self.Outputs[self.OutputAmt] = string.explode("\x1B",value)
+        self.Outputs[self.OutputAmt] = string.Explode("\x1B",value)
     end
 end
