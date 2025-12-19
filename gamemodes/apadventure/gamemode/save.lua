@@ -74,6 +74,10 @@ hook.Add("DoPlayerDeath","apAdvStoreSaveData",function(ply)
     StorePlyData(ply)
 end)
 
+hook.Add("PlayerDisconnected","apAdvStoreSaveData",function(ply) 
+    StorePlyData(ply)
+end)
+
 hook.Add("PlayerSpawn","apAdvApplyPlySave", function(ply)
     local sid = ply:SteamID64()
     local plysav = APADV_PLYSAVE[sid]
