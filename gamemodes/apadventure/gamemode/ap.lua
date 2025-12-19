@@ -303,12 +303,16 @@ hook.Add("AP_Disconnect","APADV",function(slotID)
 
 end)
 
+local editslotperms = {
+    ["superadmin"]  = true
+}
+
 net.Receive("apAdvConnectionInfo",function(len,ply)
     local addr = net.ReadString()
     local slotn = net.ReadString()
     local pw = net.ReadString()
 
     print("received connection info",addr,slotn,pw)
-
+    if !(ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
     APADV.CreateApSlot(addr,slotn,pw)
 end)
