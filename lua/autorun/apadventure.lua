@@ -1,4 +1,6 @@
 
 apAdventure = apAdventure or {}
 
-include("apadventure/cfgsettings.lua")
+if SERVER or file.Exists("apadventure/cfgsettings.lua","lcl") then
+    include("apadventure/cfgsettings.lua")
+end
