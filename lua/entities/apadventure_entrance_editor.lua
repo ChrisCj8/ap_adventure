@@ -1,3 +1,4 @@
+if !apAdventure.EditMode then return end
 
 AddCSLuaFile()
 

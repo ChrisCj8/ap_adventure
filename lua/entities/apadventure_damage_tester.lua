@@ -1,3 +1,5 @@
+if !apAdventure.EditMode then return end
+
 AddCSLuaFile()
 
 DEFINE_BASECLASS("base_gmodentity")

@@ -1,3 +1,5 @@
+if !apAdventure.EditMode then return end
+
 AddCSLuaFile()
 
 ENT.PrintName = "#apadventure.entity.location"
