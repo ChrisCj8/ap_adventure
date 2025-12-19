@@ -19,6 +19,10 @@ local allowedcolgroups = {
     [COLLISION_GROUP_WORLD] = true,
 }
 
+function GM:IsSpawnpointSuitable()
+    return true
+end
+
 function GM:PlayerSpawn(ply,trans)
     player_manager.SetPlayerClass(ply,"player_apadv")
     BASEGM.PlayerSpawn(self,ply,trans)
