@@ -33,40 +33,29 @@ local apAdvSaveHalos = {}
 
 net.Receive("APAdvActiveCfgClear",function()
     local gname = net.ReadString()
-    print("loading "..gname) 
-    apAdventure.EditCfg = {
-        Saved = {},
-        DelMark = {},
-        DelName = {},
-        Group = "";
-        Regions = {},
-        Connections = {},
-        MapItems = {},
-        Info = {},
-        GroupInfo = {},
-        Events = {},
-    }
-    editcfg = apAdventure.EditCfg
-    apAdvDelHalos = {}
-    apAdvSaveHalos = {}
-    local groupjson = file.Read("apadventure/cfgs/gm/"..gname.."/group.json","DATA")
-    if groupjson then
-        local tbl = util.JSONToTable(groupjson)
-        if tbl then
-            editcfg.GroupInfo = tbl.rules
-        end
-    end
+    local map = game.GetMap()
     local json = file.Read("apadventure/cfgs/gm/"..gname.."/"..game.GetMap().."/sav_cl.json","DATA")
     print(json)
     if json then
         local tbl = util.JSONToTable(json)
-        PrintTable(tbl)
         if tbl then 
-            editcfg.Regions = tbl.reg or {}
-            editcfg.Connections = tbl.connect or {}
-            editcfg.MapItems = tbl.item or {}
-            editcfg.Info = tbl.info or {}
-         end
+            local loader = tbl.ver or "old"
+            local loaderpath = "apadventure/loader/cl/"..loader..".lua"
+            if file.Exists(loaderpath,"LUA") then
+                include(loaderpath)(tbl)
+            end
+        end
+    end
+    local groupjson = file.Read("apadventure/cfgs/gm/"..gname.."/group.json","DATA")
+    if groupjson then
+        local tbl = util.JSONToTable(groupjson)
+        if tbl then
+            local loader = tbl.ver or "old"
+            local loaderpath = "apadventure/loader/cl/"..loader..".lua"
+            if file.Exists(loaderpath,"LUA") then
+                include(loaderpath)(tbl)
+            end
+        end
     end
 end)
 
@@ -255,6 +244,109 @@ net.Receive("APAdvAreaPortalInfo",function()
         areaportalstr = ""
     end
 end)
+
+local cfgdatacb
+
+function apAdventure.RequestCfgData(cb)
+    if !LocalPlayer():IsListenServerHost() then return end
+    cfgdatacb = cb
+    net.Start("APAdvCfgDataSave")
+    net.SendToServer()
+end
+
+local cfgdatastr = ""
+
+net.Receive("APAdvCfgDataSave",function() 
+    local str = net.ReadString()
+    local done = net.ReadBool()
+    cfgdatastr = cfgdatastr..str
+    if done then 
+        cfgdatacb(util.JSONToTable(cfgdatastr))
+        cfgdatastr = ""
+    end
+end)
+
+function apAdventure.LoadServerCfgTbl(tbl,loader)
+    if !LocalPlayer():IsListenServerHost() then return end
+    local json = util.TableToJSON(tbl)
+    repeat
+        net.Start("apadvloadsvtbl")
+            local sendstr
+
+            if #json > 60000 then
+                sendstr = string.sub(json,0,60000)
+                json = string.sub(json,60001,-1)
+            else
+                sendstr = json
+                done = true
+            end
+
+            net.WriteString(sendstr)
+            net.WriteBool(done)
+
+            if done then
+                net.WriteString(loader)
+            end
+        net.SendToServer()
+    until done
+end
+
+function apAdventure.LoadCfg(gname)
+
+
+end
+
+function apAdventure.LoadOldCfg(gname)
+    local map = game.GetMap()
+    local clpath = "apadventure/cfgs/gm/"..gname.."/"..map.."/sav_cl.json"
+    if file.Exists(clpath,"DATA") then
+        include("apadventure/loader/cl/old.lua")(util.JSONToTable(file.Read(clpath,"DATA")))
+    end
+    local gpath = "apadventure/cfgs/gm/"..gname.."/group.json"
+    if file.Exists(gpath,"DATA") then
+        include("apadventure/loader/group/old.lua")(util.JSONToTable(file.Read(gpath,"DATA")))
+    end
+    local svpath = "apadventure/cfgs/gm/"..gname.."/"..map.."/sav.json"
+    if file.Exists(svpath,"DATA") then
+        apAdventure.LoadServerCfgTbl(util.JSONToTable(file.Read(svpath,"DATA")),"old")
+    end
+end
+
+local newest_cl = "v1"
+local newest_sv = "v1"
+local newest_group = "v1"
+
+function apAdventure.SaveToLogic(tbl)
+
+end
+
+function apAdventure.SaveCfg(gname)
+    local editcfg = apAdventure.EditCfg
+    local map = game.GetMap()
+    local savtbl = {
+        cl_ver = "v1",
+        sv_ver = "v1",
+        reg = editcfg.Regions,
+        connect = editcfg.Connections,
+        item = editcfg.MapItems,
+        info = editcfg.Info,
+    }
+    local grouptbl = {
+        ver = "v1",
+        rules = editcfg.GroupInfo,
+    }
+    apAdventure.RequestCfgData(function(svtbl) 
+        table.Merge(savtbl,svtbl)
+        PrintTable(savtbl)
+        PrintTable(grouptbl)
+        local path = "apadventure/cfg/"..gname.."/"..map.."/"
+        if !file.IsDir(path,"DATA") then
+            file.CreateDir(path)
+        end
+        file.Write("apadventure/cfg/"..gname.."/group.json",util.TableToJSON(grouptbl,true))
+        file.Write("apadventure/cfg/"..gname.."/map_"..map..".json",util.TableToJSON(savtbl,true))
+    end)
+end
 
 if !game.SinglePlayer() then
 
