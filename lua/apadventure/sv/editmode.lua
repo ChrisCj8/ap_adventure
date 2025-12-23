@@ -193,7 +193,6 @@ function apAdventure.StoreCfg(groupoverride)
         i=i+1
     end
     local exit = {}
-    local exit_ap = {}
     i=1
     for k,v in ipairs(ents.FindByClass("apadventure_exit_editor")) do
         local reg, name = v:GetRegion(), v:GetExitName()
@@ -203,11 +202,9 @@ function apAdventure.StoreCfg(groupoverride)
             reg = reg,
             name = name
         }
-        exit_ap[name] = reg
         i=i+1
     end
     local entr = {}
-    local entr_ap = {}
     i=1
     for k,v in ipairs(ents.FindByClass("apadventure_entrance_editor")) do
         local reg, name = v:GetRegion(), v:GetEntrName()
@@ -217,11 +214,9 @@ function apAdventure.StoreCfg(groupoverride)
             reg = reg,
             name = name
         }
-        entr_ap[name] = reg
         i=i+1
     end
     local start = {}
-    local start_ap = {}
     i=1
     for k,v in ipairs(ents.FindByClass("apadventure_start_editor")) do
         local reg = v:GetRegion()
@@ -230,11 +225,9 @@ function apAdventure.StoreCfg(groupoverride)
             ang = v:GetAngles(),
             reg = reg
         }
-        start_ap[reg] = true 
         i=i+1
     end
     local lctn = {}
-    local lctn_ap = {}
     i=1
     for k,v in ipairs(ents.FindByClass("apadventure_location_editor")) do
         local reg, name = v:GetRegion(), v:GetLctnName()
@@ -245,13 +238,10 @@ function apAdventure.StoreCfg(groupoverride)
             name = name,
             dummy = v:GetIsDummy() or nil
         }
-        lctn_ap[reg] = lctn_ap[reg] or {}
-        lctn_ap[reg][name] = {
-            access = {}
-        }
         i=i+1
     end
     local outtbl = {
+        ver = "v1",
         sav = sav,
         del = del,
         delname = delname,
@@ -260,41 +250,27 @@ function apAdventure.StoreCfg(groupoverride)
         start = start,
         lctn = lctn
     }
-    local start_list = {}
-    if next(start_ap) != nil then 
-        local i = 0
-        for k,v in pairs(start_ap) do
-            i=i+1
-            start_list[i] = k
-        end
-    end
-    if !next(start_list) then start_list = nil end
-    if !next(entr_ap) then entr_ap = nil end
-    if !next(exit_ap) then exit_ap = nil end
-    if !next(lctn_ap) then lctn_ap = nil end
-    local outap = {
-        entr = entr_ap,
-        exit = exit_ap,
-        lctn = lctn_ap,
-        start = start_list
-    }
 
     PrintTable(outtbl)
-    PrintTable(outap)
     local prettyprint = prettyprintcvar:GetBool()
-    local dir = "apadventure/cfgs/gm/"..srctbl.Group.."/"..game.GetMap()
+    local dir = "apadventure/cfg/"..srctbl.Group.."/"..game.GetMap()
     file.CreateDir(dir)
-    file.Write(dir.."/sav.json",util.TableToJSON(outtbl,prettyprint))
-    local apdir = "apadventure/cfgs/ap/"..srctbl.Group.."/"..game.GetMap()
+    file.Write(dir.."/sv.json",util.TableToJSON(outtbl,prettyprint))
+    local apdir = "apadventure/logic/cfg/"..srctbl.Group.."/"..game.GetMap()
     file.CreateDir(apdir)
-    file.Write(apdir.."/sav.json",util.TableToJSON(outap,prettyprint))
+    file.Write(apdir.."/sv.json",util.TableToJSON(apAdventure.SvCfgToLogic(outtbl),prettyprint))
 end
 
 function apAdventure.LoadCfg(gname,dodelete)
     assert(!(gname == "" or !isstring(gname)),"Invalid Group Name")
-    local path = "apadventure/cfgs/gm/"..gname.."/"..game.GetMap().."/sav.json"
+    local path = "apadventure/cfg/"..gname.."/"..game.GetMap().."/sv.json"
     local json = assert(file.Read(path,"DATA"),"couldn't find config")
     local gtbl = util.JSONToTable(json)
+
+    if (gtbl.ver or "old") != apAdventure.CfgVers.sv then
+        gtbl = apAdventure.UpdateConfig(gtbl)
+    end
+
     local cfgtab = {
         Saved = {},
         DelMark = {},

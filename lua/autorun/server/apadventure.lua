@@ -18,9 +18,11 @@ function apAdventure.GetListenHost()
 end
 
 if engine.ActiveGamemode() == "sandbox" then
+    AddCSLuaFile("apadventure/editmode_shared.lua")
     AddCSLuaFile("apadventure/cl/editmode.lua")
     AddCSLuaFile("apadventure/ui/cmenu.lua")
     apAdventure.EditMode = true
+    include("apadventure/editmode_shared.lua")
     include("apadventure/sv/editmode.lua")
 end
 

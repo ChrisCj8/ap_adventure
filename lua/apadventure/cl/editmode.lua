@@ -49,14 +49,14 @@ net.Receive("APAdvActiveCfgClear",function()
     editcfg = apAdventure.EditCfg
     apAdvDelHalos = {}
     apAdvSaveHalos = {}
-    local groupjson = file.Read("apadventure/cfgs/gm/"..gname.."/group.json","DATA")
+    local groupjson = file.Read("apadventure/cfg/"..gname.."/group.json","DATA")
     if groupjson then
         local tbl = util.JSONToTable(groupjson)
         if tbl then
             editcfg.GroupInfo = tbl.rules
         end
     end
-    local json = file.Read("apadventure/cfgs/gm/"..gname.."/"..game.GetMap().."/sav_cl.json","DATA")
+    local json = file.Read("apadventure/cfg/"..gname.."/"..game.GetMap().."/cl.json","DATA")
     print(json)
     if json then
         local tbl = util.JSONToTable(json)
@@ -90,6 +90,7 @@ net.Receive("APAdvSaveCfg",function()
         end
     end
     local outtbl = {
+        ver = "v1",
         reg = regtbl or {},
         connect = editcfg.Connections,
         item = items,
@@ -101,20 +102,116 @@ net.Receive("APAdvSaveCfg",function()
     }
     local prettyprint = prettyprintcvar:GetBool()
     local map = game.GetMap()
-    local dir = "apadventure/cfgs/gm/"..gname
+    local dir = "apadventure/cfg/"..gname
     file.CreateDir(dir.."/"..map)
     file.Write(dir.."/group.json",util.TableToJSON(groupout,prettyprint))
-    file.Write(dir.."/"..map.."/sav_cl.json",util.TableToJSON(outtbl,prettyprint))
+    file.Write(dir.."/"..map.."/cl.json",util.TableToJSON(outtbl,prettyprint))
     if regtbl then
         for k,v in pairs(regtbl) do
             v.ammo = nil
         end
     end
-    dir = "apadventure/cfgs/ap/"..gname.."/"..map
+    dir = "apadventure/logic/cfg/"..gname.."/"..map
     file.CreateDir(dir)
-    file.Write(dir.."/sav_cl.json",util.TableToJSON(outtbl,prettyprint))
+    file.Write(dir.."/cl.json",util.TableToJSON(apAdventure.ClCfgToLogic(outtbl),prettyprint))
 end)
 
+function apAdventure.UpdateGroup(gname)
+    local gdir = "apadventure/cfg/"..gname.."/"
+    local _, folders = file.Find(gdir.."*","DATA")
+    if !next(folders) then return end
+    for k,v in ipairs(folders) do
+        local mappath = gdir..v.."/"
+        local svfile = file.Read(mappath.."sv.json")
+        local clfile = file.Read(mappath.."cl.json")
+        if svfile and clfile then
+            local svtbl = util.JSONToTable(svfile)
+            local cltbl = util.JSONToTable(clfile)
+            if svtbl and cltbl then
+                --[[ local newpath = "apadventure/cfg/"..gname.."/"..v.."/"
+                file.CreateDir(newpath) ]]
+                file.Write(mappath.."sv.json",util.TableToJSON(apAdventure.UpdateConfig(svtbl,"sv")))
+                file.Write(mappath.."cl.json",util.TableToJSON(apAdventure.UpdateConfig(cltbl,"cl")))
+            elseif !svtbl and !cltbl then
+                print("server and client cfgs for map "..v.." in group "..gname.."could not be processed into a table")
+            elseif !svtbl then
+                print("server cfg for map "..v.." in group "..gname.."could not be processed into a table")
+            else
+                print("client cfg for map "..v.." in group "..gname.."could not be processed into a table")
+            end
+        elseif !svfile and !clfile then
+            print("server and client cfgs for map "..v.." in group "..gname.."could not be read")
+        elseif !svfile then
+            print("server cfg for map "..v.." in group "..gname.."could not be read")
+        else
+            print("client cfg for map "..v.." in group "..gname.."could not be read")
+        end
+    end
+    if file.Exists(gdir.."group.json","DATA") then
+        local groupfile = file.Read(gdir.."group.json")
+        if groupfile then
+            local grouptbl = util.JSONToTable(groupfile)
+            if grouptbl then
+                file.Write("apadventure/cfg/"..gname.."/group.json",util.TableToJSON(apAdventure.UpdateConfig(grouptbl,"gr")))
+            else
+                print("group file for group "..gname.."could not be processed into a table")
+            end
+        else 
+            print("group file for group "..gname.."could not be read")
+        end
+        
+    end
+end
+
+function apAdventure.UpdateAllCfgs()
+    local dir = "apadventure/cfgs/gm/"
+    local _, folders = file.Find(dir.."*","DATA")
+    for k,v in ipairs(folders) do
+        apAdventure.UpdateGroup(v)
+    end
+end
+
+function apAdventure.ProcessGroupLogic(gname)
+    local gdir = "apadventure/cfg/"..gname.."/"
+    local _, folders = file.Find(gdir.."*","DATA")
+    PrintTable(folders)
+    if !next(folders) then return end
+    for k,v in ipairs(folders) do
+        local mappath = gdir..v.."/"
+        local svfile = file.Read(mappath.."sv.json")
+        local clfile = file.Read(mappath.."cl.json")
+        if svfile and clfile then
+            local svtbl = util.JSONToTable(svfile)
+            local cltbl = util.JSONToTable(clfile)
+            if svtbl and cltbl then
+                local newpath = "apadventure/logic/cfg/"..gname.."/"..v.."/"
+                file.CreateDir(newpath)
+                file.Write(newpath.."sv.json",util.TableToJSON(apAdventure.SvCfgToLogic(svtbl),true))
+                file.Write(newpath.."cl.json",util.TableToJSON(apAdventure.ClCfgToLogic(cltbl),true))
+            elseif !svtbl and !cltbl then
+                print("server and client cfgs for map "..v.." in group "..gname.."could not be processed into a table")
+            elseif !svtbl then
+                print("server cfg for map "..v.." in group "..gname.."could not be processed into a table")
+            else
+                print("client cfg for map "..v.." in group "..gname.."could not be processed into a table")
+            end
+        elseif !svfile and !clfile then
+            print("server and client cfgs for map "..v.." in group "..gname.."could not be read")
+        elseif !svfile then
+            print("server cfg for map "..v.." in group "..gname.."could not be read")
+        else
+            print("client cfg for map "..v.." in group "..gname.."could not be read")
+        end
+    end
+end
+
+function apAdventure.ProcessAllLogic()
+    local dir = "apadventure/cfg/"
+    local _, folders = file.Find(dir.."*","DATA")
+    for k,v in ipairs(folders) do
+        apAdventure.ProcessGroupLogic(v)
+    end
+end
 
 timer.Create("APAdvProcessDelHalos",1,0,function() 
     apAdvDelHalos = {}
@@ -255,6 +352,9 @@ net.Receive("APAdvAreaPortalInfo",function()
         areaportalstr = ""
     end
 end)
+
+concommand.Add("apadventure_update_all_cfgs",apAdventure.UpdateAllCfgs)
+concommand.Add("apadventure_process_all_logic",apAdventure.ProcessAllLogic)
 
 if !game.SinglePlayer() then
 

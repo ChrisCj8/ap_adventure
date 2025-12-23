@@ -8,13 +8,13 @@ function APADV.LoadCfg(group)
     assert(group,"Cfg Loader was not passed a Group Name and could not find a previously used Map Group")
     local map = game.GetMap()
     APADV_MAP = map
-    local path = "apadventure/cfgs/gm/"..group.."/group.json"
+    local path = "apadventure/cfg/"..group.."/group.json"
     local json = file.Read(path,"DATA")
     if json then groupcfg = util.JSONToTable(json) end
-    local path = "apadventure/cfgs/gm/"..group.."/"..map.."/sav.json"
+    local path = "apadventure/cfg/"..group.."/"..map.."/sv.json"
     local json = assert(file.Read(path,"DATA"),"couldn't find config")
     local cfg = util.JSONToTable(json)
-    path = "apadventure/cfgs/gm/"..group.."/"..map.."/sav_cl.json"
+    path = "apadventure/cfg/"..group.."/"..map.."/cl.json"
     json = assert(file.Read(path,"DATA"),"couldn't find config")
     local clcfg = util.JSONToTable(json)
     game.CleanUpMap()
@@ -71,8 +71,8 @@ function APADV.LoadCfg(group)
             end
         end
     else
+        local i = 1
         for k,v in ipairs(cfg.entr) do
-            local i = 1
             if APADV_ENTRNAME == v.name then
                 APADV_SPAWNS[i] = {
                     pos = v.pos,

@@ -77,7 +77,7 @@ def ProcessCfgs():
         else:
             print(f"{setpath} does not exist")
 
-    cfgdir = gmodpath+"/garrysmod/data/apadventure/cfgs/ap/"
+    cfgdir = gmodpath+"/garrysmod/data/apadventure/logic/cfg/"
     cfggroups = os.listdir(cfgdir)
 
     map_table = dict()
@@ -109,13 +109,13 @@ def ProcessCfgs():
 
                 newmap = GMADVMap(map,gr)
                 mapdir = grdir+"/"+map
-                if not os.path.isfile(mapdir+"/sav.json"):
+                if not os.path.isfile(mapdir+"/sv.json"):
                     #self.add_warning(f"could not find serverside save for {map} from {gr}")
                     continue
-                if not os.path.isfile(mapdir+"/sav_cl.json"):
+                if not os.path.isfile(mapdir+"/cl.json"):
                     #self.add_warning(f"could not find clientside save for {map} from {gr}")
                     continue
-                cljson = json.load(open(mapdir+"/sav_cl.json"))
+                cljson = json.load(open(mapdir+"/cl.json"))
 
                 if "info" in cljson:
                     newmap.info = cljson["info"]
@@ -130,7 +130,7 @@ def ProcessCfgs():
                 
                 newmap.internalConnections = cljson["connect"]
 
-                svjson = json.load(open(mapdir+"/sav.json"))
+                svjson = json.load(open(mapdir+"/sv.json"))
 
 
                 if "entr" in svjson:
