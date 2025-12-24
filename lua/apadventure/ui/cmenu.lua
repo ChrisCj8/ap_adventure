@@ -9,6 +9,16 @@ local function LocStrExists(str)
     return language.GetPhrase(str) != str
 end
 
+local function BitFlipper(inval,flip,onoff)
+    local biton = bit.band(inval,flip) != 0
+    if biton and !onoff then
+        return inval - flip
+    elseif !biton and onoff then
+        return inval + flip
+    end
+    return inval
+end
+
 local function ImageButton(parent,image) 
     local btn = vgui.Create("DImageButton",parent)
     btn:SetImage(image)
@@ -708,6 +718,7 @@ return function(window)
         mapitemnamein:SetPos(5,5)
 
         local mapitemaddbtn = ImageButton(mapitempnl,"icon16/add.png")
+        local mapitemcopybtn = ImageButton(mapitempnl,"icon16/page_copy.png")
         local mapitemdelbtn = ImageButton(mapitempnl,"icon16/delete.png")
 
         local mapitemlist = vgui.Create("DListView",mapitempnl)
@@ -717,6 +728,86 @@ return function(window)
         for k,v in pairs(mapitemtbl) do
             local ln = mapitemlist:AddLine(k)
             ln.itemtbl = v
+        end
+
+        local mapitemeditpnl = vgui.Create("DPanel",mapitempnl)
+        mapitemeditpnl:SetPos(160,30)
+        mapitemeditpnl.ContentsVisible = true
+
+        function mapitemeditpnl:ShowContents(show)
+            if show == self.ContentsVisible then return end
+            for k,v in ipairs(self:GetChildren()) do
+                v:SetVisible(show)
+            end
+            self.ContentsVisible = show
+        end
+
+            local mapitemamtlbl, mapitemamtin = LabelNumWang(mapitemeditpnl,"mapitem.amount")
+            mapitemamtlbl:SetPos(5,5)
+
+            mapitemamtin:SetMin(1)
+            
+            mapitemamtin:SetSize(40,22)
+            function mapitemamtin:OnValueChanged(val)
+                mapitemeditpnl.itemtbl.amt = math.floor(val)
+            end
+
+            local function FlagCheck(locstr,flag)
+                local check = vgui.Create("DCheckBoxLabel",mapitemeditpnl)
+                check:SetDark(true)
+                check:SetText("#apadventure.editor.mapitem."..locstr..".label")
+                function check:OnChange(val)
+                    mapitemeditpnl.itemtbl.fl = BitFlipper(mapitemeditpnl.itemtbl.fl,flag,val)
+                end
+
+                return check
+            end
+
+            mapitemprogressioncheck = FlagCheck("progression",1)
+            mapitemprogressioncheck:SetPos(5,30)
+            mapitemusefulcheck = FlagCheck("useful",2)
+            mapitemusefulcheck:SetPos(5,55)
+            mapitemtrapcheck = FlagCheck("trap",4)
+            mapitemtrapcheck:SetPos(5,80)
+            mapitemskipbalancecheck = FlagCheck("skipbalance",8)
+            mapitemskipbalancecheck:SetPos(5,105)
+            mapitemdepriocheck = FlagCheck("deprio",16)
+            mapitemdepriocheck:SetPos(5,130)
+
+            function mapitemprogressioncheck:OnChange(val)
+                mapitemeditpnl.itemtbl.fl = BitFlipper(mapitemeditpnl.itemtbl.fl,1,val)
+
+                if !val then
+                    mapitemskipbalancecheck:SetValue(false)
+                    mapitemdepriocheck:SetValue(false)
+                end
+                mapitemskipbalancecheck:SetEnabled(val)
+                mapitemdepriocheck:SetEnabled(val)
+            end
+
+            mapitemeditpnl:ShowContents(false)
+
+            function mapitemeditpnl:PerformLayout(w,h)
+                mapitemamtlbl:SetSize(w-50,22)
+                mapitemamtin:SetPos(w-45,5)
+
+                mapitemprogressioncheck:SetSize(w-10,22)
+                mapitemusefulcheck:SetSize(w-10,22)
+                mapitemtrapcheck:SetSize(w-10,22)
+                mapitemskipbalancecheck:SetSize(w-10,22)
+                mapitemdepriocheck:SetSize(w-10,22)
+            end
+
+        function mapitemlist:OnRowSelected(index,pnl)
+            local tbl = pnl.itemtbl
+            mapitemeditpnl.itemtbl = tbl
+            mapitemamtin:SetValue(tbl.amt)
+            mapitemprogressioncheck:SetValue(bit.band(tbl.fl,1) != 0)
+            mapitemusefulcheck:SetValue(bit.band(tbl.fl,2) != 0)
+            mapitemtrapcheck:SetValue(bit.band(tbl.fl,4) != 0)
+            mapitemskipbalancecheck:SetValue(bit.band(tbl.fl,8) != 0)
+            mapitemdepriocheck:SetValue(bit.band(tbl.fl,16) != 0)
+            mapitemeditpnl:ShowContents(true)
         end
 
         function mapitemaddbtn:DoClick()
@@ -730,43 +821,39 @@ return function(window)
             ln.itemtbl = mapitemtbl[name]
         end
 
+        function mapitemcopybtn:DoClick()
+            local _,srcpnl = mapitemlist:GetSelectedLine()
+            local src = srcpnl.itemtbl
+            local name = mapitemnamein:GetValue()
+            if name == "" or mapitemtbl[name] != nil then return end
+            mapitemtbl[name] = {
+                amt = src.amt,
+                fl = src.fl
+            }
+            local ln = mapitemlist:AddLine(name)
+            ln.itemtbl = mapitemtbl[name]
+        end
+
         function mapitemdelbtn:DoClick()
+            mapitemeditpnl:ShowContents(false)
             local lines = mapitemlist:GetSelected()
             for k,v in ipairs(lines) do
                 local name = v:GetValue(1)
                 mapitemtbl[name] = nil
-                v:Remove()
+                mapitemlist:RemoveLine(v:GetID())
             end
-        end
-
-        local mapitemeditpnl = vgui.Create("DPanel",mapitempnl)
-        mapitemeditpnl:SetPos(110,30)
-
-            local mapitemamtin = vgui.Create("DNumberWang",mapitemeditpnl)
-            mapitemamtin:SetMin(1)
-            mapitemamtin:SetPos(5,5)
-            function mapitemamtin:OnValueChanged(val)
-                mapitemeditpnl.itemtbl.amt = math.floor(val)
-            end
-
-            function mapitemeditpnl:PerformLayout(w,h)
-                mapitemamtin:SetSize(40,22)
-            end
-
-        function mapitemlist:OnRowSelected(index,pnl)
-            mapitemeditpnl.itemtbl = pnl.itemtbl
-            mapitemamtin:SetValue(pnl.itemtbl.amt)
         end
 
         function mapitempnl:PerformLayout(w,h)
-            mapitemnamein:SetSize(w-50,22)
+            mapitemnamein:SetSize(w-70,22)
 
-            mapitemaddbtn:SetPos(w-42,8)
+            mapitemaddbtn:SetPos(w-62,8)
+            mapitemcopybtn:SetPos(w-42,8)
             mapitemdelbtn:SetPos(w-22,8)
 
-            mapitemlist:SetSize(100,h-35)
+            mapitemlist:SetSize(150,h-35)
 
-            mapitemeditpnl:SetSize(w-115,h-35)
+            mapitemeditpnl:SetSize(w-165,h-35)
         end
     
     local helpdrawer = vgui.Create("DDrawer",window)
