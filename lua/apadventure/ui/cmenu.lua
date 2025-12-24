@@ -727,7 +727,7 @@ return function(window)
                 fl = 0
             }
             local ln = mapitemlist:AddLine(name)
-            ln.itembtl = mapitemtbl[name]
+            ln.itemtbl = mapitemtbl[name]
         end
 
         function mapitemdelbtn:DoClick()
