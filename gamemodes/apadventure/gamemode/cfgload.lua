@@ -125,7 +125,7 @@ function APADV.LoadCfg(group)
         end
     end
 
-    for k,v in ipairs(player.GetAll()) do
+    for k,v in player.Iterator() do
         --v:KillSilent()
         v:Spawn()
     end

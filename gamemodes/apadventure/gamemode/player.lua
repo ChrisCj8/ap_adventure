@@ -125,7 +125,7 @@ end
 function ApAdvPly.SetWalkSpeed(val)
     --if !plymeta then plymeta = player_manager.GetPlayerClasses().player_apadv end
     APADV_PLYSTATS.SlowWalkSpeed = val
-    for k,v in ipairs(player.GetAll()) do
+    for k,v in player.Iterator() do
         v:SetSlowWalkSpeed(val)
     end
 end
@@ -133,7 +133,7 @@ end
 function ApAdvPly.SetRunSpeed(val)
     --if !plymeta then plymeta = player_manager.GetPlayerClasses().player_apadv end
     APADV_PLYSTATS.WalkSpeed = val
-    for k,v in ipairs(player.GetAll()) do
+    for k,v in player.Iterator() do
         v:SetWalkSpeed(val)
     end
 end
@@ -141,7 +141,7 @@ end
 function ApAdvPly.SetSprintSpeed(val)
     --if !plymeta then plymeta = player_manager.GetPlayerClasses().player_apadv end
     APADV_PLYSTATS.RunSpeed = val
-    for k,v in ipairs(player.GetAll()) do
+    for k,v in player.Iterator() do
         v:SetRunSpeed(val)
     end
 end
@@ -149,7 +149,7 @@ end
 function ApAdvPly.SetJumpPower(val)
     --if !plymeta then plymeta = player_manager.GetPlayerClasses().player_apadv end
     APADV_PLYSTATS.JumpPower = val
-    for k,v in ipairs(player.GetAll()) do
+    for k,v in player.Iterator() do
         v:SetJumpPower(val)
     end
 end

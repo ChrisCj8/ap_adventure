@@ -60,7 +60,7 @@ hook.Add("ShutDown","apAdvStoreSaveData",function()
         file.Write(savedir..k..".json",util.TableToJSON(v))
     end
 
-    for k,v in ipairs(player.GetAll()) do
+    for k,v in player.Iterator() do
         StorePlyData(v)
     end
 

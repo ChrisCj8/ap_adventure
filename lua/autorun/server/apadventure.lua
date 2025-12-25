@@ -9,7 +9,7 @@ local listenhost
 
 function apAdventure.GetListenHost()
     if IsValid(listenhost) then return listenhost end
-    for k,v in ipairs(player.GetAll()) do
+    for k,v in player.Iterator() do
         if v:IsListenServerHost() then
             listenhost = v
             return v

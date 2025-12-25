@@ -21,7 +21,7 @@ end
 
 function ApAdvWeps.SetAvailable(class,available)
     APADV_WEPS[class] = available
-    for k,v in ipairs(player.GetAll()) do
+    for k,v in player.Iterator() do
         if available then
             v:Give(class)
         else
