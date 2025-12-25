@@ -1,4 +1,7 @@
 
+APADV.PermaDeath = APADV.PermaDeath or false
+APADV.DeadPlys = APADV.DeadPlys or {}
+
 ApAdvPly = ApAdvPly or {}
 
 util.AddNetworkString("apAdv_BHopUpdate")
@@ -24,6 +27,13 @@ function GM:IsSpawnpointSuitable()
 end
 
 function GM:PlayerSpawn(ply,trans)
+
+    if APADV.DeadPlys[ply:SteamID64()] then
+        GAMEMODE:PlayerSpawnAsSpectator(ply)
+        return
+    end
+
+    ply:SetTeam( TEAM_UNASSIGNED )
     player_manager.SetPlayerClass(ply,"player_apadv")
     BASEGM.PlayerSpawn(self,ply,trans)
 
@@ -59,6 +69,32 @@ function GM:PlayerInitialSpawn(ply)
     net.Start("ApAdvConnectionState")
         net.WriteBool(connected)
     net.Send(ply) 
+end
+
+local resettext_color = Color(222,44,44)
+
+function GM:PostPlayerDeath(ply)
+
+    if !APADV.PermaDeath then return end
+
+    local deadplys = APADV.DeadPlys
+
+    deadplys[ply:SteamID64()] = true
+
+    local remaining
+    for k,v in player.Iterator() do
+        if !deadplys[v:SteamID64()] then
+            remaining = true
+            break
+        end
+    end
+
+    if !remaining then
+        GMAP.SendChatMessage("All players have died. Config will be reloaded.",resettext_color,true)
+        if APADV_MAPGROUP then
+            timer.Simple(3, function() APADV.LoadCfg() end)
+        end
+    end
 end
 
 function GM:PlayerLoadout(ply)

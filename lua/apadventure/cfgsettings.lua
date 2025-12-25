@@ -60,6 +60,10 @@ local settings = {
         name = "hev",
         type = "check"
     },
+    {
+        name = "respawn",
+        type = "check"
+    },
 }
 
 if CLIENT then

@@ -6,6 +6,7 @@ function APADV.LoadCfg(group)
         group = APADV_MAPGROUP
     end
     assert(group,"Cfg Loader was not passed a Group Name and could not find a previously used Map Group")
+    APADV.DeadPlys = {}
     local map = game.GetMap()
     APADV_MAP = map
     local path = "apadventure/cfg/"..group.."/group.json"
@@ -48,6 +49,7 @@ function APADV.LoadCfg(group)
     ApAdvPly.SetRunSpeed(cfginfo("runspd"))
     ApAdvPly.SetSprintSpeed(cfginfo("sprintspd"))
     ApAdvPly.SetJumpPower(cfginfo("jump"))
+    APADV.PermaDeath = !cfginfo("respawn")
 
     if next(cfg.sav) then
         duplicator.Paste(nil,cfg.sav.Entities,cfg.sav.Constraints)
