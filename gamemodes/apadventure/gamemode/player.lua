@@ -97,6 +97,13 @@ function GM:PostPlayerDeath(ply)
     end
 end
 
+function GM:PlayerShouldTakeDamage(ply,attkr)
+    if APADV_GODMODE then
+        return false
+    end
+    return true
+end
+
 function GM:PlayerLoadout(ply)
     if !APADV_WEPS then return true end
 

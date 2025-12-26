@@ -50,6 +50,7 @@ function APADV.LoadCfg(group)
     ApAdvPly.SetSprintSpeed(cfginfo("sprintspd"))
     ApAdvPly.SetJumpPower(cfginfo("jump"))
     APADV.PermaDeath = !cfginfo("respawn")
+    APADV_GODMODE = cfginfo("godmode")
 
     if next(cfg.sav) then
         duplicator.Paste(nil,cfg.sav.Entities,cfg.sav.Constraints)
