@@ -64,6 +64,10 @@ local settings = {
         name = "respawn",
         type = "check"
     },
+    {
+        name = "godmode",
+        type = "check"
+    },
 }
 
 if CLIENT then
