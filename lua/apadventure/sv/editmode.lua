@@ -370,7 +370,7 @@ local function ProcessItemGroup(groupname)
                 min = deftbl.MinAmt,
                 oneuse = deftbl.OneUse,
                 group = deftbl.Groups,
-                ammocapab = deftbl.AmmoCapabilities,
+                condcapab = deftbl.ConditionalCapabilities,
                 capab = deftbl.Capabilities,
             }
         else
@@ -378,8 +378,12 @@ local function ProcessItemGroup(groupname)
         end 
     end
 
-    file.Write("apadventure/itemdefs/"..groupname..".json",util.TableToJSON(out,prettyprintcvar:GetBool()))
+    file.Write("apadventure/logic/item/"..groupname..".json",util.TableToJSON(out,prettyprintcvar:GetBool()))
 end
+
+if !file.IsDir("apadventure/logic/item/","DATA") then
+    file.CreateDir("apadventure/logic/item/")
+end 
 
 function apAdventure.ProcessItemdefs(groupname)
     if isstring(groupname) and groupname != "" then

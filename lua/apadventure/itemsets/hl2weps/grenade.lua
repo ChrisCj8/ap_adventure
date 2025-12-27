@@ -6,7 +6,7 @@ ITEM.Groups = {
     "Grenade"
 }
 ITEM.MinAmt = 1
-ITEM.AmmoCapabilities = {
+ITEM.ConditionalCapabilities = {
     ["Ammo_Grenade"] = {"DecentAOE","BlastDamage","MidThrow"}
 }
 

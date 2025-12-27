@@ -6,7 +6,7 @@ ITEM.Groups = {
     "Submachine Gun"
 }
 ITEM.MinAmt = 1
-ITEM.AmmoCapabilities = {
+ITEM.ConditionalCapabilities = {
     ["Ammo_SMG1"] = {"DecentShortRange","DecentMidRange","BulletDamage"},
     ["Ammo_SMG1_Grenade"] = {"DecentAOE","BlastDamage"}
 }

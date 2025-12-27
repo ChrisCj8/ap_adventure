@@ -7,7 +7,7 @@ from BaseClasses import ItemClassification
 def ProcessCfgs():
     gmodpath = get_settings().gmod_apadv_options["gmodpath"]
 
-    defdir = gmodpath+"/garrysmod/data/apadventure/itemdefs/"
+    defdir = gmodpath+"/garrysmod/data/apadventure/logic/item/"
     defgroups = os.listdir(defdir)
 
     class ItemSet:
@@ -63,7 +63,7 @@ def ProcessCfgs():
                         itemtypes += 1
                         item_name_to_id[iname] = itemtypes
                     #itemclass = 0
-                    """ if "ammocapab" in idef or "capab" in idef:
+                    """ if "condcapab" in idef or "capab" in idef:
                         itemclass = itemclass | 1 """
 
                     itemtypes += 1

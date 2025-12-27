@@ -7,7 +7,7 @@ ITEM.Groups = {
     "Revolver"
 }
 ITEM.MinAmt = 1
-ITEM.AmmoCapabilities = {
+ITEM.ConditionalCapabilities = {
     ["Ammo_357"] = {"StrongShortRange","StrongMidRange","BulletDamage"}
 }
 

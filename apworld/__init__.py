@@ -126,7 +126,7 @@ class GMADVWorld(World):
         self.locallocs = 0
         self.loadeditemsets = list()
         self.capabilitytbl = dict()
-        self.ammocapabilitytbl = dict()
+        self.condcapabtbl = dict()
         self.warnings = list()
         self.connectiongroups = set()
         self.entranceinfo = list()
@@ -178,7 +178,7 @@ class GMADVWorld(World):
                     if name in self.duplicate_item_names:
                         name = item.long_name
                     flags = 0
-                    if "ammocapab" in item.info or "capab" in item.info:
+                    if "condcapab" in item.info or "capab" in item.info:
                         flags = flags | 1
 
                     self.item_table[name] = (self.item_name_to_id[name],ItemClassification(flags))
@@ -196,12 +196,12 @@ class GMADVWorld(World):
                                 self.capabilitytbl[capab] = list()
                             
                             self.capabilitytbl[capab].append(capabentry)
-                    if "ammocapab" in item.info:
-                        print(item.info["ammocapab"])
-                        for ammotype,capabs in item.info["ammocapab"].items():
-                            if not ammotype in self.ammocapabilitytbl:
-                                self.ammocapabilitytbl[ammotype] = dict()
-                            self.ammocapabilitytbl[ammotype][name] = ProcessCapabs(set(capabs))
+                    if "condcapab" in item.info:
+                        print(item.info["condcapab"])
+                        for cond,capabs in item.info["condcapab"].items():
+                            if not cond in self.condcapabtbl:
+                                self.condcapabtbl[cond] = dict()
+                            self.condcapabtbl[cond][name] = ProcessCapabs(set(capabs))
                 self.loadeditemsets.append(isetname)
             else:
                 self.add_warning(f"itemset {isetname} could not be loaded")
@@ -261,7 +261,7 @@ class GMADVWorld(World):
                     newreg.onewayouts = dict()
                     newreg.twoways = dict()
                     if "cond" in v:
-                        newreg.ammo = set(v["cond"])
+                        newreg.conditions = set(v["cond"])
 
 
                     mapregs[k] = newreg

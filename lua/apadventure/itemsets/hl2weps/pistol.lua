@@ -7,7 +7,7 @@ WEP.Groups = {
 }
 WEP.MinAmt = 1
 WEP.Ammo = {"Pistol"}
-WEP.AmmoCapabilities = {
+WEP.ConditionalCapabilities = {
     ["Ammo_Pistol"] = {"DecentShortRange","WeakMidRange","WimpyLongRange","MidRangeSpray","BulletDamage","WeakDamage"}
 }
 

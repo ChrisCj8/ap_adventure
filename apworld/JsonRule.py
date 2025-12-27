@@ -61,14 +61,14 @@ def eval_json_rule(rule,state : CollectionState,world,region):
                             hascapabs = True
                             break  
                 
-            if not hascapabs and region.ammo:
-                #print(f"couldn't fullfill normal capability check, trying ammo capabilities for region {region}")
-                for ammotype in region.ammo:
-                    #print(f"trying ammo type {ammotype}")
-                    if ammotype in world.ammocapabilitytbl:
+            if not hascapabs and region.conditions:
+                #print(f"couldn't fullfill normal capability check, trying conditional capabilities for region {region}")
+                for cond in region.conditions:
+                    #print(f"trying condition {cond}")
+                    if cond in world.condcapabtbl:
         
-                        for itemname,itemcapabs in world.ammocapabilitytbl[ammotype].items():
-                            #print(f"testing ammo capabilities for {itemname}")
+                        for itemname,itemcapabs in world.condcapabtbl[cond].items():
+                            #print(f"testing conditional capabilities for {itemname}")
                             if state.has(itemname,player):
                                 allcapabs = True
                                 for cap in capab:
