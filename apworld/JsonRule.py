@@ -110,7 +110,7 @@ def preprocess_json_rule(rule,world,region):
                     nodes.pop(i)
                 else:
                     i += 1
-            if len(nodes) == 0:
+            if not nodes:
                 return nevernode
             else:
                 return rule
