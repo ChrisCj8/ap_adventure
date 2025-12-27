@@ -5,7 +5,7 @@ from worlds.AutoWorld import World
 from BaseClasses import Item, ItemClassification, Region, Location, CollectionState
 from .Settings import GMADVSettings
 from .Options import GMADVGameOptions
-from .JsonRule import eval_json_rule
+from .JsonRule import eval_json_rule, preprocess_json_rule
 from settings import get_settings
 from entrance_rando import randomize_entrances
 from .ImpliedCapabilities import ProcessCapabs
@@ -73,6 +73,23 @@ def reachtest(canreach: set,checked: set):
         return newreach
     else:
         return reachtest(newreach,checked)
+    
+def test_accessibility(canaccess: set,checked: set):
+    done = True
+    newaccess = canaccess.copy()
+    for reg in canaccess:
+        if not reg in checked:
+            done = False
+            if reg.has_entr:
+                return True
+            for entr in reg.entrances:
+                newaccess.add(entr.parent_region)
+            checked.add(reg)
+    if done:
+        return False
+    else:
+        return test_accessibility(newaccess,checked)
+
 
 class GMADVWorld(World):
     """\"I wish someone would make a mod.\"
@@ -189,20 +206,14 @@ class GMADVWorld(World):
                 
                 for k,v in map.regions.items():
                     newreg = Region(f"{map.group} - {map.bspname} - {k}",self.player,self.multiworld)
-                    reglocs = list()
-                    for ik,iv in v["lctns"].items():
-                        newlocname = f"{map.group} - {map.bspname} - {ik}"
-                        reglocs.append(GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],newreg))
-                        self.locallocs += 1
+                    newreg.locdata = v["lctns"]
                     newreg.priotize_entrances = False
                     if "prioentr" in v:
                         newreg.priotize_entrances = True
-                    newreg.locations = reglocs
                     newreg.mapname = map.bspname
                     newreg.mapgroup = map.group
                     newreg.has_entr = False
                     newreg.has_exit = False
-                    newreg.connected_to = set()
                     newreg.onewayins = dict()
                     newreg.onewayouts = dict()
                     newreg.twoways = dict()
@@ -236,10 +247,6 @@ class GMADVWorld(World):
                     else:
                         reg.onewayouts[name] = reg
 
-
-                for k,v in mapregs.items():
-                    self.multiworld.regions.append(v)
-
                 for k,v in map.internalConnections.items():
                     if not k in mapregs:
                         self.add_warning(f"{map.bspname} in {map.group} tried to make an internal connection to non-existing region \"{k}\"")
@@ -248,20 +255,50 @@ class GMADVWorld(World):
                         if not ik in mapregs:
                             self.add_warning(f"{map.bspname} in {map.group} tried to make an internal connection to non-existing region \"{ik}\"")
                             continue
-
+                        
+                        reg_a = mapregs[k]
+                        reg_b = mapregs[ik]
                         rule_a = None
                         rule_b = None
                         if "access" in iv:
-                            rule_a = lambda state, acctbl=iv["access"], world=self, region=mapregs[k]: eval_json_rule(acctbl,state,world,region)
-                            print(f"registering access rule for {ik} and {k}" )
+                            acctbl = preprocess_json_rule(iv["access"],self,reg_a)
+                            print(acctbl)
+                            if acctbl["type"] == "never":
+                                rule_a = False
+                                print(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed")
+                            else:
+                                rule_a = lambda state, acctbl=acctbl, world=self, region=reg_a: eval_json_rule(acctbl,state,world,region)
+                                print(f"registering access rule for {ik} and {k}" )
                             if iv["twoway"]:
-                                rule_b = lambda state, acctbl=iv["access"], world=self, region=mapregs[ik]: eval_json_rule(acctbl,state,world,region)
+                                acctbl = preprocess_json_rule(iv["access"],self,reg_b)
+                                print(acctbl)
+                                if acctbl["type"] == "never":
+                                    rule_b = False
+                                    print(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed")
+                                else:
+                                    rule_b = lambda state, acctbl=acctbl, world=self, region=reg_b: eval_json_rule(acctbl,state,world,region)
+                                    print(f"registering access rule for {k} and {ik}" )
+                            else:
+                                rule_b = False
+                        
+                        if rule_a != False:
+                            reg_a.connect(reg_b,f"{map.bspname} - {k} -> {ik}",rule_a)
+                        if rule_b != False:
+                            reg_b.connect(reg_a,f"{map.bspname} - {ik} -> {k}",rule_b)
 
-                        mapregs[k].connect(mapregs[ik],f"{map.bspname} - {k} -> {ik}",rule_a)
-                        mapregs[k].connected_to.add(mapregs[ik])
-                        mapregs[ik].connected_to.add(mapregs[k])
-                        if iv["twoway"] and iv["twoway"] == True:
-                            mapregs[ik].connect(mapregs[k],f"{map.bspname} - {ik} -> {k}",rule_b)
+                for k,v in mapregs.items():
+                    if test_accessibility({v},set()):
+                        reglocs = list()
+                        print(v.locdata)
+                        for ik,iv in v.locdata.items():
+                            newlocname = f"{map.group} - {map.bspname} - {ik}"
+                            reglocs.append(GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],newreg))
+                            self.locallocs += 1
+                            print(f"created location {newlocname}")
+                        v.locations = reglocs
+                        self.multiworld.regions.append(v)
+                    else:
+                        self.add_warning(f"{v.name} was removed because it was impossible to reach")
 
                 for k,v in map.items.items():
                     mapitems[f"{groupname} - {mapname} - {k}"] = v
@@ -499,9 +536,9 @@ class GMADVWorld(World):
 
         self.debuglog(f"dead ends left after first placements: {str(deadends)}")
 
-        self.add_warning(f"Unconnected Entrances: {str(unconnectedentrs)}")
-        self.add_warning(f"Unconnected Exits: {str(unconnectedexits)}")
-        self.add_warning(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
+        self.debuglog(f"Unconnected Entrances: {str(unconnectedentrs)}")
+        self.debuglog(f"Unconnected Exits: {str(unconnectedexits)}")
+        self.debuglog(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
 
         twowaysleft = len(unconnectedtwoways)
         while twowaysleft > 1:

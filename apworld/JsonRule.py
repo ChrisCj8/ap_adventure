@@ -84,3 +84,35 @@ def eval_json_rule(rule,state : CollectionState,world,region):
         case _:
             #print(False)
             return False
+
+nevernode = {
+    "type": "never"
+}
+
+def preprocess_json_rule(rule,world,region):
+    match rule["type"]:
+        case "bhop":
+            if world.bhop_logic:
+                return rule
+            else:
+                return nevernode
+        case "and":
+            for v in rule["nodes"]:
+                v = preprocess_json_rule(v,world,region)
+                if v == nevernode:
+                    return nevernode
+        case "or":
+            i = 0
+            nodes = rule["nodes"]
+            for v in nodes:
+                v = preprocess_json_rule(v,world,region)
+                if v == nevernode:
+                    nodes.pop(i)
+                else:
+                    i += 1
+            if len(nodes) == 0:
+                return nevernode
+            else:
+                return rule
+        case _:
+            return rule
