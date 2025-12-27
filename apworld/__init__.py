@@ -165,6 +165,49 @@ class GMADVWorld(World):
         else:
             self.bhop_logic = self.options.bhop_logic
 
+        chosenisets = self.options.item_sets
+
+        itempool = dict()
+
+        for isetname in chosenisets:
+            if isetname in self.item_set_table:        
+                iset = self.item_set_table[isetname]
+                isetitems = iset.items
+                for item in isetitems:
+                    name = item.name
+                    if name in self.duplicate_item_names:
+                        name = item.long_name
+                    flags = 0
+                    if "ammocapab" in item.info or "capab" in item.info:
+                        flags = flags | 1
+
+                    self.item_table[name] = (self.item_name_to_id[name],ItemClassification(flags))
+
+                    if "wgt" in item.info:
+                        self.fillers[item.name] = item.info["wgt"]
+                        self.filleramt += 1
+                    if "min" in item.info and item.info["min"] > 0:
+                        itempool[item.name] = item.info["min"]
+                    if "capab" in item.info:
+                        finalcapabs = ProcessCapabs(set(item.info["capab"]))
+                        capabentry = CapabTblEntry(name,finalcapabs)
+                        for capab in finalcapabs:
+                            if not capab in self.capabilitytbl:
+                                self.capabilitytbl[capab] = list()
+                            
+                            self.capabilitytbl[capab].append(capabentry)
+                    if "ammocapab" in item.info:
+                        print(item.info["ammocapab"])
+                        for ammotype,capabs in item.info["ammocapab"].items():
+                            if not ammotype in self.ammocapabilitytbl:
+                                self.ammocapabilitytbl[ammotype] = dict()
+                            self.ammocapabilitytbl[ammotype][name] = ProcessCapabs(set(capabs))
+                self.loadeditemsets.append(isetname)
+            else:
+                self.add_warning(f"itemset {isetname} could not be loaded")
+
+            self.items_to_create = itempool
+
     def create_item(self, name):
         data = self.item_table[name]
         if data[1] == None:
@@ -320,48 +363,11 @@ class GMADVWorld(World):
                 itempool.append(self.create_item(iname))
                 i += 1
 
-        chosenisets = self.options.item_sets
-
-        for isetname in chosenisets:
-            
-            if isetname in self.item_set_table:        
-                iset = self.item_set_table[isetname]
-                isetitems = iset.items
-                for item in isetitems:
-                    name = item.name
-                    if name in self.duplicate_item_names:
-                        name = item.long_name
-                    flags = 0
-                    if "ammocapab" in item.info or "capab" in item.info:
-                        flags = flags | 1
-
-                    self.item_table[name] = (self.item_name_to_id[name],ItemClassification(flags))
-
-                    if "wgt" in item.info:
-                        self.fillers[item.name] = item.info["wgt"]
-                        self.filleramt += 1
-                    if "min" in item.info and item.info["min"] > 0:
-                        i = 0
-                        while i < item.info["min"]:
-                            itempool.append(self.create_item(item.name))
-                            i += 1
-                    if "capab" in item.info:
-                        finalcapabs = ProcessCapabs(set(item.info["capab"]))
-                        capabentry = CapabTblEntry(name,finalcapabs)
-                        for capab in finalcapabs:
-                            if not capab in self.capabilitytbl:
-                                self.capabilitytbl[capab] = list()
-                            
-                            self.capabilitytbl[capab].append(capabentry)
-                    if "ammocapab" in item.info:
-                        print(item.info["ammocapab"])
-                        for ammotype,capabs in item.info["ammocapab"].items():
-                            if not ammotype in self.ammocapabilitytbl:
-                                self.ammocapabilitytbl[ammotype] = dict()
-                            self.ammocapabilitytbl[ammotype][name] = ProcessCapabs(set(capabs))
-                self.loadeditemsets.append(isetname)
-            else:
-                self.add_warning(f"itemset {isetname} could not be loaded")
+        for iname,amt in self.items_to_create.items():
+            i = 0
+            while i < amt:
+                itempool.append(self.create_item(iname))
+                i += 1
 
         if len(itempool) < self.locallocs:
             missingitems = self.locallocs - len(itempool)
