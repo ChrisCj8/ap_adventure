@@ -37,7 +37,7 @@ def eval_json_rule(rule,state : CollectionState,world,region):
         case "mapitem":
             return state.has(f"{region.mapgroup} - {region.mapname} - {rule["item"]}",player,rule["count"])
         case "capab":
-            capab = list(rule["capab"].keys()) # could probably speed this up by doing this conversion earlier 
+            capab = rule["capab"]
             #print(capab)
             #print(world.capabilitytbl)
             #print(world.capabilitytbl[capab[0]])
@@ -114,5 +114,12 @@ def preprocess_json_rule(rule,world,region):
                 return nevernode
             else:
                 return rule
+        case "capab":
+            capabs = rule["capab"]
+            if not type(capabs) is list:
+                capabs = list(capabs.keys())
+            rule["capab"] = capabs
+            world.usedcapabs.update(capabs)
+            return rule
         case _:
             return rule
