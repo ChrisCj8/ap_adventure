@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility
+from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool
 
 class Skill(Choice):
     """What the \"skill\" ConVar will be set to. 
@@ -60,3 +60,4 @@ class GMADVGameOptions(PerGameCommonOptions):
     item_sets: ItemSets
     generate_puml: GeneratePUML
     write_debug: WriteDebug
+    start_inventory_from_pool: StartInventoryPool
