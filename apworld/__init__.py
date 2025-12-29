@@ -133,7 +133,11 @@ class GMADVWorld(World):
         self.rando_entrances = dict()
         self.item_table = self.base_item_table.copy()
         self.usedcapabs = set()
-
+        self.usedcapabs_known = False
+        self.regconds = set()
+        self.regconds_known = False
+        self.items_to_reflag = list()
+        
     def add_warning(self,warning):
         self.warnings.append(warning)
         print(warning)
@@ -145,6 +149,57 @@ class GMADVWorld(World):
         if self.dodebug:
             self.debuginfo.append(debug)
             print(debug)
+
+    def get_item_flags(self,name):
+        if not name in self.item_table:
+            return None
+        data = self.item_table[name]
+        flags = data[1]
+        info = data[2]
+        if flags == None:
+            if info:
+                print(info)
+                flags = ItemClassification.filler
+                if self.usedcapabs_known:
+                    if "capab" in info:
+                        print(f"{name} had capabs")
+                        capab = info["capab"]
+                        if self.usedcapabs.intersection(capab):
+                            flags = ItemClassification.progression
+                        else:
+                            flags = ItemClassification.useful
+                    if not flags == ItemClassification.progression and "condcapab" in info:
+                        if not self.regconds_known:
+                            return None
+                        print(f"{name} had condcapabs")
+                        condcapab = info["condcapab"]
+                        for k,v in condcapab.items():
+                            if k in self.regconds and self.usedcapabs.intersection(v):
+                                flags = ItemClassification.progression
+                                break
+                            else:
+                                flags = ItemClassification.useful
+                else:
+                    return None
+            else:
+                match data[0]:
+                    case "Bunnyhop":
+                        if self.bhop_logic:
+                            flags = ItemClassification.progression
+                        else:
+                            flags = ItemClassification.useful
+        return flags
+    
+    def create_item(self, name):
+        flags = self.get_item_flags(name)
+        reflag = False
+        if not flags:
+            flags = ItemClassification.progression
+            reflag = True
+        item = GMADVItem(name, flags, self.item_name_to_id[name], self.player)
+        if reflag:
+            self.items_to_reflag.append(item)
+        return item
 
     def get_filler_item_name(self):
         if self.filleramt == 0:
@@ -208,41 +263,6 @@ class GMADVWorld(World):
 
             self.items_to_create = itempool
 
-    def create_item(self, name):
-        data = self.item_table[name]
-        flags = data[1]
-        info = data[2]
-        if flags == None:
-            if info:
-                print(info)
-                flags = ItemClassification.filler
-                if "capab" in info: # and self.usedcapabs.intersect(capab) or ( condcapab and self.usedcapabs.intersect(condcapab)):
-                    print(f"{name} had capabs")
-                    capab = info["capab"]
-                    if self.usedcapabs.intersection(capab):
-                        flags = ItemClassification.progression
-                    else:
-                        flags = ItemClassification.useful
-                if not flags == ItemClassification.progression and "condcapab" in info:
-                    print(f"{name} had condcapabs")
-                    condcapab = info["condcapab"]
-                    for k,v in condcapab.items():
-                        if self.usedcapabs.intersection(v):
-                            flags = ItemClassification.progression
-                            break
-                        else:
-                            flags = ItemClassification.useful
-            else:
-                match data[0]:
-                    case "Bunnyhop":
-                        if self.bhop_logic:
-                            flags = ItemClassification.progression
-                        else:
-                            flags = ItemClassification.useful
-            
-        print(f"creating item {name} with flags {flags}")
-        return GMADVItem(name, flags, data[0], self.player)
-    
     def create_regions(self):
         menu = Region("Menu",self.player,self.multiworld)
         self.multiworld.regions.append(menu)
@@ -284,6 +304,7 @@ class GMADVWorld(World):
                     newreg.twoways = dict()
                     if "cond" in v:
                         newreg.conditions = set(v["cond"])
+                        self.regconds.update(newreg.conditions)
 
 
                     mapregs[k] = newreg
@@ -371,8 +392,11 @@ class GMADVWorld(World):
         self.map_items = mapitems
         self.rando_entrances = entrs
         self.startingcandidates = startcandidates
+        self.usedcapabs_known = True
+        self.regconds_known = True
 
     def create_items(self):
+
         itempool = [self.create_item("McGuffin")]
 
         if self.bhop == 2:
@@ -397,6 +421,11 @@ class GMADVWorld(World):
             while missingitems > 0:
                 itempool.append(self.create_item(self.get_filler_item_name()))
                 missingitems -= 1
+
+        for v in self.items_to_reflag:
+            oldflag = v.classification
+            v.classification = self.get_item_flags(v.name)
+            self.debuglog(f"update flags for {v.name} from {oldflag} to {v.classification}")
 
         self.multiworld.itempool += itempool
 
