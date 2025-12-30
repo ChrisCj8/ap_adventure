@@ -3,7 +3,7 @@ apAdventure = apAdventure or {}
 
 apAdventure.CfgVers = { 
     sv = "v1", 
-    cl = "v1",
+    cl = "v1_1",
     gr = "old"
 }
 

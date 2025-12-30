@@ -115,11 +115,7 @@ def preprocess_json_rule(rule,world,region):
             else:
                 return rule
         case "capab":
-            capabs = rule["capab"]
-            if not type(capabs) is list:
-                capabs = list(capabs.keys())
-            rule["capab"] = capabs
-            world.usedcapabs.update(capabs)
+            world.usedcapabs.update(rule["capab"])
             return rule
         case _:
             return rule

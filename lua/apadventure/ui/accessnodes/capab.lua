@@ -48,39 +48,56 @@ function NODE.Panel(parent)
     caplist:SetPos(5,30)
     caplist:AddColumn("Capability")
 
-    for k,v in pairs(parent.nodetbl.capab) do
-        caplist:AddLine(k)
+    for k,v in ipairs(parent.nodetbl.capab) do
+        caplist:AddLine(v)
     end
+
+    /*
+        these next two functions kinda suck because it'd normally be better to use
+        a lookup table here but having it as a list is better for the generator and
+        doing the conversion when the client config is being converted to logic was
+        also surprisingly expensive so i think this justifiable because these lists
+        really shouldn't be that long anyways
+    */
 
     function capaddbtn:DoClick()
         local _, data = capselect:GetSelected()
-        if !parent.nodetbl.capab[data] then
-            parent.nodetbl.capab[data] = true
+        local captbl = parent.nodetbl.capab
+        local add = true
+        for k,v in ipairs(captbl) do
+            if v == data then
+                present = false
+                break
+            end
+        end
+        if add then
+            captbl[#captbl+1] = data
             caplist:AddLine(data)
         end
     end
 
     function capdelbtn:DoClick()
+        captbl = parent.nodetbl.capab
+        local changed
         for k,v in ipairs(caplist:GetSelected()) do
-            parent.nodetbl.capab[v:GetValue(1)] = nil
+            local val = v:GetValue(1)
+            for ik,iv in ipairs(captbl) do
+                if iv == val then 
+                    captbl[ik] = nil
+                    changed = true
+                end
+            end
             v:Remove()
         end
+        if changed then
+            local newlist = {}
+            local i = 0
+            for k,v in pairs(captbl) do
+                i = i + 1
+                newlist[i] = v
+            end
+        end
     end
-
-    --[[ local itemnamein = vgui.Create("DTextEntry",parent)
-    itemnamein:SetValue(parent.nodetbl.item)
-    itemnamein:SetPos(5,5)
-    function itemnamein:OnValueChange(val)
-        parent.nodetbl.item = val
-    end
-
-    local countin = vgui.Create("DNumberWang",parent)
-    countin:SetMin(1)
-    countin:SetValue(parent.nodetbl.count or 1)
-    countin:SetPos(5,30)
-    function countin:OnValueChanged(val)
-        parent.nodetbl.count = val
-    end ]]
 
     function parent:PerformLayout(w,h)
         --itemnamein:SetSize(w-10,22)
@@ -94,7 +111,7 @@ end
 function NODE.InitNode()
     return {
         capab = {},
-        type = "weapon"
+        type = "capab"
     }
 end
 
