@@ -427,37 +427,81 @@ class GMADVWorld(World):
 
     def create_items(self):
 
-        itempool = [self.create_item("McGuffin")]
+        itempool = {self.create_item("McGuffin")}
+        fillers = list[GMADVItem]()
+        usefuls = list[GMADVItem]()
 
         if self.bhop == 2:
-            itempool.append(self.create_item("Bunnyhop"))
+            bhop = self.create_item("Bunnyhop")
+            itempool.add(bhop)
+            if not self.bhop_logic:
+                usefuls.append(bhop)
+                
 
         for iname,info in self.map_items.items():
             self.item_table[iname] = (self.item_name_to_id[iname],ItemClassification(info["fl"]),None)
             i = 0
             while i < info["amt"]:
-                itempool.append(self.create_item(iname))
+                itempool.add(self.create_item(iname))
                 i += 1
 
         for iname,amt in self.items_to_create.items():
             i = 0
             while i < amt:
-                itempool.append(self.create_item(iname))
+                newitem = self.create_item(iname)
+                itempool.add(newitem)
                 i += 1
+                flags = newitem.classification
+                if flags & ItemClassification.progression == 0:
+                    if flags & ItemClassification.useful == 0:
+                        fillers.append(newitem)
+                    else:
+                        usefuls.append(newitem)
 
-        if len(itempool) < self.locallocs:
-            missingitems = self.locallocs - len(itempool)
+
+        poolsize = len(itempool)
+
+        if poolsize < self.locallocs:
+            missingitems = self.locallocs - poolsize
 
             while missingitems > 0:
-                itempool.append(self.create_item(self.get_filler_item_name()))
+                itempool.add(self.create_item(self.get_filler_item_name()))
                 missingitems -= 1
+
+        elif poolsize > self.locallocs:
+            overflow = poolsize - self.locallocs
+
+            
+            filleramt = len(fillers)
+            if filleramt <= overflow:
+                itempool.difference_update( set(fillers) )
+                overflow -= filleramt
+            else:
+                itempool.difference_update( set(fillers[-overflow:]) )
+                overflow = 0
+
+
+            
+            usefulamt = len(usefuls)
+            if usefulamt <= overflow:
+                itempool.difference_update( set(usefuls) )
+                overflow -= usefulamt
+            else:
+                itempool.difference_update( set(usefuls[-overflow:]) )
+                overflow = 0
+
+            if overflow != 0:
+                pass
+
+            print("printing itempool")
+            print(itempool)
 
         for v in self.items_to_reflag:
             oldflag = v.classification
             v.classification = self.get_item_flags(v.name)
             self.debuglog(f"update flags for {v.name} from {oldflag} to {v.classification}")
 
-        self.multiworld.itempool += itempool
+        self.multiworld.itempool.extend(itempool)
 
     def connect_entrances(self):
 
