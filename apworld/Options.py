@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool
+from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool, OptionDict
+from schema import Schema, Or
 
 class Skill(Choice):
     """What the \"skill\" ConVar will be set to. 
@@ -19,7 +20,25 @@ class Skill(Choice):
 
 class ConfigGroups(OptionSet):
     """Config Groups to use for generation."""
-    default = {"test"}
+    default = {"ravenholm"}
+
+singlepickschema = Schema(Or({
+        str: Or(list, str)
+    },{}))
+
+class ConfigCherryPick(OptionDict):
+    """This Option allows you to cherrypick single maps from a Config Group."""
+    default = {
+        "orange_test": ["ap_orange"]
+    }
+    schema = singlepickschema
+
+class ConfigBlacklist(OptionDict):
+    """This Option allows you to pick maps from a Config Group that should not be added to your run."""
+    default = {
+        "ravenholm": ["d1_town_02a"]
+    }
+    schema = singlepickschema
 
 class ItemSets(OptionSet):
     """Item Sets to use for generation."""
@@ -57,6 +76,8 @@ class GMADVGameOptions(PerGameCommonOptions):
     bhop: BunnyHop
     bhop_logic: BunnyHopLogic
     config_groups: ConfigGroups
+    config_cherrypick: ConfigCherryPick
+    config_blacklist: ConfigBlacklist
     item_sets: ItemSets
     generate_puml: GeneratePUML
     write_debug: WriteDebug

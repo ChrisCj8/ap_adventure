@@ -274,16 +274,46 @@ class GMADVWorld(World):
         startcandidates = list()
 
         mapitems = dict()
-
         entrs = dict()
+        maps = dict()
+        maptbl = self.map_table
 
         for groupname in chosencfgr:
+            if not groupname in maptbl:
+                continue
+            maps[groupname] = maptbl[groupname]
+
+        for pickgroup, pickmaps in self.options.config_cherrypick.items():
+            if pickgroup in maps:
+                continue
+            newmaps = dict()
+            mapgroup = maptbl[pickgroup]
+
+            for map in pickmaps:
+                if map in mapgroup:
+                    newmaps[map] = mapgroup[map]
+                else:
+                    self.add_warning(f"config_cherrypick tried to add map {map}, which was not present in group {pickgroup}")
+
+
+            maps[pickgroup] = newmaps
+
+        for blgroup, blmaps in self.options.config_blacklist.items():
+            if not blgroup in maps:
+                continue
+            delgroup = maps[blgroup]
+
+            for map in blmaps:
+                if map in delgroup:
+                    del delgroup[map]
+                else:
+                    self.add_warning(f"config_blacklist tried to remove map {map}, which was not present in group {blgroup}")
+
+        for groupname,groupmaps in maps.items():
 
             if not groupname in self.map_table:
                 self.add_warning(f"map group {groupname} does not exist")
                 continue
-
-            groupmaps = self.map_table[groupname]
 
             for mapname,map in groupmaps.items():
                 print(mapname)
@@ -351,7 +381,7 @@ class GMADVWorld(World):
                             print(acctbl)
                             if acctbl["type"] == "never":
                                 rule_a = False
-                                print(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed")
+                                self.add_warning(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed")
                             else:
                                 rule_a = lambda state, acctbl=acctbl, world=self, region=reg_a: eval_json_rule(acctbl,state,world,region)
                                 print(f"registering access rule for {ik} and {k}" )
@@ -360,7 +390,7 @@ class GMADVWorld(World):
                                 print(acctbl)
                                 if acctbl["type"] == "never":
                                     rule_b = False
-                                    print(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed")
+                                    self.add_warning(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed")
                                 else:
                                     rule_b = lambda state, acctbl=acctbl, world=self, region=reg_b: eval_json_rule(acctbl,state,world,region)
                                     print(f"registering access rule for {k} and {ik}" )
