@@ -90,6 +90,7 @@ nevernode = {
 }
 
 def preprocess_json_rule(rule,world,region):
+    rule = rule.copy()
     match rule["type"]:
         case "bhop":
             if world.bhop_logic:
