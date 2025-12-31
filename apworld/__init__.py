@@ -3,6 +3,7 @@ import json
 import os
 from worlds.AutoWorld import World
 from BaseClasses import Item, ItemClassification, Region, Location, CollectionState
+from Options import OptionError
 from .Settings import GMADVSettings
 from .Options import GMADVGameOptions
 from .JsonRule import eval_json_rule, preprocess_json_rule
@@ -208,20 +209,71 @@ class GMADVWorld(World):
             return self.random.choices(list(self.fillers.keys()),self.fillers.values())[0] # took this from ahit, seems like it'd be kinda slow but what do i know
     
     def generate_early(self):
-        if self.options.write_debug:
+
+        options = self.options
+
+        if options.write_debug:
             self.dodebug = True
             self.debuginfo = list()
         else:
             self.dodebug = False
 
-        self.bhop = self.options.bhop
+        self.bhop = options.bhop
 
         if self.bhop ==  1:
             self.bhop_logic = False
         else:
-            self.bhop_logic = self.options.bhop_logic
+            self.bhop_logic = options.bhop_logic
 
-        chosenisets = self.options.item_sets
+        maps = dict()
+        maptbl = self.map_table
+
+        for group in options.config_groups:
+            if group in maptbl:
+                maps[group] = maptbl[group]
+            else:
+                self.add_warning(f"config_groups tried to add group {group}, which does not exist")
+
+        for pickgroup, pickmaps in options.config_cherrypick.items():
+            if pickgroup in maps:
+                continue
+            newmaps = dict()
+            mapgroup = maptbl[pickgroup]
+
+            for map in pickmaps:
+                if map in mapgroup:
+                    newmaps[map] = mapgroup[map]
+                else:
+                    self.add_warning(f"config_cherrypick tried to add map {map}, which was not present in group {pickgroup}")
+
+            maps[pickgroup] = newmaps
+
+        for blgroup, blmaps in options.config_blacklist.items():
+            if not blgroup in maps:
+                continue
+            delgroup = maps[blgroup]
+
+            for map in blmaps:
+                if map in delgroup:
+                    del delgroup[map]
+                else:
+                    self.add_warning(f"config_blacklist tried to remove map {map}, which was not present in group {blgroup}")
+
+        emptygroups = list()
+
+        for k,v in maps.items():
+            if not v:
+                emptygroups.append(k)
+        
+        for k in emptygroups:
+            del maps[k]
+
+        if not maps:
+            raise OptionError(f"Slot {self.player_name} did not have any valid maps selected in their Options.")
+
+        self.chosen_maps = maps
+
+        chosenisets = options.item_sets
 
         itempool = dict()
 
@@ -268,46 +320,13 @@ class GMADVWorld(World):
         self.multiworld.regions.append(menu)
         self.menuregion = menu
 
-        chosencfgr = self.options.config_groups
-
         print("creating regions")
         startcandidates = list()
 
         mapitems = dict()
         entrs = dict()
-        maps = dict()
-        maptbl = self.map_table
 
-        for groupname in chosencfgr:
-            if not groupname in maptbl:
-                continue
-            maps[groupname] = maptbl[groupname]
-
-        for pickgroup, pickmaps in self.options.config_cherrypick.items():
-            if pickgroup in maps:
-                continue
-            newmaps = dict()
-            mapgroup = maptbl[pickgroup]
-
-            for map in pickmaps:
-                if map in mapgroup:
-                    newmaps[map] = mapgroup[map]
-                else:
-                    self.add_warning(f"config_cherrypick tried to add map {map}, which was not present in group {pickgroup}")
-
-
-            maps[pickgroup] = newmaps
-
-        for blgroup, blmaps in self.options.config_blacklist.items():
-            if not blgroup in maps:
-                continue
-            delgroup = maps[blgroup]
-
-            for map in blmaps:
-                if map in delgroup:
-                    del delgroup[map]
-                else:
-                    self.add_warning(f"config_blacklist tried to remove map {map}, which was not present in group {blgroup}")
+        maps = self.chosen_maps
 
         for groupname,groupmaps in maps.items():
 
