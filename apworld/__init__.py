@@ -194,7 +194,7 @@ class GMADVWorld(World):
     def create_item(self, name):
         flags = self.get_item_flags(name)
         reflag = False
-        if not flags:
+        if flags == None:
             flags = ItemClassification.progression
             reflag = True
         item = GMADVItem(name, flags, self.item_name_to_id[name], self.player)
