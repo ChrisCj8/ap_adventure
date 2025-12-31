@@ -55,6 +55,7 @@ function APADV.RegisterMapItems(itemtbl)
 
     local map = game.GetMap()
     local toID = APADV_DATAPACK_LOCAL.item_name_to_id
+    local itemlist = APADV_SLOT.Items
     for k,v in pairs(APADV.MapItemCounters) do
         local id = toID[APADV_MAPGROUP.." - "..map.." - "..k]
         if id then
@@ -62,7 +63,7 @@ function APADV.RegisterMapItems(itemtbl)
             for ik,iv in ipairs(v) do
                 outtbl[ik] = iv
                 for iik,iiv in ipairs(ents.FindByName(iv.target)) do
-                    iiv:Fire(iv.input,iv.param,iv.delay)
+                    iiv:Fire(iv.input,#itemlist[id],iv.delay)
                 end
             end
             print("new mapitem table")
