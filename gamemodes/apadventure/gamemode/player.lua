@@ -59,7 +59,7 @@ function GM:PlayerSpawn(ply,trans)
         end
 
         ply:SetPos(spawnpick.pos)
-        ply:SetAngles(spawnpick.ang)
+        ply:SetEyeAngles(spawnpick.ang)
 
     end
 end
