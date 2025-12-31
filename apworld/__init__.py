@@ -450,13 +450,13 @@ class GMADVWorld(World):
 
     def create_items(self):
 
-        itempool = {self.create_item("McGuffin")}
+        itempool = [self.create_item("McGuffin")]
         fillers = list[GMADVItem]()
         usefuls = list[GMADVItem]()
 
         if self.bhop == 2:
             bhop = self.create_item("Bunnyhop")
-            itempool.add(bhop)
+            itempool.append(bhop)
             if not self.bhop_logic:
                 usefuls.append(bhop)
                 
@@ -465,14 +465,14 @@ class GMADVWorld(World):
             self.item_table[iname] = (self.item_name_to_id[iname],ItemClassification(info["fl"]),None)
             i = 0
             while i < info["amt"]:
-                itempool.add(self.create_item(iname))
+                itempool.append(self.create_item(iname))
                 i += 1
 
         for iname,amt in self.items_to_create.items():
             i = 0
             while i < amt:
                 newitem = self.create_item(iname)
-                itempool.add(newitem)
+                itempool.append(newitem)
                 i += 1
                 flags = newitem.classification
                 if flags & ItemClassification.progression == 0:
@@ -481,43 +481,32 @@ class GMADVWorld(World):
                     else:
                         usefuls.append(newitem)
 
-
         poolsize = len(itempool)
+        rand = self.random
 
         if poolsize < self.locallocs:
             missingitems = self.locallocs - poolsize
-
             while missingitems > 0:
-                itempool.add(self.create_item(self.get_filler_item_name()))
+                itempool.append(self.create_item(self.get_filler_item_name()))
                 missingitems -= 1
 
         elif poolsize > self.locallocs:
             overflow = poolsize - self.locallocs
 
-            
             filleramt = len(fillers)
-            if filleramt <= overflow:
-                itempool.difference_update( set(fillers) )
-                overflow -= filleramt
-            else:
-                itempool.difference_update( set(fillers[-overflow:]) )
-                overflow = 0
-
-
+            while fillers and overflow > 0:
+                itempool.remove(fillers.pop(rand.randint(0,filleramt-1)))
+                filleramt -= 1
+                overflow -= 1
             
             usefulamt = len(usefuls)
-            if usefulamt <= overflow:
-                itempool.difference_update( set(usefuls) )
-                overflow -= usefulamt
-            else:
-                itempool.difference_update( set(usefuls[-overflow:]) )
-                overflow = 0
-
+            while usefuls and overflow > 0:
+                itempool.remove(usefuls.pop(rand.randint(0,usefulamt-1)))
+                usefulamt -= 1
+                overflow -= 1
+            
             if overflow != 0:
-                pass
-
-            print("printing itempool")
-            print(itempool)
+                raise RuntimeError(f"{self.player_name} had {overflow} more items than locations which could not be removed")
 
         for v in self.items_to_reflag:
             oldflag = v.classification
