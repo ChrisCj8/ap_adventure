@@ -438,9 +438,13 @@ class GMADVWorld(World):
                 for k,v in map.items.items():
                     mapitems[f"{groupname} - {mapname} - {k}"] = v
 
+        if not startcandidates:
+            raise RuntimeError(self.player_name+" had no configs with valid starting regions selected")
+
+        self.startingcandidates = startcandidates
+
         self.map_items = mapitems
         self.rando_entrances = entrs
-        self.startingcandidates = startcandidates
         self.usedcapabs_known = True
         self.regconds_known = True
 
@@ -539,27 +543,22 @@ class GMADVWorld(World):
         startcandidates = self.startingcandidates
         menu = self.menuregion
         candidateamt = len(startcandidates)
-        startreg = None
-        print("candidate amount",candidateamt)
-        if candidateamt == 0:
-            RuntimeError(self.player_name+" had no maps with valid starting regions in their selected map groups")
-        else:
-            startpick = startcandidates[self.random.randint(0,candidateamt-1)]
-            startreg = startpick.region
-            self.startpick = startpick
-            reach = reachtest({startreg},set())
-            for reg in reach:
-                for twoway,homereg in reg.twoways.items():
-                    unconnectedtwoways[twoway] = homereg
-                    del unplacedentrs[twoway]
-                    available_exits += 1
-                for exit,homereg in reg.onewayouts.items():
-                    unconnectedexits[exit] = homereg
-                    available_exits += 1
-                for entr,homereg in reg.onewayins.items():
-                    unconnectedentrs[entr] = homereg
-                    print(f"removing {entr} from unplaced entrances")
-                    del unplacedentrs[entr]
+        startpick = startcandidates[self.random.randint(0,candidateamt-1)]
+        startreg = startpick.region
+        self.startpick = startpick
+        reach = reachtest({startreg},set())
+        for reg in reach:
+            for twoway,homereg in reg.twoways.items():
+                unconnectedtwoways[twoway] = homereg
+                del unplacedentrs[twoway]
+                available_exits += 1
+            for exit,homereg in reg.onewayouts.items():
+                unconnectedexits[exit] = homereg
+                available_exits += 1
+            for entr,homereg in reg.onewayins.items():
+                unconnectedentrs[entr] = homereg
+                print(f"removing {entr} from unplaced entrances")
+                del unplacedentrs[entr]
 
         untriedentrs = set(unplacedentrs.keys())
 
