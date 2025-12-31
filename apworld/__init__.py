@@ -556,7 +556,7 @@ class GMADVWorld(World):
 
         print(str(untriedentrs))
 
-        unfinished = True
+        unfinished = bool(unplacedentrs)
 
         exit_reach_strictness = 3
 
