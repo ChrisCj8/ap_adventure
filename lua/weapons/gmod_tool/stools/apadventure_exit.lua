@@ -66,7 +66,6 @@ function TOOL:LeftClick(tr)
     local ent = tr.Entity
     local region = self:GetClientInfo("region")
     local name = self:GetClientInfo("name")
-    print(region,name)
     if ent:GetClass() == "apadventure_exit_editor" then
         ent:SetRegion(region)
         ent:SetExitName(name)

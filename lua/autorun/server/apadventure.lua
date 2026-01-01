@@ -78,7 +78,6 @@ local patchloadsavedcvar = CreateConVar("apadventure_patch_loadsaved",0,FCVAR_AR
     0,1)
 
 local function UseCapturedKeyVals()
-    --PrintTable(changelevelinfo)
     if patchchangelevelcvar:GetBool() or playingApAdv then
         for k,v in pairs(changelevelinfo) do
             local oldpos = k:GetPos()

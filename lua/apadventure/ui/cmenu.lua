@@ -592,7 +592,6 @@ return function(window)
                 local nodename, nodedata = conaccessnodeselect:GetSelected()
                 if !nodedata then return end
                 local nodetype = nodetypes[nodedata]
-                print(curnode,nodename,nodedata,nodetype)
                 if !IsValid(curnode) then
                     local rootnode = conaccesstree:Root()
                     if !rootnode or rootnode:GetChildNodeCount() > 0 then return else
@@ -617,13 +616,10 @@ return function(window)
                 local curnode = conaccesstree:GetSelectedItem()
                 if !IsValid(curnode) then return end
                 local parentnode = curnode:GetParentNode()
-                --print("trying to delete node"..tostring(curnode),parentnode:IsRootNode())
-                --PrintTable(curnode.tbl)
                 if parentnode:IsRootNode() then
                     curnode:Remove()
                     curcon.access = nil
                 else
-                    --PrintTable(parentnode:GetChildNodes())
                     local parenttbl = parentnode.tbl
                     local newtbl = {}
                     local curnodekey = curnode.tblkey
@@ -650,7 +646,6 @@ return function(window)
                 conaccessnodepnl.PerformLayout = nil
                 conaccessnodepnl:Clear()
                 conaccessnodepnl.nodetbl = node.tbl
-                PrintTable(node.tbl)
                 local pnlfunc = nodetypes[node.tbl.type].Panel
 
                 if isfunction(pnlfunc) then

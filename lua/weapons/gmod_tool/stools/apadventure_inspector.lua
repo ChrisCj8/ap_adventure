@@ -37,7 +37,6 @@ if CLIENT then
             deleted = net.ReadBool(),
         }
         inspectorinfo[inspectorinfoamt].icon = class2icon[inspectorinfo[inspectorinfoamt].class] or  obsolete
-        PrintTable(inspectorinfo)
     end)
 
     local drawcol = surface.SetDrawColor

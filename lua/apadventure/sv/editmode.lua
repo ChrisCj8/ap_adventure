@@ -164,7 +164,6 @@ function apAdventure.StoreCfg(groupoverride)
     if isstring(groupoverride) and groupoverride != "" then srctbl.Group = groupoverride end
     if srctbl.Group == "" or !isstring(srctbl.Group) then return end
     local listenhost = player.GetByID(1)
-    print(listenhost,srctbl.Group)
     net.Start("APAdvSaveCfg")
         net.WriteString(srctbl.Group)
     net.Send(listenhost) --hope that this is always the listen server host
@@ -178,7 +177,6 @@ function apAdventure.StoreCfg(groupoverride)
             srctbl.Saved[k] = nil
         end
     end
-    PrintTable(savpre)
     local sav = duplicator.CopyEnts(savpre)
     local del = {}
     local i=1
@@ -251,7 +249,6 @@ function apAdventure.StoreCfg(groupoverride)
         lctn = lctn
     }
 
-    PrintTable(outtbl)
     local prettyprint = prettyprintcvar:GetBool()
     local dir = "apadventure/cfg/"..srctbl.Group.."/"..game.GetMap()
     file.CreateDir(dir)
@@ -364,7 +361,6 @@ local function ProcessItemGroup(groupname)
     for k,v in ipairs(itemdefs) do
         local deftbl = include(grouppath.."/"..v)
         if istable(deftbl) then
-            PrintTable(deftbl)
             itemtbl[deftbl.Name] = {
                 wgt = deftbl.FillWeight,
                 min = deftbl.MinAmt,

@@ -159,11 +159,9 @@ class GMADVWorld(World):
         info = data[2]
         if flags == None:
             if info:
-                print(info)
                 flags = ItemClassification.filler
                 if self.usedcapabs_known:
                     if "capab" in info:
-                        print(f"{name} had capabs")
                         capab = info["capab"]
                         if self.usedcapabs.intersection(capab):
                             flags = ItemClassification.progression
@@ -172,7 +170,6 @@ class GMADVWorld(World):
                     if not flags == ItemClassification.progression and "condcapab" in info:
                         if not self.regconds_known:
                             return None
-                        print(f"{name} had condcapabs")
                         condcapab = info["condcapab"]
                         for k,v in condcapab.items():
                             if k in self.regconds and self.usedcapabs.intersection(v):
@@ -200,6 +197,7 @@ class GMADVWorld(World):
         item = GMADVItem(name, flags, self.item_name_to_id[name], self.player)
         if reflag:
             self.items_to_reflag.append(item)
+        self.debuglog(f"created item {name} with flags {flags}")
         return item
 
     def get_filler_item_name(self):
@@ -304,7 +302,6 @@ class GMADVWorld(World):
                             
                             self.capabilitytbl[capab].append(capabentry)
                     if "condcapab" in item.info:
-                        print(item.info["condcapab"])
                         for cond,capabs in item.info["condcapab"].items():
                             if not cond in self.condcapabtbl:
                                 self.condcapabtbl[cond] = dict()
@@ -320,7 +317,7 @@ class GMADVWorld(World):
         self.multiworld.regions.append(menu)
         self.menuregion = menu
 
-        print("creating regions")
+        self.debuglog(f"creating regions for {self.player_name}")
         startcandidates = list()
 
         mapitems = dict()
@@ -335,7 +332,7 @@ class GMADVWorld(World):
                 continue
 
             for mapname,map in groupmaps.items():
-                print(mapname)
+                self.debuglog(f"processing regions for {mapname} in {groupname}")
                 mapregs = dict()
                 
                 for k,v in map.regions.items():
@@ -359,10 +356,10 @@ class GMADVWorld(World):
                     mapregs[k] = newreg
 
                     if "startcandidate" in v:
-                        print(k, "is a starting candidate")
+                        self.debuglog(f"{k} is a starting candidate")
                         startcandidates.append(StartRegion(newreg,map,k))
 
-                    print("creating region "+map.bspname+" - "+ k)
+                    self.debuglog("creating region "+map.bspname+" - "+ k)
 
                 for k,v in map.entrances.items():
                     reg = mapregs[v]
@@ -370,7 +367,7 @@ class GMADVWorld(World):
                     name = reg.name+" - "+k
                     entrs[name] = reg
                     reg.onewayins[name] = reg
-                    print("adding exit "+k+" to "+v)
+                    self.debuglog("adding exit "+k+" to "+v)
 
                 for k,v in map.exits.items():
                     reg = mapregs[v]
@@ -397,22 +394,20 @@ class GMADVWorld(World):
                         rule_b = None
                         if "access" in iv:
                             acctbl = preprocess_json_rule(iv["access"],self,reg_a)
-                            print(acctbl)
                             if acctbl["type"] == "never":
                                 rule_a = False
                                 self.add_warning(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed")
                             else:
                                 rule_a = lambda state, acctbl=acctbl, world=self, region=reg_a: eval_json_rule(acctbl,state,world,region)
-                                print(f"registering access rule for {ik} and {k}" )
+                                self.debuglog(f"registering access rule for {ik} and {k}" )
                             if iv["twoway"]:
                                 acctbl = preprocess_json_rule(iv["access"],self,reg_b)
-                                print(acctbl)
                                 if acctbl["type"] == "never":
                                     rule_b = False
                                     self.add_warning(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed")
                                 else:
                                     rule_b = lambda state, acctbl=acctbl, world=self, region=reg_b: eval_json_rule(acctbl,state,world,region)
-                                    print(f"registering access rule for {k} and {ik}" )
+                                    self.debuglog(f"registering access rule for {k} and {ik}" )
                             else:
                                 rule_b = False
                         
@@ -424,16 +419,14 @@ class GMADVWorld(World):
                 for k,v in mapregs.items():
                     if test_accessibility({v},set()):
                         reglocs = list()
-                        print(v.locdata)
                         for ik,iv in v.locdata.items():
                             newlocname = f"{map.group} - {map.bspname} - {ik}"
                             reglocs.append(GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],newreg))
                             self.locallocs += 1
-                            print(f"created location {newlocname}")
                         v.locations = reglocs
                         self.multiworld.regions.append(v)
                     else:
-                        self.add_warning(f"{v.name} was removed because it was impossible to reach")
+                        self.add_warning(f"Region {v.name} was removed because it was impossible to reach")
 
                 for k,v in map.items.items():
                     mapitems[f"{groupname} - {mapname} - {k}"] = v
@@ -642,7 +635,7 @@ class GMADVWorld(World):
                     for entr,homereg in reg.onewayins.items():
                         if entr != trying:
                             unconnectedentrs[entr] = homereg
-                            print(f"removing {entr} from unplaced entrances")
+                            self.debuglog(f"removing {entr} from unplaced entrances")
                             if entr in unplacedentrs:
                                 del unplacedentrs[twoway]
 
@@ -696,7 +689,6 @@ class GMADVWorld(World):
             pick1 = rand.randint(0,entrsleft-1)
             pick2 = rand.randint(0,exitsleft-1)
 
-            print(pick1,unconnectedentrs)
             reg1 = unconnectedentrs[keys1[pick1]]
             reg2 = unconnectedexits[keys2[pick2]]
             reg2.connect(reg1)
@@ -708,14 +700,13 @@ class GMADVWorld(World):
             entrsleft -= 1
             exitsleft -= 1
 
-        self.add_warning(f"Unconnected Entrances: {str(unconnectedentrs)}")
-        self.add_warning(f"Unconnected Exits: {str(unconnectedexits)}")
-        self.add_warning(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
+        self.debuglog(f"Unconnected Entrances: {str(unconnectedentrs)}")
+        self.debuglog(f"Unconnected Exits: {str(unconnectedexits)}")
+        self.debuglog(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
 
         # the menu is connected at the end because the reachtest function can't handle it 
         # and doing it like this is probably faster than making it check if every region it tests is not the menu
 
-        print("connecting ",startreg, menu)
         startreg.connect(menu)
         menu.connect(startreg)
 

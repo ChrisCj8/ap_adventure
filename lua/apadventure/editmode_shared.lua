@@ -84,5 +84,3 @@ function apAdventure.SvCfgToLogic(cfg)
         start = start,
     }
 end
-
-print("fuck")

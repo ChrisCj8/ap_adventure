@@ -7,14 +7,9 @@ local function ApAdvItemHandler(slot,id,itemlist)
         APADV_ITEMHANDLERS[id](itemlist)
     end
     
-    print(id,APADV_MAPITEMCOUNTERS[id])
-
     if APADV_MAPITEMCOUNTERS[id] then
-        PrintTable(APADV_MAPITEMCOUNTERS[id])
         for k,v in pairs(APADV_MAPITEMCOUNTERS[id]) do
-            print(k,"finding ",v.target)
             for ik,iv in ipairs(ents.FindByName(v.target)) do
-                print("firing ",iv,v.input,#itemlist,v.delay)
                 iv:Fire(v.input,#itemlist,v.delay)
             end
         end
@@ -66,8 +61,6 @@ function APADV.RegisterMapItems(itemtbl)
                     iiv:Fire(iv.input,#itemlist[id],iv.delay)
                 end
             end
-            print("new mapitem table")
-            PrintTable(outtbl)
             if next(outtbl) then
                 APADV_MAPITEMCOUNTERS[id] = outtbl
             end
@@ -190,7 +183,6 @@ function APADV.CreateApSlot(addr,slotn,pw,slotdata)
 end
 
 local function OnRunID(packet)
-    PrintTable(packet)
     local runid = packet.value
     local saveid = runid.."_"..APADV_SLOT.slotName
     if APADV_SAVEID != saveid then
@@ -255,8 +247,6 @@ end
 
 function APADV.SendLocation(lctn)
     if !APADV_SLOT or !APADV_SLOT.Connected then return false end
-
-    print("sending location",lctn)
     APADV_SLOT:SendLocation(lctn)
     return true
 end
