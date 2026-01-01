@@ -532,7 +532,7 @@ class GMADVWorld(World):
         startcandidates = self.startingcandidates
         menu = self.menuregion
         candidateamt = len(startcandidates)
-        startpick = startcandidates[self.random.randint(0,candidateamt-1)]
+        startpick = startcandidates[rand.randint(0,candidateamt-1)]
         startreg = startpick.region
         self.startpick = startpick
         reach = reachtest({startreg},set())
@@ -546,7 +546,6 @@ class GMADVWorld(World):
                 available_exits += 1
             for entr,homereg in reg.onewayins.items():
                 unconnectedentrs[entr] = homereg
-                print(f"removing {entr} from unplaced entrances")
                 del unplacedentrs[entr]
 
         untriedentrs = set(unplacedentrs.keys())
@@ -554,54 +553,37 @@ class GMADVWorld(World):
         deadends = set()
         deadcount = 0
 
-        print(str(untriedentrs))
-
         unfinished = bool(unplacedentrs)
 
-        exit_reach_strictness = 3
-
         while unfinished:
-            
-            if not untriedentrs:
-                print("this isn't working")
-                
-                if exit_reach_strictness > 0:
-                    exit_reach_strictness -= 1
-                    print(f"reduced strictness to {exit_reach_strictness}")
-                    untriedentrs = set(unplacedentrs.keys())
-                print(f"available exits: {available_exits}\nremaining: {str(unplacedentrs)}\ndead ends: {str(deadends)}")
-
 
             trying = rand.choice(list(untriedentrs))
-
-            untriedentrs.remove(trying)
-
             trying_reg = unplacedentrs[trying]
-
+            untriedentrs.remove(trying)
             reach = reachtest({trying_reg},set())
 
             can_place = True
             exit_reach = 0
             deadendscleared = 0
 
-            #if available_exits < exit_reach_strictness:
-            if True:
-                for reg in reach:
-                    for twowayname in reg.twoways.keys():
-                        if twowayname != trying and not (twowayname in unconnectedexits):
-                            exit_reach += 1
-                        if twowayname in deadends:
-                            self.debuglog(f"placing this would clear a dead end")
-                            deadendscleared += 1
-                    for exitname in reg.onewayouts.keys():
-                        if not (exitname in unconnectedexits):
-                            exit_reach += 1
-                if exit_reach < 1 and available_exits - deadcount + deadendscleared >= 0:
+            for reg in reach:
+                for twowayname in reg.twoways.keys():
+                    if twowayname != trying and not (twowayname in unconnectedexits):
+                        exit_reach += 1
+                    if twowayname in deadends:
+                        self.debuglog(f"placing this would clear a dead end")
+                        deadendscleared += 1
+                for exitname in reg.onewayouts.keys():
+                    if not (exitname in unconnectedexits):
+                        exit_reach += 1
+            if exit_reach < 1 and available_exits - deadcount + deadendscleared >= 0:
+                if not trying in deadends:
                     deadends.add(trying)
                     deadcount += 1
                     self.debuglog(f"amount of dead ends: {deadcount}, {str(deadends)}")
-                    # del unplacedentrs[trying]
-                    can_place = False
+                else:
+                    self.debuglog(f"{trying} was already in our dead ends")
+                can_place = False
 
             self.debuglog(f"can we place {trying} with a reach of {exit_reach}? {can_place}")
             
@@ -633,7 +615,6 @@ class GMADVWorld(World):
                 
                 target_reg.connect(trying_reg,f"{target_name} -> {trying}")
                 self.entranceinfo.append((target_name,trying))
-                #self.debuglog(f"connected {target_reg.name} and {trying_reg.name}")
                 available_exits = len(unconnectedtwoways) + len(unconnectedexits)
                 self.debuglog(f"available exits before checking new reachables: {available_exits}")
                 del unplacedentrs[trying]
