@@ -675,13 +675,18 @@ class GMADVWorld(World):
             del unconnectedtwoways[key2]
             twowaysleft -= 2
 
-        if unconnectedtwoways:
-            last = list(unconnectedtwoways.items())[0]
-            unconnectedentrs[last[0]] = last[1]
-            unconnectedexits[last[0]] = last[1]
-
         entrsleft = len(unconnectedentrs)
         exitsleft = len(unconnectedexits)
+
+        if unconnectedtwoways and (entrsleft or exitsleft):
+            last = unconnectedtwoways.popitem()
+            if entrsleft > exitsleft:
+                unconnectedexits[last[0]] = last[1]
+                exitsleft += 1
+            else:
+                unconnectedentrs[last[0]] = last[1]
+                entrsleft += 1
+
         onewaysleft = min(entrsleft,exitsleft)
         while onewaysleft > 0:
             keys1 = list(unconnectedentrs.keys())
@@ -702,7 +707,6 @@ class GMADVWorld(World):
 
         self.debuglog(f"Unconnected Entrances: {str(unconnectedentrs)}")
         self.debuglog(f"Unconnected Exits: {str(unconnectedexits)}")
-        self.debuglog(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
 
         # the menu is connected at the end because the reachtest function can't handle it 
         # and doing it like this is probably faster than making it check if every region it tests is not the menu
