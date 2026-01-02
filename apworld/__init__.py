@@ -551,11 +551,19 @@ class GMADVWorld(World):
 
         deadends = set()
         deadcount = 0
+        placedeadends = False
 
         unfinished = bool(unplacedentrs)
 
         while unfinished:
-
+            
+            if not untriedentrs:
+                if deadcount <= available_exits:
+                    placedeadends = True
+                    untriedentrs = set(unplacedentrs.keys())
+                else:
+                    raise RuntimeError(f"""apAdventure ran out of placeable entrances for {self.player_name}, 
+                                        their config selections probably contain too many dead ends""")
             trying = rand.choice(list(untriedentrs))
             trying_reg = unplacedentrs[trying]
             untriedentrs.remove(trying)
@@ -575,7 +583,7 @@ class GMADVWorld(World):
                 for exitname in reg.onewayouts.keys():
                     if not (exitname in unconnectedexits):
                         exit_reach += 1
-            if exit_reach < 1 and available_exits - deadcount + deadendscleared >= 0:
+            if not placedeadends and not exit_reach and available_exits - deadcount + deadendscleared >= 0:
                 if not trying in deadends:
                     deadends.add(trying)
                     deadcount += 1
