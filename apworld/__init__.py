@@ -393,19 +393,25 @@ class GMADVWorld(World):
                         rule_a = None
                         rule_b = None
                         if "access" in iv:
+                            #self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
                             acctbl = preprocess_json_rule(iv["access"],self,reg_a)
-                            if acctbl["type"] == "never":
+                            #self.debuglog(f"processed access rule: {str(acctbl)}")
+                            acctype = acctbl["type"]
+                            if acctype == "never":
                                 rule_a = False
                                 self.add_warning(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed")
-                            else:
+                            elif acctype != "always":
                                 rule_a = lambda state, acctbl=acctbl, world=self, region=reg_a: eval_json_rule(acctbl,state,world,region)
                                 self.debuglog(f"registering access rule for {ik} and {k}" )
                             if iv["twoway"]:
+                                #self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
                                 acctbl = preprocess_json_rule(iv["access"],self,reg_b)
-                                if acctbl["type"] == "never":
+                                #self.debuglog(f"processed access rule: {str(acctbl)}")
+                                acctype = acctbl["type"]
+                                if acctype == "never":
                                     rule_b = False
                                     self.add_warning(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed")
-                                else:
+                                elif acctype != "always":
                                     rule_b = lambda state, acctbl=acctbl, world=self, region=reg_b: eval_json_rule(acctbl,state,world,region)
                                     self.debuglog(f"registering access rule for {k} and {ik}" )
                             else:

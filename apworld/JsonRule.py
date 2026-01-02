@@ -4,6 +4,8 @@ def eval_json_rule(rule,state : CollectionState,world,region):
     player = world.player
     #print("json rule evaluation",rule["type"])
     match rule["type"]:
+        case "always":
+            return True
         case "has":
             return state.has(rule["item"],player,rule["count"])
         case "or":
@@ -24,16 +26,7 @@ def eval_json_rule(rule,state : CollectionState,world,region):
                     break
             return out
         case "bhop":
-            if world.bhop_logic:
-                if world.bhop == 3:
-                    #print(True)
-                    return True
-                else:
-                    #print(state.has("Bunnyhop",player))
-                    return state.has("Bunnyhop",player)
-            else:
-                #print(False)
-                return False
+            return state.has("Bunnyhop",player)
         case "mapitem":
             return state.has(f"{region.mapgroup} - {region.mapname} - {rule["item"]}",player,rule["count"])
         case "capab":
@@ -89,25 +82,42 @@ nevernode = {
     "type": "never"
 }
 
+alwaysnode = {
+    "type": "always"
+}
+
 def preprocess_json_rule(rule,world,region):
     rule = rule.copy()
     match rule["type"]:
         case "bhop":
             if world.bhop_logic:
-                return rule
+                if world.bhop == 3:
+                    return alwaysnode
+                else:
+                    return rule
             else:
                 return nevernode
         case "and":
-            for v in rule["nodes"]:
-                v = preprocess_json_rule(v,world,region)
-                if v == nevernode:
-                    return nevernode
-        case "or":
             i = 0
             nodes = rule["nodes"]
             for v in nodes:
                 v = preprocess_json_rule(v,world,region)
                 if v == nevernode:
+                    return nevernode
+                if v == alwaysnode:
+                    nodes.pop(i)
+                i += 1
+            if not nodes:
+                return alwaysnode
+            return rule
+        case "or":
+            i = 0
+            nodes = rule["nodes"]
+            for v in nodes:
+                v = preprocess_json_rule(v,world,region)
+                if v == alwaysnode:
+                    return alwaysnode
+                elif v == nevernode:
                     nodes.pop(i)
                 else:
                     i += 1
