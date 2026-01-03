@@ -109,6 +109,8 @@ def preprocess_json_rule(rule,world,region):
                 i += 1
             if not nodes:
                 return alwaysnode
+            if len(nodes) == 1:
+                return nodes[0]
             return rule
         case "or":
             i = 0
@@ -123,6 +125,8 @@ def preprocess_json_rule(rule,world,region):
                     i += 1
             if not nodes:
                 return nevernode
+            if len(nodes) == 1:
+                return nodes[0]
             else:
                 return rule
         case "capab":
