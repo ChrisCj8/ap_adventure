@@ -75,23 +75,9 @@ net.Receive("APAdvSaveCfg",function()
     print("storing "..gname)
     local items = editcfg.MapItems
     if !next(items) then items = nil end
-    local regtbl = editcfg.Regions
-    if regtbl then
-        for k,v in pairs(regtbl) do
-            if v.ammo then
-                local condtbl = {}
-                local i = 0
-                for k,v in pairs(v.ammo) do
-                    i = i + 1
-                    condtbl[i] = k
-                end
-                v.cond = condtbl
-            end
-        end
-    end
     local outtbl = {
         ver = "v1",
-        reg = regtbl or {},
+        reg = editcfg.Regions or {},
         connect = editcfg.Connections,
         item = items,
         info = editcfg.Info,
@@ -106,11 +92,6 @@ net.Receive("APAdvSaveCfg",function()
     file.CreateDir(dir.."/"..map)
     file.Write(dir.."/group.json",util.TableToJSON(groupout,prettyprint))
     file.Write(dir.."/"..map.."/cl.json",util.TableToJSON(outtbl,prettyprint))
-    if regtbl then
-        for k,v in pairs(regtbl) do
-            v.ammo = nil
-        end
-    end
     dir = "apadventure/logic/cfg/"..gname.."/"..map
     file.CreateDir(dir)
     file.Write(dir.."/cl.json",util.TableToJSON(apAdventure.ClCfgToLogic(outtbl),prettyprint))

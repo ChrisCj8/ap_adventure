@@ -32,9 +32,26 @@ end
 
 function apAdventure.ClCfgToLogic(cfg)
 
+    local reg = {}
+
+    for k,v in pairs(cfg.reg) do
+        local condtbl = {}
+        if v.ammo then
+            local i = 0
+            for k,v in pairs(v.ammo) do
+                i = i + 1
+                condtbl[i] = k
+            end
+        end
+        reg[k] = {
+            cond = condtbl
+        }
+    end
+
+
     return {
         item = cfg.item,
-        reg = cfg.reg,
+        reg = reg,
         connect = cfg.connect
     }
 end
