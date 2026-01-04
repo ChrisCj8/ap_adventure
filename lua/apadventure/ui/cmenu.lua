@@ -19,6 +19,14 @@ local function BitFlipper(inval,flip,onoff)
     return inval
 end
 
+local function ShowContents(self,show)
+    if show == self.ContentsVisible then return end
+    for k,v in ipairs(self:GetChildren()) do
+        v:SetVisible(show)
+    end
+    self.ContentsVisible = show
+end
+
 local function ImageButton(parent,image) 
     local btn = vgui.Create("DImageButton",parent)
     btn:SetImage(image)
@@ -365,27 +373,7 @@ return function(window)
         reglist:AddColumn("Region")
 
         local regaddbtn = ImageButton(regpnl,"icon16/add.png")
-        function regaddbtn:DoClick()
-            local name = regnamein:GetValue()
-
-            if name == "" then return end
-
-            if !regtbl[name] then
-                regtbl[name] = {
-                    ammo = {},
-                }
-                local ln = reglist:AddLine(name)
-            end
-        end
-
         local regdelbtn = ImageButton(regpnl,"icon16/delete.png")
-        function regdelbtn:DoClick()
-            for k,v in ipairs(reglist:GetSelected()) do
-                local name = v:GetValue(1)
-                regtbl[name] = nil 
-                reglist:RemoveLine(v:GetID())
-            end
-        end
 
         for k,v in pairs(regtbl) do
             local ln = reglist:AddLine(k)
@@ -393,9 +381,11 @@ return function(window)
 
         local regeditpnl = vgui.Create("DScrollPanel",regpnl)
         regeditpnl:SetPos(160,30)
+        regeditpnl.ContentsVisible = true
+        regeditpnl.ShowContents = ShowContents
 
             local regammopnl = vgui.Create("DCollapsibleCategory",regeditpnl) 
-            regammopnl:SetPos(5,30)
+            regammopnl:SetPos(5,5)
             regammopnl:SetLabel("#apadventure.editor.regammo.label")
 
                 local ammotypes = game.GetAmmoTypes()
@@ -464,21 +454,44 @@ return function(window)
                     ammolist:SetSize(w-10,400)
                 end
 
+            regeditpnl:ShowContents(false)
+
             local oldlayout = regeditpnl.PerformLayout
             function regeditpnl:PerformLayout(w,h)
                 oldlayout(self,w,h)
                 regammopnl:SetWidth(w-30)
             end
+        
+        function regaddbtn:DoClick()
+            local name = regnamein:GetValue()
+            if name == "" then return end
+            if !regtbl[name] then
+                regtbl[name] = {
+                    ammo = {},
+                }
+                local ln = reglist:AddLine(name)
+                regeditpnl:ShowContents(true)
+            end
+        end
 
+        function regdelbtn:DoClick()
+            local didstuff
+            for k,v in ipairs(reglist:GetSelected()) do
+                local name = v:GetValue(1)
+                regtbl[name] = nil 
+                reglist:RemoveLine(v:GetID())
+                didstuff = true
+            end
+            if didstuff then regeditpnl:ShowContents(false) end
+        end
 
         function reglist:OnRowSelected(index,pnl)
             local newtbl = regtbl[pnl:GetValue(1)]
             newtbl.ammo = newtbl.ammo or {}
             regeditpnl.curreg = newtbl
             ammolist:UpdateAmmo()
+            regeditpnl:ShowContents(true)
         end
-
-
 
         function regpnl:PerformLayout(w,h)
             regnamein:SetSize(w-50,22)
@@ -516,34 +529,11 @@ return function(window)
         conntoin:SetPos(5,5)
 
         local connaddbtn = ImageButton(connpnl,"icon16/add.png")
-        function connaddbtn:DoClick()
-            local from = connfromin:GetValue()
-            local to = conntoin:GetValue()
-
-            conntbl[from] = conntbl[from] or {}
-
-            conntbl[from][to] = {
-                twoway = false,
-            }
-
-            connlist:AddLine(from,to,bool2yn[false])
-        end
-
         local conndelbtn = ImageButton(connpnl,"icon16/delete.png")
-        function conndelbtn:DoClick()
-            for k,v in ipairs(connlist:GetSelected()) do
-                local from = v:GetValue(1)
-                local to = v:GetValue(2)
-                conntbl[from][to] = nil 
-
-                if !next(conntbl[from]) then
-                    conntbl[from] = nil
-                end
-                connlist:RemoveLine(v:GetID())
-            end
-        end
 
         local coneditpnl = vgui.Create("DPanel",connpnl)
+        coneditpnl.ContentsVisible = true
+        coneditpnl.ShowContents = ShowContents
         
             local contwowaycheck = vgui.Create("DCheckBoxLabel",coneditpnl)
             contwowaycheck:SetText("Two-Way Connection")
@@ -653,6 +643,8 @@ return function(window)
                 end
             end
 
+            coneditpnl:ShowContents(false)
+
             function coneditpnl:PerformLayout(w,h)
                 conaccessnodeselect:SetSize(w-50,25)
 
@@ -664,6 +656,38 @@ return function(window)
 
                 conaccessnodepnl:SetSize(w-210,h-60)
             end
+
+        function connaddbtn:DoClick()
+            local from = connfromin:GetValue()
+            local to = conntoin:GetValue()
+
+            conntbl[from] = conntbl[from] or {}
+
+            if conntbl[from][to] then return end
+
+            conntbl[from][to] = {
+                twoway = false,
+            }
+
+            connlist:AddLine(from,to,bool2yn[false])
+            coneditpnl:ShowContents(true)
+        end
+
+        function conndelbtn:DoClick()
+            local didstuff
+            for k,v in ipairs(connlist:GetSelected()) do
+                local from = v:GetValue(1)
+                local to = v:GetValue(2)
+                conntbl[from][to] = nil 
+
+                if !next(conntbl[from]) then
+                    conntbl[from] = nil
+                end
+                connlist:RemoveLine(v:GetID())
+                didstuff = true
+            end
+            if didstuff then coneditpnl:ShowContents(false) end
+        end
 
         function connlist:OnRowSelected(index,pnl)
             local from = pnl:GetValue(1)
@@ -685,6 +709,7 @@ return function(window)
                     basenode:ExpandRecurse(true)
                 end
             end
+            coneditpnl:ShowContents(true)
         end
 
         function connpnl:PerformLayout(w,h)
@@ -728,14 +753,7 @@ return function(window)
         local mapitemeditpnl = vgui.Create("DPanel",mapitempnl)
         mapitemeditpnl:SetPos(160,30)
         mapitemeditpnl.ContentsVisible = true
-
-        function mapitemeditpnl:ShowContents(show)
-            if show == self.ContentsVisible then return end
-            for k,v in ipairs(self:GetChildren()) do
-                v:SetVisible(show)
-            end
-            self.ContentsVisible = show
-        end
+        mapitemeditpnl.ShowContents = ShowContents
 
             local mapitemamtlbl, mapitemamtin = LabelNumWang(mapitemeditpnl,"mapitem.amount")
             mapitemamtlbl:SetPos(5,5)
