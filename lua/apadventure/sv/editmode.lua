@@ -261,7 +261,12 @@ end
 function apAdventure.LoadCfg(gname,dodelete)
     assert(!(gname == "" or !isstring(gname)),"Invalid Group Name")
     local path = "apadventure/cfg/"..gname.."/"..game.GetMap().."/sv.json"
-    local json = assert(file.Read(path,"DATA"),"couldn't find config")
+    local json = file.Read(path,"DATA")
+
+    game.CleanUpMap()
+    apAdventure.LoadClientTbl(gname)
+
+    if !json then return end
     local gtbl = util.JSONToTable(json)
 
     if (gtbl.ver or "old") != apAdventure.CfgVers.sv then
@@ -275,8 +280,6 @@ function apAdventure.LoadCfg(gname,dodelete)
         Group = gname,
         Regions = {},
     }
-    game.CleanUpMap()
-    apAdventure.LoadClientTbl(gname)
 
     local newsav = cfgtab.Saved
     local presav = duplicator.Paste(nil,gtbl.sav.Entities or gtbl.sav ,gtbl.sav.Constraints or {})
