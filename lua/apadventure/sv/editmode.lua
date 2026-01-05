@@ -371,6 +371,7 @@ local function ProcessItemGroup(groupname)
                 group = deftbl.Groups,
                 condcapab = deftbl.ConditionalCapabilities,
                 capab = deftbl.Capabilities,
+                file = string.sub(v,0,-5)
             }
         else
             print(grouppath.."/"..v.." did not return a table")

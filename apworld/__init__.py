@@ -273,44 +273,77 @@ class GMADVWorld(World):
 
         chosenisets = options.item_sets
 
+        items_to_load = dict()
+        items_dontload = dict()
+        item_blacklist = options.item_blacklist
+        duplicate_item_names = set()
+
         itempool = dict()
+
+        def register_item(item):
+            name = item.name
+            if name in self.duplicate_item_names:
+                duplicate_item_names.add(name)
+            name = item.long_name # move this into the last if condition when implementing short item names
+
+            self.item_table[name] = (self.item_name_to_id[name],None,item.info)
+
+            if "wgt" in item.info:
+                self.fillers[name] = item.info["wgt"]
+                self.filleramt += 1
+            if "min" in item.info and item.info["min"] > 0:
+                itempool[name] = item.info["min"]
+            if "capab" in item.info:
+                finalcapabs = ProcessCapabs(set(item.info["capab"]))
+                capabentry = CapabTblEntry(name,finalcapabs)
+                for capab in finalcapabs:
+                    if not capab in self.capabilitytbl:
+                        self.capabilitytbl[capab] = list()
+                    
+                    self.capabilitytbl[capab].append(capabentry)
+            if "condcapab" in item.info:
+                for cond,capabs in item.info["condcapab"].items():
+                    if not cond in self.condcapabtbl:
+                        self.condcapabtbl[cond] = dict()
+                    self.condcapabtbl[cond][name] = ProcessCapabs(set(capabs))
 
         for isetname in chosenisets:
             if isetname in self.item_set_table:        
                 iset = self.item_set_table[isetname]
                 isetitems = iset.items
-                for item in isetitems:
-                    name = item.name
-                    if name in self.duplicate_item_names:
-                        name = item.long_name
-                    """ if "condcapab" in item.info or "capab" in item.info:
-                        flags = flags | 1 """
-
-                    self.item_table[name] = (self.item_name_to_id[name],None,item.info)
-
-                    if "wgt" in item.info:
-                        self.fillers[item.name] = item.info["wgt"]
-                        self.filleramt += 1
-                    if "min" in item.info and item.info["min"] > 0:
-                        itempool[item.name] = item.info["min"]
-                    if "capab" in item.info:
-                        finalcapabs = ProcessCapabs(set(item.info["capab"]))
-                        capabentry = CapabTblEntry(name,finalcapabs)
-                        for capab in finalcapabs:
-                            if not capab in self.capabilitytbl:
-                                self.capabilitytbl[capab] = list()
-                            
-                            self.capabilitytbl[capab].append(capabentry)
-                    if "condcapab" in item.info:
-                        for cond,capabs in item.info["condcapab"].items():
-                            if not cond in self.condcapabtbl:
-                                self.condcapabtbl[cond] = dict()
-                            self.condcapabtbl[cond][name] = ProcessCapabs(set(capabs))
+                blacklist = False
+                if isetname in item_blacklist:
+                    blacklist = item_blacklist[isetname]
+                for iname,item in isetitems.items():
+                    if blacklist and iname in blacklist:
+                        if not isetname in items_dontload:
+                            items_dontload[isetname] = set()
+                        items_dontload[isetname].add(item.info["file"])
+                        continue
+                    register_item(item)
                 self.loadeditemsets.append(isetname)
             else:
                 self.add_warning(f"itemset {isetname} could not be loaded")
 
-            self.items_to_create = itempool
+        for isetname,picks in options.item_cherrypick.items():
+            if not picks or isetname in chosenisets:
+                continue
+            if isetname in self.item_set_table:
+                iset = self.item_set_table[isetname]
+                load = set()
+                for iname in picks:
+                    if iname in iset.items:
+                        item = iset.items[iname]
+                        register_item(item)
+                        load.add(item.info["file"])
+                if load:
+                    items_to_load[isetname] = load
+            else:
+                self.add_warning(f"itemset {isetname} could not be loaded")
+
+        self.items_to_create = itempool
+        self.items_dontload = items_dontload
+        self.items_to_load = items_to_load
 
     def create_regions(self):
         menu = Region("Menu",self.player,self.multiworld)
@@ -749,6 +782,8 @@ class GMADVWorld(World):
             "entrances":self.entranceinfo,
             "cfgs":cfgs,
             "itemsets":self.loadeditemsets,
+            "items_dontload":self.items_dontload,
+            "items_to_load":self.items_to_load,
             "startmap":self.startpick.map.bspname,
             "startgroup":self.startpick.map.group,
             "startregion":self.startpick.regname,

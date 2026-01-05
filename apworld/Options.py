@@ -44,6 +44,16 @@ class ItemSets(OptionSet):
     """Item Sets to use for generation."""
     default = {"funny"}
 
+class ItemCherryPick(OptionDict):
+    """This Option allows you to cherrypick single items from an Item Set."""
+    default = {}
+    schema = singlepickschema
+
+class ItemBlacklist(OptionDict):
+    """This Option allows you to cherrypick single items from an Item Set."""
+    default = {}
+    schema = singlepickschema
+
 class BunnyHop(Choice):
     """GMods Sandbox gamemode (which this gamemode is derived off) normally clamps 
     the players movement speed when they jump off the ground to prevent Bunnyhopping. 
@@ -79,6 +89,8 @@ class GMADVGameOptions(PerGameCommonOptions):
     config_cherrypick: ConfigCherryPick
     config_blacklist: ConfigBlacklist
     item_sets: ItemSets
+    item_cherrypick: ItemCherryPick
+    item_blacklist: ItemBlacklist
     generate_puml: GeneratePUML
     write_debug: WriteDebug
     start_inventory_from_pool: StartInventoryPool

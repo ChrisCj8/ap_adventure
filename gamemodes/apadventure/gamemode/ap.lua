@@ -76,6 +76,33 @@ local function ApAdvRegisterItemHandlers()
 
     local slotdata = APADV_SLOT.slotData
 
+    local function RegisterItem(setpath,name,setdata)
+        local itemtbl = include(setpath.."/"..name)
+        local itemid = toID[itemtbl.Name.." - "..setdata.Name]
+        if itemid then
+            if itemtbl.OneUse then
+                APADV_ITEMSUSED[itemid] = APADV_ITEMSUSED[itemid] or 0
+                handle[itemid] = function(iList)
+                    if APADV_ITEMSUSED[itemid] < #iList then
+                        local redeem = itemtbl.RedeemCheck()
+                        print(itemtbl.Name,"redeem:",redeem)
+                        if redeem == true then
+                            itemtbl.Redeem()
+                            APADV_ITEMSUSED[itemid] = (APADV_ITEMSUSED[itemid] or 0) + 1
+                            handle[itemid](iList)
+                        elseif isnumber(redeem) then
+                            timer.Simple(redeem,function() handle[itemid](iList) end)
+                        end
+                    end
+                end
+            elseif itemtbl.Weapon then
+                handle[itemid] = function(iList)
+                    ApAdvWeps.SetAvailable(itemtbl.Class,iList[1] != nil)
+                end
+            end
+        end
+    end
+
     handle[toID["McGuffin"]] = function(iList)
         if iList[1] != nil then
             APADV_SLOT:SendGoal()
@@ -88,35 +115,26 @@ local function ApAdvRegisterItemHandlers()
         end
     end
 
+    local blacklist = slotdata.items_dontload
+
     for k,v in ipairs(slotdata.itemsets) do
         local setpath = "apadventure/itemsets/"..v
         local setdata = include(setpath..".lua")
         local setfiles = file.Find(setpath.."/*.lua","LUA")
+        local setbl
+        if blacklist[v] then setbl = apAdventure.ListToLookUp(blacklist[v]) end
         for ik,iv in ipairs(setfiles) do
-            local itemtbl = include(setpath.."/"..iv)
-            local itemid = toID[itemtbl.Name.." - "..setdata.Name]
-            if itemid then
-                if itemtbl.OneUse then
-                    APADV_ITEMSUSED[itemid] = APADV_ITEMSUSED[itemid] or 0
-                    handle[itemid] = function(iList)
-                        if APADV_ITEMSUSED[itemid] < #iList then
-                            local redeem = itemtbl.RedeemCheck()
-                            print(itemtbl.Name,"redeem:",redeem)
-                            if redeem == true then
-                                itemtbl.Redeem()
-                                APADV_ITEMSUSED[itemid] = (APADV_ITEMSUSED[itemid] or 0) + 1
-                                handle[itemid](iList)
-                            elseif isnumber(redeem) then
-                                timer.Simple(redeem,function() handle[itemid](iList) end)
-                            end
-                        end
-                    end
-                elseif itemtbl.Weapon then
-                    handle[itemid] = function(iList)
-                        ApAdvWeps.SetAvailable(itemtbl.Class,iList[1] != nil)
-                    end
-                end
+            if !setbl or !setbl[iv] then
+                RegisterItem(setpath,iv,setdata)
             end
+        end
+    end
+
+    for k,v in pairs(slotdata.items_to_load) do
+        local setpath = "apadventure/itemsets/"..k
+        local setdata = include(setpath..".lua")
+        for ik,iv in ipairs(v) do
+            RegisterItem(setpath,iv..".lua",setdata)
         end
     end
 

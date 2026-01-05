@@ -14,7 +14,7 @@ def ProcessCfgs():
         def __init__(self,name,nicename):
             self.name = name
             self.nicename = nicename
-            self.items = list()
+            self.items = dict()
 
     class SetItem:
         def __init__(self,name,set,idef):
@@ -56,23 +56,18 @@ def ProcessCfgs():
                 
                 for iname, idef in setjson["items"].items():
                     print(f"processing {iname}")
-                    newitemname = f"{iname} - {nicename}"
+                    newitem = SetItem(iname,newiset,idef)
                     if iname in item_name_to_id:
                         duplicate_item_names.add(iname)
                     else:
                         itemtypes += 1
                         item_name_to_id[iname] = itemtypes
-                    #itemclass = 0
-                    """ if "condcapab" in idef or "capab" in idef:
-                        itemclass = itemclass | 1 """
 
                     itemtypes += 1
-                    item_name_to_id[newitemname] = itemtypes
-                    
-                    newitem = SetItem(newitemname,newiset,idef)
+                    item_name_to_id[newitem.long_name] = itemtypes
 
-                    print("added item "+newitemname)
-                    newiset.items.append(newitem) 
+                    print("added item "+newitem.long_name)
+                    newiset.items[iname] = newitem 
             item_set_table[iset[:-5]] = newiset
         else:
             print(f"{setpath} does not exist")
