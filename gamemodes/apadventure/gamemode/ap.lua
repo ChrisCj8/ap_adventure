@@ -57,8 +57,11 @@ function APADV.RegisterMapItems(itemtbl)
             local outtbl = {}
             for ik,iv in ipairs(v) do
                 outtbl[ik] = iv
+                local itemamt = 0
+                local itemtbl = itemlist[id]
+                if itemtbl then itemamt = #itemtbl end
                 for iik,iiv in ipairs(ents.FindByName(iv.target)) do
-                    iiv:Fire(iv.input,#itemlist[id],iv.delay)
+                    iiv:Fire(iv.input,itemamt,iv.delay)
                 end
             end
             if next(outtbl) then
