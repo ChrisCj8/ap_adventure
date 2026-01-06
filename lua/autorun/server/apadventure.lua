@@ -132,7 +132,3 @@ end
 
 hook.Add("InitPostEntity","ApAdvUseCapturedKeyVals",UseCapturedKeyVals)
 hook.Add("PostCleanupMap","ApAdvUseCapturedKeyVals",UseCapturedKeyVals)
-
-if !file.IsDir("apadventure/itemdefs","DATA") then
-    file.CreateDir("apadventure/itemdefs")
-end
