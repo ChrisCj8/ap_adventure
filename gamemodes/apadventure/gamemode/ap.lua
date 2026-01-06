@@ -83,7 +83,8 @@ local function ApAdvRegisterItemHandlers()
         local itemtbl = include(setpath.."/"..name)
         local itemid = toID[itemtbl.Name.." - "..setdata.Name]
         if itemid then
-            if itemtbl.OneUse then
+            local itype = itemtbl.Type
+            if itype == "OneUse" then
                 APADV_ITEMSUSED[itemid] = APADV_ITEMSUSED[itemid] or 0
                 handle[itemid] = function(iList)
                     if APADV_ITEMSUSED[itemid] < #iList then
@@ -98,9 +99,13 @@ local function ApAdvRegisterItemHandlers()
                         end
                     end
                 end
-            elseif itemtbl.Weapon then
+            elseif itype == "Weapon" then
                 handle[itemid] = function(iList)
                     ApAdvWeps.SetAvailable(itemtbl.Class,iList[1] != nil)
+                end
+            else
+                if isfunction(itemtbl.Handle) then
+                    handle[itemid] = itemtbl.Handle
                 end
             end
         end
