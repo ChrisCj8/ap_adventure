@@ -1,13 +1,13 @@
 local ITEM = {}
 
 ITEM.Name = "Grenades"
-ITEM.Weapon = true
+ITEM.Type = "Weapon"
 ITEM.Groups = {
     "Grenade"
 }
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-    ["Ammo_Grenade"] = {"DecentAOE","BlastDamage","MidThrow"}
+    ["Ammo_Grenade"] = {"DecentAOE","BlastDamage","MediumArcProjectile","PhysicsProjectile","SmallProjectile","MediumExplosion"}
 }
 
 ITEM.Class = "weapon_frag"

@@ -1,7 +1,7 @@
 local ITEM = {}
 
 ITEM.Name = "SMG"
-ITEM.Weapon = true
+ITEM.Type = "Weapon"
 ITEM.Groups = {
     "Submachine Gun"
 }

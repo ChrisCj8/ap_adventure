@@ -1,12 +1,12 @@
 local ITEM = {}
 
 ITEM.Name = "Funny"
+ITEM.Type = "OneUse"
 
 ITEM.FillWeight = 20
-
 ITEM.MinAmt = 0
 
-ITEM.OneUse = true
+
 
 local funnies = {
     {

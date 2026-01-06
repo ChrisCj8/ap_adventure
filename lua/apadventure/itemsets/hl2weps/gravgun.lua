@@ -1,13 +1,13 @@
-local WEP = {}
+local ITEM = {}
 
-WEP.Name = "Gravity Gun"
-WEP.Weapon = true
-WEP.MinAmt = 1
-WEP.Capabilities = {"WimpyShortRange"}
-WEP.ConditionalCapabilities = {
+ITEM.Name = "Gravity Gun"
+ITEM.Type = "Weapon"
+ITEM.MinAmt = 1
+ITEM.Capabilities = {"WimpyShortRange"}
+ITEM.ConditionalCapabilities = {
     ["Props"] = {"StrongShortRange","DecentMidRange"}
 }
 
-WEP.Class = "weapon_physcannon"
+ITEM.Class = "weapon_physcannon"
 
-return WEP
+return ITEM

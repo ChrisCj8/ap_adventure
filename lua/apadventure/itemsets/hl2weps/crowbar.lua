@@ -1,13 +1,13 @@
-local WEP = {}
+local ITEM = {}
 
-WEP.Name = "Crowbar"
-WEP.Weapon = true
-WEP.Groups = {
+ITEM.Name = "Crowbar"
+ITEM.Type = "Weapon"
+ITEM.Groups = {
     "Melee Weapon"
 }
-WEP.MinAmt = 1
-WEP.Capabilities = {"DecentMelee","ClubDamage"}
+ITEM.MinAmt = 1
+ITEM.Capabilities = {"DecentMelee","ClubDamage"}
 
-WEP.Class = "weapon_crowbar"
+ITEM.Class = "weapon_crowbar"
 
-return WEP
+return ITEM

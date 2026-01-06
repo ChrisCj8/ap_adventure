@@ -1,15 +1,15 @@
-local WEP = {}
+local ITEM = {}
 
-WEP.Name = "Shotgun"
-WEP.Weapon = true
-WEP.Groups = {
+ITEM.Name = "Shotgun"
+ITEM.Type = "Weapon"
+ITEM.Groups = {
     "Shotgun"
 }
-WEP.MinAmt = 1
-WEP.ConditionalCapabilities = {
+ITEM.MinAmt = 1
+ITEM.ConditionalCapabilities = {
     ["Ammo_Buckshot"] = {"StrongShortRange","BulletDamage","BuckshotDamage"}
 }
 
-WEP.Class = "weapon_shotgun"
+ITEM.Class = "weapon_shotgun"
 
-return WEP
+return ITEM
