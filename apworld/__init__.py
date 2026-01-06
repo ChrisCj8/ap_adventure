@@ -483,6 +483,7 @@ class GMADVWorld(World):
     def create_items(self):
 
         itempool = [self.create_item("McGuffin")]
+        item_table = self.item_table
         fillers = list[GMADVItem]()
         usefuls = list[GMADVItem]()
 
@@ -494,13 +495,26 @@ class GMADVWorld(World):
                 
 
         for iname,info in self.map_items.items():
-            self.item_table[iname] = (self.item_name_to_id[iname],ItemClassification(info["fl"]),None)
+            item_table[iname] = (self.item_name_to_id[iname],ItemClassification(info["fl"]),None)
             i = 0
             while i < info["amt"]:
                 itempool.append(self.create_item(iname))
                 i += 1
 
         for iname,amt in self.items_to_create.items():
+            info =  item_table[iname][2]
+            if "req_cond" in info:
+                if not "condcapab" in info:
+                    self.add_warning(f"item {iname} requires conditions to be fulfilled in order to be placed, but has no conditional capabilities defined")
+                    continue
+                req = False
+                for cap in info["condcapab"].keys():
+                    if cap in self.regconds:
+                        req = True
+                        break
+                if not req:
+                    continue
+                
             i = 0
             while i < amt:
                 newitem = self.create_item(iname)

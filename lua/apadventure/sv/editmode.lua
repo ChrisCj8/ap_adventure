@@ -364,7 +364,7 @@ local function ProcessItemGroup(groupname)
     for k,v in ipairs(itemdefs) do
         local deftbl = include(grouppath.."/"..v)
         if istable(deftbl) then
-            itemtbl[deftbl.Name] = {
+            local curitem = {
                 wgt = deftbl.FillWeight,
                 min = deftbl.MinAmt,
                 oneuse = deftbl.OneUse,
@@ -373,6 +373,10 @@ local function ProcessItemGroup(groupname)
                 capab = deftbl.Capabilities,
                 file = string.sub(v,0,-5)
             }
+            if deftbl.RequireCondition then
+                curitem.req_cond = true
+            end
+            itemtbl[deftbl.Name] = curitem
         else
             print(grouppath.."/"..v.." did not return a table")
         end 
