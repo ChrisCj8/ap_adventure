@@ -383,7 +383,6 @@ class GMADVWorld(World):
                     newreg.twoways = dict()
                     if "cond" in v:
                         newreg.conditions = set(v["cond"])
-                        self.regconds.update(newreg.conditions)
 
 
                     mapregs[k] = newreg
@@ -464,6 +463,7 @@ class GMADVWorld(World):
                             self.locallocs += 1
                         v.locations = reglocs
                         self.multiworld.regions.append(v)
+                        self.regconds.update(v.conditions)
                     else:
                         self.add_warning(f"Region {v.name} was removed because it was impossible to reach")
 
