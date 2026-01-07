@@ -1,4 +1,6 @@
 VertexLitGeneric {
     $color2 "[1 1 1]"
-    $lightwarptexture "apadventure/models/frame_lightwarp"
+    //$lightwarptexture "apadventure/models/frame_lightwarp"
+    $selfillum 1
+    $selfillummask "apadventure/models/selfillum_10"
 }

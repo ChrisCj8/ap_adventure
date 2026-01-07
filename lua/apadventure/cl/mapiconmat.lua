@@ -44,7 +44,8 @@ function apAdventure.GetMapIconMat(map,loadedcb)
                 if !origmat then print(html,origmat) return end
                 local mat = CreateMaterial("apAdventure_MapIcon_"..map,"VertexLitGeneric",{
                     ["$basetexture"] = origmat:GetString("$basetexture"),
-                    ["$lightwarptexture"] = "apadventure/models/frame_lightwarp"
+                    ["$selfillum"] = 1,
+                    ["$selfillummask"] = "apadventure/models/selfillum_10",
                 })
 
                 apAdventure.MapIconMats[map] = {
