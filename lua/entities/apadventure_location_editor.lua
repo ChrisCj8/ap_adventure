@@ -13,11 +13,14 @@ function ENT:SetupDataTables()
     self:NetworkVar("Bool",0,"IsDummy",{KeyName="isdummy",Edit={type="Boolean"}})
 end
 
+local bboxmins = Vector(-10,-10,0)
+local bboxmaxs = Vector(10,10,20)
+
 function ENT:Initialize()
     BaseClass.Initialize(self)
-    self:SetModel("models/hunter/blocks/cube05x05x05.mdl")
+    self:SetModel("models/apapdventure/location_pickup.mdl")
     self:SetCollisionGroup( COLLISION_GROUP_WORLD )
-    self:PhysicsInitStatic( SOLID_BBOX )
+    self:PhysicsInitBox( bboxmins,bboxmaxs )
     local phys = self:GetPhysicsObject()
     self.boundmins, self.boundmaxs = self:GetCollisionBounds()
     self.CopyRegionName = self.GetRegion

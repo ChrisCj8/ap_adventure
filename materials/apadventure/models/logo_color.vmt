@@ -1,0 +1,6 @@
+VertexLitGeneric {
+    $basetexture "apadventure/models/logo_color"
+    //$lightwarptexture "apadventure/models/logo_lightwarp"
+    $selfillum 1
+    $selfillummask "apadventure/models/selfillum_10"
+}

@@ -6,22 +6,16 @@ DEFINE_BASECLASS("base_gmodentity")
 
 APADV_LOCENTS = APADV_LOCENTS or {}
 
+local bboxmins = Vector(-10,-10,0)
+local bboxmaxs = Vector(10,10,20)
+
 function ENT:Initialize()
     BaseClass.Initialize(self)
-    self:SetModel("models/hunter/blocks/cube05x05x05.mdl")
-    --self:SetCollisionGroup( COLLISION_GROUP_WORLD )
-    --[[ local phys = self:GetPhysicsObject()
-    if IsValid(phys) then
-        self:PhysicsDestroy()
-    end ]]
-    self:PhysicsInit(SOLID_BBOX)
+    self:SetModel("models/apapdventure/location_pickup.mdl")
+    self:PhysicsInitBox( bboxmins,bboxmaxs )
     self:SetSolidFlags(bit.bor(FSOLID_NOT_SOLID,FSOLID_TRIGGER))
     local phys = self:GetPhysicsObject()
     phys:EnableGravity(false)
-
-
-    --[[ if CLIENT then return end
-    self:SetTrigger(true) ]]
 end
 
 local IsCollector
