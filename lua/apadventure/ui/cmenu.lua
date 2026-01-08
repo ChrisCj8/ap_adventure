@@ -629,6 +629,54 @@ return function(window)
                 end
             end
 
+            local conaccesscutbtn = ImageButton(coneditpnl,"icon16/cut.png")
+            local conaccesscopybtn = ImageButton(coneditpnl,"icon16/page_white_copy.png")
+            local conaccesspastebtn = ImageButton(coneditpnl,"icon16/paste_plain.png")
+
+            function conaccesscopybtn:DoClick()
+                local curnode = conaccesstree:GetSelectedItem()
+                if IsValid(curnode) then
+                    local tocopy = table.Copy(curnode.tbl)
+                    apAdventure.AccessNodeClipboard = tocopy
+                end
+            end
+
+            function conaccesspastebtn:DoClick()
+                local curnode = conaccesstree:GetSelectedItem()
+                local nodedata = apAdventure.AccessNodeClipboard
+                if !nodedata then return end
+                local nodename = nodedata.type
+                if !IsValid(curnode) then
+                    local rootnode = conaccesstree:Root()
+                    if !rootnode or rootnode:GetChildNodeCount() > 0 then return else
+                        local node = conaccesstree:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
+                        local tbl = table.Copy(nodedata)
+                        node.tbl = tbl
+                        curcon.access = tbl
+                        if tbl.nodes and next(tbl.nodes) then
+                            addnodes(node,tbl.nodes)
+                            rootnode:ExpandRecurse(true)
+                        end
+                    end
+                elseif nodetypes[curnode.tbl.type].SubNodes then
+                    local node = curnode:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
+                    local tbl = table.Copy(nodedata)
+                    local newkey =  #curnode.tbl.nodes+1
+                    curnode.tbl.nodes[newkey] = tbl
+                    node.tbl = tbl
+                    node.tblkey = newkey
+                    if tbl.nodes and next(tbl.nodes) then
+                        addnodes(node,tbl.nodes)
+                    end
+                    curnode:ExpandRecurse(true)
+                end
+            end
+
+            function conaccesscutbtn:DoClick()
+                conaccesscopybtn:DoClick()
+                conaccessdelbtn:DoClick()
+            end
+
             local conaccessnodepnl = vgui.Create("DPanel",coneditpnl)
             conaccessnodepnl:SetPos(210,60)
 
@@ -646,11 +694,14 @@ return function(window)
             coneditpnl:ShowContents(false)
 
             function coneditpnl:PerformLayout(w,h)
-                conaccessnodeselect:SetSize(w-50,25)
+                conaccessnodeselect:SetSize(w-115,25)
 
-                conaccessaddbtn:SetPos(w-42,33)
+                conaccessaddbtn:SetPos(w-107,33)
+                conaccessdelbtn:SetPos(w-87,33)
 
-                conaccessdelbtn:SetPos(w-22,33)
+                conaccesscutbtn:SetPos(w-62,33)
+                conaccesscopybtn:SetPos(w-42,33)
+                conaccesspastebtn:SetPos(w-22,33)
 
                 conaccesstree:SetSize(200,h-60)
 
