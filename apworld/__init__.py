@@ -305,7 +305,9 @@ class GMADVWorld(World):
                 for cond,capabs in item.info["condcapab"].items():
                     if not cond in self.condcapabtbl:
                         self.condcapabtbl[cond] = dict()
-                    self.condcapabtbl[cond][name] = ProcessCapabs(set(capabs))
+                    capabs = ProcessCapabs(set(capabs))
+                    item.info["condcapab"][cond] = capabs
+                    self.condcapabtbl[cond][name] = capabs
 
         for isetname in chosenisets:
             if isetname in self.item_set_table:        
