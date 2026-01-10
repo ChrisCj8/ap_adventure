@@ -450,6 +450,8 @@ class GMADVWorld(World):
                                     self.debuglog(f"registering access rule for {k} and {ik}" )
                             else:
                                 rule_b = False
+                        elif not iv["twoway"]:
+                            rule_b = False
                         
                         if rule_a != False:
                             reg_a.connect(reg_b,f"{map.bspname} - {k} -> {ik}",rule_a)
