@@ -170,13 +170,12 @@ class GMADVWorld(World):
                     if not flags == ItemClassification.progression and "condcapab" in info:
                         if not self.regconds_known:
                             return None
+                        flags = ItemClassification.useful
                         condcapab = info["condcapab"]
                         for k,v in condcapab.items():
                             if k in self.regconds and self.usedcapabs.intersection(v):
                                 flags = ItemClassification.progression
-                                break
-                            else:
-                                flags = ItemClassification.useful
+                                break                        
                 else:
                     return None
             else:
