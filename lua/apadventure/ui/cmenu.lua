@@ -403,7 +403,10 @@ return function(window)
                 end
 
                 local otherconds = {
-                    "Props"
+                    "Props",
+                    "Props_Sharp",
+                    "Props_Explosive",
+                    "Antlions_Controllable"
                 }
 
                 for k,v in ipairs(otherconds) do
