@@ -18,6 +18,15 @@ local capabs = {
     "WeakAOE",
     "MidAOE",
     "StrongAOE",
+    "TinyArcProjectile",
+    "ShortArcProjectile",
+    "MediumArcProjectile",
+    "LongArcProjectile",
+    "PhysicsProjectile",
+    "FlyingProjectile",
+    "SmallExplosion",
+    "MediumExplosion",
+    "LargeExplosion",
     "WeakSpam",
     "MidSpam",
     "StrongSpam",
@@ -27,14 +36,24 @@ local capabs = {
 
 function NODE.Panel(parent)
 
+    local capselectiontypebtn = vgui.Create("DImageButton",parent)
+    capselectiontypebtn:SetSize(16,16)
+    capselectiontypebtn:SetImage("icon16/pencil.png")
+    capselectiontypebtn:SetPos(5,7)
     
+    local textinputactive = false
+
     local capselect = vgui.Create("DComboBox",parent)
-    capselect:SetPos(5,5)
+    capselect:SetPos(25,5)
     local first = true
     for k,v in ipairs(capabs) do
         capselect:AddChoice(v,v,first)
         first = false
     end
+
+    local capnamein = vgui.Create("DTextEntry",parent)
+    capnamein:SetPos(25,5)
+    capnamein:SetVisible(false)
 
     local capaddbtn = vgui.Create("DImageButton",parent)
     capaddbtn:SetSize(16,16)
@@ -60,13 +79,25 @@ function NODE.Panel(parent)
         really shouldn't be that long anyways
     */
 
+    function capselectiontypebtn:DoClick()
+        textinputactive = !textinputactive
+        capselect:SetVisible(!textinputactive)
+        capnamein:SetVisible(textinputactive)
+        self:SetImage(textinputactive and "icon16/text_list_bullets.png" or "icon16/pencil.png")
+    end
+
     function capaddbtn:DoClick()
-        local _, data = capselect:GetSelected()
+        local data, _
+        if textinputactive then
+            data = capnamein:GetText()
+        else
+            _, data = capselect:GetSelected()
+        end
         local captbl = parent.nodetbl.capab
         local add = true
         for k,v in ipairs(captbl) do
             if v == data then
-                present = false
+                add = false
                 break
             end
         end
@@ -87,7 +118,7 @@ function NODE.Panel(parent)
                     changed = true
                 end
             end
-            v:Remove()
+            caplist:RemoveLine(v:GetID())
         end
         if changed then
             local newlist = {}
@@ -96,12 +127,15 @@ function NODE.Panel(parent)
                 i = i + 1
                 newlist[i] = v
             end
+            parent.nodetbl.capab = newlist
         end
     end
 
     function parent:PerformLayout(w,h)
         --itemnamein:SetSize(w-10,22)
-        capselect:SetSize(w-50,22)
+
+        capselect:SetSize(w-70,22)
+        capnamein:SetSize(w-70,22)
         caplist:SetSize(w-10,h-35)
         capaddbtn:SetPos(w-5-16-20,7)
         capdelbtn:SetPos(w-5-16,7)
