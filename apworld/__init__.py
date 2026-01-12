@@ -294,6 +294,7 @@ class GMADVWorld(World):
                 itempool[name] = item.info["min"]
             if "capab" in item.info:
                 finalcapabs = ProcessCapabs(set(item.info["capab"]))
+                item.info["capab"] = finalcapabs
                 capabentry = CapabTblEntry(name,finalcapabs)
                 for capab in finalcapabs:
                     if not capab in self.capabilitytbl:
