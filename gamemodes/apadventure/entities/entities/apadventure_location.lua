@@ -1,6 +1,7 @@
 AddCSLuaFile()
 
 ENT.PrintName = "apAdventure Location"
+ENT.AutomaticFrameAdvance = true
 
 DEFINE_BASECLASS("base_gmodentity")
 
@@ -16,6 +17,16 @@ function ENT:Initialize()
     self:SetSolidFlags(bit.bor(FSOLID_NOT_SOLID,FSOLID_TRIGGER))
     local phys = self:GetPhysicsObject()
     phys:EnableGravity(false)
+    if CLIENT then return end
+    local spin = self:AddLayeredSequence(self:LookupSequence("rotate"),1)
+    local bob = self:AddLayeredSequence(self:LookupSequence("bob"),2)
+    self:SetLayerPlaybackRate(spin,math.Rand(.3,.7))
+    self:SetLayerPlaybackRate(bob,math.Rand(.3,.7))
+end
+
+function ENT:Think()
+    self:NextThink(CurTime())
+    return true
 end
 
 local IsCollector
