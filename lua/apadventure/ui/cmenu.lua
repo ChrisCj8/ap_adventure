@@ -549,166 +549,13 @@ return function(window)
                 end
             end
 
-            local nodetypes = {}
-
-            for k,v in ipairs(file.Find("apadventure/ui/accessnodes/*.lua","lcl")) do
-                local name = string.sub(v,0,-5)
-                nodetypes[name] = include("apadventure/ui/accessnodes/"..v)
-            end
-
-            local conaccesstree = vgui.Create("DTree",coneditpnl)
-            conaccesstree:SetPos(5,60)
-
-            local conaccessnodeselect = vgui.Create("DComboBox",coneditpnl)
-            conaccessnodeselect:SetPos(5,30)
-
-            for k,v in pairs(nodetypes) do
-                conaccessnodeselect:AddChoice(k,k)
-            end
-
-            local addnodes
-
-            function addnodes(base,tbl)
-                for k,v in ipairs(tbl) do
-                    local node = base:AddNode(v.type,nodetypes[v.type].Icon or "icon16/bullet_black.png")
-                    node.tbl = v
-                    node.tblkey = k
-                    if v.nodes then
-                        addnodes(node,v.nodes)
-                    end
-                end
-            end
-
-            local conaccessaddbtn = ImageButton(coneditpnl,"icon16/add.png")
-            function conaccessaddbtn:DoClick()
-                local curnode = conaccesstree:GetSelectedItem()
-                local nodename, nodedata = conaccessnodeselect:GetSelected()
-                if !nodedata then return end
-                local nodetype = nodetypes[nodedata]
-                if !IsValid(curnode) then
-                    local rootnode = conaccesstree:Root()
-                    if !rootnode or rootnode:GetChildNodeCount() > 0 then return else
-                        local node = conaccesstree:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
-                        local tbl = nodetype.InitNode()
-                        node.tbl = tbl
-                        curcon.access = tbl
-                    end
-                elseif nodetypes[curnode.tbl.type].SubNodes then
-                    local node = curnode:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
-                    local tbl = nodetype.InitNode()
-                    local newkey =  #curnode.tbl.nodes+1
-                    curnode.tbl.nodes[newkey] = tbl
-                    node.tbl = tbl
-                    node.tblkey = newkey
-                    curnode:ExpandRecurse(true)
-                end
-            end
-
-            local conaccessdelbtn = ImageButton(coneditpnl,"icon16/delete.png")
-            function conaccessdelbtn:DoClick()
-                local curnode = conaccesstree:GetSelectedItem()
-                if !IsValid(curnode) then return end
-                local parentnode = curnode:GetParentNode()
-                if parentnode:IsRootNode() then
-                    curnode:Remove()
-                    curcon.access = nil
-                else
-                    local parenttbl = parentnode.tbl
-                    local newtbl = {}
-                    local curnodekey = curnode.tblkey
-                    i = 1
-                    for k,v in ipairs(parenttbl.nodes) do
-                        if k != curnodekey then
-                            newtbl[i] = v 
-                            i = i + 1
-                        end
-                    end
-                    parentnode.tbl.nodes = newtbl
-                    for k,v in ipairs(parentnode:GetChildNodes()) do
-                        v:Remove()
-                    end
-                    addnodes(parentnode,newtbl)
-                    parentnode:ExpandRecurse(true)
-                end
-            end
-
-            local conaccesscutbtn = ImageButton(coneditpnl,"icon16/cut.png")
-            local conaccesscopybtn = ImageButton(coneditpnl,"icon16/page_white_copy.png")
-            local conaccesspastebtn = ImageButton(coneditpnl,"icon16/paste_plain.png")
-
-            function conaccesscopybtn:DoClick()
-                local curnode = conaccesstree:GetSelectedItem()
-                if IsValid(curnode) then
-                    local tocopy = table.Copy(curnode.tbl)
-                    apAdventure.AccessNodeClipboard = tocopy
-                end
-            end
-
-            function conaccesspastebtn:DoClick()
-                local curnode = conaccesstree:GetSelectedItem()
-                local nodedata = apAdventure.AccessNodeClipboard
-                if !nodedata then return end
-                local nodename = nodedata.type
-                if !IsValid(curnode) then
-                    local rootnode = conaccesstree:Root()
-                    if !rootnode or rootnode:GetChildNodeCount() > 0 then return else
-                        local node = conaccesstree:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
-                        local tbl = table.Copy(nodedata)
-                        node.tbl = tbl
-                        curcon.access = tbl
-                        if tbl.nodes and next(tbl.nodes) then
-                            addnodes(node,tbl.nodes)
-                            rootnode:ExpandRecurse(true)
-                        end
-                    end
-                elseif nodetypes[curnode.tbl.type].SubNodes then
-                    local node = curnode:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
-                    local tbl = table.Copy(nodedata)
-                    local newkey =  #curnode.tbl.nodes+1
-                    curnode.tbl.nodes[newkey] = tbl
-                    node.tbl = tbl
-                    node.tblkey = newkey
-                    if tbl.nodes and next(tbl.nodes) then
-                        addnodes(node,tbl.nodes)
-                    end
-                    curnode:ExpandRecurse(true)
-                end
-            end
-
-            function conaccesscutbtn:DoClick()
-                conaccesscopybtn:DoClick()
-                conaccessdelbtn:DoClick()
-            end
-
-            local conaccessnodepnl = vgui.Create("DPanel",coneditpnl)
-            conaccessnodepnl:SetPos(210,60)
-
-            function conaccesstree:OnNodeSelected(node)
-                conaccessnodepnl.PerformLayout = nil
-                conaccessnodepnl:Clear()
-                conaccessnodepnl.nodetbl = node.tbl
-                local pnlfunc = nodetypes[node.tbl.type].Panel
-
-                if isfunction(pnlfunc) then
-                    pnlfunc(conaccessnodepnl)
-                end
-            end
+            local conaccessedit = include("apadventure/ui/access.lua")(coneditpnl)
+            conaccessedit:SetPos(5,30)
 
             coneditpnl:ShowContents(false)
 
             function coneditpnl:PerformLayout(w,h)
-                conaccessnodeselect:SetSize(w-115,25)
-
-                conaccessaddbtn:SetPos(w-107,33)
-                conaccessdelbtn:SetPos(w-87,33)
-
-                conaccesscutbtn:SetPos(w-62,33)
-                conaccesscopybtn:SetPos(w-42,33)
-                conaccesspastebtn:SetPos(w-22,33)
-
-                conaccesstree:SetSize(200,h-60)
-
-                conaccessnodepnl:SetSize(w-210,h-60)
+                conaccessedit:SetSize(w-10,300)
             end
 
         function connaddbtn:DoClick()
@@ -750,19 +597,9 @@ return function(window)
             curcon = conntbl[from][to]
             curconline = pnl
 
+            conaccessedit:LoadTbl(curcon)
             contwowaycheck:SetChecked(curcon.twoway)
-
-            conaccesstree:Clear()
-
-            local access = curcon.access
-            if access then
-                local basenode = conaccesstree:AddNode(access.type,nodetypes[access.type].Icon or "icon16/bullet_black.png")
-                basenode.tbl = access
-                if access.nodes then
-                    addnodes(basenode,access.nodes)
-                    basenode:ExpandRecurse(true)
-                end
-            end
+            
             coneditpnl:ShowContents(true)
         end
 
