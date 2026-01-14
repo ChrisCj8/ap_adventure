@@ -5,12 +5,14 @@ local function ImageButton(parent,image)
     return btn
 end
 
-return function(parent)
+return function(parent,targetheight)
 
     local container = vgui.Create("DCollapsibleCategory",parent)
     container:SetLabel("#apadventure.ui.accessedit.label")
+    container.TargetHeight = targetheight or 300
     
-    local curcon = false 
+    local basetbl
+    local basekey
 
     local nodetypes = {}
 
@@ -54,7 +56,7 @@ return function(parent)
                 local node = accesstree:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
                 local tbl = nodetype.InitNode()
                 node.tbl = tbl
-                curcon.access = tbl
+                basetbl[basekey] = tbl
             end
         elseif nodetypes[curnode.tbl.type].SubNodes then
             local node = curnode:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
@@ -74,7 +76,7 @@ return function(parent)
         local parentnode = curnode:GetParentNode()
         if parentnode:IsRootNode() then
             curnode:Remove()
-            curcon.access = nil
+            basetbl[basekey] = nil
         else
             local parenttbl = parentnode.tbl
             local newtbl = {}
@@ -118,7 +120,7 @@ return function(parent)
                 local node = accesstree:AddNode(nodename,nodetypes[nodename].Icon or "icon16/bullet_black.png")
                 local tbl = table.Copy(nodedata)
                 node.tbl = tbl
-                curcon.access = tbl
+                basetbl[basekey] = tbl
                 if tbl.nodes and next(tbl.nodes) then
                     addnodes(node,tbl.nodes)
                     rootnode:ExpandRecurse(true)
@@ -159,6 +161,7 @@ return function(parent)
 
     local oldlayout = container.PerformLayout
     function container:PerformLayout(w,h)
+        if self:GetExpanded() then h = self.TargetHeight end
         oldlayout(self,w,h)
         nodeselect:SetSize(w-115,25)
 
@@ -169,20 +172,31 @@ return function(parent)
         copybtn:SetPos(w-42,29)
         pastebtn:SetPos(w-22,29)
 
-        accesstree:SetSize(200,h-60)
+        local treewidth = 200
+        local nodepnlwidth = w-210
+        local nodepnlx = 210
 
-        nodepnl:SetSize(w-210,h-60)
+        if nodepnlwidth < treewidth then
+            treewidth = (w-10)/2
+            nodepnlx = treewidth + 10
+            nodepnlwidth = w - nodepnlx
+        end
+
+        accesstree:SetSize(treewidth,h-60)
+
+        nodepnl:SetSize(nodepnlwidth,h-60)
+        nodepnl:SetPos(nodepnlx,55)
     end
 
-    function container:LoadTbl(tbl)
+    function container:LoadTbl(tbl,key)
 
-        curcon = tbl
-        local access = tbl.access
+        basetbl = tbl
+        basekey = key or "access"
+        local access = tbl[basekey]
 
         accesstree:Clear()
 
-        if access then
-            PrintTable(access)
+        if access and next(access) then
             local basenode = accesstree:AddNode(access.type,nodetypes[access.type].Icon or "icon16/bullet_black.png")
             basenode.tbl = access
             if access.nodes then
