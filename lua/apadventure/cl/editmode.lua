@@ -92,9 +92,11 @@ net.Receive("APAdvSaveCfg",function()
     file.CreateDir(dir.."/"..map)
     file.Write(dir.."/group.json",util.TableToJSON(groupout,prettyprint))
     file.Write(dir.."/"..map.."/cl.json",util.TableToJSON(outtbl,prettyprint))
+    local cllogic = apAdventure.ClCfgToLogic(outtbl)
+    if !cllogic then return end
     dir = "apadventure/logic/cfg/"..gname.."/"..map
     file.CreateDir(dir)
-    file.Write(dir.."/cl.json",util.TableToJSON(apAdventure.ClCfgToLogic(outtbl),prettyprint))
+    file.Write(dir.."/cl.json",util.TableToJSON(cllogic,prettyprint))
 end)
 
 function apAdventure.UpdateGroup(gname)
@@ -166,9 +168,15 @@ function apAdventure.ProcessGroupLogic(gname)
             local cltbl = util.JSONToTable(clfile)
             if svtbl and cltbl then
                 local newpath = "apadventure/logic/cfg/"..gname.."/"..v.."/"
-                file.CreateDir(newpath)
-                file.Write(newpath.."sv.json",util.TableToJSON(apAdventure.SvCfgToLogic(svtbl),true))
-                file.Write(newpath.."cl.json",util.TableToJSON(apAdventure.ClCfgToLogic(cltbl),true))
+                local svlogic = apAdventure.SvCfgToLogic(svtbl)
+                if svlogic and cllogic then
+                    local cllogic = apAdventure.ClCfgToLogic(cltbl)
+                    if cllogic then
+                        file.CreateDir(newpath)
+                        file.Write(newpath.."sv.json",util.TableToJSON(svlogic,true))
+                        file.Write(newpath.."cl.json",util.TableToJSON(cllogic,true))
+                    end
+                end
             elseif !svtbl and !cltbl then
                 print("server and client cfgs for map "..v.." in group "..gname.."could not be processed into a table")
             elseif !svtbl then
