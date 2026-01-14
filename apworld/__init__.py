@@ -463,7 +463,15 @@ class GMADVWorld(World):
                         reglocs = list()
                         for ik,iv in v.locdata.items():
                             newlocname = f"{map.group} - {map.bspname} - {ik}"
-                            reglocs.append(GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],newreg))
+                            newloc = GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],newreg)
+                            if iv and iv["access"]:
+                                acctbl = preprocess_json_rule(iv["access"],self,v)
+                                acctype = acctbl["type"]
+                                if acctype == "never":
+                                    continue
+                                elif acctype != "always":
+                                    newloc.access_rule = lambda state, acctbl=acctbl, world=self, region=v: eval_json_rule(acctbl,state,world,region)
+                            reglocs.append(newloc)
                             self.locallocs += 1
                         v.locations = reglocs
                         self.multiworld.regions.append(v)

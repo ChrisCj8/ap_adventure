@@ -73,9 +73,10 @@ function apAdventure.SvCfgToLogic(cfg)
     if !next(entr) then entr = nil end
 
     local lctn = {}
+    local lctnaccess = cfg.lctnaccess or {}
     for k,v in ipairs(cfg.lctn) do
         lctn[v.reg] = lctn[v.reg] or {}
-        lctn[v.reg][v.name] = {access={}}
+        lctn[v.reg][v.name] = {access=lctnaccess[v.name]}
     end
 
     if !next(lctn) then lctn = nil end
