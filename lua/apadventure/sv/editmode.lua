@@ -39,6 +39,8 @@ util.AddNetworkString("APAdvClearSaveMark")
 util.AddNetworkString("APAdvActiveCfgClear")
 util.AddNetworkString("APAdvRegion")
 util.AddNetworkString("APAdvSaveCfg")
+util.AddNetworkString("APAdvAccess")
+util.AddNetworkString("APAdvAccessCopy")
 
 local editcfg = apAdventure.EditCfg
 
@@ -400,6 +402,65 @@ end
 if !file.IsDir("apadventure/logic/item/","DATA") then
     file.CreateDir("apadventure/logic/item/")
 end 
+
+local jsonmsg = ""
+local reqname
+
+local accesstbls = {
+    [0] = "LocationAccess",
+    [1] = "EntrAccess",
+}
+
+net.Receive("APAdvAccess",function() 
+    jsonmsg = jsonmsg..net.ReadString()
+    if net.ReadBool() then
+        if reqname then
+            local targetkey = accesstbls[net.ReadUInt(2)]
+            local accesstbl = util.JSONToTable(jsonmsg)
+            if accesstbl then
+                if next(accesstbl) then
+                    apAdventure.EditCfg[targetkey][reqname] = accesstbl
+                else
+                    apAdventure.EditCfg[targetkey][reqname] = nil
+                end
+            else
+                ErrorNoHalt("Received Access Table for "..reqname.." was not a valid JSON Table.\n")
+                print(jsonmsg)
+            end
+            jsonmsg = ""
+        else
+            jsonmsg = ""
+            ErrorNoHalt("Received an Access Table despite not making a request for it.\n")
+        end
+        reqname = nil
+    end
+end)
+
+function apAdventure.RequestAccessTbl(ply,name,type)
+    reqname = name
+    net.Start("APAdvAccess")
+        net.WriteUInt(type,2)
+    net.Send(ply)
+end
+
+function apAdventure.CopyAccessTbl(requester,name,copytype,targettype)
+
+    targettype = targettype or copytype
+    local accesstbl = apAdventure.EditCfg[accesstbls[copytype]][name]
+    local json = util.TableToJSON(accesstbl or {})
+    local done
+
+    repeat
+        local msg = string.sub(json,1,60000)
+        json = string.sub(json,60001,-1)
+        done = #json <= 0
+        net.Start("APAdvAccessCopy")
+            net.WriteString(msg)
+            net.WriteBool(done)
+            if done then net.WriteUInt(targettype,2) end
+        net.Send(requester)
+    until done
+end
 
 function apAdventure.ProcessItemdefs(groupname)
     if isstring(groupname) and groupname != "" then

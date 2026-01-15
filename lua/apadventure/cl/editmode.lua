@@ -292,6 +292,60 @@ net.Receive("APAdvClearSaveMark", function()
     timer.Start("APAdvProcessSaveHalos")
 end)
 
+local accesstbls = {
+    [0] = "LocationAccessTbl",
+    [1] = "EntrAccessTbl",
+}
+
+local accesspnlkeys = {
+    [0] = "LctnAccessPnl",
+    [1] = "EntrAccessPnl"
+}
+
+net.Receive("APAdvAccess",function()
+    local type = net.ReadUInt(2)
+    local acctbl = apAdventure[accesstbls[type]]
+    local json = "[]"
+    if acctbl then json = util.TableToJSON(acctbl) end
+    local done
+
+    repeat
+        local msg = string.sub(json,1,60000)
+        json = string.sub(json,60001,-1)
+        done = #json <= 0
+        net.Start("APAdvAccess")
+            net.WriteString(msg)
+            net.WriteBool(done)
+            if done then net.WriteUInt(type,2) end
+        net.SendToServer()
+    until done
+end)
+
+local entrmsg = ""
+
+net.Receive("APAdvAccessCopy",function()
+    entrmsg = entrmsg..net.ReadString()
+
+    if net.ReadBool() then
+        local type = net.ReadUInt(2)
+        local targetkey = accesstbls[type]
+        local accesstbl = util.JSONToTable(entrmsg)
+        if accesstbl then
+            apAdventure[targetkey] = accesstbl
+        else
+            apAdventure[targetkey] = {}
+            if entrmsg != "" then
+                ErrorNoHalt("Received Invalid Access JSON Table from the Server when copying Settings from the Entrance/Exit Entity.\n")
+            end
+        end
+        local accesspnl = apAdventure[accesspnlkeys[type]]
+        if IsValid(accesspnl) then
+            accesspnl:LoadTbl(apAdventure,targetkey)
+        end
+        entrmsg = ""
+    end
+end)
+
 local delmarkhalo = Color(200,10,10)
 local savmarkhalo = Color(10,200,10)
 
