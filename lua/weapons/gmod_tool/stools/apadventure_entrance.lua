@@ -14,6 +14,10 @@ if CLIENT then
         {name="reload"}
     }
 
+    apAdventure.EntrAccessTbl = apAdventure.EntrAccessTbl or {}
+
+    local accesspnl
+
     function TOOL.BuildCPanel(cPnl)
         apAdventure.entrregnamepnl = cPnl:TextEntry("#apadventure.toolui.region","apadventure_entrance_region")
         cPnl:ControlHelp("#tool.apadventure_entrance.region_help")
@@ -21,6 +25,11 @@ if CLIENT then
         cPnl:ControlHelp("#tool.apadventure_entrance.name_help")
         cPnl:Help("#tool.apadventure_entrance.match_names_info")
         cPnl:Help("#apadventure.toolui.twoway")
+        accesspnl = include("apadventure/ui/access.lua")(cPnl,400)
+        accesspnl:LoadTbl(apAdventure,"EntrAccessTbl")
+        accesspnl:DockMargin(5,5,5,5)
+        accesspnl:Dock(TOP)
+        apAdventure.EntrAccessPnl = accesspnl
     end
 
     cvars.AddChangeCallback("apadventure_entrance_region",function(cvar,old,new) 
@@ -91,6 +100,7 @@ function TOOL:LeftClick(tr)
             undo.SetPlayer(self:GetOwner())
         undo.Finish()
     end
+    apAdventure.RequestAccessTbl(self:GetOwner(),name,1)
     return true
 end
 
@@ -112,10 +122,11 @@ function TOOL:Reload()
         undo.AddEntity(ent)
         undo.SetPlayer(user)
     undo.Finish()
+    apAdventure.RequestAccessTbl(user,name,1)
     local toolgun = self:GetWeapon()
     toolgun:EmitSound(toolgun.ShootSound)
     toolgun:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+    user:SetAnimation(PLAYER_ATTACK1)
 end
 
 if !game.SinglePlayer() then return end
@@ -131,8 +142,13 @@ function TOOL:RightClick(tr)
         ray = true
     end
     if isfunction(ent.CopyConnectionName) then
-        owner:ConCommand("apadventure_entrance_name \""..ent:CopyConnectionName().."\"")
+        local name = ent:CopyConnectionName()
+        owner:ConCommand("apadventure_entrance_name \""..name.."\"")
         ray = true
+        if ent.APAdvAccessTableType then
+            apAdventure.CopyAccessTbl(owner,name,ent.APAdvAccessTableType,1)
+        end
     end
+    
     return ray
 end

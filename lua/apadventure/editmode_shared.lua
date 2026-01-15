@@ -68,8 +68,12 @@ function apAdventure.SvCfgToLogic(cfg)
     if !next(exit) then exit = nil end
 
     local entr = {}
+    local entraccess = cfg.entraccess or {}
     for k,v in ipairs(cfg.entr) do
-        entr[v.name] = v.reg
+        entr[v.name] = {
+            reg = v.reg,
+            access = entraccess[v.name],
+        }
     end
 
     if !next(entr) then entr = nil end

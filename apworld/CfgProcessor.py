@@ -130,7 +130,7 @@ def ProcessCfgs():
 
                 if "entr" in svjson:
                     for k,v in svjson["entr"].items():
-                        if v in newmap.regions:
+                        if v["reg"] in newmap.regions:
                             newmap.entrances[k] = v
                             print("adding entrance "+k+" to map "+map)
                         else: 

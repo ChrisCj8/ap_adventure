@@ -396,12 +396,20 @@ class GMADVWorld(World):
                     self.debuglog("creating region "+map.bspname+" - "+ k)
 
                 for k,v in map.entrances.items():
-                    reg = mapregs[v]
+                    reg = mapregs[v["reg"]]
+                    access = None
+                    if "access" in v:
+                        access = preprocess_json_rule(v["access"],self,reg)
+                        acctype = access["type"]
+                        if acctype == "never":
+                            continue
+                        elif acctype == "always":
+                            access = None
                     reg.has_entr = True
                     name = reg.name+" - "+k
-                    entrs[name] = reg
+                    entrs[name] = (reg,access)
                     reg.onewayins[name] = reg
-                    self.debuglog("adding exit "+k+" to "+v)
+                    self.debuglog("adding entrace "+k+" to "+v["reg"])
 
                 for k,v in map.exits.items():
                     reg = mapregs[v]
@@ -578,7 +586,8 @@ class GMADVWorld(World):
         rand = self.random
 
         #unplacedconnectiongroups = self.connectiongroups.copy()
-        unplacedentrs = self.rando_entrances
+        entrs = self.rando_entrances
+        unplacedentrs = entrs.copy()
         unconnectedtwoways = dict()
         unconnectedexits = dict()
         unconnectedentrs = dict()
@@ -624,7 +633,7 @@ class GMADVWorld(World):
                     raise RuntimeError(f"""apAdventure ran out of placeable entrances for {self.player_name}, 
                                         their config selections probably contain too many dead ends""")
             trying = rand.choice(list(untriedentrs))
-            trying_reg = unplacedentrs[trying]
+            trying_reg = unplacedentrs[trying][0]
             untriedentrs.remove(trying)
             reach = reachtest({trying_reg},set())
 
@@ -657,6 +666,8 @@ class GMADVWorld(World):
                 twoway = trying in trying_reg.twoways
                 target_reg = None
 
+                entrdata = entrs[trying]
+
                 if twoway and unconnectedtwoways:
                     target_name = rand.choice(list(unconnectedtwoways.keys()))
                     target_reg = unconnectedtwoways[target_name]
@@ -664,7 +675,13 @@ class GMADVWorld(World):
                     connectedtwoways.add(target_name)
                     connectedtwoways.add(trying)
                     self.debuglog(f"trying to connect {trying_reg.name} and {target_reg.name}")
-                    trying_reg.connect(target_reg,f"{trying} -> {target_name}")
+                    targetentrdata = entrs[target_name]
+                    rule = None
+                    targetentracctbl = targetentrdata[1]
+                    if targetentracctbl != None:
+                        rule = lambda state, acctbl=targetentracctbl, world=self, region=trying_reg: eval_json_rule(acctbl,state,world,region)
+                    trying_reg.connect(target_reg,f"{trying} -> {target_name}",rule)
+                    
                     self.entranceinfo.append((trying,target_name))
                 elif unconnectedexits:
                     target_name = rand.choice(list(unconnectedexits.keys()))
@@ -678,8 +695,12 @@ class GMADVWorld(World):
                     continue
 
                 self.debuglog(f"trying to connect {target_reg.name} and {trying_reg.name}")
+                rule = None
+                entracctbl = entrdata[1]
+                if entracctbl != None:
+                    rule = lambda state, acctbl=entracctbl, world=self, region=target_reg: eval_json_rule(acctbl,state,world,region)
                 
-                target_reg.connect(trying_reg,f"{target_name} -> {trying}")
+                target_reg.connect(trying_reg,f"{target_name} -> {trying}",rule)
                 self.entranceinfo.append((target_name,trying))
                 available_exits = len(unconnectedtwoways) + len(unconnectedexits)
                 self.debuglog(f"available exits before checking new reachables: {available_exits}")

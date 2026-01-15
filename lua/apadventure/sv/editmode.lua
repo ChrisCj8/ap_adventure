@@ -26,6 +26,7 @@ apAdventure.EditCfg = apAdventure.EditCfg or {
     ConnectionsInt = {},
     ConnectionsExt = {},
     LocationAccess = {},
+    EntrAccess = {},
 }
 
 local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHIVE+FCVAR_REPLICATED,
@@ -206,6 +207,7 @@ function apAdventure.StoreCfg(groupoverride)
         i=i+1
     end
     local entr = {}
+    local entrnames = {}
     i=1
     for k,v in ipairs(ents.FindByClass("apadventure_entrance_editor")) do
         local reg, name = v:GetRegion(), v:GetEntrName()
@@ -215,6 +217,7 @@ function apAdventure.StoreCfg(groupoverride)
             reg = reg,
             name = name
         }
+        entrnames[name] = true
         i=i+1
     end
     local start = {}
@@ -243,10 +246,16 @@ function apAdventure.StoreCfg(groupoverride)
         lctnnames[name] = true
         i=i+1
     end
-    local lctnaccess = srctbl.LocationAccess
+    local lctnaccess = srctbl.LocationAccess or {}
     for k,v in pairs(lctnaccess) do
         if !lctnnames[k] then
             lctnaccess[k] = nil
+        end
+    end
+    local entraccess = srctbl.EntrAccess or {}
+    for k,v in pairs(entraccess) do
+        if !entrnames[k] then
+            entraccess[k] = nil
         end
     end
     local outtbl = {
@@ -259,6 +268,7 @@ function apAdventure.StoreCfg(groupoverride)
         start = start,
         lctn = lctn,
         lctnaccess = lctnaccess,
+        entraccess = entraccess,
     }
 
     local prettyprint = prettyprintcvar:GetBool()
@@ -292,6 +302,7 @@ function apAdventure.LoadCfg(gname,dodelete)
         Group = gname,
         Regions = {},
         LocationAccess = gtbl.lctnaccess,
+        EntrAccess = gtbl.entraccess or {},
     }
 
     local newsav = cfgtab.Saved
