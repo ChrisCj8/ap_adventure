@@ -169,13 +169,17 @@ function apAdventure.ProcessGroupLogic(gname)
             if svtbl and cltbl then
                 local newpath = "apadventure/logic/cfg/"..gname.."/"..v.."/"
                 local svlogic = apAdventure.SvCfgToLogic(svtbl)
-                if svlogic and cllogic then
+                if svlogic then
                     local cllogic = apAdventure.ClCfgToLogic(cltbl)
                     if cllogic then
                         file.CreateDir(newpath)
                         file.Write(newpath.."sv.json",util.TableToJSON(svlogic,true))
                         file.Write(newpath.."cl.json",util.TableToJSON(cllogic,true))
+                    else
+                        print("client cfg for map "..v.." in group "..gname.."could not be processed into logic")
                     end
+                else
+                    print("server cfg for map "..v.." in group "..gname.."could not be processed into logic")
                 end
             elseif !svtbl and !cltbl then
                 print("server and client cfgs for map "..v.." in group "..gname.."could not be processed into a table")
