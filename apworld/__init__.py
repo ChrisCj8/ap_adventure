@@ -822,8 +822,11 @@ class GMADVWorld(World):
             data_a = unconnectedentrs[keys1[pick1]]
             data_b = unconnectedexits[keys2[pick2]]
 
+            reg1 = data_a[0]
+            reg2 = data_b[0]
+
             reg2.connect(reg1,f"{reg2.name} -> {reg1.name} (from remaining)",
-                self.make_intermap_rule(data_a[0],data_a[1],data_b[0],data_b[1]))
+                self.make_intermap_rule(reg1,data_a[1],reg2,data_b[1]))
             self.entranceinfo.append((keys2[pick2],keys1[pick1]))
 
             del unconnectedentrs[keys1[pick1]]
