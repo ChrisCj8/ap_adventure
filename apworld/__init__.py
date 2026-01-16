@@ -407,19 +407,30 @@ class GMADVWorld(World):
                             access = None
                     reg.has_entr = True
                     name = reg.name+" - "+k
-                    entrs[name] = (reg,access)
-                    reg.onewayins[name] = reg
+                    entrdata = (reg,access)
+                    entrs[name] = entrdata
+                    reg.onewayins[name] = entrdata
                     self.debuglog("adding entrace "+k+" to "+v["reg"])
 
                 for k,v in map.exits.items():
-                    reg = mapregs[v]
+                    reg = mapregs[v["reg"]]
+                    access = None
+                    if "access" in v:
+                        access = preprocess_json_rule(v["access"],self,reg)
+                        acctype = access["type"]
+                        if acctype == "never":
+                            continue
+                        elif acctype == "always":
+                            access = None
                     reg.has_exit = True
                     name = reg.name+" - "+k
                     if name in reg.onewayins:
+                        newdata = (reg,reg.onewayins[name][1],access)
+                        reg.twoways[name] = newdata
+                        entrs[name] = newdata
                         del reg.onewayins[name]
-                        reg.twoways[name] = reg
                     else:
-                        reg.onewayouts[name] = reg
+                        reg.onewayouts[name] = (reg,access)
 
                 for k,v in map.internalConnections.items():
                     if not k in mapregs:
@@ -581,6 +592,17 @@ class GMADVWorld(World):
 
         self.multiworld.itempool.extend(itempool)
 
+    def make_intermap_rule(self,entr_reg,entr_acctbl,exit_reg,exit_acctbl):
+        if entr_acctbl != None:
+            if exit_acctbl == None:
+                return lambda state, acctbl=entr_acctbl, world=self, region=entr_reg: eval_json_rule(acctbl,state,world,region)
+            else:
+                return lambda state, acc_a=entr_acctbl, acc_b=exit_acctbl, world=self, reg_a=entr_reg, reg_b=exit_reg: \
+                    eval_json_rule(acc_a,state,world,reg_a) and eval_json_rule(acc_b,state,world,reg_b)
+        elif exit_acctbl != None:
+            return lambda state, acctbl=exit_acctbl, world=self, region=exit_reg: eval_json_rule(acctbl,state,world,region)
+        return None
+
     def connect_entrances(self):
 
         rand = self.random
@@ -604,15 +626,15 @@ class GMADVWorld(World):
         self.startpick = startpick
         reach = reachtest({startreg},set())
         for reg in reach:
-            for twoway,homereg in reg.twoways.items():
-                unconnectedtwoways[twoway] = homereg
+            for twoway,exitdata in reg.twoways.items():
+                unconnectedtwoways[twoway] = exitdata
                 del unplacedentrs[twoway]
                 available_exits += 1
-            for exit,homereg in reg.onewayouts.items():
-                unconnectedexits[exit] = homereg
+            for exit,exitdata in reg.onewayouts.items():
+                unconnectedexits[exit] = exitdata
                 available_exits += 1
-            for entr,homereg in reg.onewayins.items():
-                unconnectedentrs[entr] = homereg
+            for entr,exitdata in reg.onewayins.items():
+                unconnectedentrs[entr] = exitdata
                 del unplacedentrs[entr]
 
         untriedentrs = set(unplacedentrs.keys())
@@ -633,7 +655,9 @@ class GMADVWorld(World):
                     raise RuntimeError(f"""apAdventure ran out of placeable entrances for {self.player_name}, 
                                         their config selections probably contain too many dead ends""")
             trying = rand.choice(list(untriedentrs))
-            trying_reg = unplacedentrs[trying][0]
+            trying_data = unplacedentrs[trying]
+            trying_reg = trying_data[0]
+
             untriedentrs.remove(trying)
             reach = reachtest({trying_reg},set())
 
@@ -666,27 +690,28 @@ class GMADVWorld(World):
                 twoway = trying in trying_reg.twoways
                 target_reg = None
 
-                entrdata = entrs[trying]
+                targetexitacctbl = None
 
                 if twoway and unconnectedtwoways:
                     target_name = rand.choice(list(unconnectedtwoways.keys()))
-                    target_reg = unconnectedtwoways[target_name]
+                    target_data = unconnectedtwoways[target_name]
+                    target_reg = target_data[0]
                     del unconnectedtwoways[target_name]
                     connectedtwoways.add(target_name)
                     connectedtwoways.add(trying)
                     self.debuglog(f"trying to connect {trying_reg.name} and {target_reg.name}")
-                    targetentrdata = entrs[target_name]
-                    rule = None
-                    targetentracctbl = targetentrdata[1]
-                    if targetentracctbl != None:
-                        rule = lambda state, acctbl=targetentracctbl, world=self, region=trying_reg: eval_json_rule(acctbl,state,world,region)
-                    trying_reg.connect(target_reg,f"{trying} -> {target_name}",rule)
+                    targetentracctbl = target_data[1]
+                    targetexitacctbl = target_data[2]
+                    tryingexitacctbl = trying_data[2]
+                    trying_reg.connect(target_reg,f"{trying} -> {target_name}",
+                        self.make_intermap_rule(target_reg,targetentracctbl,trying_reg,tryingexitacctbl))
                     
                     self.entranceinfo.append((trying,target_name))
                 elif unconnectedexits:
                     target_name = rand.choice(list(unconnectedexits.keys()))
-                    target_reg = unconnectedexits[target_name]
+                    target_data = unconnectedexits[target_name]
                     del unconnectedexits[target_name]
+                    target_reg = target_data[0]
                     connectedexits.add(target_name)
                     if twoway:
                         connectedtwoways.add(trying)
@@ -695,12 +720,10 @@ class GMADVWorld(World):
                     continue
 
                 self.debuglog(f"trying to connect {target_reg.name} and {trying_reg.name}")
-                rule = None
-                entracctbl = entrdata[1]
-                if entracctbl != None:
-                    rule = lambda state, acctbl=entracctbl, world=self, region=target_reg: eval_json_rule(acctbl,state,world,region)
+                entracctbl = trying_data[1]
                 
-                target_reg.connect(trying_reg,f"{target_name} -> {trying}",rule)
+                target_reg.connect(trying_reg,f"{target_name} -> {trying}",
+                    self.make_intermap_rule(trying_reg,entracctbl,target_reg,targetexitacctbl))
                 self.entranceinfo.append((target_name,trying))
                 available_exits = len(unconnectedtwoways) + len(unconnectedexits)
                 self.debuglog(f"available exits before checking new reachables: {available_exits}")
@@ -757,12 +780,18 @@ class GMADVWorld(World):
 
             key1 = keys[pick1]
             key2 = keys[pick2]
+
+            data_a = unconnectedtwoways[key1]
+            data_b = unconnectedtwoways[key2]
             
-            reg1 = unconnectedtwoways[key1]
-            reg2 = unconnectedtwoways[key2]
-            reg1.connect(reg2,f"{key1} -> {key2} (from remaining)")
+            reg1 = data_a[0]
+            reg2 = data_b[0]
+
+            reg1.connect(reg2,f"{key1} -> {key2} (from remaining)",
+                self.make_intermap_rule(reg2,data_b[1],reg1,data_a[2]))
             self.entranceinfo.append((key1,key2))
-            reg2.connect(reg1,f"{key2} -> {key1} (from remaining)")
+            reg2.connect(reg1,f"{key2} -> {key1} (from remaining)",
+                self.make_intermap_rule(reg1,data_a[1],reg2,data_b[2]))
             self.entranceinfo.append((key2,key1))
 
             del unconnectedtwoways[key1]
@@ -774,11 +803,13 @@ class GMADVWorld(World):
 
         if unconnectedtwoways and (entrsleft or exitsleft):
             last = unconnectedtwoways.popitem()
+            last_data = last[1]
             if entrsleft > exitsleft:
-                unconnectedexits[last[0]] = last[1]
+                last_data = (last_data[0],last_data[2])
+                unconnectedexits[last[0]] = last_data
                 exitsleft += 1
             else:
-                unconnectedentrs[last[0]] = last[1]
+                unconnectedentrs[last[0]] = last_data
                 entrsleft += 1
 
         onewaysleft = min(entrsleft,exitsleft)
@@ -788,9 +819,11 @@ class GMADVWorld(World):
             pick1 = rand.randint(0,entrsleft-1)
             pick2 = rand.randint(0,exitsleft-1)
 
-            reg1 = unconnectedentrs[keys1[pick1]]
-            reg2 = unconnectedexits[keys2[pick2]]
-            reg2.connect(reg1)
+            data_a = unconnectedentrs[keys1[pick1]]
+            data_b = unconnectedexits[keys2[pick2]]
+
+            reg2.connect(reg1,f"{reg2.name} -> {reg1.name} (from remaining)",
+                self.make_intermap_rule(data_a[0],data_a[1],data_b[0],data_b[1]))
             self.entranceinfo.append((keys2[pick2],keys1[pick1]))
 
             del unconnectedentrs[keys1[pick1]]

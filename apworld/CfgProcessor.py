@@ -142,7 +142,7 @@ def ProcessCfgs():
                 
                 if "exit" in svjson:
                     for k,v in svjson["exit"].items():
-                        if v in newmap.regions:
+                        if v["reg"] in newmap.regions:
                             newmap.exits[k] = v
                         else: 
                             print(f"map {map} from {gr} has an exit placed in non-existing region \"{k}\"")

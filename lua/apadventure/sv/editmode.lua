@@ -27,6 +27,7 @@ apAdventure.EditCfg = apAdventure.EditCfg or {
     ConnectionsExt = {},
     LocationAccess = {},
     EntrAccess = {},
+    ExitAccess = {},
 }
 
 local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHIVE+FCVAR_REPLICATED,
@@ -195,6 +196,7 @@ function apAdventure.StoreCfg(groupoverride)
         i=i+1
     end
     local exit = {}
+    local exitnames = {}
     i=1
     for k,v in ipairs(ents.FindByClass("apadventure_exit_editor")) do
         local reg, name = v:GetRegion(), v:GetExitName()
@@ -204,6 +206,7 @@ function apAdventure.StoreCfg(groupoverride)
             reg = reg,
             name = name
         }
+        exitnames[name] = true
         i=i+1
     end
     local entr = {}
@@ -258,6 +261,12 @@ function apAdventure.StoreCfg(groupoverride)
             entraccess[k] = nil
         end
     end
+    local exitaccess = srctbl.ExitAccess or {}
+    for k,v in pairs(exitaccess) do
+        if !exitnames[k] then
+            exitaccess[k] = nil
+        end
+    end
     local outtbl = {
         ver = "v1",
         sav = sav,
@@ -269,6 +278,7 @@ function apAdventure.StoreCfg(groupoverride)
         lctn = lctn,
         lctnaccess = lctnaccess,
         entraccess = entraccess,
+        exitaccess = exitaccess,
     }
 
     local prettyprint = prettyprintcvar:GetBool()
@@ -301,8 +311,9 @@ function apAdventure.LoadCfg(gname,dodelete)
         DelName = {},
         Group = gname,
         Regions = {},
-        LocationAccess = gtbl.lctnaccess,
+        LocationAccess = gtbl.lctnaccess or {},
         EntrAccess = gtbl.entraccess or {},
+        ExitAccess = gtbl.exitaccess or {},
     }
 
     local newsav = cfgtab.Saved
@@ -420,6 +431,7 @@ local reqname
 local accesstbls = {
     [0] = "LocationAccess",
     [1] = "EntrAccess",
+    [2] = "ExitAccess"
 }
 
 net.Receive("APAdvAccess",function() 

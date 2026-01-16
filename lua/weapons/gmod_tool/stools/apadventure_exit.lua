@@ -13,6 +13,10 @@ if CLIENT then
         {name="right"}
     }
 
+    apAdventure.ExitAccessTbl = apAdventure.ExitAccessTbl or {}
+
+    local accesspnl
+
     function TOOL.BuildCPanel(cPnl)
         apAdventure.exitregnamepnl = cPnl:TextEntry("#apadventure.toolui.region","apadventure_exit_region")
         cPnl:ControlHelp("#tool.apadventure_exit.region_help")
@@ -20,6 +24,11 @@ if CLIENT then
         cPnl:ControlHelp("#tool.apadventure_exit.name_help")
         cPnl:Help("#tool.apadventure_exit.match_names_info")
         cPnl:Help("#apadventure.toolui.twoway")
+        accesspnl = include("apadventure/ui/access.lua")(cPnl,400)
+        accesspnl:LoadTbl(apAdventure,"ExitAccessTbl")
+        accesspnl:DockMargin(5,5,5,5)
+        accesspnl:Dock(TOP)
+        apAdventure.ExitAccessPnl = accesspnl
     end
 
     cvars.AddChangeCallback("apadventure_exit_region",function(cvar,old,new) 
@@ -52,8 +61,12 @@ if CLIENT then
             ray = true
         end
         if isfunction(ent.CopyConnectionName) then
-            GetConVar("apadventure_exit_name"):SetString(ent:CopyConnectionName())
+            local name = ent:CopyConnectionName()
+            GetConVar("apadventure_exit_name"):SetString(name)
             ray = true
+            if ent.APAdvAccessTableType then
+                apAdventure.CopyAccessTbl(name,ent.APAdvAccessTableType,2)
+            end
         end
         return ray
     end
@@ -86,6 +99,7 @@ function TOOL:LeftClick(tr)
             undo.SetPlayer(self:GetOwner())
         undo.Finish()
     end
+    apAdventure.RequestAccessTbl(self:GetOwner(),name,2)
     return true
 end
 
@@ -102,8 +116,12 @@ function TOOL:RightClick(tr)
         ray = true
     end
     if isfunction(ent.CopyConnectionName) then
-        owner:ConCommand("apadventure_exit_name \""..ent:CopyConnectionName().."\"")
+        local name = ent:CopyConnectionName()
+        owner:ConCommand("apadventure_exit_name \""..name.."\"")
         ray = true
+        if ent.APAdvAccessTableType then
+            apAdventure.CopyAccessTbl(owner,name,ent.APAdvAccessTableType,2)
+        end
     end
     return ray
 end

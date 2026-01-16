@@ -4,6 +4,7 @@ AddCSLuaFile()
 
 ENT.PrintName = "#apadventure.entity.exit"
 ENT.Editable = true
+ENT.APAdvAccessTableType = 2
 
 DEFINE_BASECLASS("base_gmodentity")
 

@@ -295,11 +295,13 @@ end)
 local accesstbls = {
     [0] = "LocationAccessTbl",
     [1] = "EntrAccessTbl",
+    [2] = "ExitAccessTbl",
 }
 
 local accesspnlkeys = {
     [0] = "LctnAccessPnl",
-    [1] = "EntrAccessPnl"
+    [1] = "EntrAccessPnl",
+    [2] = "ExitAccessPnl",
 }
 
 net.Receive("APAdvAccess",function()
