@@ -62,8 +62,12 @@ if CLIENT then
             ray = true
         end
         if isfunction(ent.CopyConnectionName) then
-            GetConVar("apadventure_entrance_name"):SetString(ent:CopyConnectionName())
+            local name = ent:CopyConnectionName()
+            GetConVar("apadventure_entrance_name"):SetString(name)
             ray = true
+            if ent.APAdvAccessTableType then
+                apAdventure.CopyAccessTbl(name,ent.APAdvAccessTableType,1)
+            end
         end
         return ray
     end

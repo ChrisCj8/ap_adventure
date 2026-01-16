@@ -501,6 +501,10 @@ else
         net.Broadcast()
         return true
     end
+
+    net.Receive("APAdvAccessCopy",function(len,ply)
+        apAdventure.CopyAccessTbl(ply,net.ReadString(),net.ReadUInt(2),net.ReadUInt(2))
+    end)
 end
 
 concommand.Add("apadventure_editor_loadcfg",function(ply,_,args) 

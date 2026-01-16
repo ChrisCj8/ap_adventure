@@ -420,4 +420,13 @@ if !game.SinglePlayer() then
         util.Effect("ToolTracer",effect)
     end)
 
+    function apAdventure.CopyAccessTbl(name,copytype,targettype)
+        targettype = targettype or copytype
+        net.Start("APAdvAccessCopy")
+            net.WriteString(name)
+            net.WriteUInt(copytype,2)
+            net.WriteUInt(targettype,2)
+        net.SendToServer()
+    end
+
 end
