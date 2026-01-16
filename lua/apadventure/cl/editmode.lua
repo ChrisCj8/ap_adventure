@@ -76,7 +76,7 @@ net.Receive("APAdvSaveCfg",function()
     local items = editcfg.MapItems
     if !next(items) then items = nil end
     local outtbl = {
-        ver = "v1",
+        ver = "v1_1",
         reg = editcfg.Regions or {},
         connect = editcfg.Connections,
         item = items,
