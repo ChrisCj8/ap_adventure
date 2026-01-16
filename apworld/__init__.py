@@ -754,7 +754,7 @@ class GMADVWorld(World):
                             unconnectedentrs[entr] = homereg
                             self.debuglog(f"removing {entr} from unplaced entrances")
                             if entr in unplacedentrs:
-                                del unplacedentrs[twoway]
+                                del unplacedentrs[entr]
 
                 self.debuglog(f"available exits after checking new reachables: {available_exits}")
 
