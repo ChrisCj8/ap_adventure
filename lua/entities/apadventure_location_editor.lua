@@ -5,6 +5,7 @@ AddCSLuaFile()
 ENT.PrintName = "#apadventure.entity.location"
 ENT.Editable = true
 ENT.AutomaticFrameAdvance = true
+ENT.APAdvAccessTableType = 0
 
 DEFINE_BASECLASS("base_gmodentity")
 
