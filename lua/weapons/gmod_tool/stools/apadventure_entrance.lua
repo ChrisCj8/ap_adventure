@@ -16,8 +16,6 @@ if CLIENT then
 
     apAdventure.EntrAccessTbl = apAdventure.EntrAccessTbl or {}
 
-    local accesspnl
-
     function TOOL.BuildCPanel(cPnl)
         apAdventure.entrregnamepnl = cPnl:TextEntry("#apadventure.toolui.region","apadventure_entrance_region")
         cPnl:ControlHelp("#tool.apadventure_entrance.region_help")
@@ -25,7 +23,7 @@ if CLIENT then
         cPnl:ControlHelp("#tool.apadventure_entrance.name_help")
         cPnl:Help("#tool.apadventure_entrance.match_names_info")
         cPnl:Help("#apadventure.toolui.twoway")
-        accesspnl = include("apadventure/ui/access.lua")(cPnl,400)
+        local accesspnl = include("apadventure/ui/access.lua")(cPnl,400)
         accesspnl:LoadTbl(apAdventure,"EntrAccessTbl")
         accesspnl:DockMargin(5,5,5,5)
         accesspnl:Dock(TOP)

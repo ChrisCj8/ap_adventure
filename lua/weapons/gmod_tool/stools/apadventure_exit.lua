@@ -15,8 +15,6 @@ if CLIENT then
 
     apAdventure.ExitAccessTbl = apAdventure.ExitAccessTbl or {}
 
-    local accesspnl
-
     function TOOL.BuildCPanel(cPnl)
         apAdventure.exitregnamepnl = cPnl:TextEntry("#apadventure.toolui.region","apadventure_exit_region")
         cPnl:ControlHelp("#tool.apadventure_exit.region_help")
@@ -24,7 +22,7 @@ if CLIENT then
         cPnl:ControlHelp("#tool.apadventure_exit.name_help")
         cPnl:Help("#tool.apadventure_exit.match_names_info")
         cPnl:Help("#apadventure.toolui.twoway")
-        accesspnl = include("apadventure/ui/access.lua")(cPnl,400)
+        local accesspnl = include("apadventure/ui/access.lua")(cPnl,400)
         accesspnl:LoadTbl(apAdventure,"ExitAccessTbl")
         accesspnl:DockMargin(5,5,5,5)
         accesspnl:Dock(TOP)
