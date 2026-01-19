@@ -7,6 +7,12 @@
     "menusystem" "1"
 
     "settings" {
-        
+        1 {
+            "name" "apadv_connection_preset"
+            "type" "Text"
+            "text" "Connection Preset"
+            "help" "The Gamemode will try to load a connection preset with this name when starting."
+            "singleplayer" ""
+        }
     }
 }

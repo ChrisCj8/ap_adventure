@@ -97,4 +97,13 @@ if file.Exists("apadventure/leveltransdata.json","DATA") then
         end
     end
     file.Delete("apadventure/leveltransdata.json")
+else
+    local presetconv = GetConVar("apadv_connection_preset")
+    local presetpath = "apadventure/connect/"..presetconv:GetString()..".json"
+    if file.Exists(presetpath,"DATA") then
+        local data = util.JSONToTable(file.Read(presetpath,"DATA"))
+        if data.s then
+            APADV.CreateApSlot(data.a,data.s,data.p)
+        end
+    end
 end
