@@ -3,7 +3,7 @@ local ITEM = {}
 ITEM.Name = "Gravity Gun"
 ITEM.Type = "Weapon"
 ITEM.MinAmt = 1
-ITEM.Capabilities = {"WimpyShortRange"}
+ITEM.Capabilities = {"WimpyShortRange","GravityGun"}
 ITEM.ConditionalCapabilities = {
     ["Props"] = {"StrongShortRange","DecentMidRange"}
 }

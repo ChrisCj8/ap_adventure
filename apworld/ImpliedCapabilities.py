@@ -12,8 +12,17 @@ impliedcapabilities = {
     "WeakLongRange": ["WimpyLongRange"],
     "DecentLongRange": ["WeakLongRange"],
     "StrongLongRange": ["DecentLongRange"],
-    "MidThrow":["ShortThrow"],
-    "LongThrow":["MidThrow"]
+    "ShortArcProjectile": ["TinyArcProjectile"],
+    "MediumArcProjectile":["ShortArcProjectile"],
+    "LongArcProjectile":["MediumArcProjectile"],
+    "TinyExplosion": ["SmallOrSmallerExplosion","TinyOrLargerExplosion"],
+    "SmallExplosion": ["SmallOrSmallerExplosion","SmallOrLargerExplosion"],
+    "MediumSizeExplosion": ["MediumSizeOrSmallerExplosion","MediumSizeOrLargerExplosion","MediumOrSmallerExplosion","MediumOrLargerExplosion"],
+    "LargeExplosion": ["LargeOrSmallerExplosion","MediumSizeOrLargerExplosion"],
+    "MediumSizeOrSmallerExplosion": ["SmallOrSmallerExplosion"],
+    "LargeOrSmallerExplosion": ["MediumOrSmallerExplosion"],
+    "TinyOrLargerExplosion": ["SmallOrLargerExplosion"],
+    "SmallOrLargerExplosion": ["MediumSizeOrLargerExplosion"],
 }
 
 def ProcessCapabs(capabin):

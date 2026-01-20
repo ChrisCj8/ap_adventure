@@ -3,7 +3,7 @@ local ITEM = {}
 ITEM.Name = "Bugbait"
 ITEM.Type = "Weapon"
 ITEM.MinAmt = 1
-ITEM.Capability = {"AntlionFriendly"}
+ITEM.Capabilities = {"AntlionFriendly"}
 ITEM.ConditionalCapabilities = {
     ["Antlions_Controllable"] = {}
 }
