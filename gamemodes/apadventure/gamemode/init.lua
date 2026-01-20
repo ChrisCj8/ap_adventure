@@ -21,6 +21,8 @@ APADV_ENTRANCES = APADV_ENTRANCES or {}
 APADV_EXITENTS = APADV_EXITENTS or {}
 APADV_MAPITEMCOUNTERS = APADV_MAPITEMCOUNTERS or {}
 
+local BASEGM = baseclass.Get("gamemode_base")
+
 function GM:PreCleanupMap()
     APADV.MapItemCounters = {}
 end
@@ -119,3 +121,9 @@ end
 
 -- doing it like this because i think making the recursive IsCollector call use a local reference is faster
 APADV.IsCollector = IsCollector
+
+function GM:SendDeathNotice(attacker,inflictor,victim,flags)
+    if victim.ApAdvDoKillFeed then 
+        return BASEGM:SendDeathNotice(attacker,inflictor,victim,flags)
+    end
+end
