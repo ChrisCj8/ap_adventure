@@ -116,7 +116,9 @@ function GM:PlayerLoadout(ply)
     return true
 end
 
-local plymeta = player_manager.GetPlayerClasses().player_apadv
+local plymeta = FindMetaTable("Player")
+
+plymeta.ApAdvCollector = true
 
 APADV_PLYSTATS = APADV_PLYSTATS or {}
 
@@ -130,7 +132,6 @@ function ApAdvPly.UpdateBHop(val)
 end
 
 function ApAdvPly.SetWalkSpeed(val)
-    --if !plymeta then plymeta = player_manager.GetPlayerClasses().player_apadv end
     APADV_PLYSTATS.SlowWalkSpeed = val
     for k,v in player.Iterator() do
         v:SetSlowWalkSpeed(val)
@@ -138,7 +139,6 @@ function ApAdvPly.SetWalkSpeed(val)
 end
 
 function ApAdvPly.SetRunSpeed(val)
-    --if !plymeta then plymeta = player_manager.GetPlayerClasses().player_apadv end
     APADV_PLYSTATS.WalkSpeed = val
     for k,v in player.Iterator() do
         v:SetWalkSpeed(val)
@@ -146,7 +146,6 @@ function ApAdvPly.SetRunSpeed(val)
 end
 
 function ApAdvPly.SetSprintSpeed(val)
-    --if !plymeta then plymeta = player_manager.GetPlayerClasses().player_apadv end
     APADV_PLYSTATS.RunSpeed = val
     for k,v in player.Iterator() do
         v:SetRunSpeed(val)
@@ -154,7 +153,6 @@ function ApAdvPly.SetSprintSpeed(val)
 end
 
 function ApAdvPly.SetJumpPower(val)
-    --if !plymeta then plymeta = player_manager.GetPlayerClasses().player_apadv end
     APADV_PLYSTATS.JumpPower = val
     for k,v in player.Iterator() do
         v:SetJumpPower(val)

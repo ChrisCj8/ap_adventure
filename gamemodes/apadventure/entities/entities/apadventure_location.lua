@@ -29,15 +29,9 @@ function ENT:Think()
     return true
 end
 
-local IsCollector
+if CLIENT then return end
 
-local function IsCollector(ent)
-    if !IsValid(ent) then return false end
-    if ent.ApAdvCollector != nil then return ent.ApAdvCollector end
-    if ent:IsPlayer() then return true end
-    if ent:IsVehicle() then return IsCollector(ent:GetDriver()) end
-    return false
-end
+local IsCollector = APADV.IsCollector
 
 function ENT:StartTouch(ent)
     local collecttouch = IsCollector(ent)
@@ -62,11 +56,3 @@ function ENT:SetupLocation(lctnname)
     APADV_LOCENTS[lctnname] = APADV_LOCENTS[lctnname] or {}
     APADV_LOCENTS[lctnname][self] = true
 end
-
---[[ function ENT:EndTouch(ent)
-    print(ent,"stopped touching",self,self.LocationName)
-end ]]
-
---[[ function ENT:Touch(ent)
-    print(ent,"touching",self,self.LocationName)
-end ]]

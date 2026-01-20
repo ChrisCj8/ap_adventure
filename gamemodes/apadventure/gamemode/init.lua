@@ -107,3 +107,15 @@ else
         end
     end
 end
+
+local IsCollector
+
+local function IsCollector(ent)
+    if !IsValid(ent) then return false end
+    if isbool(ent.ApAdvCollector) then return ent.ApAdvCollector end
+    if ent:IsVehicle() then return IsCollector(ent:GetDriver()) end
+    return false
+end
+
+-- doing it like this because i think making the recursive IsCollector call use a local reference is faster
+APADV.IsCollector = IsCollector
