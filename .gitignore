@@ -1,3 +1,4 @@
 *.blend1
-
+*.prt
+*.log
 __pycache__/
