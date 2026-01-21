@@ -2,7 +2,7 @@
 {
     "base"  "sandbox"
     "title" "apAdventure"
-    "maps" "^apadv_"
+    "maps" "^ap_"
     "category"  "pve"
     "menusystem" "1"
 
