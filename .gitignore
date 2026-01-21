@@ -1,4 +1,5 @@
 *.blend1
 *.prt
 *.log
+*.pts
 __pycache__/
