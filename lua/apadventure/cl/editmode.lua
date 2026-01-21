@@ -72,26 +72,35 @@ end)
 
 net.Receive("APAdvSaveCfg",function() 
     local gname = net.ReadString()
+
     print("storing "..gname)
+
     local items = editcfg.MapItems
     if !next(items) then items = nil end
+    local connect = editcfg.Connections
+    if !next(connect) then connect = nil end
+
     local outtbl = {
         ver = "v1_1",
         reg = editcfg.Regions or {},
-        connect = editcfg.Connections,
+        connect = connect,
         item = items,
         info = editcfg.Info,
     }
     PrintTable(outtbl)
+
     local groupout = {
         rules = editcfg.GroupInfo
     }
+
     local prettyprint = prettyprintcvar:GetBool()
     local map = game.GetMap()
+
     local dir = "apadventure/cfg/"..gname
     file.CreateDir(dir.."/"..map)
     file.Write(dir.."/group.json",util.TableToJSON(groupout,prettyprint))
     file.Write(dir.."/"..map.."/cl.json",util.TableToJSON(outtbl,prettyprint))
+
     local cllogic = apAdventure.ClCfgToLogic(outtbl)
     if !cllogic then return end
     dir = "apadventure/logic/cfg/"..gname.."/"..map

@@ -122,8 +122,9 @@ def ProcessCfgs():
                 if not newmap.regions:
                     #self.add_warning(f"map {map} from {gr} has no regions, discarded")
                     continue
-                
-                newmap.internalConnections = cljson["connect"]
+
+                if "connect" in cljson:
+                    newmap.internalConnections = cljson["connect"]
 
                 svjson = json.load(open(mapdir+"/sv.json"))
 
