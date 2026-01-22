@@ -2,4 +2,5 @@
 *.prt
 *.log
 *.pts
+*.vmx
 __pycache__/
