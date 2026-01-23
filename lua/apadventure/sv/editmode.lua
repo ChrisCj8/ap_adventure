@@ -35,6 +35,7 @@ local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHI
     0,1)
 
 util.AddNetworkString("APAdvDelMark")
+util.AddNetworkString("APAdvDelNameMark")
 util.AddNetworkString("APAdvClearDelMark")
 util.AddNetworkString("APAdvSaveMark")
 util.AddNetworkString("APAdvClearSaveMark")
@@ -82,6 +83,21 @@ function apAdventure.DelMark(ent,state)
     return true
 end
 
+local function sendnamedelmark(name,state)
+    net.Start("APAdvDelNameMark")
+        net.WriteString(name)
+        net.WriteBool(state)
+    net.Broadcast()
+end
+
+function apAdventure.NameDelMark(name,state)
+    local namedeltbl = apAdventure.EditCfg.DelName
+    if name == "" or (state and namedeltbl[name]) or (!state and !namedeltbl[name]) then return false end
+    namedeltbl[name] = state or nil
+    sendnamedelmark(name,state)
+    return true
+end
+
 function apAdventure.UpdateDelMarks(ply)
     local send = net.send
     if !ply then
@@ -94,12 +110,21 @@ function apAdventure.UpdateDelMarks(ply)
     for k,v in pairs(apAdventure.EditCfg.DelMark) do
         senddelmark(k,v,true)
     end
+    for k,v in pairs(apAdventure.EditCfg.DelName) do
+        sendnamedelmark(k,v,true)
+    end
 end
 
 net.Receive("APAdvDelMark",function(len,ply)
     local id = net.ReadUInt(14)
     local state = net.ReadBool()
     apAdventure.DelMark(id,state)
+end)
+
+net.Receive("APAdvDelNameMark",function(len,ply)
+    local name = net.ReadString()
+    local state = net.ReadBool()
+    apAdventure.NameDelMark(name,state)
 end)
 
 local function sendsavemark(ent,state)
@@ -189,12 +214,6 @@ function apAdventure.StoreCfg(groupoverride)
         del[i] = k
         i=i+1
     end
-    local delname = {}
-    i=1
-    for k,v in pairs(srctbl.DelName) do
-        delname[i] = k
-        i=i+1
-    end
     local exit = {}
     local exitnames = {}
     i=1
@@ -271,7 +290,7 @@ function apAdventure.StoreCfg(groupoverride)
         ver = "v1",
         sav = sav,
         del = del,
-        delname = delname,
+        delname = srctbl.DelName,
         exit = exit,
         entr = entr,
         start = start,
@@ -334,15 +353,14 @@ function apAdventure.LoadCfg(gname,dodelete)
     end
 
     local newdelname = cfgtab.DelName
-    for k,v in ipairs(gtbl.delname) do
-        newdelname[v] = true
-        if dodelete then
-            timer.Simple(.2,function() 
-                for ik,iv in ipairs(ents.FindByName(v)) do
-                    iv:Remove()
+    if dodelete then
+        timer.Simple(.2,function() 
+            for k,v in ents.Iterator() do
+                if newdelname[v:GetName()] then
+                    v:Remove()
                 end
-            end)
-        end
+            end
+        end)
     end
 
     for k,v in ipairs(gtbl.exit) do

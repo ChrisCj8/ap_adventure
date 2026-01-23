@@ -68,6 +68,8 @@ net.Receive("APAdvActiveCfgClear",function()
             editcfg.Info = tbl.info or {}
          end
     end
+    timer.Start("APAdvUpdateDelMark")
+    timer.Start("APAdvUpdateDelNameMark")
 end)
 
 net.Receive("APAdvSaveCfg",function() 
@@ -242,10 +244,20 @@ timer.Create("APAdvUpdateDelMark",1,0,function()
 end)
 timer.Stop("APAdvUpdateDelMark")
 
+timer.Create("APAdvUpdateDelNameMark",1,0,function()
+    if IsValid(apAdventure.DeleteByNameList) then
+        apAdventure.DeleteByNameList:ProcessDelMark()
+    end
+    timer.Stop("APAdvUpdateDelNameMark")
+end)
+timer.Stop("APAdvUpdateDelNameMark")
+
 net.Receive("APAdvClearDelMark", function()
     apAdventure.EditCfg.DelMark = {}
+    apAdventure.EditCfg.DelName = {}
     timer.Start("APAdvProcessDelHalos")
     timer.Start("APAdvUpdateDelMark")
+    timer.Start("APAdvUpdateDelNameMark")
 end)
 
 net.Receive("APAdvDelMark",function() 
@@ -274,6 +286,13 @@ net.Receive("APAdvDelMark",function()
     apAdventure.EditCfg.DelMark[id] = entry
     timer.Start("APAdvProcessDelHalos")
     timer.Start("APAdvUpdateDelMark")
+end)
+
+net.Receive("APAdvDelNameMark",function()
+    local name = net.ReadString()
+    local state = net.ReadBool()
+    apAdventure.EditCfg.DelName[name] = state or nil
+    timer.Start("APAdvUpdateDelNameMark")
 end)
 
 timer.Create("APAdvProcessSaveHalos",1,0,function() 
