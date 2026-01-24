@@ -1,4 +1,10 @@
 
+APADV_CFGLUA = APADV_CFGLUA or {}
+
+local function CfgLuaValid(self)
+    return self == APADV_CFGLUA
+end
+
 function APADV.LoadCfg(group)
     if group then
         APADV_MAPGROUP = group
@@ -6,7 +12,11 @@ function APADV.LoadCfg(group)
         group = APADV_MAPGROUP
     end
     assert(group,"Cfg Loader was not passed a Group Name and could not find a previously used Map Group")
+    if isfunction(APADV_CFGLUA.CfgUnload) then
+        APADV_CFGLUA:CfgUnload()
+    end
     APADV.DeadPlys = {}
+    game.CleanUpMap()
     local map = game.GetMap()
     APADV_MAP = map
     local path = "apadventure/cfg/"..group.."/group.json"
@@ -18,7 +28,12 @@ function APADV.LoadCfg(group)
     path = "apadventure/cfg/"..group.."/"..map.."/cl.json"
     json = assert(file.Read(path,"DATA"),"couldn't find config")
     local clcfg = util.JSONToTable(json)
-    game.CleanUpMap()
+    
+    local scriptpath = "apadventure/cfglua/"..group.."/"..map..".lua"
+    if file.Exists(scriptpath,"lsv") then
+        APADV_CFGLUA = include(scriptpath) or {}
+        APADV_CFGLUA.IsValid = CfgLuaValid
+    end
 
     local infotbl = clcfg.info
     local grouprules = {} 
@@ -52,12 +67,26 @@ function APADV.LoadCfg(group)
     APADV.PermaDeath = !cfginfo("respawn")
     APADV_GODMODE = cfginfo("godmode")
 
-    if next(cfg.sav) then
-        duplicator.Paste(nil,cfg.sav.Entities,cfg.sav.Constraints)
-    end
-    
     for k,v in ipairs(cfg.del) do
         ents.GetMapCreatedEntity(v):Remove()
+    end
+
+    local delnames = cfg.delname
+
+    for k,v in ents.Iterator() do
+        if delnames[v:GetName()] then
+            v:Remove()
+        end
+    end
+
+    local dupedata = cfg.sav
+
+    if isfunction(APADV_CFGLUA.PreDupe) then
+        dupedata = APADV_CFGLUA:PreDupe(dupedata)
+    end
+
+    if dupedata and next(dupedata) then
+        duplicator.Paste(nil,cfg.sav.Entities,cfg.sav.Constraints)
     end
 
     APADV_SPAWNS = {}
@@ -131,8 +160,15 @@ function APADV.LoadCfg(group)
         v:Spawn()
     end
 
-    local scriptpath = "apadventure/cfglua/"..group.."/"..map..".lua"
-    if file.Exists(scriptpath,"lsv") then
-        local scripts = include(scriptpath)
+    if isfunction(APADV_CFGLUA.PostCfgLoad) then
+        APADV_CFGLUA:PostCfgLoad()
     end
+
+    if isfunction(APADV_CFGLUA.OnFullConnect) then
+        if APADV_SLOT.FullData then
+            APADV_CFGLUA:OnFullConnect()
+            APADV_CFGLUA.OnFullConnect = nil
+        end
+    end
+
 end

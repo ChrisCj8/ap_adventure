@@ -170,9 +170,15 @@ local function ApAdvDPLoad(slot,datapackage)
     end
 end
 
+local function ApAdvFullData(slot)
+    if isfunction(APADV_CFGLUA.OnFullConnect) then
+        APADV_CFGLUA:OnFullConnect()
+        APADV_CFGLUA.OnFullConnect = nil
+    end
+end
+
 function APADV.CreateApSlot(addr,slotn,pw,slotdata)
     local getslotdata = true
-    
 
     if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
 
@@ -202,6 +208,7 @@ function APADV.CreateApSlot(addr,slotn,pw,slotdata)
 
         APADV_SLOT.OnItemUpdate = ApAdvItemHandler
         APADV_SLOT.OnDataPackageLoad = ApAdvDPLoad
+        APADV_SLOT.OnFullData = ApAdvFullData
         APADV_SLOT.OnLocationUpdate = ApAdvLocationHandler
 
         APADV_SLOT:Connect()
