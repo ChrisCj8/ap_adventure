@@ -2,13 +2,39 @@ from settings import get_settings
 import os
 import json
 from BaseClasses import ItemClassification
-
+from Utils import user_path
+from importlib import resources
+from pathlib import Path
 
 def ProcessCfgs():
+
+    worldpath = resources.files(__package__).joinpath("logic")
+    worldcfgdir = worldpath.joinpath("cfg")
+    worlditemdir = worldpath.joinpath("item")
+
     gmodpath = get_settings().gmod_apadv_options["gmodpath"]
 
-    defdir = gmodpath+"/garrysmod/data/apadventure/logic/item/"
-    defgroups = os.listdir(defdir)
+    apdir = user_path("gmod_apadv/logic/")
+    apcfgdir = apdir+"cfg/"
+    if not os.path.exists(apcfgdir):
+        os.makedirs(apcfgdir)
+    apitemdir = apdir+"item/"
+    if not os.path.exists(apitemdir):
+        os.makedirs(apitemdir)
+
+    itempaths = dict[str, Path]()
+
+    for gr in worlditemdir.iterdir():
+        itempaths[gr.name] = gr
+
+    for gr in os.listdir(apitemdir):
+        itempaths[gr] = Path(apitemdir+gr)
+    
+    if gmodpath:
+        dir = gmodpath+"/garrysmod/data/apadventure/logic/item/"
+        if os.path.exists(dir):
+            for gr in os.listdir(dir):
+                itempaths[gr] = Path(dir+gr)
 
     class ItemSet:
         def __init__(self,name,nicename):
@@ -44,12 +70,10 @@ def ProcessCfgs():
 
     item_set_table = dict()
 
-    for iset in defgroups:
-        setpath = defdir+iset
-        
-        if os.path.isfile(setpath):
+    for iset,setpath in itempaths.items():
+        if setpath.is_file():
             print(f"processing {setpath}")
-            setjson = json.load(open(setpath))
+            setjson = json.load(setpath.open())
             nicename = setjson["name"]
             newiset = ItemSet(iset,nicename)
             if "items" in setjson and isinstance(setjson["items"], dict):
@@ -72,8 +96,19 @@ def ProcessCfgs():
         else:
             print(f"{setpath} does not exist")
 
-    cfgdir = gmodpath+"/garrysmod/data/apadventure/logic/cfg/"
-    cfggroups = os.listdir(cfgdir)
+    grouppaths = dict[str, Path]()
+
+    for gr in worldcfgdir.iterdir():
+        grouppaths[gr.name] = gr
+
+    for gr in os.listdir(apcfgdir):
+        grouppaths[gr] = Path(apcfgdir+gr)
+
+    if gmodpath:
+        dir = gmodpath+"/garrysmod/data/apadventure/logic/cfg/"
+        if os.path.exists(dir):
+            for gr in os.listdir(dir):
+                grouppaths[gr] = Path(dir+gr)
 
     map_table = dict()
 
@@ -90,27 +125,30 @@ def ProcessCfgs():
             self.items = dict()
             self.info = dict()
 
-    for gr in cfggroups:
-        grdir = cfgdir+gr
-        if os.path.isdir(grdir):
-            print("found group "+gr+" at "+grdir)
+    for gr,grdir in grouppaths.items():
+        if grdir.is_dir():
+            print(f"found group {gr} at {grdir}")
             foundgroups += 1
-            foundmaps = os.listdir(grdir)
+            #foundmaps = os.listdir(grdir)
             
             groupmaps = dict()
 
-            for map in foundmaps:
+            for path in grdir.iterdir():
+                if not path.is_dir():
+                    continue
+                map = path.name
                 print("processing "+map)
 
                 newmap = GMADVMap(map,gr)
-                mapdir = grdir+"/"+map
-                if not os.path.isfile(mapdir+"/sv.json"):
+                clpath = path.joinpath("cl.json")
+                svpath = path.joinpath("sv.json")
+                if not svpath.is_file():
                     #self.add_warning(f"could not find serverside save for {map} from {gr}")
                     continue
-                if not os.path.isfile(mapdir+"/cl.json"):
+                if not clpath.is_file():
                     #self.add_warning(f"could not find clientside save for {map} from {gr}")
                     continue
-                cljson = json.load(open(mapdir+"/cl.json"))
+                cljson = json.load(clpath.open())
 
                 if "info" in cljson:
                     newmap.info = cljson["info"]
@@ -126,7 +164,7 @@ def ProcessCfgs():
                 if "connect" in cljson:
                     newmap.internalConnections = cljson["connect"]
 
-                svjson = json.load(open(mapdir+"/sv.json"))
+                svjson = json.load(svpath.open())
 
 
                 if "entr" in svjson:
@@ -172,19 +210,18 @@ def ProcessCfgs():
                     for iname, item in mapitems.items():
                         itemtypes += 1
                         item_name_to_id[f"{gr} - {map} - {iname}"] = itemtypes
-                    
 
 
                 groupmaps[map] = newmap
                 #del newmap, cljson, svjson
             map_table[gr] = groupmaps
         else:
-            print("couldn't find group "+gr+" at "+grdir)
-        
+            print(f"couldn't find group {gr} at {grdir}")
+
 
     if foundgroups == 0:
         raise RuntimeError("could not find any valid config groups")
-    
+
     print(str(item_set_table))
-    
+
     return (item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table, location_name_to_id) # this sucks !
