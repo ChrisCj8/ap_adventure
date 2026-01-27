@@ -52,7 +52,7 @@ e2function number apAdvItemAmount(item)
 end
 
 e2function number apAdvItemAmount(string item)
-    if !APADV_SLOT or !APADV_SLOT.Room or !APADV_SLOT.Room.DataPackage or !APADV_SLOT.Room.DataPackage.games.gmAdventure then
+    if !APADV_SLOT or !APADV_SLOT.Room or !APADV_SLOT.Room.DataPackage or !APADV_SLOT.Room.DataPackage.games["GMod - apAdventure"] then
         
     end
     local item

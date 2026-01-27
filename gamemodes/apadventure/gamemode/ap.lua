@@ -72,7 +72,7 @@ function APADV.RegisterMapItems(itemtbl)
 end
 
 local function ApAdvRegisterItemHandlers()
-    local dp = APADV_SLOT.Room.DataPackage.games.gmAdventure
+    local dp = APADV_SLOT.Room.DataPackage.games["GMod - apAdventure"]
     local toID = dp.item_name_to_id
 
     local handle = APADV_ITEMHANDLERS
@@ -164,7 +164,7 @@ local dp_loaded = dp_loaded or false
 local function ApAdvDPLoad(slot,datapackage)
     dp_loaded = true
     APADV_DATAPACK = datapackage
-    APADV_DATAPACK_LOCAL = datapackage.games.gmAdventure
+    APADV_DATAPACK_LOCAL = datapackage.games["GMod - apAdventure"]
     if APADV_SLOT.slotData and !handlers_registered then
         ApAdvRegisterItemHandlers()
     end
@@ -196,7 +196,7 @@ function APADV.CreateApSlot(addr,slotn,pw,slotdata)
             address = addr,
             slotName = slotn,
             password = pw,
-            game = "gmAdventure",
+            game = "GMod - apAdventure",
             receiveAPchat = true,
             forwardAPchat = true,
             forwardGMODchat = true,
@@ -311,7 +311,7 @@ hook.Add("AP_Connect","APADV",function(slotID)
         net.WriteBool(true)
     net.Broadcast()
 
-    APADV_SLOT:DataStoreSet("gmadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
+    APADV_SLOT:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
 
 end)
 

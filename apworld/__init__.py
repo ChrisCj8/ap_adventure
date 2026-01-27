@@ -14,10 +14,10 @@ from .ImpliedCapabilities import ProcessCapabs
 from .CfgProcessor import ProcessCfgs
 
 class GMADVItem(Item):
-    game = "gmAdventure"
+    game = "GMod - apAdventure"
 
 class GMADVLocation(Location):
-    game = "gmAdventure"
+    game = "GMod - apAdventure"
 
 class CapabTblEntry:
     def __init__(self,name,capabs):
@@ -97,7 +97,7 @@ class GMADVWorld(World):
     
     Garry:"""
 
-    game = "gmAdventure"
+    game = "GMod - apAdventure"
 
     processout = ProcessCfgs()
 
