@@ -19,6 +19,15 @@ function GM:PlayerCanPickupWeapon(ply,wep)
     return canpick
 end
 
+ApAdvWeps.OnEquip = {}
+
+function GM:WeaponEquip(wep,ply)
+    local onequip = ApAdvWeps.OnEquip[wep:GetClass()]
+    if onequip then
+        onequip(wep,ply)
+    end
+end
+
 function ApAdvWeps.SetAvailable(class,available)
     APADV_WEPS[class] = available
     for k,v in player.Iterator() do

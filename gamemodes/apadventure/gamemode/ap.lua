@@ -79,6 +79,8 @@ local function ApAdvRegisterItemHandlers()
 
     local slotdata = APADV_SLOT.slotData
 
+    onequiptbl = {}
+
     local function RegisterItem(setpath,name,setdata)
         local itemtbl = include(setpath.."/"..name)
         local itemid = toID[itemtbl.Name.." - "..setdata.Name]
@@ -102,6 +104,9 @@ local function ApAdvRegisterItemHandlers()
             elseif itype == "Weapon" then
                 handle[itemid] = function(iList)
                     ApAdvWeps.SetAvailable(itemtbl.Class,iList[1] != nil)
+                end
+                if isfunction(itemtbl.OnEquip) then
+                    onequiptbl[itemtbl.Class] = itemtbl.OnEquip
                 end
             else
                 if isfunction(itemtbl.Handle) then
@@ -153,6 +158,8 @@ local function ApAdvRegisterItemHandlers()
     if APADV.MapItemTbl then
         APADV.RegisterMapItems()
     end
+
+    ApAdvWeps.OnEquip = onequiptbl
 
     for k,v in pairs(handle) do
         v(APADV_SLOT.Items[k] or empty)
