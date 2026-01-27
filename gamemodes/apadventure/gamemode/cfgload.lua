@@ -13,7 +13,7 @@ function APADV.LoadCfg(group)
     end
     assert(group,"Cfg Loader was not passed a Group Name and could not find a previously used Map Group")
     if isfunction(APADV_CFGLUA.CfgUnload) then
-        APADV_CFGLUA:CfgUnload()
+        ProtectedCall(APADV_CFGLUA.CfgUnload,APADV_CFGLUA)
     end
     APADV.DeadPlys = {}
     game.CleanUpMap()
@@ -82,7 +82,12 @@ function APADV.LoadCfg(group)
     local dupedata = cfg.sav
 
     if isfunction(APADV_CFGLUA.PreDupe) then
-        dupedata = APADV_CFGLUA:PreDupe(dupedata)
+        local success, out = pcall(APADV_CFGLUA.PreDupe,dupedata)
+        if success then 
+            dupedata = out 
+        else
+            ErrorNoHalt("Config Script Function PreDupe for "..map.." in "..group.." caused an Error: \n"..out)
+        end
     end
 
     if dupedata and next(dupedata) then
@@ -161,12 +166,12 @@ function APADV.LoadCfg(group)
     end
 
     if isfunction(APADV_CFGLUA.PostCfgLoad) then
-        APADV_CFGLUA:PostCfgLoad()
+        ProtectedCall(APADV_CFGLUA.PostCfgLoad,APADV_CFGLUA)
     end
 
     if isfunction(APADV_CFGLUA.OnFullConnect) then
         if APADV_SLOT.FullData then
-            APADV_CFGLUA:OnFullConnect()
+            ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
             APADV_CFGLUA.OnFullConnect = nil
         end
     end

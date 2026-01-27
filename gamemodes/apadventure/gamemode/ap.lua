@@ -172,7 +172,7 @@ end
 
 local function ApAdvFullData(slot)
     if isfunction(APADV_CFGLUA.OnFullConnect) then
-        APADV_CFGLUA:OnFullConnect()
+        ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
         APADV_CFGLUA.OnFullConnect = nil
     end
 end
