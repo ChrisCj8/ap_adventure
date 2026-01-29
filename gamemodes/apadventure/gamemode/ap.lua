@@ -168,60 +168,6 @@ end
 
 local dp_loaded = dp_loaded or false
 
-local function ApAdvDPLoad(slot,datapackage)
-    dp_loaded = true
-    APADV_DATAPACK = datapackage
-    APADV_DATAPACK_LOCAL = datapackage.games["GMod - apAdventure"]
-    if APADV_SLOT.slotData and !handlers_registered then
-        ApAdvRegisterItemHandlers()
-    end
-end
-
-local function ApAdvFullData(slot)
-    if isfunction(APADV_CFGLUA.OnFullConnect) then
-        ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
-        APADV_CFGLUA.OnFullConnect = nil
-    end
-end
-
-function APADV.CreateApSlot(addr,slotn,pw,slotdata)
-    local getslotdata = true
-
-    if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
-
-        if slotdata then
-            getslotdata = false
-        end
-
-        dp_loaded = false
-        handlers_registered = false
-
-        APADV_ITEMHANDLERS = {}
-
-        APADV_SLOT = GMAP.NewSlot({
-            ID = "APADV",
-            address = addr,
-            slotName = slotn,
-            password = pw,
-            game = "GMod - apAdventure",
-            receiveAPchat = true,
-            forwardAPchat = true,
-            forwardGMODchat = true,
-            deathlink = false,
-            getSlotData = getslotdata,
-            dontStore = true,
-            slotData = slotdata
-        })
-
-        APADV_SLOT.OnItemUpdate = ApAdvItemHandler
-        APADV_SLOT.OnDataPackageLoad = ApAdvDPLoad
-        APADV_SLOT.OnFullData = ApAdvFullData
-        APADV_SLOT.OnLocationUpdate = ApAdvLocationHandler
-
-        APADV_SLOT:Connect()
-    end
-end
-
 local function OnRunID(packet)
     local runid = packet.value
     local saveid = runid.."_"..APADV_SLOT.slotName
@@ -285,6 +231,82 @@ local function OnRunID(packet)
     end
 end
 
+local function OnConnect(self)
+    
+    local room = self.Room
+
+    net.Start("ApAdvConnectionState")
+        net.WriteBool(true)
+    net.Broadcast()
+
+    self:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
+
+end
+
+local function OnDisconnect(self)
+
+    net.Start("ApAdvConnectionState")
+        net.WriteBool(false)
+    net.Broadcast()
+
+end
+
+local function ApAdvDPLoad(slot,datapackage)
+    dp_loaded = true
+    APADV_DATAPACK = datapackage
+    APADV_DATAPACK_LOCAL = datapackage.games["GMod - apAdventure"]
+    if APADV_SLOT.slotData and !handlers_registered then
+        ApAdvRegisterItemHandlers()
+    end
+end
+
+local function ApAdvFullData(slot)
+    if isfunction(APADV_CFGLUA.OnFullConnect) then
+        ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
+        APADV_CFGLUA.OnFullConnect = nil
+    end
+end
+
+function APADV.CreateApSlot(addr,slotn,pw,slotdata)
+    local getslotdata = true
+
+    if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
+
+        if slotdata then
+            getslotdata = false
+        end
+
+        dp_loaded = false
+        handlers_registered = false
+
+        APADV_ITEMHANDLERS = {}
+
+        APADV_SLOT = GMAP.NewSlot({
+            ID = "APADV",
+            address = addr,
+            slotName = slotn,
+            password = pw,
+            game = "GMod - apAdventure",
+            receiveAPchat = true,
+            forwardAPchat = true,
+            forwardGMODchat = true,
+            deathlink = false,
+            getSlotData = getslotdata,
+            dontStore = true,
+            slotData = slotdata
+        })
+
+        APADV_SLOT.OnItemUpdate = ApAdvItemHandler
+        APADV_SLOT.OnDataPackageLoad = ApAdvDPLoad
+        APADV_SLOT.OnFullData = ApAdvFullData
+        APADV_SLOT.OnLocationUpdate = ApAdvLocationHandler
+        APADV_SLOT.OnConnect = OnConnect
+        APADV_SLOT.OnDisconnect = OnDisconnect
+
+        APADV_SLOT:Connect()
+    end
+end
+
 function APADV.SendLocation(lctn)
     if !APADV_SLOT or !APADV_SLOT.Connected then return false end
     APADV_SLOT:SendLocation(lctn)
@@ -307,32 +329,6 @@ end
 function APADV.RemoveTracker(type,trackedID,hookID)
     GMAP.RemoveTracker("APADV",type,trackedID,hookID)
 end
-
-hook.Add("AP_Connect","APADV",function(slotID) 
-
-    if slotID != "APADV" then return end
-
-    local room = APADV_SLOT.Room
-
-    net.Start("ApAdvConnectionState")
-        net.WriteBool(true)
-    net.Broadcast()
-
-    APADV_SLOT:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
-
-end)
-
-hook.Add("AP_Disconnect","APADV",function(slotID) 
-
-    if slotID != "APADV" then return end
-
-    local room = APADV_SLOT.Room
-
-    net.Start("ApAdvConnectionState")
-        net.WriteBool(false)
-    net.Broadcast()
-
-end)
 
 local editslotperms = {
     ["superadmin"]  = true
