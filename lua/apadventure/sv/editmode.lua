@@ -111,7 +111,7 @@ function apAdventure.UpdateDelMarks(ply)
         senddelmark(k,v,true)
     end
     for k,v in pairs(apAdventure.EditCfg.DelName) do
-        sendnamedelmark(k,v,true)
+        sendnamedelmark(k,v)
     end
 end
 
@@ -327,7 +327,7 @@ function apAdventure.LoadCfg(gname,dodelete)
     local cfgtab = {
         Saved = {},
         DelMark = {},
-        DelName = {},
+        DelName = gtbl.delname or {},
         Group = gname,
         Regions = {},
         LocationAccess = gtbl.lctnaccess or {},
@@ -352,7 +352,7 @@ function apAdventure.LoadCfg(gname,dodelete)
         end
     end
 
-    local newdelname = cfgtab.DelName
+    local delname = cfgtab.DelName
     if dodelete then
         timer.Simple(.2,function() 
             for k,v in ents.Iterator() do
@@ -361,6 +361,10 @@ function apAdventure.LoadCfg(gname,dodelete)
                 end
             end
         end)
+    end
+
+    for k,v in pairs(delname) do
+        sendnamedelmark(k,v)
     end
 
     for k,v in ipairs(gtbl.exit) do
