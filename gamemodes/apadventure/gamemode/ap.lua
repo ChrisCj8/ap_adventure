@@ -72,20 +72,31 @@ function APADV.RegisterMapItems(itemtbl)
 end
 
 local function ApAdvRegisterItemHandlers()
+
+    if APADV.ItemUnregisterFuncs then
+        for k,v in ipairs(APADV.ItemUnregisterFuncs) do v() end
+    end
+
     local dp = APADV_SLOT.Room.DataPackage.games["GMod - apAdventure"]
     local toID = dp.item_name_to_id
 
     local handle = APADV_ITEMHANDLERS
 
     local slotdata = APADV_SLOT.slotData
+    local unregisterfuncs = {}
+    local unregisteramt = 0
 
     onequiptbl = {}
+
+    local setwepavailable = ApAdvWeps.SetAvailable
 
     local function RegisterItem(setpath,name,setdata)
         local itemtbl = include(setpath.."/"..name)
         local itemid = toID[itemtbl.Name.." - "..setdata.Name]
         if itemid then
             local itype = itemtbl.Type
+            local handler = itemtbl.Handle
+            if !isfunction(handler) then handler = nil end
             if itype == "OneUse" then
                 APADV_ITEMSUSED[itemid] = APADV_ITEMSUSED[itemid] or 0
                 handle[itemid] = function(iList)
@@ -102,16 +113,29 @@ local function ApAdvRegisterItemHandlers()
                     end
                 end
             elseif itype == "Weapon" then
-                handle[itemid] = function(iList)
-                    ApAdvWeps.SetAvailable(itemtbl.Class,iList[1] != nil)
+                local class = itemtbl.Class
+                if handler then
+                    handle[itemid] = function(iList)
+                        handler(iList)
+                        setwepavailable(class,iList[1] != nil)
+                    end
+                else
+                    handle[itemid] = function(iList)
+                        setwepavailable(class,iList[1] != nil)
+                    end
                 end
                 if isfunction(itemtbl.OnEquip) then
                     onequiptbl[itemtbl.Class] = itemtbl.OnEquip
                 end
             else
-                if isfunction(itemtbl.Handle) then
-                    handle[itemid] = itemtbl.Handle
+                if isfunction(handler) then
+                    handle[itemid] = handler
                 end
+            end
+
+            if isfunction(itemtbl.Unregister) then
+                unregisteramt = unregisteramt + 1
+                unregisterfuncs[unregisteramt] = itemtbl.Unregister
             end
         end
     end
@@ -160,6 +184,7 @@ local function ApAdvRegisterItemHandlers()
     end
 
     ApAdvWeps.OnEquip = onequiptbl
+    APADV.ItemUnregisterFuncs = unregisterfuncs
 
     for k,v in pairs(handle) do
         v(APADV_SLOT.Items[k] or empty)
