@@ -15,6 +15,10 @@ local capabs = {
     "WeakMidRange",
     "DecentMidRange",
     "StrongMidRange",
+    "WimpyLongRange",
+    "WeakLongRange",
+    "DecentLongRange",
+    "StrongLongRange",
     "WeakAOE",
     "MidAOE",
     "StrongAOE",
@@ -24,6 +28,7 @@ local capabs = {
     "LongArcProjectile",
     "PhysicsProjectile",
     "FlyingProjectile",
+    "TinyExplosion",
     "SmallExplosion",
     "MediumExplosion",
     "LargeExplosion",
@@ -31,7 +36,17 @@ local capabs = {
     "MidSpam",
     "StrongSpam",
     "HeliKiller",
-    "Waterproof"
+    "Waterproof",
+    "AntlionFriendly",
+    "AntlionControl",
+    "BugbaitTrigger",
+    "MediumSizeOrSmallerExplosion", 
+    "SmallOrSmallerExplosion",
+    "LargeOrSmallerExplosion", 
+    "MediumOrSmallerExplosion",
+    "TinyOrLargerExplosion", 
+    "SmallOrLargerExplosion",
+    "MediumSizeOrLargerExplosion",
 }
 
 function NODE.Panel(parent)
