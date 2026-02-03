@@ -21,6 +21,9 @@ APADV_ENTRANCES = APADV_ENTRANCES or {}
 APADV_EXITENTS = APADV_EXITENTS or {}
 APADV_MAPITEMCOUNTERS = APADV_MAPITEMCOUNTERS or {}
 
+RunConsoleCommand("gmod_maxammo",0)
+RunConsoleCommand("ai_disabled",0)
+
 local BASEGM = baseclass.Get("gamemode_base")
 
 function GM:PreCleanupMap()
