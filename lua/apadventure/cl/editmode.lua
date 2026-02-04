@@ -38,7 +38,7 @@ net.Receive("APAdvActiveCfgClear",function()
         Saved = {},
         DelMark = {},
         DelName = {},
-        Group = "";
+        Group = gname;
         Regions = {},
         Connections = {},
         MapItems = {},

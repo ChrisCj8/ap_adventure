@@ -111,8 +111,28 @@ local checkboxdefaultcolor = color_black
 local lightblue = Color(100,167,255)
 
 return function(window)
+    local mbar = vgui.Create("DMenuBar",window)
+    mbar:DockMargin(-2,-5,-2,0)
+
+    local configloaded = editcfg.Group != ""
+    local filemenu = mbar:AddMenu("#apadventure.editor.menu.file")
+    filemenu:AddOption("#apadventure.editor.menu.file.load",function() include("apadventure/ui/loadmenu.lua")() end)
+    local reloadoption = filemenu:AddOption("#apadventure.editor.menu.file.reload",function() 
+        RunConsoleCommand("apadventure_editor_loadcfg")
+    end)
+    --reloadoption:SetIcon("icon16/arrow_refresh.png")
+    reloadoption:SetEnabled(configloaded)
+    local saveoption = filemenu:AddOption("#apadventure.editor.menu.file.save",function() RunConsoleCommand("apadventure_editor_savecfg") end)
+    saveoption:SetEnabled(configloaded)
+    filemenu:AddOption("#apadventure.editor.menu.file.saveto",function() include("apadventure/ui/savemenu.lua")() end)
+
+    local logicmenu = mbar:AddMenu("#apadventure.editor.menu.logic")
+    logicmenu:AddOption("#apadventure.editor.menu.logic.updateallcfgs",function() RunConsoleCommand("apadventure_update_all_cfgs") end)
+    logicmenu:AddOption("#apadventure.editor.menu.logic.processallitemdefs",function() RunConsoleCommand("apadventure_editor_processitemdefs") end)
+
+
     local tabs = vgui.Create("DPropertySheet",window)
-    tabs:SetPos(5,25)
+    tabs:SetPos(5,50)
 
     local grouptbl = editcfg.GroupInfo
     local infotbl = editcfg.Info
@@ -823,6 +843,6 @@ return function(window)
     function window:PerformLayout(width,height)
         oldlayout(self,width,height)
         local _,drawerh = helpdrawer:GetSize()
-        tabs:SetSize(width-10,height-30-drawerh)
+        tabs:SetSize(width-10,height-55-drawerh)
     end
 end
