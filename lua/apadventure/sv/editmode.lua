@@ -543,13 +543,17 @@ end
 
 concommand.Add("apadventure_editor_loadcfg",function(ply,_,args) 
     local arg = args[1]
-    if !ply:IsListenServerHost() or !arg or arg == "" then return end
+    if !ply:IsListenServerHost() then return end
+    if arg == "" or !isstring(arg) then arg = apAdventure.EditCfg.Group end
+    if arg == "" or !isstring(arg) or !apAdventure.TestFileSystemSafe(arg) then return end
     apAdventure.LoadCfg(arg)
 end)
 
 concommand.Add("apadventure_editor_savecfg",function(ply,_,args) 
     local arg = args[1]
-    if !ply:IsListenServerHost() or !arg or arg == "" then return end
+    if !ply:IsListenServerHost() then return end
+    if arg == "" or !isstring(arg) then arg = apAdventure.EditCfg.Group end
+    if arg == "" or !isstring(arg) or !apAdventure.TestFileSystemSafe(arg) then return end
     apAdventure.StoreCfg(arg)
 end)
 
