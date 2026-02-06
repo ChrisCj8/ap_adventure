@@ -2,6 +2,7 @@
 include("apadventure/sv/mapiconmat.lua")
 
 AddCSLuaFile("apadventure/cl/mapiconmat.lua")
+AddCSLuaFile("apadventure/ui/savemanage.lua")
 
 local playingApAdv = engine.ActiveGamemode() == "apadventure"
 
@@ -27,6 +28,8 @@ if engine.ActiveGamemode() == "sandbox" then
 end
 
 util.AddNetworkString("APAdvAreaPortalInfo")
+util.AddNetworkString("APAdvSaveManageCmd")
+util.AddNetworkString("APAdvSaveManageData")
 
 apAdventure.AreaPortalInfo = apAdventure.AreaPortalInfo or {}
 local areaportalinfo = apAdventure.AreaPortalInfo
@@ -132,3 +135,33 @@ end
 
 hook.Add("InitPostEntity","ApAdvUseCapturedKeyVals",UseCapturedKeyVals)
 hook.Add("PostCleanupMap","ApAdvUseCapturedKeyVals",UseCapturedKeyVals)
+
+local function deldir(path) 
+    local files, dirs = file.Find(path.."/*","DATA")
+    for k,v in ipairs(files) do
+        file.Delete(path.."/"..v)
+    end
+    for k,v in ipairs(dirs) do
+        deldir(path.."/"..v)
+    end
+    file.Delete(path)
+end
+
+net.Receive("APAdvSaveManageCmd",function(_,ply)
+    if !(ply:IsListenServerHost() or ply:IsUserGroup("superadmin")) then return end
+    local cmd = {
+        data = function()
+            local _,saves = file.Find("apadventure/sav/*","DATA")
+            for k,v in ipairs(saves) do
+                net.Start("APAdvSaveManageData")
+                    net.WriteString(v)
+                net.Send(ply)
+            end
+        end,
+        del = function()
+            local name = net.ReadString()
+            deldir("apadventure/sav/"..name)
+        end
+    }
+    cmd[net.ReadString()]()
+end)

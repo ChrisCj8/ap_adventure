@@ -130,6 +130,8 @@ return function(window)
     logicmenu:AddOption("#apadventure.editor.menu.logic.updateallcfgs",function() RunConsoleCommand("apadventure_update_all_cfgs") end)
     logicmenu:AddOption("#apadventure.editor.menu.logic.processallitemdefs",function() RunConsoleCommand("apadventure_editor_processitemdefs") end)
 
+    local miscmenu = mbar:AddMenu("#apadventure.editor.menu.misc")
+    miscmenu:AddOption("#apadventure.editor.menu.misc.savemanage",function() RunConsoleCommand("apadventure_save_manager") end)
 
     local tabs = vgui.Create("DPropertySheet",window)
     tabs:SetPos(5,50)
