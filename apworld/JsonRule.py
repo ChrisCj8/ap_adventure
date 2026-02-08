@@ -27,8 +27,6 @@ def eval_json_rule(rule,state : CollectionState,world,region):
             return out
         case "bhop":
             return state.has("Bunnyhop",player)
-        case "mapitem":
-            return state.has(f"{region.mapgroup} - {region.mapname} - {rule["item"]}",player,rule["count"])
         case "capab":
             capab = rule["capab"]
             #print(capab)
@@ -89,6 +87,10 @@ alwaysnode = {
 def preprocess_json_rule(rule,world,region):
     rule = rule.copy()
     match rule["type"]:
+        case "has":
+            if rule["count"] <= 0:
+                return alwaysnode
+            return rule
         case "bhop":
             if world.bhop_logic:
                 if world.bhop == 3:
@@ -131,6 +133,12 @@ def preprocess_json_rule(rule,world,region):
                 return rule
         case "capab":
             world.usedcapabs.update(rule["capab"])
+            return rule
+        case "mapitem":
+            if rule["count"] <= 0:
+                return alwaysnode
+            rule["type"] = "has"
+            rule["item"] = f"{region.mapgroup} - {region.mapname} - {rule["item"]}"
             return rule
         case _:
             return rule
