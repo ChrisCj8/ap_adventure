@@ -482,7 +482,7 @@ class GMADVWorld(World):
                         reglocs = list()
                         for ik,iv in v.locdata.items():
                             newlocname = f"{map.group} - {map.bspname} - {ik}"
-                            newloc = GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],newreg)
+                            newloc = GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],v)
                             if iv and iv["access"]:
                                 acctbl = preprocess_json_rule(iv["access"],self,v)
                                 acctype = acctbl["type"]
