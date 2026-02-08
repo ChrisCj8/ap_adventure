@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool, OptionDict
+from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool, OptionDict, OptionList
 from schema import Schema, Or
 
 class Skill(Choice):
@@ -50,9 +50,27 @@ class ItemCherryPick(OptionDict):
     schema = singlepickschema
 
 class ItemBlacklist(OptionDict):
-    """This Option allows you to cherrypick single items from an Item Set."""
+    """This Option allows you to blacklist single items from an Item Set."""
     default = {}
     schema = singlepickschema
+
+class AmmoMerge(OptionList):
+    """This Option allows you to merge ammo types together, so picking up 
+    ammo for one type will also give you ammo of the merged type and 
+    weapons using merged ammo types will also be considered in logic
+    if that type is available.
+
+    This is mainly intended to be used for HL:S Weapons, which use 
+    separate ammo types from their HL2 counterparts.
+
+    A list of all of GMods default ammo types can be found here:
+    https://wiki.facepunch.com/gmod/Default_Ammo_Types"""
+    default = [
+        ["Pistol","9mmRound"],
+        ["357","357Round"],
+        ["Grenade","GrenadeHL1"],
+        ["RPG_Round","RPG_Rocket"],
+    ]
 
 class BunnyHop(Choice):
     """GMods Sandbox gamemode (which this gamemode is derived off) normally clamps 
@@ -91,6 +109,7 @@ class GMADVGameOptions(PerGameCommonOptions):
     item_sets: ItemSets
     item_cherrypick: ItemCherryPick
     item_blacklist: ItemBlacklist
+    ammo_merge: AmmoMerge
     generate_puml: GeneratePUML
     write_debug: WriteDebug
     start_inventory_from_pool: StartInventoryPool

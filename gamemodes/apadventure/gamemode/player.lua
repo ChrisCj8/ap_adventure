@@ -116,6 +116,15 @@ function GM:PlayerLoadout(ply)
     return true
 end
 
+function GM:PlayerAmmoChanged(ply,ammoID,old,new)
+    ammodata = APADV_AMMOMERGE[ammoID]
+    if ammodata then
+        for k,v in ipairs(ammodata) do
+            ply:SetAmmo(new,v)
+        end
+    end
+end
+
 local plymeta = FindMetaTable("Player")
 
 plymeta.ApAdvCollector = true

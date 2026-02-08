@@ -225,6 +225,20 @@ local function OnRunID(packet)
 
         APADV_ENTRANCES = {}
 
+        local ammotbl = {}
+
+        local ammoID = game.GetAmmoID
+
+        for k,v in pairs(slotdata.ammomerge) do
+            local newdata = {}
+            for ik,iv in ipairs(v) do
+                newdata[ik] = ammoID(iv)
+            end
+            ammotbl[ammoID(k)] = newdata
+        end
+
+        APADV_AMMOMERGE = ammotbl
+
         for k,v in ipairs(slotdata.entrances) do
             local from = string.Explode(" - ",v[1])
             local to = string.Explode(" - ",v[2])
@@ -338,13 +352,21 @@ function APADV.SendLocation(lctn)
     return true
 end
 
-function APADV.SendMapLocation(lctn)
-    if !APADV_SLOT or !APADV_SLOT.Connected or !APADV_DATAPACK_LOCAL or !APADV_MAPGROUP then return false end
+function APADV.MapLocationStatus(lctn)
+    if !APADV_SLOT or !APADV_SLOT.FullData or !APADV_MAPGROUP then return end
     local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
     local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]   
-    if !ID then return false end
+    if !ID then return end
+    return APADV_SLOT.Locations[ID]
+end
+
+function APADV.SendMapLocation(lctn)
+    if !APADV_SLOT or !APADV_SLOT.FullData or !APADV_MAPGROUP then return end
+    local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
+    local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]
+    if !ID then return end
     APADV_SLOT:SendLocation(ID)
-    return true
+    return APADV_SLOT.Locations[ID]
 end
 
 function APADV.AddTracker(type,trackedID,hookID,method)

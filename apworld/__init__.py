@@ -347,6 +347,52 @@ class GMADVWorld(World):
         self.items_dontload = items_dontload
         self.items_to_load = items_to_load
 
+        ammomergeopt = list()
+        
+        for v in options.ammo_merge:
+            ammomergeopt.append(set(v))
+
+        unfinished = True
+        while unfinished:
+            unfinished = False
+            for v in ammomergeopt:
+                iunfinished = False
+                for iv in ammomergeopt:
+                    if v != iv and v.intersection(iv):
+                        v.update(iv)
+                        ammomergeopt.remove(iv)
+                        iunfinished = True
+                        break
+                if iunfinished:
+                    unfinished = True
+                    break
+        
+        self.debuglog(f"processed ammo merge options: {ammomergeopt}")
+
+        ammomergedict = dict()
+
+        for v in ammomergeopt:
+            for iv in v:
+                entry = v.copy()
+                entry.remove(iv)
+                ammomergedict[iv] = entry
+
+        self.debuglog(f"ammo merge dictionary: {ammomergedict}")
+
+        self.ammomerge_out = ammomergedict
+
+        ammomerge_int = dict()
+
+        for k,v in ammomergedict.items():
+            newset = set()
+            for iv in v:
+                newset.add("Ammo_"+iv)
+            ammomerge_int["Ammo_"+k] = newset
+
+        self.ammomerge = ammomerge_int
+
+                    
+
     def create_regions(self):
         menu = Region("Menu",self.player,self.multiworld)
         self.multiworld.regions.append(menu)
@@ -354,6 +400,8 @@ class GMADVWorld(World):
 
         self.debuglog(f"creating regions for {self.player_name}")
         startcandidates = list()
+
+        ammomerge = self.ammomerge
 
         mapitems = dict()
         entrs = dict()
@@ -384,7 +432,12 @@ class GMADVWorld(World):
                     newreg.onewayouts = dict()
                     newreg.twoways = dict()
                     if "cond" in v:
-                        newreg.conditions = set(v["cond"])
+                        conds = set()
+                        for iv in v["cond"]:
+                            conds.add(iv)
+                            if iv in ammomerge:
+                                conds.update(ammomerge[iv])
+                        newreg.conditions = conds
 
 
                     mapregs[k] = newreg
@@ -870,6 +923,7 @@ class GMADVWorld(World):
             "startmap":self.startpick.map.bspname,
             "startgroup":self.startpick.map.group,
             "startregion":self.startpick.regname,
+            "ammomerge":self.ammomerge_out,
         }
 
         return slotdata
