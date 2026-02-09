@@ -720,11 +720,12 @@ class GMADVWorld(World):
 
             for reg in reach:
                 for twowayname in reg.twoways.keys():
-                    if twowayname != trying and not (twowayname in unconnectedexits):
-                        exit_reach += 1
-                    if twowayname in deadends:
-                        self.debuglog(f"placing this would clear a dead end")
-                        deadendscleared += 1
+                    if twowayname != trying:
+                        if not twowayname in unconnectedexits:
+                            exit_reach += 1
+                        if twowayname in deadends:
+                            self.debuglog(f"placing this would clear a dead end")
+                            deadendscleared += 1
                 for exitname in reg.onewayouts.keys():
                     if not (exitname in unconnectedexits):
                         exit_reach += 1
