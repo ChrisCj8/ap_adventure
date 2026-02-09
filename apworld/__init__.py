@@ -164,7 +164,7 @@ class GMADVWorld(World):
                     if "capab" in info:
                         capab = info["capab"]
                         if self.usedcapabs.intersection(capab):
-                            flags = ItemClassification.progression
+                            return ItemClassification.progression
                         else:
                             flags = ItemClassification.useful
                     if not flags == ItemClassification.progression and "condcapab" in info:
@@ -174,17 +174,16 @@ class GMADVWorld(World):
                         condcapab = info["condcapab"]
                         for k,v in condcapab.items():
                             if k in self.regconds and self.usedcapabs.intersection(v):
-                                flags = ItemClassification.progression
-                                break                        
+                                return ItemClassification.progression
                 else:
                     return None
             else:
                 match data[0]:
                     case "Bunnyhop":
                         if self.bhop_logic:
-                            flags = ItemClassification.progression
+                            return ItemClassification.progression
                         else:
-                            flags = ItemClassification.useful
+                            return ItemClassification.useful
         return flags
     
     def create_item(self, name):
