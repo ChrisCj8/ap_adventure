@@ -24,14 +24,6 @@ class CapabTblEntry:
         self.name = name
         self.capabilities = set(capabs)
 
-class connectiongroup:
-    def __init__(self,members,entr,exit,twoway):
-        self.members = members
-        self.entr = entr
-        self.exit = exit
-        self.twoway = twoway
-        self.just_connected = False
-
 class SetItem:
     def __init__(self,id,name,idef):
         self.id = id
