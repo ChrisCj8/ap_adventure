@@ -177,3 +177,24 @@ function APADV.LoadCfg(group)
     end
 
 end
+
+concommand.Add("apadventure_loadcfg",function(ply,cmd,args)
+    if !(ply:IsListenServerHost() or ply:IsUserGroup("superadmin")) then return end
+    local gr = args[1]
+
+    if gr != nil then
+        if gr == "" then
+            gr = nil
+        else
+            local grdir = "apadventure/"..gr.."/"
+            if !file.Exists(grdir.."group.json","DATA") then print("group \""..gr.."\" does not exist!") return end
+            local mapdir = grdir..game.GetMap()
+            if !file.Exists(mapdir.."/cl.json","DATA") or !file.Exists(mapdir.."/sv.json","DATA") then 
+                print("group \""..gr.."\" does not have a config for this map!") 
+                return 
+            end
+        end
+    end
+    
+    APADV.LoadCfg(gr)
+end,nil,"Loads a config for this map by its group name, if it exists. If a config has already been loaded then this command can be used without any arguments to reload the current config.")
