@@ -50,6 +50,18 @@ if CLIENT then
                 menu:AddOption("#tool.apadventure_delete.copymenu.name",function() 
                     SetClipboardText(ln:GetValue(3))
                 end)
+                menu:AddSpacer()
+                menu:AddOption("#tool.apadventure_delete.copymenu.id2name",function() 
+                    for k,v in ipairs(cIdList:GetSelected()) do
+                        local name = v:GetValue(3)
+                        if name != "" then
+                            net.Start("APAdvDelNameMark") 
+                                net.WriteString(name)
+                                net.WriteBool(true)
+                            net.SendToServer()
+                        end
+                    end
+                end)
                 menu:SetPos(self:CursorPos())
             end
 
