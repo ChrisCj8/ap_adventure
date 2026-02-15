@@ -12,7 +12,7 @@ apAdventure.EditCfg = apAdventure.EditCfg or {
 }
 
 local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHIVE+FCVAR_REPLICATED,
-    "When enabled, config .json files will generated with the prettyprint parameter enabled, which makes them more readable at the cost of taking slightly more storage space",
+    "When enabled, config .json files will be saved with the prettyprint parameter enabled, making them more readable at the cost of increasing file size",
     0,1)
 
 list.Set("DesktopWindows","apAdventureEditor",{
