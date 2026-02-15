@@ -106,6 +106,12 @@ local drawerconv = CreateClientConVar("apadventure_editor_help_drawer_state",1,t
 
 local mapsettings = apAdventure.CfgSettings
 
+local mapsettingslookup = {}
+
+for k,v in ipairs(mapsettings) do
+    mapsettingslookup[v.name] = v
+end
+
 local numwdefaultcolor 
 local checkboxdefaultcolor = color_black
 local lightblue = Color(100,167,255)
@@ -138,6 +144,11 @@ return function(window)
 
     local grouptbl = editcfg.GroupInfo
     local infotbl = editcfg.Info
+
+    local groupupdate = {}
+    local groupupdatecount = 0
+    local mapupdate = {}
+    local mapupdatecount = 0
 
     local infoinputs = {}
 
@@ -179,6 +190,11 @@ return function(window)
                     oldvalue = val
                 end
                 numw:SetValue(grouptbl[valname] or default)
+                groupupdatecount = groupupdatecount + 1
+                groupupdate[groupupdatecount] = {
+                    p = numw,
+                    n = valname
+                }
                 groupruleselements = groupruleselements + 1
                 grouprulesplacegroups[groupruleselements] = {
                     pnls = {
@@ -205,6 +221,11 @@ return function(window)
                     oldval = val
                 end
                 check:SetValue(grouptbl[valname] or default)
+                groupupdatecount = groupupdatecount + 1
+                groupupdate[groupupdatecount] = {
+                    p = check,
+                    n = valname
+                }
                 groupruleselements = groupruleselements + 1
                 grouprulesplacegroups[groupruleselements] = {
                     pnls = {
@@ -305,6 +326,11 @@ return function(window)
                     end
                 end
                 numw:SetValue(infotbl[valname] or grouptbl[valname] or default)
+                mapupdatecount = mapupdatecount + 1
+                mapupdate[mapupdatecount] = {
+                    p = numw,
+                    n = valname
+                }
                 mapruleselements = mapruleselements + 1
                 maprulesplacegroups[mapruleselements] = {
                     pnls = {
@@ -332,6 +358,11 @@ return function(window)
                     end
                 end
                 check:SetValue(infotbl[valname] or grouptbl[valname] or default)
+                mapupdatecount = mapupdatecount + 1
+                mapupdate[mapupdatecount] = {
+                    p = check,
+                    n = valname
+                }
                 mapruleselements = mapruleselements + 1
                 maprulesplacegroups[mapruleselements] = {
                     pnls = {
@@ -385,7 +416,7 @@ return function(window)
     newtab = tabs:AddSheet("Regions",regpnl)
     newtab.Tab.guide = "regiontab"
 
-        local regtbl = editcfg.Regions
+        local regtbl
 
         local regnamein = vgui.Create("DTextEntry",regpnl)
         regnamein:SetPos(5,5)
@@ -396,10 +427,6 @@ return function(window)
 
         local regaddbtn = ImageButton(regpnl,"icon16/add.png")
         local regdelbtn = ImageButton(regpnl,"icon16/delete.png")
-
-        for k,v in pairs(regtbl) do
-            local ln = reglist:AddLine(k)
-        end
 
         local regeditpnl = vgui.Create("DScrollPanel",regpnl)
         regeditpnl:SetPos(160,30)
@@ -460,7 +487,7 @@ return function(window)
                 end
 
                 function ammolist:UpdateAmmo()
-                    for k,v in ipairs(self:GetLines()) do
+                    for k,v in pairs(self:GetLines()) do
                         self:RemoveLine(v:GetID())
                     end
                     local ammotbl = regeditpnl.curreg.ammo
@@ -518,6 +545,18 @@ return function(window)
             regeditpnl:ShowContents(true)
         end
 
+        function reglist:LoadInfo(tbl)
+            regtbl = tbl
+            for k,v in pairs(self:GetLines()) do
+                self:RemoveLine(v:GetID())
+            end
+            for k,v in pairs(tbl) do
+                self:AddLine(k)
+            end
+            regeditpnl:ShowContents(false)
+        end
+        reglist:LoadInfo(editcfg.Regions)
+
         function regpnl:PerformLayout(w,h)
             regnamein:SetSize(w-50,22)
             regaddbtn:SetPos(w-42,8)
@@ -530,7 +569,7 @@ return function(window)
     newtab = tabs:AddSheet("Connections",connpnl)
     newtab.Tab.guide = "connecttab"
     
-        local conntbl = editcfg.Connections
+        local conntbl
 
         local curcon = false
         local curconline = false
@@ -540,12 +579,6 @@ return function(window)
         connlist:AddColumn("From")
         connlist:AddColumn("To")
         connlist:AddColumn("Two-Way")
-
-        for k,v in pairs(conntbl) do
-            for ik, iv in pairs(v) do
-                connlist:AddLine(k,ik,bool2yn[iv.twoway])
-            end
-        end
 
         local connfromin = vgui.Create("DTextEntry",connpnl)
         connfromin:SetPos(5,5)
@@ -625,6 +658,20 @@ return function(window)
             coneditpnl:ShowContents(true)
         end
 
+        function connlist:LoadInfo(tbl)
+            conntbl = tbl
+            for k,v in pairs(self:GetLines()) do
+                self:RemoveLine(v:GetID())
+            end
+            for k,v in pairs(tbl) do
+                for ik, iv in pairs(v) do
+                    self:AddLine(k,ik,bool2yn[iv.twoway])
+                end
+            end
+            coneditpnl:ShowContents(false)
+        end
+        connlist:LoadInfo(editcfg.Connections)
+
         function connpnl:PerformLayout(w,h)
             connfromin:SetSize((w-55)/2,22)
 
@@ -645,7 +692,7 @@ return function(window)
     newtab = tabs:AddSheet("Map Items",mapitempnl)
     newtab.Tab.guide = "mapitemtab"
 
-        local mapitemtbl = editcfg.MapItems
+        local mapitemtbl
 
         local mapitemnamein = vgui.Create("DTextEntry",mapitempnl)
         mapitemnamein:SetPos(5,5)
@@ -658,10 +705,17 @@ return function(window)
         mapitemlist:SetPos(5,30)
         mapitemlist:AddColumn("Items")
 
-        for k,v in pairs(mapitemtbl) do
-            local ln = mapitemlist:AddLine(k)
-            ln.itemtbl = v
+        function mapitemlist:LoadMapItems(tbl)
+            mapitemtbl = tbl
+            for k,v in pairs(self:GetLines()) do 
+                self:RemoveLine(v:GetID())
+            end
+            for k,v in pairs(tbl) do
+                local ln = self:AddLine(k)
+                ln.itemtbl = v
+            end
         end
+        mapitemlist:LoadMapItems(editcfg.MapItems)
 
         local mapitemeditpnl = vgui.Create("DPanel",mapitempnl)
         mapitemeditpnl:SetPos(160,30)
@@ -781,7 +835,32 @@ return function(window)
 
             mapitemeditpnl:SetSize(w-165,h-35)
         end
-    
+
+    function window:UpdateInfo(cfg)
+        editcfg = cfg
+
+        grouptbl = cfg.GroupInfo
+
+        for k,v in ipairs(groupupdate) do
+            local name = v.n
+            local ruleinfo = mapsettingslookup[name]
+            v.p:SetValue(grouptbl[name] or ruleinfo.default)
+        end
+
+        infotbl = cfg.Info
+
+        for k,v in ipairs(mapupdate) do
+            local name = v.n
+            local ruleinfo = mapsettingslookup[name]
+            v.p:SetValue(infotbl[name] or grouptbl[name] or ruleinfo.default)
+        end
+
+        reglist:LoadInfo(cfg.Regions)
+        connlist:LoadInfo(cfg.Connections)
+        mapitemlist:LoadMapItems(cfg.MapItems)
+
+    end
+
     local helpdrawer = vgui.Create("DDrawer",window)
     helpdrawer:SetOpenSize(200)
     if drawerconv:GetBool() then
