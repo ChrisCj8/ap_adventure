@@ -11,6 +11,7 @@ return function()
 
     function grouplist:DoDoubleClick(id,pnl)
         RunConsoleCommand("apadventure_editor_loadcfg",pnl:GetValue(1))
+        window:Remove()
     end
 
     local oldlayout = window.PerformLayout
