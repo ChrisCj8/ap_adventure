@@ -40,7 +40,7 @@ if CLIENT then
             cIdList:ProcessDelMark()
 
             function cIdList:OnRowRightClick(_,ln)
-                local menu = vgui.Create("DMenu",self)
+                local menu = vgui.Create("DMenu")
                 menu:AddOption("#tool.apadventure_delete.copymenu.id",function() 
                     SetClipboardText(ln:GetValue(1))
                 end)
@@ -62,7 +62,8 @@ if CLIENT then
                         end
                     end
                 end)
-                menu:SetPos(self:CursorPos())
+                menu:SetPos(input.GetCursorPos())
+                menu:MakePopup()
             end
 
             local iddelbtn = vgui.Create("DButton",idlistcontainer)
@@ -130,11 +131,12 @@ if CLIENT then
             namelist:ProcessDelMark()
 
             function namelist:OnRowRightClick(_,ln)
-                local menu = vgui.Create("DMenu",self)
+                local menu = vgui.Create("DMenu")
                 menu:AddOption("#tool.apadventure_delete.copymenu.name",function() 
                     SetClipboardText(ln:GetValue(1))
                 end)
-                menu:SetPos(self:CursorPos())
+                menu:SetPos(input.GetCursorPos())
+                menu:MakePopup()
             end
 
             local namedelbtn = vgui.Create("DButton",namelistcontainer)
