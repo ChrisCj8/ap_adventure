@@ -68,6 +68,9 @@ net.Receive("APAdvActiveCfgClear",function()
             editcfg.Info = tbl.info or {}
          end
     end
+    if IsValid(apAdventure.EditWindow) then
+        apAdventure.EditWindow:UpdateInfo(editcfg)
+    end
     timer.Start("APAdvUpdateDelMark")
     timer.Start("APAdvUpdateDelNameMark")
 end)
