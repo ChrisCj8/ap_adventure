@@ -613,20 +613,23 @@ return function(window)
                 conaccessedit:SetSize(w-10,300)
             end
 
-        function connaddbtn:DoClick()
-            local from = connfromin:GetValue()
-            local to = conntoin:GetValue()
-
+        local function newconn(from,to)
             conntbl[from] = conntbl[from] or {}
 
             if conntbl[from][to] then return end
 
-            conntbl[from][to] = {
-                twoway = false,
-            }
+            local tbl = {twoway = false}
+
+            conntbl[from][to] = tbl
 
             connlist:AddLine(from,to,bool2yn[false])
             coneditpnl:ShowContents(true)
+
+            return tbl
+        end
+
+        function connaddbtn:DoClick()
+            newconn(connfromin:GetValue(),conntoin:GetValue())
         end
 
         function conndelbtn:DoClick()
@@ -656,6 +659,31 @@ return function(window)
             contwowaycheck:SetChecked(curcon.twoway)
             
             coneditpnl:ShowContents(true)
+        end
+
+        function connlist:OnRowRightClick(id,pnl)
+            local menu = vgui.Create("DMenu")
+            menu:AddOption("#apadventure.editor.conn.rclick.copyfrom",function()
+                SetClipboardText(pnl:GetValue(1))
+            end)
+            menu:AddOption("#apadventure.editor.conn.rclick.copyto",function()
+                SetClipboardText(pnl:GetValue(2))
+            end)
+            menu:AddSpacer()
+            menu:AddOption("#apadventure.editor.conn.rclick.invertdupe",function()
+                local from = pnl:GetValue(2)
+                local to = pnl:GetValue(1)
+                local tbl = newconn(from,to)
+                if tbl then
+                    local src = conntbl[to][from]
+                    tbl.access = table.Copy(src.access)
+                    tbl.twoway = false
+                    src.twoway = false
+                    pnl:SetValue(3,"no")
+                end
+            end)
+            menu:SetPos(input.GetCursorPos())
+            menu:MakePopup()
         end
 
         function connlist:LoadInfo(tbl)
