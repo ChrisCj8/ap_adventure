@@ -887,6 +887,9 @@ return function(window)
         connlist:LoadInfo(cfg.Connections)
         mapitemlist:LoadMapItems(cfg.MapItems)
 
+        reloadoption:SetEnabled(true)
+        saveoption:SetEnabled(true)
+
     end
 
     local helpdrawer = vgui.Create("DDrawer",window)
