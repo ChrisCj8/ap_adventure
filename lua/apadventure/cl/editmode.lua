@@ -21,6 +21,8 @@ list.Set("DesktopWindows","apAdventureEditor",{
     width = 800,
     height = 500,
     init = function(icon, window)
+        if IsValid(apAdventure.EditWindow) then apAdventure.EditWindow:Remove() end
+        apAdventure.EditWindow = window
         include("apadventure/ui/cmenu.lua")(window)
     end
 })
