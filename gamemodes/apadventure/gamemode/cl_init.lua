@@ -41,3 +41,9 @@ net.Receive("ApAdvConnectionState", function()
     APADV_NOCONNECTWARN:SetVisible(!connected)
     APADV_NOCONNECTWARN2:SetVisible(!connected)
 end)
+
+local sv_cheats = GetConVar("sv_cheats")
+
+function GM:SpawnMenuOpen()
+    return sv_cheats:GetBool()
+end

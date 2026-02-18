@@ -7,6 +7,7 @@ ApAdvPly = ApAdvPly or {}
 util.AddNetworkString("apAdv_BHopUpdate")
 
 local BASEGM = baseclass.Get("gamemode_base")
+local SBOX = baseclass.Get("gamemode_sandbox")
 
 local allowedcolgroups = {
     [COLLISION_GROUP_NONE] = true,
@@ -122,6 +123,28 @@ function GM:PlayerAmmoChanged(ply,ammoID,old,new)
         for k,v in ipairs(ammodata) do
             ply:SetAmmo(new,v)
         end
+    end
+end
+
+local sv_cheats = GetConVar("sv_cheats")
+
+local permhooks = {
+    "PlayerSpawnSENT",
+    "PlayerSpawnEffect",
+    "PlayerSpawnNPC",
+    "PlayerSpawnObject",
+    "PlayerSpawnProp",
+    "PlayerSpawnRagdoll",
+    "PlayerSpawnSWEP",
+    "PlayerSpawnVehicle",
+    "PlayerGiveSWEP"
+}
+
+for k,v in ipairs(permhooks) do
+    local ogfunc = SBOX[v]
+    GM[v] = function (self,ply,...)
+        if !sv_cheats:GetBool() then return false end
+        return ogfunc(self,ply,...)
     end
 end
 
