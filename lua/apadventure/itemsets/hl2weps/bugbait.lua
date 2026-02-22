@@ -18,7 +18,7 @@ function ITEM.Handle(iList)
     game.SetGlobalState("antlion_allied",val and 1 or 0)
     APADV.AntlionFriendly = val
     if isfunction(APADV_CFGLUA.OnAntlionStatusUpdate) then
-        APADV_CFGLUA:OnAntlionStatusUpdate(val)
+        ProtectedCall(APADV_CFGLUA.OnAntlionStatusUpdate,APADV_CFGLUA,val)
     end
 end
 
