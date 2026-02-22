@@ -19,6 +19,11 @@ local function BitFlipper(inval,flip,onoff)
     return inval
 end
 
+local function ErrorNotif(text,time)
+    notification.AddLegacy("#apadventure.editor.error."..text,NOTIFY_ERROR,time or 3)
+    surface.PlaySound("buttons/button10.wav")
+end
+
 local function ShowContents(self,show)
     if show == self.ContentsVisible then return end
     for k,v in ipairs(self:GetChildren()) do
@@ -516,7 +521,9 @@ return function(window)
         
         function regaddbtn:DoClick()
             local name = regnamein:GetValue()
-            if name == "" then return end
+            if name == "" then ErrorNotif("noregname") return end
+            if name[1] == " " then ErrorNotif("regleadspace") return end
+            if name[#name] == " " then ErrorNotif("regtrailspace") return end
             if !regtbl[name] then
                 regtbl[name] = {
                     ammo = {},
@@ -629,7 +636,15 @@ return function(window)
         end
 
         function connaddbtn:DoClick()
-            newconn(connfromin:GetValue(),conntoin:GetValue())
+            local from = connfromin:GetValue()
+            local to = conntoin:GetValue()
+            if from == "" then ErrorNotif("nosrcname") return end
+            if from[1] == " " then ErrorNotif("srcleadspace") return end
+            if from[#from] == " " then ErrorNotif("srctrailspace") return end
+            if to == "" then ErrorNotif("notgtname") return end
+            if to[1] == " " then ErrorNotif("tgtleadspace") return end
+            if to[#to] == " " then ErrorNotif("tgttrailspace") return end
+            newconn(from,to)
         end
 
         function conndelbtn:DoClick()
