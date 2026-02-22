@@ -508,7 +508,7 @@ return function(window)
                     ammoaddbtn:SetPos(w-26-18,28)
                     ammodelbtn:SetPos(w-26,28)
                     ammoselect:SetSize(w-52,22)
-                    ammolist:SetSize(w-10,400)
+                    ammolist:SetSize(w-10,250)
                 end
 
             regeditpnl:ShowContents(false)
