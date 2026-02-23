@@ -70,33 +70,6 @@ return function(parent,targetheight)
     end
 
     local delbtn = ImageButton(container,"icon16/delete.png")
-    function delbtn:DoClick()
-        local curnode = accesstree:GetSelectedItem()
-        if !IsValid(curnode) then return end
-        local parentnode = curnode:GetParentNode()
-        if parentnode:IsRootNode() then
-            curnode:Remove()
-            basetbl[basekey] = nil
-        else
-            local parenttbl = parentnode.tbl
-            local newtbl = {}
-            local curnodekey = curnode.tblkey
-            i = 1
-            for k,v in ipairs(parenttbl.nodes) do
-                if k != curnodekey then
-                    newtbl[i] = v 
-                    i = i + 1
-                end
-            end
-            parentnode.tbl.nodes = newtbl
-            for k,v in ipairs(parentnode:GetChildNodes()) do
-                v:Remove()
-            end
-            addnodes(parentnode,newtbl)
-            parentnode:ExpandRecurse(true)
-        end
-    end
-
     local cutbtn = ImageButton(container,"icon16/cut.png")
     local copybtn = ImageButton(container,"icon16/page_white_copy.png")
     local pastebtn = ImageButton(container,"icon16/paste_plain.png")
@@ -140,12 +113,8 @@ return function(parent,targetheight)
         end
     end
 
-    function cutbtn:DoClick()
-        copybtn:DoClick()
-        delbtn:DoClick()
-    end
-
     local nodepnl = vgui.Create("DPanel",container)
+    local nodepnloldlayout = nodepnl.PerformLayout
     nodepnl:SetPos(210,55)
 
     function accesstree:OnNodeSelected(node)
@@ -158,6 +127,42 @@ return function(parent,targetheight)
             pnlfunc(nodepnl)
         end
     end
+
+    function delbtn:DoClick()
+        local curnode = accesstree:GetSelectedItem()
+        if !IsValid(curnode) then return end
+        local parentnode = curnode:GetParentNode()
+        if parentnode:IsRootNode() then
+            curnode:Remove()
+            basetbl[basekey] = nil
+        else
+            local parenttbl = parentnode.tbl
+            local newtbl = {}
+            local curnodekey = curnode.tblkey
+            i = 1
+            for k,v in ipairs(parenttbl.nodes) do
+                if k != curnodekey then
+                    newtbl[i] = v 
+                    i = i + 1
+                end
+            end
+            parentnode.tbl.nodes = newtbl
+            for k,v in ipairs(parentnode:GetChildNodes()) do
+                v:Remove()
+            end
+            addnodes(parentnode,newtbl)
+            parentnode:ExpandRecurse(true)
+        end
+        nodepnl.PerformLayout = nodepnloldlayout
+        nodepnl:Clear()
+    end
+
+    function cutbtn:DoClick()
+        copybtn:DoClick()
+        delbtn:DoClick()
+    end
+
+
 
     local oldlayout = container.PerformLayout
     function container:PerformLayout(w,h)
