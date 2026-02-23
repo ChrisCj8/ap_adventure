@@ -317,7 +317,23 @@ function apAdventure.LoadCfg(gname,dodelete)
     game.CleanUpMap()
     apAdventure.LoadClientTbl(gname)
 
-    if !json then return end
+    if !json then
+        apAdventure.SetCfgTbl({
+            Saved = {},
+            DelMark = {},
+            DelName = {},
+            Group = gname,
+            Regions = {},
+            ConnectionsInt = {},
+            ConnectionsExt = {},
+            LocationAccess = {},
+            EntrAccess = {},
+            ExitAccess = {},
+        })
+        return 
+    end
+
+
     local gtbl = util.JSONToTable(json)
 
     if (gtbl.ver or "old") != apAdventure.CfgVers.sv then
