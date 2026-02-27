@@ -87,7 +87,8 @@ if CLIENT then
             local idmarkbtn = vgui.Create("DButton",idlistcontainer)
             idmarkbtn:SetText("#tool.apadventure_delete.idlist.markbtn")
             idmarkbtn:SetPos(90,357)
-            function idmarkbtn:DoClick()
+
+            local function addidmark()
                 local id = idmarkin:GetFloat()
                 if !id or id < 1 then 
                     surface.PlaySound("buttons/button10.wav")
@@ -99,7 +100,9 @@ if CLIENT then
                     net.WriteBool(true)
                 net.SendToServer()
             end
-            
+
+            idmarkbtn.DoClick = addidmark
+            idmarkin.OnEnter = addidmark
 
             local oldlayout = idlistcontainer.PerformLayout
             function idlistcontainer:PerformLayout(w,h)
@@ -159,7 +162,8 @@ if CLIENT then
             namemarkbtn:SetText("#tool.apadventure_delete.namelist.markbtn")
             namemarkbtn:SetPos(90,357)
             namemarkbtn:SetSize(150,22)
-            function namemarkbtn:DoClick()
+
+            local function addnamemark()
                 local name = namemarkin:GetValue()
                 if name == "" then 
                     surface.PlaySound("buttons/button10.wav")
@@ -170,6 +174,9 @@ if CLIENT then
                     net.WriteBool(true)
                 net.SendToServer()
             end
+
+            namemarkbtn.DoClick = addnamemark
+            namemarkin.OnEnter = addnamemark
 
             local oldlayout = namelistcontainer.PerformLayout
             function namelistcontainer:PerformLayout(w,h)
