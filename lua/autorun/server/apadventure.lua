@@ -30,6 +30,7 @@ end
 util.AddNetworkString("APAdvAreaPortalInfo")
 util.AddNetworkString("APAdvSaveManageCmd")
 util.AddNetworkString("APAdvSaveManageData")
+util.AddNetworkString("APAdvNotif")
 
 apAdventure.AreaPortalInfo = apAdventure.AreaPortalInfo or {}
 local areaportalinfo = apAdventure.AreaPortalInfo
@@ -165,3 +166,24 @@ net.Receive("APAdvSaveManageCmd",function(_,ply)
     }
     cmd[net.ReadString()]()
 end)
+
+function apAdventure.SendNotification(text,type,len,snd,ply)
+    if !type then
+        type = 0
+    elseif type % 1 != 0 or type > 4 or type < 0 then 
+        ErrorNoHalt("Invalid Notification Type "..type.." passed to SendNotification")
+    end
+    print(text,type,len,snd,ply)
+    net.Start("ApAdvNotif")
+        net.WriteUInt(type,3)
+        net.WriteString(text)
+        net.WriteFloat(len or 3)
+        net.WriteString(snd or "")
+    if !ply then
+        net.Broadcast()
+    elseif isentity(ply) and ply:IsPlayer() or isentity(ply[1]) and ply[1]:IsPlayer() or type(ply) == "CRecipientFilter" then
+        net.Send(ply)
+    else
+        net.Broadcast()
+    end
+end
