@@ -40,10 +40,9 @@ function ENT:StartTouch(ent)
     if sent then self:Remove() end
 end
 
---removing old location entity table entries might be a little overkill since
---there's not really any scenario in which they should exist but whatever
-function ENT:SetupLocation(lctnname)
+function ENT:RemoveLocTblEntry()
     local oldloc = self.LocationName
+    if !oldloc then return end
     local oldloctbl = APADV_LOCENTS[oldloc] 
     if oldloctbl and oldloctbl[self] then
         oldloctbl[self] = nil
@@ -51,8 +50,17 @@ function ENT:SetupLocation(lctnname)
             APADV_LOCENTS[oldloc] = nil
         end
     end
+end
 
+function ENT:SetupLocation(lctnname)
+    --removing old location entity table entries might be a little overkill since
+    --there's not really any scenario in which they should exist but whatever
+    self:RemoveLocTblEntry()
     self.LocationName = lctnname
     APADV_LOCENTS[lctnname] = APADV_LOCENTS[lctnname] or {}
     APADV_LOCENTS[lctnname][self] = true
+end
+
+function ENT:OnRemove()
+    self:RemoveLocTblEntry()
 end
