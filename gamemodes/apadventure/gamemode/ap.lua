@@ -353,10 +353,17 @@ function APADV.SendLocation(lctn)
 end
 
 function APADV.MapLocationStatus(lctn)
-    if !APADV_SLOT or !APADV_SLOT.FullData or !APADV_MAPGROUP then return end
+    if !APADV_SLOT or !APADV_SLOT.FullData or !APADV_MAPGROUP then
+        ErrorNoHalt("Tried to check the Status of a Location before the connection was established.")
+        return
+    end
     local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
-    local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]   
-    if !ID then return end
+    local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]
+    if !ID then
+        ErrorNoHalt("Location "..locname.." could not be matched to an ID.")
+        return
+    end
+    lastlocationtable = table.Copy(APADV_SLOT.Locations)
     return APADV_SLOT.Locations[ID]
 end
 
