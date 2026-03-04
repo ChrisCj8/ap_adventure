@@ -145,19 +145,30 @@ function APADV.LoadCfg(group)
         APADV.MapItemTbl = clcfg.item
     end
 
+    APADV_UNCHECKED_LOCS = {}
+    local uncheckedloccnt = 0
+
     for k,v in pairs(cfg.lctn) do
         if !v.dummy then
             local locname = group .. " - " .. map .. " - " .. v.name
             -- prevents already checked locations from being placed, but this only works if we're connected when the config is loaded
             -- so this doesn't work all the time since the gamemode doesn't wait for the slot to reconnect when doing a map transition
-            if !locnametoid or !loclist[locnametoid[locname]] then 
+            if !locnametoid or loclist[locnametoid[locname]] == false then 
                 local loc = ents.Create("apadventure_location")
                 loc:SetPos(v.pos)
                 loc:SetAngles(v.ang)
                 loc:SetupLocation(locname)
                 loc:Spawn()
+                if !locnametoid then
+                    uncheckedloccnt = uncheckedloccnt + 1
+                    APADV_UNCHECKED_LOCS[uncheckedloccnt] = loc
+                end
             end
         end
+    end
+
+    if !APADV_UNCHECKED_LOCS[1] then
+        APADV_UNCHECKED_LOCS = nil
     end
 
     for k,v in player.Iterator() do

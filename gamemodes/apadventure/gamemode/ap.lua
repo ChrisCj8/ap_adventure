@@ -300,6 +300,22 @@ local function ApAdvDPLoad(slot,datapackage)
 end
 
 local function ApAdvFullData(slot)
+    if APADV_UNCHECKED_LOCS then
+        local loclist = APADV_SLOT.Locations
+        local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+        for k,v in ipairs(APADV_UNCHECKED_LOCS) do
+            if IsValid(v) then
+                local locid = locnametoid[v.LocationName]
+                if !locid then
+                    ErrorNoHalt("Map Config contained a Location that was not in the DataPackage. Was this run generated with the same config as the one that's being used by GMod?")
+                    v:Remove()
+                elseif loclist[locid] != false then
+                    v:Remove()
+                end
+            end
+        end
+        APADV_UNCHECKED_LOCS = nil
+    end
     if isfunction(APADV_CFGLUA.OnFullConnect) then
         ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
         APADV_CFGLUA.OnFullConnect = nil
