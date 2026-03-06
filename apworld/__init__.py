@@ -122,7 +122,7 @@ class GMADVWorld(World):
         self.condcapabtbl = dict()
         self.warnings = list()
         self.connectiongroups = set()
-        self.entranceinfo = list()
+        self.connectinfo = dict()
         self.rando_entrances = dict()
         self.item_table = self.base_item_table.copy()
         self.usedcapabs = set()
@@ -451,7 +451,7 @@ class GMADVWorld(World):
                             access = None
                     reg.has_entr = True
                     name = reg.name+" - "+k
-                    entrdata = (reg,access)
+                    entrdata = (k,reg,access)
                     entrs[name] = entrdata
                     reg.onewayins[name] = entrdata
                     self.debuglog("adding entrace "+k+" to "+v["reg"])
@@ -469,12 +469,12 @@ class GMADVWorld(World):
                     reg.has_exit = True
                     name = reg.name+" - "+k
                     if name in reg.onewayins:
-                        newdata = (reg,reg.onewayins[name][1],access)
+                        newdata = (k,reg,reg.onewayins[name][2],access)
                         reg.twoways[name] = newdata
                         entrs[name] = newdata
                         del reg.onewayins[name]
                     else:
-                        reg.onewayouts[name] = (reg,access)
+                        reg.onewayouts[name] = (k,reg,access)
 
                 for k,v in map.internalConnections.items():
                     if not k in mapregs:
@@ -647,6 +647,25 @@ class GMADVWorld(World):
             return lambda state, acctbl=exit_acctbl, world=self, region=exit_reg: eval_json_rule(acctbl,state,world,region)
         return None
 
+    def add_connectinfo(self,src_reg,src_name,tgt_reg,tgt_name):
+        cinfo = self.connectinfo
+        if not src_reg.mapgroup in cinfo:
+            gtbl = dict()
+            cinfo[src_reg.mapgroup] = gtbl
+        else:
+            gtbl = cinfo[src_reg.mapgroup]
+        if not src_reg.mapname in gtbl:
+            mtbl = dict()
+            gtbl[src_reg.mapname] = mtbl
+        else:
+            mtbl = gtbl[src_reg.mapname]
+
+        mtbl[src_name] = {
+            "group": tgt_reg.mapgroup,
+            "map": tgt_reg.mapname,
+            "entr": tgt_name,
+        }
+
     def connect_entrances(self):
 
         rand = self.random
@@ -700,7 +719,7 @@ class GMADVWorld(World):
                                         their config selections probably contain too many dead ends""")
             trying = rand.choice(list(untriedentrs))
             trying_data = unplacedentrs[trying]
-            trying_reg = trying_data[0]
+            trying_reg = trying_data[1]
 
             untriedentrs.remove(trying)
             reach = reachtest({trying_reg},set())
@@ -740,23 +759,23 @@ class GMADVWorld(World):
                 if twoway and unconnectedtwoways:
                     target_name = rand.choice(list(unconnectedtwoways.keys()))
                     target_data = unconnectedtwoways[target_name]
-                    target_reg = target_data[0]
+                    target_reg = target_data[1]
                     del unconnectedtwoways[target_name]
                     connectedtwoways.add(target_name)
                     connectedtwoways.add(trying)
                     self.debuglog(f"trying to connect {trying_reg.name} and {target_reg.name}")
-                    targetentracctbl = target_data[1]
-                    targetexitacctbl = target_data[2]
-                    tryingexitacctbl = trying_data[2]
+                    targetentracctbl = target_data[2]
+                    targetexitacctbl = target_data[3]
+                    tryingexitacctbl = trying_data[3]
                     trying_reg.connect(target_reg,f"{trying} -> {target_name}",
                         self.make_intermap_rule(target_reg,targetentracctbl,trying_reg,tryingexitacctbl))
                     
-                    self.entranceinfo.append((trying,target_name))
+                    self.add_connectinfo(trying_reg,trying_data[0],target_reg,target_data[0])
                 elif unconnectedexits:
                     target_name = rand.choice(list(unconnectedexits.keys()))
                     target_data = unconnectedexits[target_name]
                     del unconnectedexits[target_name]
-                    target_reg = target_data[0]
+                    target_reg = target_data[1]
                     connectedexits.add(target_name)
                     if twoway:
                         connectedtwoways.add(trying)
@@ -765,11 +784,11 @@ class GMADVWorld(World):
                     continue
 
                 self.debuglog(f"trying to connect {target_reg.name} and {trying_reg.name}")
-                entracctbl = trying_data[1]
+                entracctbl = trying_data[2]
                 
                 target_reg.connect(trying_reg,f"{target_name} -> {trying}",
                     self.make_intermap_rule(trying_reg,entracctbl,target_reg,targetexitacctbl))
-                self.entranceinfo.append((target_name,trying))
+                self.add_connectinfo(target_reg,target_data[0],trying_reg,trying_data[0])
                 available_exits = len(unconnectedtwoways) + len(unconnectedexits)
                 self.debuglog(f"available exits before checking new reachables: {available_exits}")
                 del unplacedentrs[trying]
@@ -829,15 +848,15 @@ class GMADVWorld(World):
             data_a = unconnectedtwoways[key1]
             data_b = unconnectedtwoways[key2]
             
-            reg1 = data_a[0]
-            reg2 = data_b[0]
+            reg1 = data_a[1]
+            reg2 = data_b[1]
 
             reg1.connect(reg2,f"{key1} -> {key2} (from remaining)",
-                self.make_intermap_rule(reg2,data_b[1],reg1,data_a[2]))
-            self.entranceinfo.append((key1,key2))
+                self.make_intermap_rule(reg2,data_b[2],reg1,data_a[3]))
+            self.add_connectinfo(reg2,data_b[0],reg1,data_a[0])
             reg2.connect(reg1,f"{key2} -> {key1} (from remaining)",
-                self.make_intermap_rule(reg1,data_a[1],reg2,data_b[2]))
-            self.entranceinfo.append((key2,key1))
+                self.make_intermap_rule(reg1,data_a[2],reg2,data_b[3]))
+            self.add_connectinfo(reg1,data_a[0],reg2,data_b[0])
 
             del unconnectedtwoways[key1]
             del unconnectedtwoways[key2]
@@ -848,13 +867,13 @@ class GMADVWorld(World):
 
         if unconnectedtwoways and (entrsleft or exitsleft):
             last = unconnectedtwoways.popitem()
-            last_data = last[1]
+            last_data = last[2]
             if entrsleft > exitsleft:
-                last_data = (last_data[0],last_data[2])
-                unconnectedexits[last[0]] = last_data
+                last_data = (last_data[1],last_data[3])
+                unconnectedexits[last[1]] = last_data
                 exitsleft += 1
             else:
-                unconnectedentrs[last[0]] = last_data
+                unconnectedentrs[last[1]] = last_data
                 entrsleft += 1
 
         onewaysleft = min(entrsleft,exitsleft)
@@ -867,12 +886,12 @@ class GMADVWorld(World):
             data_a = unconnectedentrs[keys1[pick1]]
             data_b = unconnectedexits[keys2[pick2]]
 
-            reg1 = data_a[0]
-            reg2 = data_b[0]
+            reg1 = data_a[1]
+            reg2 = data_b[1]
 
             reg2.connect(reg1,f"{reg2.name} -> {reg1.name} (from remaining)",
-                self.make_intermap_rule(reg1,data_a[1],reg2,data_b[1]))
-            self.entranceinfo.append((keys2[pick2],keys1[pick1]))
+                self.make_intermap_rule(reg1,data_a[2],reg2,data_b[2]))
+            self.add_connectinfo(reg1,data_a[0],reg2,data_b[0])
 
             del unconnectedentrs[keys1[pick1]]
             del unconnectedexits[keys2[pick2]]
@@ -907,7 +926,7 @@ class GMADVWorld(World):
         slotdata = {
             "bhop":int(self.bhop),
             "skill":int(self.options.skill),
-            "entrances":self.entranceinfo,
+            "connections":self.connectinfo,
             "cfgs":cfgs,
             "itemsets":self.loadeditemsets,
             "items_dontload":self.items_dontload,

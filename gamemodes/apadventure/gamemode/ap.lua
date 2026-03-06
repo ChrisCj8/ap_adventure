@@ -238,19 +238,7 @@ local function OnRunID(packet)
         end
 
         APADV_AMMOMERGE = ammotbl
-
-        for k,v in ipairs(slotdata.entrances) do
-            local from = string.Explode(" - ",v[1])
-            local to = string.Explode(" - ",v[2])
-
-            APADV_ENTRANCES[from[1]] = APADV_ENTRANCES[from[1]] or {}
-            APADV_ENTRANCES[from[1]][from[2]] = APADV_ENTRANCES[from[1]][from[2]] or {}
-            APADV_ENTRANCES[from[1]][from[2]][from[4]] = {
-                group = to[1],
-                map = to[2],
-                entr = to[4],
-            }
-        end
+        APADV_ENTRANCES = slotdata.connections
 
         if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] then
             local mapexits = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]
