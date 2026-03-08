@@ -208,6 +208,10 @@ return function(parent,targetheight)
                 addnodes(basenode,access.nodes)
                 basenode:ExpandRecurse(true)
             end
+            accesstree:OnNodeSelected(basenode)
+        else
+            nodepnl.PerformLayout = nodepnloldlayout
+            nodepnl:Clear()
         end
     end
 
