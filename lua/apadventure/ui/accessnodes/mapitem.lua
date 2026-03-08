@@ -5,6 +5,7 @@ function NODE.Panel(parent)
     local itemnamein = vgui.Create("DTextEntry",parent)
     itemnamein:SetValue(parent.nodetbl.item)
     itemnamein:SetPos(5,5)
+    itemnamein:SetUpdateOnType(true)
     function itemnamein:OnValueChange(val)
         parent.nodetbl.item = val
     end
@@ -19,8 +20,6 @@ function NODE.Panel(parent)
 
     function parent:PerformLayout(w,h)
         itemnamein:SetSize(w-10,22)
-
-
     end
 end
 
