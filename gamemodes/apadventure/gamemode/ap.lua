@@ -19,21 +19,23 @@ end
 APADV_LOCENTS = APADV_LOCENTS or {}
 
 local function ApAdvLocationHandler(slot,id,state)
-    local locname = APADV_DATAPACK_LOCAL.location_id_to_name[id]
-    if !locname then 
+    local locn = APADV_DATAPACK_LOCAL.location_id_to_name[id]
+    if !locn then 
         ErrorNoHalt("Received a Location update for an ID that's not in the DataPackage")
         return 
     end
-    local loctbl = APADV_LOCENTS[locname]
-    if loctbl and state then
-        for k,v in pairs(loctbl) do
-            if IsValid(k) then
-                k:Remove()
+    if state then
+        local loctbl = APADV_LOCENTS[locn]
+        if loctbl then
+            for k,v in pairs(loctbl) do
+                if IsValid(k) then
+                    k:Remove()
+                end
+                loctbl[k] = nil
             end
-            loctbl[k] = nil
-        end
-        if !next(loctbl) then
-            APADV_LOCENTS[locname] = nil
+            if !next(loctbl) then
+                APADV_LOCENTS[locn] = nil
+            end
         end
     end
 end
@@ -401,3 +403,8 @@ net.Receive("apAdvConnectionInfo",function(len,ply)
     if !(ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
     APADV.CreateApSlot(addr,slotn,pw)
 end)
+
+concommand.Add("apadv_slot_disconnect",function(ply) 
+    if !APADV_SLOT or !(ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
+    APADV_SLOT:Disconnect()
+end,nil,"Disconnects the apAdventure Slot from the Archipelago Server.")
