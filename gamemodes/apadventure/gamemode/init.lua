@@ -30,6 +30,13 @@ function GM:PreCleanupMap()
     APADV.MapItemCounters = {}
 end
 
+function APADV.MarkEntrance(map,group,name)
+    APADV_SAVEDATA.visited = APADV_SAVEDATA.visited or {}
+    APADV_SAVEDATA.visited[map] = APADV_SAVEDATA.visited[map] or {}
+    APADV_SAVEDATA.visited[map][group] = APADV_SAVEDATA.visited[map][group] or {}
+    APADV_SAVEDATA.visited[map][group][name] = true
+end
+
 function APADV.DoMapTransition(map,group,entrname)
     local curmap = game.GetMap()
     local slotdata
@@ -65,10 +72,7 @@ function APADV.DoMapTransition(map,group,entrname)
     }
     
     if entrname then
-        APADV_SAVEDATA.visited = APADV_SAVEDATA.visited or {}
-        APADV_SAVEDATA.visited[map] = APADV_SAVEDATA.visited[map] or {}
-        APADV_SAVEDATA.visited[map][group] = APADV_SAVEDATA.visited[map][group] or {}
-        APADV_SAVEDATA.visited[map][group][entrname] = true 
+        APADV.MarkEntrance(map,group,entrname)
     elseif slotdata and slotdata.start == curmap then
         APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
     end
