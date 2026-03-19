@@ -118,6 +118,7 @@ function GM:PlayerLoadout(ply)
 end
 
 function GM:PlayerAmmoChanged(ply,ammoID,old,new)
+    if !APADV_AMMOMERGE then return end
     ammodata = APADV_AMMOMERGE[ammoID]
     if ammodata then
         for k,v in ipairs(ammodata) do
