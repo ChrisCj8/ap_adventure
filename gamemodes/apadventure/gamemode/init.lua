@@ -4,6 +4,7 @@ APADV.MapItemCounters = {}
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 AddCSLuaFile("ui/connect.lua")
+AddCSLuaFile("ui/tracker.lua")
 
 include("player.lua")
 include("shared.lua")
@@ -11,6 +12,7 @@ include("cfgload.lua")
 include("save.lua")
 include("wephandler.lua")
 include("ap.lua")
+include("tracker.lua")
 
 util.AddNetworkString("apAdvConnectionInfo")
 util.AddNetworkString("ApAdvConnectionState")

@@ -1,4 +1,5 @@
 include("shared.lua")
+include("apadventure/gamemode/ui/tracker.lua")
 
 net.Receive("apAdv_BHopUpdate", function() 
     APADV_BHOP = net.ReadBool()

@@ -37,6 +37,7 @@ local function ApAdvLocationHandler(slot,id,state)
                 APADV_LOCENTS[locn] = nil
             end
         end
+        APADV_TRACKER:UpdateLocationByName(locn,0)
     end
 end
 
@@ -73,6 +74,55 @@ function APADV.RegisterMapItems(itemtbl)
     end
 end
 
+local tolookup = apAdventure.ListToLookUp
+
+local impliedcapabilities = {
+    WeakMelee = {"WimpyMelee"},
+    MidMelee = {"DecentMelee"},
+    DecentMelee = {"MidMelee","WeakMelee"},
+    StrongMelee = {"DecentMelee"},
+    WeakShortRange = {"WimpyShortRange"},
+    DecentShortRange = {"WeakShortRange"},
+    StrongShortRange = {"DecentShortRange"},
+    WeakMidRange = {"WimpyMidRange"},
+    DecentMidRange = {"WeakMidRange"},
+    StrongMidRange = {"DecentMidRange"},
+    WeakLongRange = {"WimpyLongRange"},
+    DecentLongRange = {"WeakLongRange"},
+    StrongLongRange = {"DecentLongRange"},
+    ShortArcProjectile = {"TinyArcProjectile"},
+    MediumArcProjectile = {"ShortArcProjectile"},
+    LongArcProjectile = {"MediumArcProjectile"},
+    TinyExplosion = {"SmallOrSmallerExplosion","TinyOrLargerExplosion"},
+    SmallExplosion = {"SmallOrSmallerExplosion","SmallOrLargerExplosion"},
+    MediumSizeExplosion = {"MediumSizeOrSmallerExplosion","MediumSizeOrLargerExplosion","MediumOrSmallerExplosion","MediumOrLargerExplosion"},
+    LargeExplosion = {"LargeOrSmallerExplosion","MediumSizeOrLargerExplosion"},
+    MediumSizeOrSmallerExplosion = {"SmallOrSmallerExplosion"},
+    LargeOrSmallerExplosion = {"MediumOrSmallerExplosion"},
+    TinyOrLargerExplosion = {"SmallOrLargerExplosion"},
+    SmallOrLargerExplosion = {"MediumSizeOrLargerExplosion"},
+}
+
+local function processcapabs(capabs)
+    repeat
+        local new = 0
+
+        for k,v in pairs(capabs) do
+            if impliedcapabilities[k] then
+                for ik,iv in ipairs(impliedcapabilities[k]) do
+                    if !capabs[iv] then
+                        capabs[iv] = true
+                        new = new + 1
+                    end
+                end
+            end
+        end
+
+    until new == 0
+
+    return capabs
+end
+
 local function ApAdvRegisterItemHandlers()
 
     if APADV.ItemUnregisterFuncs then
@@ -92,9 +142,14 @@ local function ApAdvRegisterItemHandlers()
 
     local setwepavailable = ApAdvWeps.SetAvailable
 
+    local capabtbl = {}
+    local condcapabtbl = {}
+    local id2capab = {}
+
     local function RegisterItem(setpath,name,setdata)
         local itemtbl = include(setpath.."/"..name)
-        local itemid = toID[itemtbl.Name.." - "..setdata.Name]
+        local itemname = itemtbl.Name.." - "..setdata.Name
+        local itemid = toID[itemname]
         if itemid then
             local itype = itemtbl.Type
             local handler = itemtbl.Handle
@@ -135,6 +190,47 @@ local function ApAdvRegisterItemHandlers()
                 end
             end
 
+            local itemcapabs = itemtbl.Capabilities
+            if istable(itemcapabs) then
+                local itemcapablookup = processcapabs(tolookup(itemcapabs))
+                for k,v in pairs(itemcapablookup) do
+                    capabtbl[k] = capabtbl[k] or {}
+                    local curcaptbl = capabtbl[k]
+                    curcaptbl[#curcaptbl+1] = itemid
+                end
+
+                id2capab[itemid] = {
+                    cap = itemcapablookup
+                }
+            end
+
+            local itemcapabs = itemtbl.ConditionalCapabilities
+            if istable(itemcapabs) then
+                local condlookup = {}
+                for k,v in pairs(itemcapabs) do
+                    condcapabtbl[k] = condcapabtbl[k] or {}
+                    local condtbl = condcapabtbl[k]
+                    local lookup = {}
+
+                    for ik, iv in ipairs(v) do
+                        condtbl[iv] = condtbl[iv] or {}
+                        local curcaptbl = condtbl[iv]
+                        curcaptbl[#curcaptbl+1] = itemid
+
+                        lookup[iv] = true
+                    end
+                    condlookup[k] = processcapabs(lookup)
+                end
+
+                if id2capab[itemid] then
+                    id2capab[itemid].cond = condlookup
+                else
+                    id2capab[itemid] = {
+                        cond = condlookup
+                    }
+                end
+            end
+
             if isfunction(itemtbl.Unregister) then
                 unregisteramt = unregisteramt + 1
                 unregisterfuncs[unregisteramt] = itemtbl.Unregister
@@ -161,7 +257,7 @@ local function ApAdvRegisterItemHandlers()
         local setdata = include(setpath..".lua")
         local setfiles = file.Find(setpath.."/*.lua","LUA")
         local setbl
-        if blacklist[v] then setbl = apAdventure.ListToLookUp(blacklist[v]) end
+        if blacklist[v] then setbl = tolookup(blacklist[v]) end
         for ik,iv in ipairs(setfiles) do
             if !setbl or !setbl[iv] then
                 RegisterItem(setpath,iv,setdata)
@@ -187,6 +283,10 @@ local function ApAdvRegisterItemHandlers()
 
     ApAdvWeps.OnEquip = onequiptbl
     APADV.ItemUnregisterFuncs = unregisterfuncs
+
+    APADV.capabtbl = capabtbl
+    APADV.condcapabtbl = condcapabtbl
+    APADV.id2capab = id2capab
 
     for k,v in pairs(handle) do
         v(APADV_SLOT.Items[k] or empty)
@@ -252,24 +352,30 @@ local function OnRunID(packet)
             end
         end
 
-        if dp_loaded then
-            ApAdvRegisterItemHandlers()
-        end
-        
         APADV_SAVEID = saveid
+    end
+
+    if dp_loaded then
+        ApAdvRegisterItemHandlers()
+    end
+
+    if APADV_TRACKER.built then
+        APADV_TRACKER:SendTrackerData()
+        APADV_TRACKER:Query()
+    else
+        APADV_TRACKER:Build()
+    end
+
+    if isfunction(APADV_CFGLUA.OnFullConnect) then
+        ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
+        APADV_CFGLUA.OnFullConnect = nil
     end
 end
 
 local function OnConnect(self)
-    
-    local room = self.Room
-
     net.Start("ApAdvConnectionState")
         net.WriteBool(true)
     net.Broadcast()
-
-    self:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
-
 end
 
 local function OnDisconnect(self)
@@ -306,10 +412,9 @@ local function ApAdvFullData(slot)
         end
         APADV_UNCHECKED_LOCS = nil
     end
-    if isfunction(APADV_CFGLUA.OnFullConnect) then
-        ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
-        APADV_CFGLUA.OnFullConnect = nil
-    end
+
+    local room = slot.Room
+    slot:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
 end
 
 function APADV.CreateApSlot(addr,slotn,pw,slotdata)

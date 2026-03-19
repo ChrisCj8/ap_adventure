@@ -24,6 +24,12 @@ function APADV.InitSaveData(saveid)
         if APADV_SAVEDATA.itemsused then
             APADV_ITEMSUSED = APADV_SAVEDATA.itemsused
         end
+
+        if APADV_SAVEDATA._tracker then
+            APADV_TRACKER:LoadFromTable(APADV_SAVEDATA._tracker)
+            APADV_SAVEDATA._tracker = nil
+        end
+
     else
         file.CreateDir(savedir.."ply/")
     end
@@ -68,6 +74,8 @@ hook.Add("ShutDown","apAdvStoreSaveData",function()
     for k,v in pairs(APADV_PLYSAVE) do
         file.Write(plydir..k..".json",util.TableToJSON(v))
     end
+
+    APADV_TRACKER:SaveToFile(savedir.."_tracker.json")
 end)
 
 hook.Add("DoPlayerDeath","apAdvStoreSaveData",function(ply) 

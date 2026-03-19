@@ -70,6 +70,10 @@ function GM:PlayerInitialSpawn(ply)
     net.Start("ApAdvConnectionState")
         net.WriteBool(connected)
     net.Send(ply) 
+
+    if APADV_TRACKER.built then
+        APADV_TRACKER:SendTrackerData(ply)
+    end
 end
 
 local resettext_color = Color(222,44,44)
