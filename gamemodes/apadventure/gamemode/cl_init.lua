@@ -7,7 +7,7 @@ end)
 
 list.Set("DesktopWindows","apAdventureConnect",{
     icon = "apadventure/apicon64.png",
-    title = "apAdventure Connection",
+    title = "#apadventure.connect.title",
     width = 400,
     height = 500,
     init = function(icon, window)
