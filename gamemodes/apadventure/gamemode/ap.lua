@@ -76,32 +76,7 @@ end
 
 local tolookup = apAdventure.ListToLookUp
 
-local impliedcapabilities = {
-    WeakMelee = {"WimpyMelee"},
-    MidMelee = {"DecentMelee"},
-    DecentMelee = {"MidMelee","WeakMelee"},
-    StrongMelee = {"DecentMelee"},
-    WeakShortRange = {"WimpyShortRange"},
-    DecentShortRange = {"WeakShortRange"},
-    StrongShortRange = {"DecentShortRange"},
-    WeakMidRange = {"WimpyMidRange"},
-    DecentMidRange = {"WeakMidRange"},
-    StrongMidRange = {"DecentMidRange"},
-    WeakLongRange = {"WimpyLongRange"},
-    DecentLongRange = {"WeakLongRange"},
-    StrongLongRange = {"DecentLongRange"},
-    ShortArcProjectile = {"TinyArcProjectile"},
-    MediumArcProjectile = {"ShortArcProjectile"},
-    LongArcProjectile = {"MediumArcProjectile"},
-    TinyExplosion = {"SmallOrSmallerExplosion","TinyOrLargerExplosion"},
-    SmallExplosion = {"SmallOrSmallerExplosion","SmallOrLargerExplosion"},
-    MediumSizeExplosion = {"MediumSizeOrSmallerExplosion","MediumSizeOrLargerExplosion","MediumOrSmallerExplosion","MediumOrLargerExplosion"},
-    LargeExplosion = {"LargeOrSmallerExplosion","MediumSizeOrLargerExplosion"},
-    MediumSizeOrSmallerExplosion = {"SmallOrSmallerExplosion"},
-    LargeOrSmallerExplosion = {"MediumOrSmallerExplosion"},
-    TinyOrLargerExplosion = {"SmallOrLargerExplosion"},
-    SmallOrLargerExplosion = {"MediumSizeOrLargerExplosion"},
-}
+local impliedcapabilities = util.JSONToTable(file.Read("data_static/apadventure/impliedcapabilities.json","GAME"))
 
 local function processcapabs(capabs)
     repeat

@@ -1,29 +1,7 @@
-impliedcapabilities = {
-    "WeakMelee": ["WimpyMelee"],
-    "MidMelee": ["DecentMelee"],
-    "DecentMelee": ["MidMelee","WeakMelee"],
-    "StrongMelee": ["DecentMelee"],
-    "WeakShortRange": ["WimpyShortRange"],
-    "DecentShortRange": ["WeakShortRange"],
-    "StrongShortRange": ["DecentShortRange"],
-    "WeakMidRange": ["WimpyMidRange"],
-    "DecentMidRange": ["WeakMidRange"],
-    "StrongMidRange": ["DecentMidRange"],
-    "WeakLongRange": ["WimpyLongRange"],
-    "DecentLongRange": ["WeakLongRange"],
-    "StrongLongRange": ["DecentLongRange"],
-    "ShortArcProjectile": ["TinyArcProjectile"],
-    "MediumArcProjectile":["ShortArcProjectile"],
-    "LongArcProjectile":["MediumArcProjectile"],
-    "TinyExplosion": ["SmallOrSmallerExplosion","TinyOrLargerExplosion"],
-    "SmallExplosion": ["SmallOrSmallerExplosion","SmallOrLargerExplosion"],
-    "MediumSizeExplosion": ["MediumSizeOrSmallerExplosion","MediumSizeOrLargerExplosion","MediumOrSmallerExplosion","MediumOrLargerExplosion"],
-    "LargeExplosion": ["LargeOrSmallerExplosion","MediumSizeOrLargerExplosion"],
-    "MediumSizeOrSmallerExplosion": ["SmallOrSmallerExplosion"],
-    "LargeOrSmallerExplosion": ["MediumOrSmallerExplosion"],
-    "TinyOrLargerExplosion": ["SmallOrLargerExplosion"],
-    "SmallOrLargerExplosion": ["MediumSizeOrLargerExplosion"],
-}
+from importlib import resources
+from json import load
+
+impliedcapabilities = load(resources.files(__package__).joinpath("impliedcapabilities.json").open())
 
 def ProcessCapabs(capabin):
     newcapabs = capabin.copy()
