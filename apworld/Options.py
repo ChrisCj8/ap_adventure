@@ -96,7 +96,12 @@ class AmmoMerge(OptionList):
     separate ammo types from their HL2 counterparts.
 
     A list of all of GMods default ammo types can be found here:
-    https://wiki.facepunch.com/gmod/Default_Ammo_Types"""
+    https://wiki.facepunch.com/gmod/Default_Ammo_Types
+    
+    Alternatively, apAdventure also provides a console command
+    called "apadventure_dump_ammotypes" that will dump the names
+    of all currently existing ammo types, which can be used to figure
+    out the names of ammo types that have been added by addons."""
     default = [
         ["Pistol","9mmRound"],
         ["Buckshot","BuckshotHL1"],

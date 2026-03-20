@@ -39,3 +39,9 @@ net.Receive("ApAdvNotif",function()
     if !snd then return end
     surface.PlaySound(snd)
 end)
+
+concommand.Add("apadventure_dump_ammotypes",function()
+    for k,v in pairs(game.GetAmmoTypes()) do
+        print(k,v)
+    end
+end)
