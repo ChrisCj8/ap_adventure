@@ -3,13 +3,18 @@ from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility,
 from schema import Schema, Or
 
 class Skill(Choice):
-    """What the \"skill\" ConVar will be set to. 
-    
-    This is mainly used for Half-Life 2s difficulty settings, which affect how much 
-    ammo the player gets from pickups, among other things.
+    """Sets the internal "skill" variable, which is mainly used for difficulty settings
+    in the Half-Life games.
 
-    Outside of HL2, lua coders and map makers are also able to check what this value is set to 
-    and have their code/maps behave differently depending on it, but this isn't very common.
+    In Half-Life: Source, enemies will gain more health and deal more damage at higher skill settings.
+
+    In Half-Life 2, enemies will deal more damage at higher difficulties and ammo gain from pickups is reduced.
+
+    Players will also deal less damage against enemies from both games at higher difficulties.
+    (This may not be intended behavior for HL1 enemies, but this is how GMod handles it.)
+
+    Outside of Half-Life, lua coders and map makers are also able to check what this value is set to 
+    and have their code/maps behave differently depending on it, but this is not very common.
     """
     display_name = "Skill"
     option_easy = 1
@@ -19,46 +24,73 @@ class Skill(Choice):
     default = 2
 
 class ConfigGroups(OptionSet):
-    """Config Groups to use for generation."""
-    default = {"ravenholm"}
+    """Config Groups to use for generation.
+    
+    Map Configs are used by apAdventure to tell the generator what the maps the player wants to play on contain
+    and where the gamemode should place exits, locations and whatever else the config creator wants to include
+    in their Config.
+
+    Configs are organized into groups so maps related to each other (such as maps from the same chapter in HL2)
+    can be grouped together and share certain settings.
+    """
+    default = {"canals_walk","ravenholm","coast_walk","nova_prospekt"}
 
 singlepickschema = Schema(Or({
         str: Or(list, str)
     },{}))
 
 class ConfigCherryPick(OptionDict):
-    """This Option allows you to cherrypick single maps from a Config Group."""
+    """This option allows you to cherrypick single maps from a Config Group."""
     default = {
         "orange_test": ["ap_orange"]
     }
     schema = singlepickschema
 
 class ConfigBlacklist(OptionDict):
-    """This Option allows you to pick maps from a Config Group that should not be added to your run."""
+    """This option allows you to pick maps from a Config Group that should not be added to your run.
+    
+    The defaults for this setting contain some maps that don't play very well in this mode, but still
+    had configs made for them for the sake of completion.
+    
+    Blacklisting maps that have not actually been added through the previous options
+    should not cause problems."""
     default = {
-        "ravenholm": ["d1_town_02a"]
+        "ravenholm": ["d1_town_02a","d1_town_04"],
+        "nova_prospekt": ["d2_prison_06"]
     }
     schema = singlepickschema
 
 class ItemSets(OptionSet):
-    """Item Sets to use for generation."""
-    default = {"funny"}
+    """Item Sets to use for generation.
+    
+    Similarly to Map Configs, Items related to each other are grouped together in Item Sets.
+    
+    The Generator will automatically check which of the items chosen are relevant to progression
+    and will automatically start removing items that are not logically required if there is not
+    enough space for them. This process is not perfect though, the generator just checks
+    if the item can fullfill any logic rule, but it doesn't check if there is another item
+    that could also satisfy that rule, so if multiple items exist that can pass the same
+    conditions the generator will keep all of then, even if the run could be beaten with
+    only one of them."""
+    default = {"hl2weps","funny"}
 
 class ItemCherryPick(OptionDict):
-    """This Option allows you to cherrypick single items from an Item Set."""
+    """This option allows you to cherrypick single items from an Item Set."""
     default = {}
     schema = singlepickschema
 
 class ItemBlacklist(OptionDict):
-    """This Option allows you to blacklist single items from an Item Set."""
+    """This option allows you to blacklist single items from an Item Set."""
     default = {}
     schema = singlepickschema
 
 class AmmoMerge(OptionList):
-    """This Option allows you to merge ammo types together, so picking up 
-    ammo for one type will also give you ammo of the merged type and 
-    weapons using merged ammo types will also be considered in logic
-    if that type is available.
+    """This option allows ammo types to be merged together.
+
+    Whenever the player gains or loses ammo for a merged type,
+    all merged types will also be set to the same amount, and
+    whenever ammunition of a merged type is available logically,
+    the generator will also consider all merged types to be available.
 
     This is mainly intended to be used for HL:S Weapons, which use 
     separate ammo types from their HL2 counterparts.
@@ -67,15 +99,21 @@ class AmmoMerge(OptionList):
     https://wiki.facepunch.com/gmod/Default_Ammo_Types"""
     default = [
         ["Pistol","9mmRound"],
+        ["Buckshot","BuckshotHL1"],
         ["357","357Round"],
         ["Grenade","GrenadeHL1"],
+        ["SMG1_Grenade","MP5_Grenade"],
         ["RPG_Round","RPG_Rocket"],
     ]
 
 class BunnyHop(Choice):
-    """GMods Sandbox gamemode (which this gamemode is derived off) normally clamps 
+    """GMods Sandbox gamemode (which this gamemode derives from internally) normally clamps 
     the players movement speed when they jump off the ground to prevent Bunnyhopping. 
-    This behavior may be disabled entirely or removed after the player receives an item."""
+
+    Choosing "never" maintains this behavior, "item" removes it after
+    receiving an item and "always" will disable it from the start.
+    
+    The latter two options also provide an Autohop."""
     display_name = "BunnyHop"
     option_never = 1
     option_item = 2
@@ -84,7 +122,7 @@ class BunnyHop(Choice):
 
 class BunnyHopLogic(Toggle):
     """Should the player be expected to BunnyHop to reach certain areas?
-    Ignored if BunnyHop is set to \"never\"."""
+    Ignored if BunnyHop is set to "never"."""
     display_name = "BunnyHop Logic"
 
 
