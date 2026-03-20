@@ -1,6 +1,9 @@
 
 APADV_CFGLUA = APADV_CFGLUA or {}
 
+local fromJSON = util.JSONToTable
+local fileR = file.Read
+
 local function CfgLuaValid(self)
     return self == APADV_CFGLUA
 end
@@ -19,15 +22,25 @@ function APADV.LoadCfg(group)
     game.CleanUpMap()
     local map = game.GetMap()
     APADV_MAP = map
+
     local path = "apadventure/cfg/"..group.."/group.json"
-    local json = file.Read(path,"DATA")
-    if json then groupcfg = util.JSONToTable(json) end
-    local path = "apadventure/cfg/"..group.."/"..map.."/sv.json"
-    local json = assert(file.Read(path,"DATA"),"couldn't find config")
-    local cfg = util.JSONToTable(json)
+
+    local groupcfg
+    local json = fileR(path,"DATA")
+    if !json then json = fileR("data_static/"..path,"GAME") end
+    if json then groupcfg = fromJSON(json) end
+
+    path = "apadventure/cfg/"..group.."/"..map.."/sv.json"
+    local json = fileR(path,"DATA")
+    if !json then json = fileR("data_static/"..path,"GAME") end
+    if !json then ErrorNoHalt("Could not find a serverside config for map"..map.." in group "..group) return end
+    local cfg = fromJSON(json)
+
     path = "apadventure/cfg/"..group.."/"..map.."/cl.json"
-    json = assert(file.Read(path,"DATA"),"couldn't find config")
-    local clcfg = util.JSONToTable(json)
+    local json = fileR(path,"DATA")
+    if !json then json = fileR("data_static/"..path,"GAME") end
+    if !json then ErrorNoHalt("Could not find a clientside config for map"..map.." in group "..group) return end
+    local clcfg = fromJSON(json)
     
     local scriptpath = "apadventure/cfglua/"..group.."/"..map..".lua"
     if file.Exists(scriptpath,"lsv") then
