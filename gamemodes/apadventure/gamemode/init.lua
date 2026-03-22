@@ -136,3 +136,46 @@ function GM:SendDeathNotice(attacker,inflictor,victim,flags)
         return BASEGM:SendDeathNotice(attacker,inflictor,victim,flags)
     end
 end
+
+local strstart = string.StartsWith
+local checksayperms
+
+local sayperms = CreateConVar("apadv_apsay_perms",1,FCVAR_ARCHIVE,
+    [[Determines who is allowed to use the \"/ap\" chat command and \"apadv_say\" console command to talk directly through the Archipelago slot.\n
+    0 - anyone\n
+    1 - Admins and Listen Server Host only\n
+    2 - Super Admins and Listen Server Host only]],0,2)
+
+local function updatesayperms()
+    local funcs = {
+        function() return true end,
+        function(ply)
+            if ply:IsListenServerHost() then return true end
+            local group = ply:GetUserGroup()
+            return group == "admin" or group == "superadmin"
+        end,
+        function(ply) return ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin" end
+    }
+    checksayperms = funcs[sayperms:GetInt()+1]
+end
+updatesayperms()
+
+cvars.AddChangeCallback("apadv_apsay_perms",updatesayperms)
+
+function apsay(txt)
+    if !APADV_SLOT or !APADV_SLOT.Connected then return end
+    APADV_SLOT:SendChatMessage(txt)
+end
+
+function GM:PlayerSay(ply,txt)
+    if strstart(txt,"/ap ") then
+        if checksayperms(ply) then apsay(string.sub(txt,5,-1)) end
+        return ""
+    end
+    return txt
+end
+
+concommand.Add("apadv_apsay",function(ply,_,_,txt)
+    print(ply)
+    if ply == NULL or checksayperms(ply) then apsay(txt) end
+end)
