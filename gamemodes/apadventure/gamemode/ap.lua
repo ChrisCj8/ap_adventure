@@ -484,7 +484,7 @@ net.Receive("apAdvConnectionInfo",function(len,ply)
     APADV.CreateApSlot(addr,slotn,pw)
 end)
 
-concommand.Add("apadv_slot_disconnect",function(ply) 
-    if !APADV_SLOT or !(ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
+concommand.Add("apadv_slot_disconnect",function(ply)
+    if !APADV_SLOT or !(ply == NULL or ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
     APADV_SLOT:Disconnect()
 end,nil,"Disconnects the apAdventure Slot from the Archipelago Server.")

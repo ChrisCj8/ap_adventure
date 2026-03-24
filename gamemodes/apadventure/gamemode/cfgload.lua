@@ -203,7 +203,7 @@ function APADV.LoadCfg(group)
 end
 
 concommand.Add("apadventure_loadcfg",function(ply,cmd,args)
-    if !(ply:IsListenServerHost() or ply:IsUserGroup("superadmin")) then return end
+    if !(ply == NULL or ply:IsListenServerHost() or ply:IsUserGroup("superadmin")) then return end
     local gr = args[1]
 
     if gr != nil then
