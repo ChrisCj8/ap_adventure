@@ -475,13 +475,8 @@ local editslotperms = {
 }
 
 net.Receive("apAdvConnectionInfo",function(len,ply)
-    local addr = net.ReadString()
-    local slotn = net.ReadString()
-    local pw = net.ReadString()
-
-    print("received connection info",addr,slotn,pw)
     if !(ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
-    APADV.CreateApSlot(addr,slotn,pw)
+    APADV.CreateApSlot(net.ReadString(),net.ReadString(),net.ReadString())
 end)
 
 concommand.Add("apadv_slot_connect",function(ply) 
