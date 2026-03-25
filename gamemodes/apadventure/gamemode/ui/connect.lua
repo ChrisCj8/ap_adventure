@@ -1,5 +1,7 @@
+local UImake = vgui.Create 
+
 local function Label(parent,text)
-    local lbl = vgui.Create("DLabel",parent)
+    local lbl = UImake("DLabel",parent)
     lbl:SetText(text)
     lbl:SetDark(true)
     return lbl
@@ -15,14 +17,14 @@ end
 return function(window)
     window:SetSizable(true)
     
-    local background = vgui.Create("DPanel",window)
+    local background = UImake("DPanel",window)
     background:Dock(FILL)
 
     local presetlbl = Label(background,"#apadventure.connect.presets")
     presetlbl:SetPos(5,5)
-    local presetselect = vgui.Create("DComboBox",background)
+    local presetselect = UImake("DComboBox",background)
     presetselect:SetPos(90,5)
-    local presetdel = vgui.Create("DImageButton",background)
+    local presetdel = UImake("DImageButton",background)
     presetdel:SetImage("icon16/bin.png")
     presetdel:SetSize(16,16)
     presetlbl.HoverHint,presetselect.HoverHint = "preset","preset"
@@ -49,27 +51,28 @@ return function(window)
 
     local adrlbl = Label(background,"#apadventure.connect.address")
     adrlbl:SetPos(5,35)
-    local adrin = vgui.Create("DTextEntry",background)
+    local adrin = UImake("DTextEntry",background)
     adrin:SetPos(90,35)
     adrin:SetPlaceholderText("ws://localhost:38281")
     adrlbl.HoverHint,adrin.HoverHint = "adress","address"
 
     local namelbl = Label(background,"#apadventure.connect.slotname")
     namelbl:SetPos(5,65)
-    local namein = vgui.Create("DTextEntry",background)
+    local namein = UImake("DTextEntry",background)
     namein:SetPos(90,65)
     namelbl.HoverHint,namein.HoverHint = "slotname","slotname"
 
     local pwlbl = Label(background,"#apadventure.connect.password")
     pwlbl:SetPos(5,95)
-    local pwin = vgui.Create("DTextEntry",background)
+    local pwin = UImake("DTextEntry",background)
     pwin:SetPos(90,95)
     pwin:SetTextHidden(true)
     pwlbl.HoverHint,pwin.HoverHint = "password","password"
 
-    local sendbtn = vgui.Create("DButton",background)
+    local sendbtn = UImake("DButton",background)
     sendbtn:SetPos(5,125)
-    sendbtn:SetText("#apadventure.connect.connect")
+    sendbtn:SetText("#apadventure.connect.send")
+    sendbtn.HoverHint = "send"
     function sendbtn:DoClick()
         net.Start("apAdvConnectionInfo")
             net.WriteString(adrin:GetValue())
@@ -78,6 +81,22 @@ return function(window)
         net.SendToServer()
     end
 
+    local connectbtn = UImake("DButton",background)
+    connectbtn:SetPos(5,155)
+    connectbtn:SetText("#apadventure.connect.connect")
+    function connectbtn:DoClick()
+        RunConsoleCommand("apadv_slot_connect")
+    end
+
+    local dcbtn = UImake("DButton",background)
+    dcbtn:SetPos(50,155)
+    dcbtn:SetText("#apadventure.connect.disconnect")
+    function dcbtn:DoClick()
+        RunConsoleCommand("apadv_slot_disconnect")
+    end
+
+    connectbtn.HoverHint,dcbtn.Hoverhint = "connect","connect"
+
     function presetselect:OnSelect(_,val)
         local data = util.JSONToTable(file.Read("apadventure/connect/"..val..".json","DATA"))
         adrin:SetText(data.a or "")
@@ -85,12 +104,12 @@ return function(window)
         pwin:SetText(data.p or "")
     end
 
-    local presetnamein = vgui.Create("DTextEntry",background)
-    presetnamein:SetPos(5,160)
+    local presetnamein = UImake("DTextEntry",background)
+    presetnamein:SetPos(5,185)
 
-    local presetsavebtn = vgui.Create("DButton",background)
+    local presetsavebtn = UImake("DButton",background)
     presetsavebtn:SetText("#apadventure.connect.presetsave")
-    presetsavebtn:SetPos(100,160)
+    presetsavebtn:SetPos(100,185)
     presetsavebtn:SetSize(90,22)
 
     presetnamein.HoverHint,presetsavebtn.HoverHint = "presetsave","presetsave"
@@ -121,7 +140,7 @@ return function(window)
     end
 
     local hintlbl = Label(background,"#apadventure.connect.hint.initial")
-    hintlbl:SetPos(5,190)
+    hintlbl:SetPos(5,215)
     hintlbl:SetWrap(true)
     hintlbl:SetAutoStretchVertical(true)
 
@@ -142,9 +161,13 @@ return function(window)
         namein:SetSize(w-95,22)
         pwin:SetSize(w-95,22)
         sendbtn:SetSize(w-10,22)
+        local hw = (w-15)/2
+        connectbtn:SetSize(hw,22)
+        dcbtn:SetSize(hw,22)
+        dcbtn:SetPos(10+hw,155)
 
         presetnamein:SetSize(w-10-95,22)
-        presetsavebtn:SetPos(w-95,160)
+        presetsavebtn:SetPos(w-95,185)
 
         hintlbl:SetWide(w-10)
     end
