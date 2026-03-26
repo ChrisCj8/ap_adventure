@@ -56,7 +56,7 @@ local function iconpick(loccount)
     return "archipelago/tracker/empty.png"
 end
 
-timer.Create("APAdvTrackerUpdateMapIcons",.5,2,function()
+timer.Create("APAdvTrackerUpdateMapIcons",.5,0,function()
     if IsValid(trackwindow) then
         local grnodes = trackwindow.grnodelookup
         local mapnodes = trackwindow.nodelookup
