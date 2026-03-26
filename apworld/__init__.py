@@ -925,6 +925,7 @@ class GMADVWorld(World):
 
         slotdata = {
             "bhop":int(self.bhop),
+            "bhop_logic":bool(self.bhop_logic),
             "skill":int(self.options.skill),
             "connections":self.connectinfo,
             "cfgs":cfgs,

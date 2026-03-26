@@ -386,7 +386,15 @@ function APADV_TRACKER:Query()
             end,
             ["bhop"] = function(node)
                 local bhop = APADV_SLOT.slotData.bhop
-                if bhop == 2 then return APADV_BHOP and 1,1 or 3 end
+                if bhop == 2 then 
+                    if APADV_BHOP then 
+                        if APADV_SLOT.slotData.bhop_logic then
+                            return 1,1
+                        end
+                        return 2,2
+                    end
+                    return 3
+                end
                 if bhop == 3 then return 1,1 else return 3,3 end
             end,
             ["has"] = function(node)
