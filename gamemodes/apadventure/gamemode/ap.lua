@@ -334,7 +334,7 @@ local function OnRunID(packet)
         ApAdvRegisterItemHandlers()
     end
 
-    if APADV_TRACKER.built then
+    if APADV_TRACKER.runid == saveid then
         APADV_TRACKER:SendTrackerData()
         APADV_TRACKER:Query()
     else

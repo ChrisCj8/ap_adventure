@@ -283,7 +283,7 @@ function APADV_TRACKER:Build()
     }
     
     self.locnametomap = locnametomap
-    self.built = true
+    self.runid = APADV_SAVEID
 
     self:Query()
 
@@ -622,5 +622,5 @@ function APADV_TRACKER:LoadFromTable(data)
     self.regs = data.regs
     self.query = data.query
     self.locnametomap = data.locnametomap
-    self.built = true
+    self.runid = APADV_SAVEID
 end
