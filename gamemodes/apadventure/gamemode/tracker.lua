@@ -309,6 +309,7 @@ local evalmeta = {__index = function()
 end}
 
 function APADV_TRACKER:Query()
+    timer.Stop("APAdvTrackerQuery")
     local slot = APADV_SLOT
     local slotdata = slot.slotData
     local slotitems = slot.Items

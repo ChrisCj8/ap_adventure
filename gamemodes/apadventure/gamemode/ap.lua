@@ -2,6 +2,11 @@ APADV = APADV or {}
 
 APADV_ITEMHANDLERS = APADV_ITEMHANDLERS or {}
 
+timer.Create("APAdvTrackerQuery",1,0,function() 
+    APADV_TRACKER:Query()
+end)
+timer.Stop("APAdvTrackerQuery")
+
 local function ApAdvItemHandler(slot,id,itemlist)
     if APADV_ITEMHANDLERS[id] then 
         APADV_ITEMHANDLERS[id](itemlist)
@@ -14,6 +19,8 @@ local function ApAdvItemHandler(slot,id,itemlist)
             end
         end
     end
+
+    timer.Start("APAdvTrackerQuery")
 end
 
 APADV_LOCENTS = APADV_LOCENTS or {}
