@@ -71,7 +71,7 @@ function GM:PlayerInitialSpawn(ply)
         net.WriteBool(connected)
     net.Send(ply) 
 
-    if APADV_TRACKER.built then
+    if APADV_TRACKER.runid then
         APADV_TRACKER:SendTrackerData(ply)
     end
 end
