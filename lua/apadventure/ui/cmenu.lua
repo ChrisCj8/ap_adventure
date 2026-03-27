@@ -551,6 +551,15 @@ return function(window)
             regeditpnl:ShowContents(true)
         end
 
+        function reglist:OnRowRightClick(id,pnl)
+            local menu = vgui.Create("DMenu")
+            menu:AddOption("#apadventure.editor.reg.rclick.copyname",function()
+                SetClipboardText(pnl:GetValue(1))
+            end)
+            menu:SetPos(input.GetCursorPos())
+            menu:MakePopup()
+        end
+
         function reglist:LoadInfo(tbl)
             regtbl = tbl
             for k,v in pairs(self:GetLines()) do
