@@ -319,8 +319,8 @@ function APADV_TRACKER:Query()
     local newquery = {}
     local newqueries = 0
     local regtbl = APADV_TRACKER.regs
-    local locquery = {}
-    local locqueries = 0
+    --local locquery = {}
+    --local locqueries = 0
     local entrs = APADV_TRACKER.entr
     local id2capab = APADV.id2capab
     local capabtbl = APADV.capabtbl
