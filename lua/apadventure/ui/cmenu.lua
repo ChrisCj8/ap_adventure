@@ -139,7 +139,6 @@ return function(window)
 
     local logicmenu = mbar:AddMenu("#apadventure.editor.menu.logic")
     logicmenu:AddOption("#apadventure.editor.menu.logic.updateallcfgs",function() RunConsoleCommand("apadventure_update_all_cfgs") end)
-    logicmenu:AddOption("#apadventure.editor.menu.logic.processallitemdefs",function() RunConsoleCommand("apadventure_editor_processitemdefs") end)
 
     local miscmenu = mbar:AddMenu("#apadventure.editor.menu.misc")
     miscmenu:AddOption("#apadventure.editor.menu.misc.savemanage",function() RunConsoleCommand("apadventure_save_manager") end)
