@@ -158,7 +158,7 @@ return function(window)
 
     local groupcfgpnl = vgui.Create("DScrollPanel")
     groupcfgpnl:SetPaintBackground(true)
-    local newtab = tabs:AddSheet("Group Settings",groupcfgpnl)
+    local newtab = tabs:AddSheet("#apadventure.editor.tab.group",groupcfgpnl)
     newtab.Tab.guide = "grouptab"
 
         local grouprulesplacegroups = {}
@@ -279,7 +279,7 @@ return function(window)
 
     local mapcfgpnl = vgui.Create("DScrollPanel")
     mapcfgpnl:SetPaintBackground(true)
-    newtab = tabs:AddSheet("Map Settings",mapcfgpnl)
+    newtab = tabs:AddSheet("#apadventure.editor.tab.map",mapcfgpnl)
     newtab.Tab.guide = "maptab"
 
         local maprulesplacegroups = {}
@@ -417,7 +417,7 @@ return function(window)
         end
 
     local regpnl = vgui.Create("DPanel")
-    newtab = tabs:AddSheet("Regions",regpnl)
+    newtab = tabs:AddSheet("#apadventure.editor.tab.reg",regpnl)
     newtab.Tab.guide = "regiontab"
 
         local regtbl
@@ -581,7 +581,7 @@ return function(window)
         end
 
     local connpnl = vgui.Create("DPanel")
-    newtab = tabs:AddSheet("Connections",connpnl)
+    newtab = tabs:AddSheet("#apadventure.editor.tab.conn",connpnl)
     newtab.Tab.guide = "connecttab"
     
         local conntbl
@@ -591,9 +591,9 @@ return function(window)
 
         local connlist = vgui.Create("DListView",connpnl)
         connlist:SetPos(5,30)
-        connlist:AddColumn("From")
-        connlist:AddColumn("To")
-        connlist:AddColumn("Two-Way")
+        connlist:AddColumn("#apadventure.editor.conn.fromcol")
+        connlist:AddColumn("#apadventure.editor.conn.tocol")
+        connlist:AddColumn("#apadventure.editor.conn.twcol")
 
         local connfromin = vgui.Create("DTextEntry",connpnl)
         connfromin:SetPos(5,5)
@@ -609,7 +609,7 @@ return function(window)
         coneditpnl.ShowContents = ShowContents
         
             local contwowaycheck = vgui.Create("DCheckBoxLabel",coneditpnl)
-            contwowaycheck:SetText("Two-Way Connection")
+            contwowaycheck:SetText("#apadventure.editor.conn.twowaycheck")
             contwowaycheck:SetDark(true)
             contwowaycheck:SetPos(5,5)
             function contwowaycheck:OnChange(val)
@@ -740,7 +740,7 @@ return function(window)
         end
     
     local mapitempnl = vgui.Create("DPanel")
-    newtab = tabs:AddSheet("Map Items",mapitempnl)
+    newtab = tabs:AddSheet("#apadventure.editor.tab.mapitem",mapitempnl)
     newtab.Tab.guide = "mapitemtab"
 
         local mapitemtbl
@@ -754,7 +754,7 @@ return function(window)
 
         local mapitemlist = vgui.Create("DListView",mapitempnl)
         mapitemlist:SetPos(5,30)
-        mapitemlist:AddColumn("Items")
+        mapitemlist:AddColumn("#apadventure.editor.mapitem.itemcol")
 
         function mapitemlist:LoadMapItems(tbl)
             mapitemtbl = tbl

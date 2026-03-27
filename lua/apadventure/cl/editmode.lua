@@ -17,7 +17,7 @@ local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHI
 
 list.Set("DesktopWindows","apAdventureEditor",{
     icon = "apadventure/apicon64.png",
-    title = "apAdventure Editor",
+    title = "#apadventure.editor.title",
     width = 800,
     height = 500,
     init = function(icon, window)
