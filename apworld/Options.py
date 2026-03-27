@@ -92,8 +92,9 @@ class AmmoMerge(OptionList):
     whenever ammunition of a merged type is available logically,
     the generator will also consider all merged types to be available.
 
-    This is mainly intended to be used for HL:S Weapons, which use 
-    separate ammo types from their HL2 counterparts.
+    This feature mainly exists for Half-Life: Source, which uses
+    separate ammo types from HL2. Note that not all HL2 ammo types
+    have a HL:S counterpart.
 
     A list of all of GMods default ammo types can be found here:
     https://wiki.facepunch.com/gmod/Default_Ammo_Types
