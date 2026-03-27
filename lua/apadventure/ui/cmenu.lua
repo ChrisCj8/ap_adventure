@@ -427,7 +427,7 @@ return function(window)
         
         local reglist = vgui.Create("DListView",regpnl)
         reglist:SetPos(5,30)
-        reglist:AddColumn("Region")
+        reglist:AddColumn("#apadventure.editor.reg.regcol")
 
         local regaddbtn = ImageButton(regpnl,"icon16/add.png")
         local regdelbtn = ImageButton(regpnl,"icon16/delete.png")
@@ -439,7 +439,7 @@ return function(window)
 
             local regammopnl = vgui.Create("DCollapsibleCategory",regeditpnl) 
             regammopnl:SetPos(5,5)
-            regammopnl:SetLabel("#apadventure.editor.regammo.label")
+            regammopnl:SetLabel("#apadventure.editor.reg.condpnl")
 
                 local ammotypes = game.GetAmmoTypes()
 
@@ -471,7 +471,7 @@ return function(window)
 
                 local ammolist = vgui.Create("DListView",regammopnl)
                 ammolist:SetPos(5,52)
-                ammolist:AddColumn("Type")
+                ammolist:AddColumn("#apadventure.editor.reg.condcol")
 
                 function ammoaddbtn:DoClick()
                     local newcondtext, newconddata = ammoselect:GetSelected()
