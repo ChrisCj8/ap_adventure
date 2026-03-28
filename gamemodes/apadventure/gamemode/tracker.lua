@@ -430,7 +430,7 @@ function APADV_TRACKER:Query()
                             if !itemcond then return false end
                             local missing = true
                             for ik,iv in pairs(itemcond) do
-                                if iv[k] then
+                                if iv[v] and conds[ik] then
                                     missing = false
                                     break
                                 end
@@ -452,13 +452,13 @@ function APADV_TRACKER:Query()
                     end
                 end
 
-                for k,v in ipairs(conds) do
-                    local condtbl = condcapabtbl[v]
+                for k,v in pairs(conds) do
+                    local condtbl = condcapabtbl[k]
                     if condtbl then
-                        local candidates = condtbl[v]
+                        local candidates = condtbl[first]
                         if candidates then
                             for ik,iv in ipairs(candidates) do
-                                if slotitems[v] and checkitem(v) then return 1,1 end
+                                if slotitems[iv] and checkitem(iv) then return 1,1 end
                             end
                         end
                     end
