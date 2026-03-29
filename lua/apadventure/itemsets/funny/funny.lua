@@ -3,12 +3,10 @@ local ITEM = {}
 ITEM.Name = "Funny"
 ITEM.Type = "OneUse"
 
-ITEM.FillWeight = 20
+ITEM.FillWeight = 5
 ITEM.MinAmt = 0
 
-
-
-local funnies = {
+local allfunnies = {
     {
         {audio="player/voice/whiskey_passwhiskey2.wav",wait=0,}
     },
@@ -52,7 +50,16 @@ local funnies = {
     },
 }
 
-local DoFunny
+local funnies = {}
+local i = 1
+
+for k,v in ipairs(allfunnies) do
+    -- just checking if the first one exists since all sounds in sequences come from the same source
+    if file.Exists("sound/"..v[1].audio,"GAME") then
+        funnies[i] = v
+        i = i+1
+    end
+end
 
 local function DoFunny(funny,index)
     local audio = funny[index].audio
@@ -71,7 +78,6 @@ local lastredeem = 0
 
 function ITEM.RedeemCheck()
     local sinceredeem = CurTime() - lastredeem
-    print("running redeemcheck",sinceredeem)
     if sinceredeem < 5 then
         return 5.5 - sinceredeem
     else 
@@ -84,7 +90,6 @@ local funnyamt = #funnies
 function ITEM.Redeem()
     lastredeem = CurTime()
     DoFunny(funnies[math.random(1,funnyamt)],1)
-    --EmitSound("player/voice/whiskey_passwhiskey2.wav",vector_origin,0,CHAN_STATIC,1,0)
 end
 
 return ITEM
