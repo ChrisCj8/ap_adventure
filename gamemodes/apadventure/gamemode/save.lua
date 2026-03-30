@@ -37,7 +37,7 @@ end
 
 local function StorePlyData(ply)
 
-    local sid = ply:SteamID64()
+    local sid = ply.APADV_STEAMID64
     local ammotypes = game.GetAmmoTypes()
 
     APADV_PLYSAVE[sid] = APADV_PLYSAVE[sid] or {}
@@ -87,7 +87,7 @@ hook.Add("PlayerDisconnected","apAdvStoreSaveData",function(ply)
 end)
 
 hook.Add("PlayerSpawn","apAdvApplyPlySave", function(ply)
-    local sid = ply:SteamID64()
+    local sid = ply.APADV_STEAMID64
     local plysav = APADV_PLYSAVE[sid]
     if plysav then
         timer.Simple(0,function()

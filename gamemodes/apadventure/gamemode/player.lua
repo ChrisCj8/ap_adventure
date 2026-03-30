@@ -29,7 +29,7 @@ end
 
 function GM:PlayerSpawn(ply,trans)
 
-    if APADV.DeadPlys[ply:SteamID64()] then
+    if APADV.DeadPlys[ply.APADV_STEAMID64] then
         GAMEMODE:PlayerSpawnAsSpectator(ply)
         return
     end
@@ -71,6 +71,8 @@ function GM:PlayerInitialSpawn(ply)
         net.WriteBool(connected)
     net.Send(ply) 
 
+    ply.APADV_STEAMID64 = ply:SteamID64()
+
     if APADV_TRACKER.runid then
         APADV_TRACKER:SendTrackerData(ply)
     end
@@ -84,11 +86,11 @@ function GM:PostPlayerDeath(ply)
 
     local deadplys = APADV.DeadPlys
 
-    deadplys[ply:SteamID64()] = true
+    deadplys[ply.APADV_STEAMID64] = true
 
     local remaining
     for k,v in player.Iterator() do
-        if !deadplys[v:SteamID64()] then
+        if !deadplys[v.APADV_STEAMID64] then
             remaining = true
             break
         end
