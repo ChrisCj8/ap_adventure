@@ -138,16 +138,26 @@ local function ApAdvRegisterItemHandlers()
             if !isfunction(handler) then handler = nil end
             if itype == "OneUse" then
                 APADV_ITEMSUSED[itemid] = APADV_ITEMSUSED[itemid] or 0
-                handle[itemid] = function(iList)
-                    if APADV_ITEMSUSED[itemid] < #iList then
-                        local redeem = itemtbl.RedeemCheck()
-                        print(itemtbl.Name,"redeem:",redeem)
-                        if redeem == true then
+                if itemtbl.RedeemCheck then
+                    handle[itemid] = function(iList)
+                        if APADV_ITEMSUSED[itemid] < #iList then
+                            local redeem = itemtbl.RedeemCheck()
+                            print(itemtbl.Name,"redeem:",redeem)
+                            if redeem == true then
+                                itemtbl.Redeem()
+                                APADV_ITEMSUSED[itemid] = (APADV_ITEMSUSED[itemid] or 0) + 1
+                                handle[itemid](iList)
+                            elseif isnumber(redeem) then
+                                timer.Simple(redeem,function() handle[itemid](iList) end)
+                            end
+                        end
+                    end
+                else
+                    handle[itemid] = function(iList)
+                        if APADV_ITEMSUSED[itemid] < #iList then
                             itemtbl.Redeem()
                             APADV_ITEMSUSED[itemid] = (APADV_ITEMSUSED[itemid] or 0) + 1
                             handle[itemid](iList)
-                        elseif isnumber(redeem) then
-                            timer.Simple(redeem,function() handle[itemid](iList) end)
                         end
                     end
                 end
