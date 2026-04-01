@@ -605,8 +605,27 @@ class GMADVWorld(World):
         poolsize = len(itempool)
         rand = self.random
 
+        try:
+            mcguffin_desired = int(self.options.mcguffin_count.value) - 1
+        except:
+            mcguffin_desired = 0
+
+        if mcguffin_desired <= 0:
+            mcguffin_desired = 0
+            self.mcguffin_goal = 1
+
         if poolsize < self.locallocs:
             missingitems = self.locallocs - poolsize
+
+            if mcguffin_desired > 0:
+                if mcguffin_desired >= poolsize:
+                    mcguffin_desired = poolsize
+                self.mcguffin_goal = mcguffin_desired + 1
+                while mcguffin_desired > 0:
+                    itempool.append(self.create_item("McGuffin"))
+                    mcguffin_desired -= 1
+                    missingitems -= 1
+
             while missingitems > 0:
                 itempool.append(self.create_item(self.get_filler_item_name()))
                 missingitems -= 1
@@ -911,7 +930,7 @@ class GMADVWorld(World):
         
 
     def set_rules(self):
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("McGuffin", self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("McGuffin", self.player, self.mcguffin_goal)
 
     def fill_slot_data(self):
 
@@ -924,6 +943,7 @@ class GMADVWorld(World):
                 cfgs[v.bspname] = [v.group]
 
         slotdata = {
+            "mcguffin_goal":self.mcguffin_goal,
             "bhop":int(self.bhop),
             "bhop_logic":bool(self.bhop_logic),
             "skill":int(self.options.skill),

@@ -1,6 +1,16 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool, OptionDict, OptionList
+from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool, OptionDict, OptionList, FreeText
 from schema import Schema, Or
+
+class McGuffinCount(FreeText):
+    """Currently, the main goal of apAdventure is to collect all McGuffin items.
+    This setting controls how many of these items will exist in the item pool.
+
+    If this is set to a higher number than the amount of free space in
+    the item pool the generator will only place as many as it can fit.
+    """
+    display_name = "McGuffin Count"
+    default = 1
 
 class Skill(Choice):
     """Sets the internal "skill" variable, which is mainly used for difficulty settings
@@ -144,6 +154,7 @@ class WriteDebug(Toggle):
 
 @dataclass
 class GMADVGameOptions(PerGameCommonOptions):
+    mcguffin_count: McGuffinCount
     skill: Skill
     bhop: BunnyHop
     bhop_logic: BunnyHopLogic

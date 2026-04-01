@@ -230,8 +230,9 @@ local function ApAdvRegisterItemHandlers()
         end
     end
 
+    local goalcount = APADV_SLOT.slotData.mcguffin_goal
     handle[toID["McGuffin"]] = function(iList)
-        if iList[1] != nil then
+        if iList[goalcount] != nil then
             APADV_SLOT:SendGoal()
         end
     end
