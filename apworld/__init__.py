@@ -1,17 +1,13 @@
 import typing
-import json
-import os
-from worlds.AutoWorld import World
-from BaseClasses import Item, ItemClassification, Region, Location, CollectionState
+from worlds.AutoWorld import World, WebWorld
+from BaseClasses import Item, ItemClassification, Region, Location, Tutorial
 from Options import OptionError
 from .Settings import APADVSettings
 from .Options import APADVGameOptions
 from .JsonRule import eval_json_rule, preprocess_json_rule
-from settings import get_settings
-from entrance_rando import randomize_entrances
 from .ImpliedCapabilities import ProcessCapabs
-#from .CfgProcessor import item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table
 from .CfgProcessor import ProcessCfgs
+from timeit import default_timer as time
 
 class APADVItem(Item):
     game = "GMod - apAdventure"
@@ -84,10 +80,32 @@ def test_accessibility(canaccess: set,checked: set):
         return test_accessibility(newaccess,checked)
 
 
+class APADVWebWorld(WebWorld):
+    theme = "grass"
+    tutorials = [Tutorial(
+        "Setup Guide",
+        "Setup Guide for apAdventure.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["ChrisCj"]
+    ),Tutorial(
+        "Advanced Options",
+        "Advanced Options Guide for apAdventure.",
+        "English",
+        "options_en.md",
+        "options/en",
+        ["ChrisCj"]
+    )]
+
+
 class APADVWorld(World):
+    """\"I wish someone would make a mod.\"\n
+    \n
     Garry:"""
 
     game = "GMod - apAdventure"
+    web = APADVWebWorld()
 
     processout = ProcessCfgs()
 
@@ -483,40 +501,42 @@ class APADVWorld(World):
                             self.add_warning(f"{map.bspname} in {map.group} tried to make an internal connection to non-existing region \"{ik}\"")
                             continue
                         
-                        reg_a = mapregs[k]
-                        reg_b = mapregs[ik]
+                        reg_a: Region = mapregs[k]
+                        reg_b: Region = mapregs[ik]
                         rule_a = None
                         rule_b = None
                         if "access" in iv:
-                            #self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
+                            self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
                             acctbl = preprocess_json_rule(iv["access"],self,reg_a)
-                            #self.debuglog(f"processed access rule: {str(acctbl)}")
+                            self.debuglog(f"processed access rule: {str(acctbl)}")
                             acctype = acctbl["type"]
                             if acctype == "never":
                                 rule_a = False
                                 self.add_warning(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed")
                             elif acctype != "always":
                                 rule_a = lambda state, acctbl=acctbl, world=self, region=reg_a: eval_json_rule(acctbl,state,world,region)
-                                self.debuglog(f"registering access rule for {ik} and {k}" )
+                                self.debuglog(f"registering access rule for {ik} and {k} with table {acctbl}" )
                             if iv["twoway"]:
-                                #self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
+                                self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
                                 acctbl = preprocess_json_rule(iv["access"],self,reg_b)
-                                #self.debuglog(f"processed access rule: {str(acctbl)}")
+                                self.debuglog(f"processed access rule: {str(acctbl)}")
                                 acctype = acctbl["type"]
                                 if acctype == "never":
                                     rule_b = False
                                     self.add_warning(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed")
                                 elif acctype != "always":
                                     rule_b = lambda state, acctbl=acctbl, world=self, region=reg_b: eval_json_rule(acctbl,state,world,region)
-                                    self.debuglog(f"registering access rule for {k} and {ik}" )
+                                    self.debuglog(f"registering access rule for {k} and {ik} with table {acctbl}" )
                             else:
                                 rule_b = False
                         elif not iv["twoway"]:
                             rule_b = False
                         
                         if rule_a != False:
+                            self.debuglog(f"making connection between {k} and {ik} with rule {rule_a}" )
                             reg_a.connect(reg_b,f"{map.bspname} - {k} -> {ik}",rule_a)
                         if rule_b != False:
+                            self.debuglog(f"making connection between {ik} and {k} with rule {rule_b}" )
                             reg_b.connect(reg_a,f"{map.bspname} - {ik} -> {k}",rule_b)
 
                 for k,v in mapregs.items():
@@ -524,7 +544,7 @@ class APADVWorld(World):
                         reglocs = list()
                         for ik,iv in v.locdata.items():
                             newlocname = f"{map.group} - {map.bspname} - {ik}"
-                            newloc = GMADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],v)
+                            newloc = APADVLocation(self.player,newlocname,self.location_name_to_id[newlocname],v)
                             if iv and iv["access"]:
                                 acctbl = preprocess_json_rule(iv["access"],self,v)
                                 acctype = acctbl["type"]
@@ -649,8 +669,8 @@ class APADVWorld(World):
         for v in self.items_to_reflag:
             oldflag = v.classification
             v.classification = self.get_item_flags(v.name)
-            self.debuglog(f"update flags for {v.name} from {oldflag} to {v.classification}")
-
+            self.debuglog(f"updated flags for {v.name} from {oldflag} to {v.classification}")
+        
         self.multiworld.itempool.extend(itempool)
 
     def make_intermap_rule(self,entr_reg,entr_acctbl,exit_reg,exit_acctbl):
@@ -684,6 +704,8 @@ class APADVWorld(World):
         }
 
     def connect_entrances(self):
+
+        starttime = time()
 
         rand = self.random
 
@@ -925,7 +947,7 @@ class APADVWorld(World):
         startreg.connect(menu)
         menu.connect(startreg)
 
-        
+        self.debuglog(f"connecting regions took {time()-starttime} seconds")
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("McGuffin", self.player, self.mcguffin_goal)
@@ -954,6 +976,7 @@ class APADVWorld(World):
             "startgroup":self.startpick.map.group,
             "startregion":self.startpick.regname,
             "ammomerge":self.ammomerge_out,
+            "ver":1,
         }
 
         return slotdata
