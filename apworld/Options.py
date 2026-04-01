@@ -153,7 +153,7 @@ class WriteDebug(Toggle):
     display_name = "Debug Log"
 
 @dataclass
-class GMADVGameOptions(PerGameCommonOptions):
+class APADVGameOptions(PerGameCommonOptions):
     mcguffin_count: McGuffinCount
     skill: Skill
     bhop: BunnyHop

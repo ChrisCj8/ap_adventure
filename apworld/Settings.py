@@ -1,7 +1,7 @@
 import settings
 import typing
 
-class GMADVSettings(settings.Group):
+class APADVSettings(settings.Group):
     class GModPath(settings.UserFolderPath):
         description = "The Location of your GarrysMod Folder"
         

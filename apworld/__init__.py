@@ -4,8 +4,8 @@ import os
 from worlds.AutoWorld import World
 from BaseClasses import Item, ItemClassification, Region, Location, CollectionState
 from Options import OptionError
-from .Settings import GMADVSettings
-from .Options import GMADVGameOptions
+from .Settings import APADVSettings
+from .Options import APADVGameOptions
 from .JsonRule import eval_json_rule, preprocess_json_rule
 from settings import get_settings
 from entrance_rando import randomize_entrances
@@ -13,10 +13,10 @@ from .ImpliedCapabilities import ProcessCapabs
 #from .CfgProcessor import item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table
 from .CfgProcessor import ProcessCfgs
 
-class GMADVItem(Item):
+class APADVItem(Item):
     game = "GMod - apAdventure"
 
-class GMADVLocation(Location):
+class APADVLocation(Location):
     game = "GMod - apAdventure"
 
 class CapabTblEntry:
@@ -36,13 +36,13 @@ class StartRegion:
         self.map = map
         self.regname = regname
 
-class GMADVItemSet:
+class APADVItemSet:
     def __init__(self,name,nicename):
         self.name = name
         self.nicename = nicename
         self.items = list()
 
-class GMADVMap:
+class APADVMap:
     def __init__(self,bspname,group):
         self.bspname = bspname
         self.group = group
@@ -84,9 +84,7 @@ def test_accessibility(canaccess: set,checked: set):
         return test_accessibility(newaccess,checked)
 
 
-class GMADVWorld(World):
-    """\"I wish someone would make a mod.\"
-    
+class APADVWorld(World):
     Garry:"""
 
     game = "GMod - apAdventure"
@@ -107,9 +105,9 @@ class GMADVWorld(World):
 
     registereditemsets = dict()
 
-    settings: typing.ClassVar[GMADVSettings]
-    options_dataclass = GMADVGameOptions
-    options: GMADVGameOptions
+    settings: typing.ClassVar[APADVSettings]
+    options_dataclass = APADVGameOptions
+    options: APADVGameOptions
 
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
@@ -184,7 +182,7 @@ class GMADVWorld(World):
         if flags == None:
             flags = ItemClassification.progression
             reflag = True
-        item = GMADVItem(name, flags, self.item_name_to_id[name], self.player)
+        item = APADVItem(name, flags, self.item_name_to_id[name], self.player)
         if reflag:
             self.items_to_reflag.append(item)
         self.debuglog(f"created item {name} with flags {flags}")
@@ -559,8 +557,8 @@ class GMADVWorld(World):
 
         itempool = [self.create_item("McGuffin")]
         item_table = self.item_table
-        fillers = list[GMADVItem]()
-        usefuls = list[GMADVItem]()
+        fillers = list[APADVItem]()
+        usefuls = list[APADVItem]()
 
         if self.bhop == 2:
             bhop = self.create_item("Bunnyhop")
