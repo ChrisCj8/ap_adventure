@@ -1,13 +1,13 @@
 @PointClass base(Targetname) iconsprite("apadventure/editor/ap_icon.vmt") = logic_apadventure_map_item_count : "Outputs how many of a certain map item the current slot has."
 [
-    item(string) : "Item" : : "name of the item that should be counted"
+    item(string) : "Item" : : "Name of the item that should be counted"
 
-    output ItemCount(integer) : "how many of the item the slot owns"
+    output ItemCount(integer) : "How many of the item the slot owns"
 ]
 
 @PointClass base(Targetname) iconsprite("apadventure/editor/ap_icon.vmt") = logic_apadventure_slot : "Used to interact with the Archipelago Slot. You shouldn't need to place more than one of these."
 [
-    input SendMapLocation(string) : "send a location from this map"
-    input SendChat(string) : "send a chat message to the Archipelago server"
-    //input SendDeathLink(string) : "send a deathlink signal"
+    input SendMapLocation(string) : "Send a location from this map"
+    input SendChat(string) : "Send a chat message to the Archipelago server"
+    //input SendDeathLink(string) : "Send a DeathLink signal"
 ]
