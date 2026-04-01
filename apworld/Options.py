@@ -43,17 +43,19 @@ class ConfigGroups(OptionSet):
     Configs are organized into groups so maps related to each other (such as maps from the same chapter in HL2)
     can be grouped together and share certain settings.
     """
-    default = {"canals_walk","ravenholm","coast_walk","nova_prospekt"}
+    display_name = "Config Groups"
+    default = {"orange_hub","canals_walk","ravenholm","coast_walk","nova_prospekt"}
 
 singlepickschema = Schema(Or({
         str: Or(list, str)
     },{}))
 
 class ConfigCherryPick(OptionDict):
-    """This option allows you to cherrypick single maps from a Config Group."""
-    default = {
-        "orange_test": ["ap_orange"]
-    }
+    """This option allows you to cherrypick single maps from a Config Group.
+    
+    Check the options guide for more Information on how this option works."""
+    display_name = "Config Cherrypicking"
+    default = {}
     schema = singlepickschema
 
 class ConfigBlacklist(OptionDict):
@@ -63,7 +65,10 @@ class ConfigBlacklist(OptionDict):
     had configs made for them for the sake of completion.
     
     Blacklisting maps that have not actually been added through the previous options
-    should not cause problems."""
+    should not cause problems.
+    
+    Check the options guide for more Information on how this option works."""
+    display_name = "Config Blacklist"
     default = {
         "ravenholm": ["d1_town_02a","d1_town_04"],
         "nova_prospekt": ["d2_prison_06"]
@@ -76,21 +81,27 @@ class ItemSets(OptionSet):
     Similarly to Map Configs, Items related to each other are grouped together in Item Sets.
     
     The Generator will automatically check which of the items chosen are relevant to progression
-    and will automatically start removing items that are not logically required if there is not
-    enough space for them. This process is not perfect though, the generator just checks
-    if the item can fullfill any logic rule, but it doesn't check if there is another item
-    that could also satisfy that rule, so if multiple items exist that can pass the same
-    conditions the generator will keep all of then, even if the run could be beaten with
-    only one of them."""
-    default = {"hl2weps","funny"}
+    and remove items that are not logically required if there is not enough space for them.
+    This process is not perfect though, the generator just checks if the item can fullfill
+    any logic rule, but it doesn't check if there is another item that could also satisfy
+    that rule, so if multiple items exist that can pass the same conditions the generator will
+    keep all of then, even if the run could be beaten with only one of them."""
+    display_name = "Item Sets"
+    default = {"hl2weps","generic_filler","funny"}
 
 class ItemCherryPick(OptionDict):
-    """This option allows you to cherrypick single items from an Item Set."""
+    """This option allows you to cherrypick single items from an Item Set.
+    
+    Check the options guide for more Information on how this option works."""
+    display_name = "Item Cherrypicking"
     default = {}
     schema = singlepickschema
 
 class ItemBlacklist(OptionDict):
-    """This option allows you to blacklist single items from an Item Set."""
+    """This option allows you to blacklist single items from an Item Set.
+    
+    Check the options guide for more Information on how this option works."""
+    display_name = "Item Blacklist"
     default = {}
     schema = singlepickschema
 
@@ -113,6 +124,7 @@ class AmmoMerge(OptionList):
     called "apadventure_dump_ammotypes" that will dump the names
     of all currently existing ammo types, which can be used to figure
     out the names of ammo types that have been added by addons."""
+    display_name = "Ammo Merge"
     default = [
         ["Pistol","9mmRound"],
         ["Buckshot","BuckshotHL1"],
@@ -130,7 +142,7 @@ class BunnyHop(Choice):
     receiving an item and "always" will disable it from the start.
     
     The latter two options also provide an Autohop."""
-    display_name = "BunnyHop"
+    display_name = "Bunnyhop"
     option_never = 1
     option_item = 2
     option_always = 3
@@ -139,7 +151,7 @@ class BunnyHop(Choice):
 class BunnyHopLogic(Toggle):
     """Should the player be expected to BunnyHop to reach certain areas?
     Ignored if BunnyHop is set to "never"."""
-    display_name = "BunnyHop Logic"
+    display_name = "Bunnyhop Logic"
 
 
 class GeneratePUML(Toggle):
