@@ -104,15 +104,15 @@ function APADV_TRACKER:Build()
         local gtbl = grouptbls[groupn]
 
         if !gtbl then
-            gtbl = fromJSON(rfile("apadventure/cfg/"..groupn.."/group.json","DATA"))
+            gtbl = fromJSON(rfile("apadventure/cfg/"..groupn.."/group.json","DATA") or rfile("data_static/apadventure/cfg/"..groupn.."/group.json","GAME"))
             grouptbls[groupn] = gtbl
         end
 
         local path = "apadventure/cfg/"..groupn.."/"..mapn.."/sv.json"
-        local json = assert(rfile(path,"DATA"),"couldn't find config for map "..mapn.." in group "..groupn)
+        local json = assert(rfile(path,"DATA") or rfile("data_static/"..path,"GAME"),"couldn't find config for map "..mapn.." in group "..groupn)
         local svcfg = fromJSON(json)
         path = "apadventure/cfg/"..groupn.."/"..mapn.."/cl.json"
-        json = assert(rfile(path,"DATA"),"couldn't find config for map "..mapn.." in group "..groupn)
+        json = assert(rfile(path,"DATA") or rfile("data_static/"..path,"GAME"),"couldn't find config for map "..mapn.." in group "..groupn)
         local clcfg = fromJSON(json)
 
         local locsbyreg = {}
