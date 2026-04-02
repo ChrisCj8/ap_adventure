@@ -9,7 +9,7 @@ timer.Create("ApAdvMapIconMatReload",2,0, function()
 end)
 
 function apAdventure.GetMapIconMat(map,loadedcb)
-    print(map)
+    --print(map)
     if apAdventure.MapIconMats[map] then
         --return apAdventure.MapIconMats[map].mat
         if isfunction(loadedcb) then
@@ -35,10 +35,10 @@ function apAdventure.GetMapIconMat(map,loadedcb)
         ]])
         local olddocready = html.OnDocumentReady
         function html:OnFinishLoadingDocument()
-            print("html loaded") 
+            --print("html loaded") 
             html:UpdateHTMLTexture()
             local timername = "apadventure_mapiconmat_"..map
-            timer.Create(timername,1,0, function()
+            timer.Create(timername,.5,0, function()
                 html:UpdateHTMLTexture()
                 local origmat = html:GetHTMLMaterial()
                 if !origmat then print(html,origmat) return end
