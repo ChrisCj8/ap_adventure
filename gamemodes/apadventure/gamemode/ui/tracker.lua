@@ -372,7 +372,6 @@ local function opentracker(window)
 
     window:SetSizable(true)
 
-    print(curmapnode)
     if curmapnode then
         curmapnode:GetParentNode():SetExpanded(true)
         tree:SetSelectedItem(curmapnode)

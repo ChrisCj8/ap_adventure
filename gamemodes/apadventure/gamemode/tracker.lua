@@ -72,7 +72,6 @@ function APADV_TRACKER:SendTrackerData(ply)
                     end
                 end
                 if reg.locs then
-                    PrintTable(reg.locs)
                     for k,v in pairs(reg.locs) do
                         self:SendLocationUpdate(grn,mapn,k,v.reach,ply)
                     end
