@@ -10,7 +10,7 @@ class McGuffinCount(FreeText):
     the item pool the generator will only place as many as it can fit.
     """
     display_name = "McGuffin Count"
-    default = 1
+    default = 5
 
 class Skill(Choice):
     """Sets the internal "skill" variable, which is mainly used for difficulty settings

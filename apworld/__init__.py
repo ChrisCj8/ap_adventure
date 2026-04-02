@@ -626,7 +626,7 @@ class APADVWorld(World):
         try:
             mcguffin_desired = int(self.options.mcguffin_count.value) - 1
         except:
-            mcguffin_desired = 0
+            mcguffin_desired = 4
 
         if mcguffin_desired <= 0:
             mcguffin_desired = 0
