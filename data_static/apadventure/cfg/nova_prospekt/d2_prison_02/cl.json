@@ -1,0 +1,33 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Exit": {
+			"ammo": []
+		},
+		"Entrance": {
+			"ammo": []
+		},
+		"Prison Cells": {
+			"ammo": []
+		}
+	},
+	"connect": {
+		"Entrance": {
+			"Prison Cells": {
+				"twoway": true,
+				"access": {
+					"capab": [
+						"WeakMelee"
+					],
+					"type": "capab"
+				}
+			}
+		},
+		"Prison Cells": {
+			"Exit": {
+				"twoway": true
+			}
+		}
+	}
+}

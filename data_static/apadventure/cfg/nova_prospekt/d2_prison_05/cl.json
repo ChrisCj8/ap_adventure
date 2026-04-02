@@ -1,0 +1,26 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Main": {
+			"ammo": {
+				"Ammo_Buckshot": true,
+				"Antlions_Controllable": true,
+				"Ammo_AR2": true
+			}
+		},
+		"Guard Arena": {
+			"ammo": {
+				"Ammo_Buckshot": true,
+				"Ammo_AR2": true
+			}
+		}
+	},
+	"connect": {
+		"Main": {
+			"Guard Arena": {
+				"twoway": false
+			}
+		}
+	}
+}

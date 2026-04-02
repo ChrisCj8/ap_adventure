@@ -1,0 +1,89 @@
+{
+	"ver": "v1",
+	"delname": {
+		"global_newgame_template_base_items": true,
+		"global_newgame_template_ammo": true,
+		"global_newgame_template_local_items": true
+	},
+	"exitaccess": {
+		"Exit": {
+			"capab": [
+				"MediumExplosion"
+			],
+			"type": "capab"
+		}
+	},
+	"entraccess": [],
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [],
+	"exit": [
+		{
+			"ang": "{90 0 0}",
+			"pos": "[1804.2812 1400.6228 -513.8837]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{90 179.9716 180}",
+			"pos": "[-259.4073 -2618.0017 -181.0356]",
+			"reg": "After Vent",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 -80.5234 0}",
+			"pos": "[1865.7103 1469.9016 -557.3531]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -73.3184 0}",
+			"pos": "[1893.8302 1358.2961 -569.7988]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -66.2784 0}",
+			"pos": "[1929.1356 1267.5283 -556.322]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -86.3534 0}",
+			"pos": "[1960.8925 1096.2384 -561.6303]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -89.4334 0}",
+			"pos": "[1965.2693 959.8365 -566.678]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -85.5284 0}",
+			"pos": "[1974.543 799.6549 -558.4088]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -82.3384 0}",
+			"pos": "[1985.0306 692.1842 -562.8608]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -82.8334 0}",
+			"pos": "[2007.7024 515.1319 -575.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": []
+}

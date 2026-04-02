@@ -1,0 +1,103 @@
+{
+	"ver": "v1",
+	"delname": {
+		"playerclip_shower_dropdown": true,
+		"global_newgame_template_local_items": true,
+		"global_newgame_template_ammo": true,
+		"global_newgame_template_base_items": true
+	},
+	"exitaccess": [],
+	"entraccess": {
+		"Entrance": {
+			"type": "or",
+			"nodes": [
+				{
+					"capab": [
+						"StrongShortRange"
+					],
+					"type": "capab"
+				},
+				{
+					"capab": [
+						"StrongMelee"
+					],
+					"type": "capab"
+				}
+			]
+		}
+	},
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[-3495.7097 2763.1021 104.4028]",
+			"dummy": true,
+			"ang": "{0 0 0}",
+			"reg": "Showers",
+			"name": "Defeat Shower Guard"
+		},
+		{
+			"pos": "[-3540.2976 4022.8813 174.0148]",
+			"ang": "{0 0 0}",
+			"reg": "After Field",
+			"name": "Lambda Cache"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{89.9781 -0.0217 180}",
+			"pos": "[-2592.4836 3181.9956 188.7125]",
+			"reg": "Showers",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{90 -0.0171 180}",
+			"pos": "[-3406.8359 6047.6641 56.8599]",
+			"reg": "Exit",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 -90.7274 0}",
+			"pos": "[-2647.415 3193.5659 128.0312]",
+			"reg": "Showers",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.7274 0}",
+			"pos": "[-2648.8777 3078.3513 128.0312]",
+			"reg": "Showers",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.7274 0}",
+			"pos": "[-2650.5154 2949.3513 128.0312]",
+			"reg": "Showers",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.6724 0}",
+			"pos": "[-2749.8433 3213.2478 128.0312]",
+			"reg": "Showers",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.6724 0}",
+			"pos": "[-2751.1938 3098.0332 128.0312]",
+			"reg": "Showers",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.6724 0}",
+			"pos": "[-2752.8638 2955.5332 128.0312]",
+			"reg": "Showers",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": []
+}

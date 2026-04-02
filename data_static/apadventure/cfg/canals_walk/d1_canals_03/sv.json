@@ -1,0 +1,95 @@
+{
+	"ver": "v1",
+	"delname": {
+		"global_newgame_template": true
+	},
+	"exitaccess": [],
+	"entraccess": {
+		"Entrance": {
+			"capab": [
+				"DecentMelee"
+			],
+			"type": "capab"
+		}
+	},
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[-825.234 2795.2476 -707.9993]",
+			"ang": "{0 0 0}",
+			"reg": "Pre-Ambush",
+			"name": "Matts Supplies"
+		},
+		{
+			"pos": "[-1597.3552 51.9178 -956.218]",
+			"dummy": true,
+			"ang": "{0 0 0}",
+			"reg": "Ambush",
+			"name": "Rappelling Metrocop"
+		},
+		{
+			"pos": "[-122.4836 -468.4021 -926.2335]",
+			"ang": "{0 0 0}",
+			"reg": "Post-Ambush",
+			"name": "Lambda Cache"
+		},
+		{
+			"pos": "[-3022.0093 -813.9846 -937.7804]",
+			"ang": "{0 0 0}",
+			"reg": "Post-Ambush",
+			"name": "Manhack Vent"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{89.9858 -45.0123 180}",
+			"pos": "[356.2537 3258.9785 -795.3897]",
+			"reg": "Pre-Ambush",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{90 179.9736 180}",
+			"pos": "[-3100.8306 80.9947 -1017.5363]",
+			"reg": "Post-Ambush",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 134.6682 0}",
+			"pos": "[323.2317 3291.7722 -847.9688]",
+			"reg": "Pre-Ambush",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 134.6682 0}",
+			"pos": "[248.2312 3367.6462 -847.9688]",
+			"reg": "Pre-Ambush",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 177.0181 0}",
+			"pos": "[189.752 3425.606 -847.9688]",
+			"reg": "Pre-Ambush",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -120.3369 0}",
+			"pos": "[116.6015 3503.9182 -847.9688]",
+			"reg": "Pre-Ambush",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 176.9081 0}",
+			"pos": "[24.2722 3439.2512 -847.9688]",
+			"reg": "Pre-Ambush",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": []
+}

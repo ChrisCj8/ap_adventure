@@ -1,0 +1,59 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Entry": {
+			"ammo": []
+		},
+		"Beach": {
+			"ammo": {
+				"Ammo_AR2": true,
+				"Props": true
+			}
+		},
+		"Guard Arena": {
+			"ammo": {
+				"Ammo_Buckshot": true,
+				"Ammo_AR2": true,
+				"Props": true
+			}
+		},
+		"Enclave": {
+			"ammo": []
+		}
+	},
+	"connect": {
+		"Entry": {
+			"Beach": {
+				"twoway": true
+			}
+		},
+		"Beach": {
+			"Guard Arena": {
+				"twoway": false
+			}
+		},
+		"Guard Arena": {
+			"Enclave": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		}
+	}
+}

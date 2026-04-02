@@ -1,0 +1,115 @@
+{
+	"ver": "v1",
+	"delname": {
+		"global_newgame_template_base_items": true,
+		"global_newgame_template_local_items": true,
+		"global_newgame_template_ammo": true
+	},
+	"exitaccess": {
+		"Entrance": {
+			"capab": [
+				"AntlionControl"
+			],
+			"type": "capab"
+		}
+	},
+	"entraccess": {
+		"Entrance": {
+			"capab": [
+				"AntlionControl"
+			],
+			"type": "capab"
+		}
+	},
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[-1409.3893 577.3223 425.9395]",
+			"ang": "{0 0.0134 0}",
+			"reg": "Main",
+			"name": "Lambda Cache"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 -90.0261 180}",
+			"pos": "[1439.3048 316.8073 444.297]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{89.9966 2.3137 180}",
+			"pos": "[-4311.7915 -1006.7904 706.6684]",
+			"reg": "Guard Arena",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 89.8937 0}",
+			"pos": "[1386.4933 705.4318 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 89.8937 0}",
+			"pos": "[1386.3481 627.565 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 89.8937 0}",
+			"pos": "[1386.2201 558.8469 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 89.8937 0}",
+			"pos": "[1386.0596 472.769 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 89.8937 0}",
+			"pos": "[1385.8658 368.9046 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 88.6287 0}",
+			"pos": "[1481.4375 367.0351 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 88.6287 0}",
+			"pos": "[1483.4418 450.7678 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 88.6287 0}",
+			"pos": "[1485.4674 535.4006 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 88.6287 0}",
+			"pos": "[1487.5541 622.5675 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 88.6287 0}",
+			"pos": "[1489.4949 703.6514 384.0312]",
+			"reg": "Main",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": []
+}

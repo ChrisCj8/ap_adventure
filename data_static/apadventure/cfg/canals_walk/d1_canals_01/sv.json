@@ -1,0 +1,116 @@
+{
+	"ver": "v1",
+	"delname": [],
+	"exitaccess": {
+		"Exit": {
+			"type": "or",
+			"nodes": [
+				{
+					"capab": [
+						"DecentMelee"
+					],
+					"type": "capab"
+				},
+				{
+					"type": "and",
+					"nodes": [
+						{
+							"type": "or",
+							"nodes": [
+								{
+									"capab": [
+										"DecentShortRange"
+									],
+									"type": "capab"
+								},
+								{
+									"capab": [
+										"DecentMidRange"
+									],
+									"type": "capab"
+								}
+							]
+						},
+						{
+							"capab": [
+								"WimpyMelee"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			]
+		}
+	},
+	"entraccess": [],
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[64.2368 -7356.9297 -39.7489]",
+			"dummy": true,
+			"ang": "{0 0 0}",
+			"reg": "Main",
+			"name": "Stopped Police Brutality"
+		},
+		{
+			"pos": "[607.6608 -4962.251 538.0222]",
+			"ang": "{0 0 0}",
+			"reg": "Main",
+			"name": "Lambda Cache"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 90 0}",
+			"pos": "[635.2001 -8319.7188 -66.3813]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{90 295.5 0}",
+			"pos": "[666.7584 3394.7122 -36.0027]",
+			"reg": "Main",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 89.0562 0}",
+			"pos": "[632.0648 -8242.999 -127.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 89.0562 0}",
+			"pos": "[634.6983 -8083.1855 -127.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 89.0562 0}",
+			"pos": "[637.0961 -7937.6855 -127.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 89.0562 0}",
+			"pos": "[639.2961 -7804.1855 -127.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 89.0562 0}",
+			"pos": "[641.3725 -7678.1855 -127.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": [
+		1430
+	]
+}

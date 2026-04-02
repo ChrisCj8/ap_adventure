@@ -1,0 +1,77 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Corridor": {
+			"ammo": []
+		},
+		"Cell Block": {
+			"ammo": {
+				"Ammo_SMG1": true
+			}
+		},
+		"Control Room": {
+			"ammo": []
+		}
+	},
+	"connect": {
+		"Corridor": {
+			"Control Room": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"DecentMelee"
+					],
+					"type": "capab"
+				}
+			},
+			"Cell Block": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"DecentMelee"
+					],
+					"type": "capab"
+				}
+			}
+		},
+		"Cell Block": {
+			"Corridor": {
+				"twoway": false,
+				"access": {
+					"type": "and",
+					"nodes": [
+						{
+							"type": "or",
+							"nodes": [
+								{
+									"capab": [
+										"DecentMidRange"
+									],
+									"type": "capab"
+								},
+								{
+									"capab": [
+										"DecentShortRange"
+									],
+									"type": "capab"
+								}
+							]
+						},
+						{
+							"capab": [
+								"WeakMelee"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Control Room": {
+			"Corridor": {
+				"twoway": false
+			}
+		}
+	}
+}

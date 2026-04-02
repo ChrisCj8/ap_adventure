@@ -1,0 +1,104 @@
+{
+	"ver": "v1",
+	"delname": [],
+	"exitaccess": [],
+	"entraccess": {
+		"Entrance": {
+			"type": "and",
+			"nodes": [
+				{
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"WeakShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"WeakMidRange"
+							],
+							"type": "capab"
+						}
+					]
+				},
+				{
+					"capab": [
+						"DecentMelee"
+					],
+					"type": "capab"
+				}
+			]
+		}
+	},
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[148.3557 6057.4834 -42.3107]",
+			"ang": "{-0 -0.0303 0}",
+			"reg": "Main",
+			"name": "Lambda Cache"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 180 0}",
+			"pos": "[959.7188 3080.6653 -34.6261]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{90 -179.9602 180}",
+			"pos": "[-5550.6929 9215.0781 82.6194]",
+			"reg": "Main",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 105.8321 0}",
+			"pos": "[778.937 3039.0142 -95.9688]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 104.2921 0}",
+			"pos": "[726.4115 3226.2461 -95.9688]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 72.942 0}",
+			"pos": "[626.6175 3355.6899 -95.9502]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 64.417 0}",
+			"pos": "[667.3514 3532.3594 -95.9688]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 62.6019 0}",
+			"pos": "[737.1977 2949.6584 -95.9688]",
+			"reg": "Main",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 13.9019 0}",
+			"pos": "[589.282 2880.2512 -95.9688]",
+			"reg": "Main",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": [
+		2250
+	]
+}

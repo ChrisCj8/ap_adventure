@@ -1,0 +1,7 @@
+{
+	"rules": {
+		"respawn": true,
+		"hev": false,
+		"godmode": false
+	}
+}

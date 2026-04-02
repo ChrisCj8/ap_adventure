@@ -1,0 +1,60 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Main": {
+			"ammo": {
+				"Ammo_Pistol": true
+			}
+		},
+		"Entrance": {
+			"ammo": []
+		}
+	},
+	"connect": {
+		"Entrance": {
+			"Main": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"type": "and",
+							"nodes": [
+								{
+									"type": "or",
+									"nodes": [
+										{
+											"capab": [
+												"WeakShortRange"
+											],
+											"type": "capab"
+										},
+										{
+											"capab": [
+												"WeakMidRange"
+											],
+											"type": "capab"
+										}
+									]
+								},
+								{
+									"capab": [
+										"WimpyMelee"
+									],
+									"type": "capab"
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Main": {
+			"ammo": {
+				"Ammo_Pistol": true,
+				"Props": true
+			}
+		}
+	}
+}

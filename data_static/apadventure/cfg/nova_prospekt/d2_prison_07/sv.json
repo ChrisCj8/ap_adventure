@@ -1,0 +1,247 @@
+{
+	"ver": "v1",
+	"delname": {
+		"global_newgame_template_base_items": true,
+		"global_newgame_template_ammo": true,
+		"global_newgame_template_local_items": true
+	},
+	"exitaccess": {
+		"Exit": {
+			"type": "or",
+			"nodes": [
+				{
+					"capab": [
+						"DecentMidRange"
+					],
+					"type": "capab"
+				},
+				{
+					"capab": [
+						"DecentShortRange"
+					],
+					"type": "capab"
+				}
+			]
+		}
+	},
+	"entraccess": [],
+	"lctnaccess": {
+		"Defended Cell Block": {
+			"type": "or",
+			"nodes": [
+				{
+					"capab": [
+						"DecentMidRange"
+					],
+					"type": "capab"
+				},
+				{
+					"capab": [
+						"DecentShortRange"
+					],
+					"type": "capab"
+				}
+			]
+		}
+	},
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[4140.7627 -3953.3853 -497.951]",
+			"dummy": true,
+			"ang": "{0 0 0}",
+			"reg": "Cell Block",
+			"name": "Defended Cell Block"
+		},
+		{
+			"pos": "[-417.2144 -3404.1577 -109.4283]",
+			"dummy": true,
+			"ang": "{0 0 0}",
+			"reg": "Control Room",
+			"name": "Defended Control Room"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 0 180}",
+			"pos": "[4736.9673 -4336.2539 -635.55]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{89.9888 -0.0471 180}",
+			"pos": "[527.5308 -2623.9949 -179.1771]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4638.4863 -4293.8354 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4627.564 -4398.8564 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4516.5537 -4398.3643 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4483.6021 -4288.4087 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4368.5703 -4286.978 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4358.4263 -4380.3413 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4232.6836 -4385.5229 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4220.7178 -4278.1206 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4093.3389 -4297.5693 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[4086.2437 -4397.6157 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[3978.4634 -4386.8901 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[3962.0461 -4269.624 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[3837.845 -4267.7261 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 179.7144 0}",
+			"pos": "[3818.6877 -4399.4307 -695.9688]",
+			"reg": "Cell Block",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 -179.9302 0}",
+			"pos": "[485.4219 -2622.967 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.9302 0}",
+			"pos": "[371.6344 -2623.0979 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.9302 0}",
+			"pos": "[269.2599 -2623.2166 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.9302 0}",
+			"pos": "[266.3734 -2459.2563 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.9302 0}",
+			"pos": "[163.157 -2458.677 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.5453 0}",
+			"pos": "[41.6586 -2459.2039 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.5453 0}",
+			"pos": "[-78.3377 -2460.1609 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.5453 0}",
+			"pos": "[-195.3341 -2461.094 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -178.2803 0}",
+			"pos": "[169.8629 -2615.6304 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.0502 0}",
+			"pos": "[24.3538 -2618.7639 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.0502 0}",
+			"pos": "[-94.13 -2620.7312 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.0502 0}",
+			"pos": "[-203.6146 -2622.5491 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -179.0502 0}",
+			"pos": "[-295.1015 -2624.0681 -239.9688]",
+			"reg": "Control Room",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": []
+}

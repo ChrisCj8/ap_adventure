@@ -1,0 +1,454 @@
+{
+	"ver": "v1",
+	"delname": [],
+	"exitaccess": [],
+	"entraccess": [],
+	"lctnaccess": {
+		"Behind Planks in Red Hut": {
+			"type": "or",
+			"nodes": [
+				{
+					"capab": [
+						"WimpyMelee"
+					],
+					"type": "capab"
+				},
+				{
+					"capab": [
+						"GravityGun"
+					],
+					"type": "capab"
+				}
+			]
+		}
+	},
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[-294.461 349.9934 78.3142]",
+			"ang": "{0 0 0}",
+			"reg": "Green Hut",
+			"name": "In Green Hut"
+		},
+		{
+			"pos": "[317.8509 820.1712 307.2755]",
+			"ang": "{0 0 0}",
+			"reg": "Outside",
+			"name": "Red Hut Roof"
+		},
+		{
+			"pos": "[-246.3994 487.9189 78.923]",
+			"ang": "{0 0 0}",
+			"reg": "Outside",
+			"name": "Behind Green Hut"
+		},
+		{
+			"pos": "[785.0713 748.4367 150.6174]",
+			"ang": "{0 0 0}",
+			"reg": "Red Hut",
+			"name": "Behind Planks in Red Hut"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 0 0}",
+			"pos": "[-431.7188 352.2457 79.4817]",
+			"reg": "Green Hut",
+			"name": "Green Hut"
+		},
+		{
+			"ang": "{90 180 0}",
+			"pos": "[943.7188 735.6515 287.3493]",
+			"reg": "Red Hut",
+			"name": "Red Hut Upper"
+		},
+		{
+			"ang": "{90 180 0}",
+			"pos": "[943.7188 911.6399 159.0461]",
+			"reg": "Red Hut",
+			"name": "Red Hut Lower"
+		},
+		{
+			"ang": "{90 239.9999 0}",
+			"pos": "[840.8182 407.5346 77.0438]",
+			"reg": "Outside",
+			"name": "Lone Wall"
+		},
+		{
+			"ang": "{90 180 0}",
+			"pos": "[943.7188 2591.9028 223.2897]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{90 0 0}",
+			"pos": "[272.2812 2319.9958 223.2133]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{90 180 0}",
+			"pos": "[511.7188 2288.3376 79.7165]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{90 0 0}",
+			"pos": "[272.2812 1888.4401 127.9477]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 -1.6984 0}",
+			"pos": "[-384.4311 347.2459 16.0312]",
+			"reg": "Green Hut",
+			"name": "Green Hut"
+		},
+		{
+			"ang": "{0 0.6666 0}",
+			"pos": "[-255.6016 348.4429 16.0312]",
+			"reg": "Green Hut",
+			"name": "Green Hut"
+		},
+		{
+			"ang": "{0 -142.7735 0}",
+			"pos": "[-146.9543 359.3685 16.0312]",
+			"reg": "Green Hut",
+			"name": "Green Hut"
+		},
+		{
+			"ang": "{0 -179.7887 0}",
+			"pos": "[898.6575 910.6032 96.0312]",
+			"reg": "Red Hut",
+			"name": "Red Hut Lower"
+		},
+		{
+			"ang": "{0 -179.7887 0}",
+			"pos": "[755.9715 910.0776 96.0312]",
+			"reg": "Red Hut",
+			"name": "Red Hut Lower"
+		},
+		{
+			"ang": "{0 -179.7887 0}",
+			"pos": "[612.3094 909.5482 96.0312]",
+			"reg": "Red Hut",
+			"name": "Red Hut Lower"
+		},
+		{
+			"ang": "{0 -179.7887 0}",
+			"pos": "[458.4853 908.9814 96.0312]",
+			"reg": "Red Hut",
+			"name": "Red Hut Lower"
+		},
+		{
+			"ang": "{0 179.5813 0}",
+			"pos": "[891.5648 735.8276 224.0312]",
+			"reg": "Red Hut",
+			"name": "Red Hut Upper"
+		},
+		{
+			"ang": "{0 -179.9238 0}",
+			"pos": "[759.6991 736.24 224.0312]",
+			"reg": "Red Hut",
+			"name": "Red Hut Upper"
+		},
+		{
+			"ang": "{0 -179.9238 0}",
+			"pos": "[653.7721 736.0995 224.0312]",
+			"reg": "Red Hut",
+			"name": "Red Hut Upper"
+		},
+		{
+			"ang": "{0 -137.9214 0}",
+			"pos": "[807.6837 365.7102 24.0312]",
+			"reg": "Outside",
+			"name": "Lone Wall"
+		},
+		{
+			"ang": "{0 -178.4565 0}",
+			"pos": "[841.4231 71.3808 16.0312]",
+			"reg": "Outside",
+			"name": "Lone Wall"
+		},
+		{
+			"ang": "{0 178.5736 0}",
+			"pos": "[599.0406 73.4957 16.0312]",
+			"reg": "Outside",
+			"name": "Lone Wall"
+		},
+		{
+			"ang": "{0 -24.6763 0}",
+			"pos": "[586.312 266.2787 16.0312]",
+			"reg": "Outside",
+			"name": "Lone Wall"
+		},
+		{
+			"ang": "{0 0.7407 0}",
+			"pos": "[324.0447 2393.1538 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 0.7407 0}",
+			"pos": "[431.7514 2394.54 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 0.0257 0}",
+			"pos": "[554.7474 2395.2554 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 0.0257 0}",
+			"pos": "[697.2474 2395.3223 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 0.0257 0}",
+			"pos": "[797.7474 2395.3713 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 -1.5692 0}",
+			"pos": "[345.847 2253.4663 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 -1.8992 0}",
+			"pos": "[437.2471 2250.6592 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 -2.1742 0}",
+			"pos": "[540.6811 2246.978 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 -2.2842 0}",
+			"pos": "[647.0985 2242.7971 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 -2.2842 0}",
+			"pos": "[786.485 2237.2344 160.0312]",
+			"reg": "Yellow Hut Upper",
+			"name": "Yellow Hut Upper"
+		},
+		{
+			"ang": "{0 179.131 0}",
+			"pos": "[450.398 2238.3657 16.0312]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{0 179.406 0}",
+			"pos": "[434.7111 2353.6079 16.0312]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{0 -179.714 0}",
+			"pos": "[341.94 2354.1099 16.0312]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{0 -179.714 0}",
+			"pos": "[244.4419 2353.615 16.0312]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{0 -179.714 0}",
+			"pos": "[136.443 2353.0701 16.0312]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{0 179.0209 0}",
+			"pos": "[367.3682 2243.6133 16.0312]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{0 179.3509 0}",
+			"pos": "[296.8174 2244.7346 16.0312]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{0 -179.3291 0}",
+			"pos": "[164.823 2245.7102 16.0312]",
+			"reg": "Blue Sewer",
+			"name": "Blue Sewer"
+		},
+		{
+			"ang": "{0 179.6609 0}",
+			"pos": "[887.6862 2529.5591 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 179.8259 0}",
+			"pos": "[755.9709 2529.686 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 -179.7341 0}",
+			"pos": "[610.4709 2530.1016 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 -179.9541 0}",
+			"pos": "[496.4709 2529.9199 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 -179.9541 0}",
+			"pos": "[358.4709 2529.8076 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 -179.9541 0}",
+			"pos": "[263.9709 2529.7307 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 179.8258 0}",
+			"pos": "[886.9228 2652.8735 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 179.8258 0}",
+			"pos": "[783.9474 2653.1982 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 179.7708 0}",
+			"pos": "[660.9474 2653.5835 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 179.6058 0}",
+			"pos": "[531.9485 2654.2368 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 179.6058 0}",
+			"pos": "[398.4516 2655.1494 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 179.6058 0}",
+			"pos": "[284.4539 2655.9287 160.0312]",
+			"reg": "Outside",
+			"name": "Behind Blue/Yellow Hut"
+		},
+		{
+			"ang": "{0 0.2955 0}",
+			"pos": "[385.1787 1958.257 64.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 0.5155 0}",
+			"pos": "[386.117 1844.9791 64.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 0.5155 0}",
+			"pos": "[516.9957 1942.3567 32.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 0.5155 0}",
+			"pos": "[519.0885 1834.3236 32.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 0.5155 0}",
+			"pos": "[625.4625 1835.2834 32.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 0.5155 0}",
+			"pos": "[625.9847 1961.5159 32.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 1.6157 0}",
+			"pos": "[527.1274 2080.6968 32.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 1.6157 0}",
+			"pos": "[624.3033 2083.4346 32.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 -0.2543 0}",
+			"pos": "[536.022 1732.913 32.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		},
+		{
+			"ang": "{0 -0.2543 0}",
+			"pos": "[625.7372 1732.512 32.0312]",
+			"reg": "Blue/Yellow Hut Lower",
+			"name": "Blue/Yellow Hut Lower"
+		}
+	],
+	"start": [
+		{
+			"ang": "{0 131.95 0}",
+			"pos": "[379.5717 -5.6189 16.0312]",
+			"reg": "Outside"
+		},
+		{
+			"ang": "{0 91.3601 0}",
+			"pos": "[119.0163 -55.9019 16.0312]",
+			"reg": "Outside"
+		},
+		{
+			"ang": "{0 52.2001 0}",
+			"pos": "[-359.7302 -24.6658 16.0312]",
+			"reg": "Outside"
+		},
+		{
+			"ang": "{0 -160.675 0}",
+			"pos": "[412.1872 410.4198 16.0312]",
+			"reg": "Outside"
+		}
+	],
+	"del": []
+}

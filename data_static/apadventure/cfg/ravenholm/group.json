@@ -1,0 +1,12 @@
+{
+	"rules": {
+		"walkspd": 150,
+		"frctn": 4,
+		"sprintspd": 320,
+		"hev": true,
+		"godmode": false,
+		"stopspd": 100,
+		"respawn": false,
+		"runspd": 190
+	}
+}

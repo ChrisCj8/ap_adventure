@@ -1,0 +1,102 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"item": {
+		"Blue Key": {
+			"fl": 1,
+			"amt": 1
+		},
+		"Yellow Key": {
+			"fl": 1,
+			"amt": 1
+		},
+		"Green Key": {
+			"fl": 1,
+			"amt": 1
+		},
+		"Red Key": {
+			"fl": 1,
+			"amt": 1
+		}
+	},
+	"reg": {
+		"Blue/Yellow Hut Lower": {
+			"ammo": []
+		},
+		"Blue Sewer": {
+			"ammo": []
+		},
+		"Red Hut": {
+			"ammo": []
+		},
+		"Yellow Hut Upper": {
+			"ammo": []
+		},
+		"Outside": {
+			"cond": [],
+			"ammo": []
+		},
+		"Green Hut": {
+			"ammo": []
+		}
+	},
+	"connect": {
+		"Blue/Yellow Hut Lower": {
+			"Outside": {
+				"twoway": false
+			}
+		},
+		"Yellow Hut Upper": {
+			"Blue/Yellow Hut Lower": {
+				"twoway": false
+			}
+		},
+		"Outside": {
+			"Green Hut": {
+				"twoway": true,
+				"access": {
+					"type": "mapitem",
+					"count": 1,
+					"item": "Green Key"
+				}
+			},
+			"Red Hut": {
+				"twoway": true,
+				"access": {
+					"type": "mapitem",
+					"count": 1,
+					"item": "Red Key"
+				}
+			},
+			"Yellow Hut Upper": {
+				"twoway": true,
+				"access": {
+					"type": "mapitem",
+					"count": 1,
+					"item": "Yellow Key"
+				}
+			},
+			"Blue Sewer": {
+				"twoway": false,
+				"access": {
+					"type": "mapitem",
+					"count": 1,
+					"item": "Blue Key"
+				}
+			}
+		},
+		"Blue Sewer": {
+			"Blue/Yellow Hut Lower": {
+				"twoway": true,
+				"access": {
+					"type": "mapitem",
+					"count": 1,
+					"item": "Blue Key"
+				}
+			},
+			"Outside": {
+				"twoway": false
+			}
+		}
+	}
+}

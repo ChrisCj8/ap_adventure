@@ -1,0 +1,68 @@
+{
+	"ver": "v1",
+	"delname": [],
+	"exitaccess": [],
+	"entraccess": [],
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [],
+	"exit": [
+		{
+			"ang": "{89.9497 0.1079 180}",
+			"pos": "[887.5228 -1256.2584 -3590.4661]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{90 180 180}",
+			"pos": "[-2779.4231 1149.6387 -4798.0405]",
+			"reg": "Exit",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 -142.738 0}",
+			"pos": "[812.772 -1183.3488 -3647.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.6431 0}",
+			"pos": "[698.3237 -974.411 -3647.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.6431 0}",
+			"pos": "[566.5107 -970.6307 -3647.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -57.543 0}",
+			"pos": "[491.6622 -940.0927 -3647.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -152.0328 0}",
+			"pos": "[841.7999 -1066.1038 -3647.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -126.059 0}",
+			"pos": "[689.0449 -1104.5408 -3647.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": [
+		1487
+	]
+}

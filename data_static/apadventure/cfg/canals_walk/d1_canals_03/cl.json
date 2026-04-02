@@ -1,0 +1,41 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Pre-Ambush": {
+			"ammo": {
+				"Props": true
+			}
+		},
+		"Post-Ambush": {
+			"ammo": {
+				"Ammo_SMG1": true,
+				"Props": true
+			}
+		},
+		"Ambush": {
+			"ammo": {
+				"Ammo_SMG1": true,
+				"Props": true
+			}
+		}
+	},
+	"connect": {
+		"Pre-Ambush": {
+			"Ambush": {
+				"twoway": false
+			}
+		},
+		"Ambush": {
+			"Post-Ambush": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"DecentMidRange"
+					],
+					"type": "capab"
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,186 @@
+{
+	"ver": "v1",
+	"delname": [],
+	"exitaccess": [],
+	"entraccess": [],
+	"lctnaccess": [],
+	"sav": {
+		"Mins": "[-6513.5532 -1 -1]",
+		"Constraints": [],
+		"Maxs": "[1 8158.4946 906.2391]",
+		"Entities": {
+			"1130": {
+				"Skin": 0,
+				"Mins": "[-4.5597 -2.6329 -0.975]",
+				"MaxHealth": 0,
+				"ColGroup": 11,
+				"Persistent": false,
+				"Name": "",
+				"Model": "models/weapons/w_grenade.mdl",
+				"PhysicsObjects": {
+					"0": {
+						"Sleep": true,
+						"Pos": "[-6502.8857 8146.1128 898.3141]",
+						"Frozen": false,
+						"Angle": "{-39.5941 -50.3022 89.6541}"
+					}
+				},
+				"Pos": "[-6502.8857 8146.1128 898.3141]",
+				"CurHealth": 0,
+				"Class": "weapon_frag",
+				"FlexScale": 1,
+				"Maxs": "[3.764 2.2008 9.7652]",
+				"sligwolf_internalTable": {
+					"isDuped": true
+				},
+				"Angle": "{-39.5941 -50.3022 89.6541}"
+			},
+			"1128": {
+				"Skin": 0,
+				"Mins": "[-4.5597 -2.6329 -0.975]",
+				"MaxHealth": 0,
+				"ColGroup": 11,
+				"Persistent": false,
+				"Name": "",
+				"Model": "models/weapons/w_grenade.mdl",
+				"PhysicsObjects": {
+					"0": {
+						"Sleep": true,
+						"Pos": "[-6506.1284 8155.0874 898.3095]",
+						"Frozen": false,
+						"Angle": "{-20.7301 35.5451 90.761}"
+					}
+				},
+				"Pos": "[-6506.1284 8155.0874 898.3095]",
+				"CurHealth": 0,
+				"Class": "weapon_frag",
+				"FlexScale": 1,
+				"Maxs": "[3.764 2.2008 9.7652]",
+				"sligwolf_internalTable": {
+					"isDuped": true
+				},
+				"Angle": "{-20.7301 35.5451 90.761}"
+			},
+			"1129": {
+				"Skin": 0,
+				"Mins": "[-4.5597 -2.6329 -0.975]",
+				"MaxHealth": 0,
+				"ColGroup": 11,
+				"Persistent": false,
+				"Name": "",
+				"Model": "models/weapons/w_grenade.mdl",
+				"PhysicsObjects": {
+					"0": {
+						"Sleep": true,
+						"Pos": "[-6508.8813 8152.1597 896.3616]",
+						"Frozen": false,
+						"Angle": "{1.0633 1.8334 0.7896}"
+					}
+				},
+				"Pos": "[-6508.8813 8152.1597 896.3616]",
+				"CurHealth": 0,
+				"Class": "weapon_frag",
+				"FlexScale": 1,
+				"Maxs": "[3.764 2.2008 9.7652]",
+				"sligwolf_internalTable": {
+					"isDuped": true
+				},
+				"Angle": "{1.0633 1.8334 0.7896}"
+			}
+		}
+	},
+	"lctn": [
+		{
+			"pos": "[-3621.4136 7693.1621 959.9835]",
+			"ang": "{0 0 0}",
+			"reg": "Warehouse Yard",
+			"name": "In Train Car"
+		},
+		{
+			"pos": "[-11382.5117 4394.9282 1055.7728]",
+			"ang": "{0 0 0}",
+			"reg": "Mine Exit",
+			"name": "Lambda Cache"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 -0 180}",
+			"pos": "[-9991.1475 4353.6104 959.7598]",
+			"reg": "Mine Exit",
+			"name": "Mine Exit"
+		},
+		{
+			"ang": "{90 270 0}",
+			"pos": "[-1615.1117 10847.7188 961.3359]",
+			"reg": "Rebel Base",
+			"name": "Rebel Base"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 -91.9239 0}",
+			"pos": "[-1667.8867 10775.5273 896.0312]",
+			"reg": "Rebel Base",
+			"name": "Rebel Base"
+		},
+		{
+			"ang": "{0 -91.9239 0}",
+			"pos": "[-1563.231 10771.9834 896.0312]",
+			"reg": "Rebel Base",
+			"name": "Rebel Base"
+		},
+		{
+			"ang": "{0 -90.024 0}",
+			"pos": "[-1623.3368 10673.2998 896.0312]",
+			"reg": "Rebel Base",
+			"name": "Rebel Base"
+		},
+		{
+			"ang": "{0 -1.804 0}",
+			"pos": "[-1587.5686 10424.1055 864.0312]",
+			"reg": "Rebel Base",
+			"name": "Rebel Base"
+		},
+		{
+			"ang": "{0 -3.234 0}",
+			"pos": "[-1394.0593 10437.4873 864.0312]",
+			"reg": "Rebel Base",
+			"name": "Rebel Base"
+		},
+		{
+			"ang": "{0 179.3124 0}",
+			"pos": "[-10094.832 4432.9927 896.0312]",
+			"reg": "Mine Exit",
+			"name": "Mine Exit"
+		},
+		{
+			"ang": "{0 179.3124 0}",
+			"pos": "[-10302.6562 4435.4951 896.0312]",
+			"reg": "Mine Exit",
+			"name": "Mine Exit"
+		},
+		{
+			"ang": "{0 179.3124 0}",
+			"pos": "[-10335.6367 4280.4243 898.1495]",
+			"reg": "Mine Exit",
+			"name": "Mine Exit"
+		},
+		{
+			"ang": "{0 179.3124 0}",
+			"pos": "[-10179.9072 4278.5493 897.663]",
+			"reg": "Mine Exit",
+			"name": "Mine Exit"
+		},
+		{
+			"ang": "{0 -179.9976 0}",
+			"pos": "[-10064.1748 4353.6958 904.0312]",
+			"reg": "Mine Exit",
+			"name": "Mine Exit"
+		}
+	],
+	"start": [],
+	"del": [
+		1240
+	]
+}

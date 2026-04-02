@@ -1,0 +1,25 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Entrance": {
+			"ammo": []
+		},
+		"Exit": {
+			"ammo": []
+		}
+	},
+	"connect": {
+		"Entrance": {
+			"Exit": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"WimpyMelee"
+					],
+					"type": "capab"
+				}
+			}
+		}
+	}
+}

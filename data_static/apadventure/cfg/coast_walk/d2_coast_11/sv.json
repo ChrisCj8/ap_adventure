@@ -1,0 +1,120 @@
+{
+	"ver": "v1",
+	"delname": {
+		"global_newgame_template_base_items": true,
+		"global_newgame_template_local_items": true,
+		"global_newgame_template_ammo": true
+	},
+	"exitaccess": [],
+	"entraccess": [],
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[3397.6431 868.9904 854.296]",
+			"ang": "{0 0 0}",
+			"reg": "Beach",
+			"name": "Lambda Cache"
+		},
+		{
+			"pos": "[6991.1514 -1316.514 403.8015]",
+			"ang": "{0 0 0}",
+			"reg": "Beach",
+			"name": "Pier near Shore"
+		},
+		{
+			"pos": "[1170.3502 -303.8208 314.9024]",
+			"ang": "{0 0 0}",
+			"reg": "Beach",
+			"name": "Side Path"
+		},
+		{
+			"pos": "[5666.3135 9486.7324 245.9532]",
+			"dummy": true,
+			"ang": "{0 0 0}",
+			"reg": "Enclave",
+			"name": "Inside Antlion Guard"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{88.6031 170.7956 18.6224}",
+			"pos": "[4259.1353 -11367.6719 1674.6823]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{89.9763 134.9834 180}",
+			"pos": "[-1982.0848 12502.499 415.7882]",
+			"reg": "Enclave",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 156.3862 0}",
+			"pos": "[4217.7549 -11334.6943 1609.3163]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 156.5511 0}",
+			"pos": "[4016.6733 -11312.7969 1594.9536]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 156.6611 0}",
+			"pos": "[3967.6807 -11102.0039 1583.6125]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 156.7711 0}",
+			"pos": "[3828.7766 -11245.6025 1576.856]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 156.7711 0}",
+			"pos": "[3817.8735 -11021.9004 1566.0256]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 125.8062 0}",
+			"pos": "[3662.8022 -11179.1396 1575.0444]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 150.006 0}",
+			"pos": "[3700.5396 -10946.3896 1557.0499]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 117.8861 0}",
+			"pos": "[3546.6943 -11049.1904 1566.3344]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 141.1511 0}",
+			"pos": "[3527.554 -10855.2637 1536.606]",
+			"reg": "Entry",
+			"name": "Entry"
+		},
+		{
+			"ang": "{0 96.9861 0}",
+			"pos": "[3378.7883 -10890.1729 1555.6266]",
+			"reg": "Entry",
+			"name": "Entry"
+		}
+	],
+	"start": [],
+	"del": []
+}

@@ -1,0 +1,131 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Bunker": {
+			"ammo": {
+				"Ammo_SMG1": true,
+				"Props_Explosive": true,
+				"Props": true,
+				"Ammo_Pistol": true,
+				"Ammo_Buckshot": true,
+				"Antlions_Controllable": true,
+				"Ammo_AR2": true
+			}
+		},
+		"Cave": {
+			"ammo": {
+				"Ammo_Buckshot": true,
+				"Antlions_Controllable": true,
+				"Ammo_AR2": true
+			}
+		},
+		"Cliffside": {
+			"ammo": {
+				"Antlions_Controllable": true
+			}
+		},
+		"Beach": {
+			"ammo": {
+				"Ammo_SMG1": true,
+				"Ammo_Buckshot": true,
+				"Ammo_Pistol": true,
+				"Antlions_Controllable": true,
+				"Ammo_AR2": true
+			}
+		},
+		"Sewer": {
+			"ammo": {
+				"Ammo_Buckshot": true,
+				"Antlions_Controllable": true,
+				"Ammo_AR2": true
+			}
+		},
+		"Below Cliff": {
+			"ammo": {
+				"Ammo_Buckshot": true,
+				"Ammo_SMG1": true,
+				"Ammo_AR2": true
+			}
+		}
+	},
+	"connect": {
+		"Bunker": {
+			"Below Cliff": {
+				"twoway": true
+			}
+		},
+		"Cave": {
+			"Beach": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"AntlionControl"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Cliffside": {
+			"Sewer": {
+				"twoway": true,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"AntlionControl"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Beach": {
+			"Bunker": {
+				"twoway": true
+			},
+			"Cave": {
+				"twoway": false
+			}
+		},
+		"Below Cliff": {
+			"Cliffside": {
+				"twoway": true
+			},
+			"Beach": {
+				"twoway": false
+			}
+		}
+	}
+}

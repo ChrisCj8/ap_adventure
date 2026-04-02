@@ -1,0 +1,47 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Floor 2": {
+			"ammo": {
+				"Ammo_AR2": true,
+				"Ammo_SMG1": true,
+				"Antlions_Controllable": true,
+				"Props": true
+			}
+		},
+		"Floor 1": {
+			"ammo": {
+				"Ammo_SMG1": true,
+				"Antlions_Controllable": true,
+				"Props": true
+			}
+		},
+		"Floor 3": {
+			"ammo": {
+				"Ammo_SMG1": true,
+				"Props": true,
+				"Ammo_Buckshot": true,
+				"Antlions_Controllable": true,
+				"Ammo_AR2": true
+			}
+		}
+	},
+	"connect": {
+		"Floor 2": {
+			"Floor 3": {
+				"twoway": false
+			}
+		},
+		"Floor 1": {
+			"Floor 2": {
+				"twoway": false
+			}
+		},
+		"Floor 3": {
+			"Floor 1": {
+				"twoway": false
+			}
+		}
+	}
+}

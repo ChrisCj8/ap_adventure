@@ -1,0 +1,101 @@
+{
+	"ver": "v1",
+	"delname": {
+		"global_newgame_template_local_items": true,
+		"global_newgame_template_ammo": true,
+		"global_newgame_template_base_itemsc": true
+	},
+	"exitaccess": [],
+	"entraccess": [],
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[-2280.2627 1673.0687 570.9955]",
+			"ang": "{0 0 0}",
+			"reg": "Exit",
+			"name": "Lambda Cache"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 180 180}",
+			"pos": "[-2799.5054 1208.7423 700.6166]",
+			"reg": "Exit",
+			"name": "Exit"
+		},
+		{
+			"ang": "{89.977 89.9801 180}",
+			"pos": "[-1130.8098 3367.5312 441.246]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 0.4316 0}",
+			"pos": "[-2748.5696 1218.5399 640.0312]",
+			"reg": "Exit",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 0.4316 0}",
+			"pos": "[-2682.8545 1219.0367 640.0312]",
+			"reg": "Exit",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 -0.4484 0}",
+			"pos": "[-2549.3545 1218.9756 640.0312]",
+			"reg": "Exit",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 -0.4484 0}",
+			"pos": "[-2414.3545 1217.9116 640.0312]",
+			"reg": "Exit",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 -0.4484 0}",
+			"pos": "[-2286.8545 1216.9155 640.0312]",
+			"reg": "Exit",
+			"name": "Exit"
+		},
+		{
+			"ang": "{0 -90.5202 0}",
+			"pos": "[-1101.7582 3303.0361 384.0312]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.5202 0}",
+			"pos": "[-1103.0206 3171.8804 384.0312]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.5202 0}",
+			"pos": "[-1104.5601 3002.4434 384.0312]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.5202 0}",
+			"pos": "[-1105.9756 2846.4561 384.0312]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -90.5202 0}",
+			"pos": "[-1107.4343 2685.7478 384.0312]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		}
+	],
+	"start": [],
+	"del": []
+}

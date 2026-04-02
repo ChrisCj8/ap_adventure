@@ -1,0 +1,44 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Exit": {
+			"ammo": []
+		},
+		"Sewer": {
+			"ammo": {
+				"Antlions_Controllable": true
+			}
+		},
+		"Prison Yard": {
+			"ammo": {
+				"Antlions_Controllable": true,
+				"Ammo_RPG_Round": true
+			}
+		}
+	},
+	"connect": {
+		"Sewer": {
+			"Prison Yard": {
+				"twoway": true,
+				"access": {
+					"capab": [
+						"AntlionFriendly"
+					],
+					"type": "capab"
+				}
+			}
+		},
+		"Prison Yard": {
+			"Exit": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"HeliKiller"
+					],
+					"type": "capab"
+				}
+			}
+		}
+	}
+}

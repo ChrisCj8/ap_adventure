@@ -1,0 +1,84 @@
+{
+	"ver": "v1",
+	"delname": {
+		"global_newgame_template_base_items": true,
+		"global_newgame_template_ammo": true,
+		"global_newgame_template_local_items": true,
+		"relay_start_rockfall": true
+	},
+	"exitaccess": [],
+	"entraccess": [],
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[1928.4995 -3322.6265 1100.5022]",
+			"ang": "{0 0 0}",
+			"reg": "Prison Yard",
+			"name": "Sewer Basin"
+		},
+		{
+			"pos": "[2334.0127 -2579.7471 1548.9752]",
+			"ang": "{0 0 0}",
+			"reg": "Prison Yard",
+			"name": "On Turnt Over Dumpster"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 -90 180}",
+			"pos": "[4157.7612 -4705.2173 1138.8809]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{89.7308 -174.7339 95.2429}",
+			"pos": "[591.6523 -1599.5 1661.3929]",
+			"reg": "Exit",
+			"name": "Exit"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 87.2356 0}",
+			"pos": "[4156.9907 -4624.9976 1084.6079]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 179.4707 0}",
+			"pos": "[4204.3359 -4481.9941 1072.0312]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 178.2057 0}",
+			"pos": "[4205.0645 -4403.1792 1072.0312]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 177.9857 0}",
+			"pos": "[4112.2554 -4400.0107 1072.0312]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 177.9857 0}",
+			"pos": "[4108.4624 -4507.8086 1072.0312]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 179.3056 0}",
+			"pos": "[4027.062 -4448.6963 1091.3765]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		}
+	],
+	"start": [],
+	"del": []
+}

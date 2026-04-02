@@ -1,0 +1,303 @@
+{
+	"ver": "v1",
+	"delname": {
+		"player_spawn_items_maker": true
+	},
+	"exitaccess": [],
+	"entraccess": [],
+	"lctnaccess": [],
+	"sav": {
+		"Mins": "[-1 -12347.0811 -1]",
+		"Constraints": [],
+		"Maxs": "[9204.4766 8051.2891 2081.24]",
+		"Entities": {
+			"1336": {
+				"Skin": 0,
+				"MaxHealth": 20,
+				"ColGroup": 0,
+				"Persistent": false,
+				"PhysicsObjects": {
+					"0": {
+						"Sleep": true,
+						"Pos": "[9179.6758 8044.7246 2064.9656]",
+						"Frozen": false,
+						"Angle": "{86.2144 175.4203 -118.5232}"
+					}
+				},
+				"dynamic_values": {
+					"DesiredAmmoAR2_AltFire": 0,
+					"DesiredAmmoAR2": 0.4,
+					"DesiredAmmoPistol": 0.5,
+					"DesiredHealth": 1,
+					"DesiredAmmoRPG_Round": 0,
+					"DesiredArmor": 0.3,
+					"DesiredAmmo357": 0,
+					"DesiredAmmoSMG1": 0.5,
+					"DesiredAmmoGrenade": 0.1,
+					"DesiredAmmoSMG1_Grenade": 0.1,
+					"DesiredAmmoBuckshot": 0.5,
+					"DesiredAmmoCrossbow": 0
+				},
+				"appearance": 0,
+				"Maxs": "[17.2693 15.3114 24.2812]",
+				"Mins": "[-15.298 -17.2547 -0.2813]",
+				"class": "item_box_buckshot",
+				"Name": "",
+				"FlexScale": 1,
+				"amount": 3,
+				"Pos": "[9179.6758 8044.7246 2064.9656]",
+				"CurHealth": 25,
+				"health": 25,
+				"Class": "item_item_crate",
+				"Model": "models/items/item_item_crate.mdl",
+				"Angle": "{86.2144 175.4203 -118.5232}"
+			},
+			"1335": {
+				"Skin": 0,
+				"MaxHealth": 20,
+				"ColGroup": 0,
+				"Persistent": false,
+				"PhysicsObjects": {
+					"0": {
+						"Sleep": true,
+						"Pos": "[5578.0776 -12296.6406 199.1324]",
+						"Frozen": false,
+						"Angle": "{7.0193 10.1247 1.1863}"
+					}
+				},
+				"dynamic_values": {
+					"DesiredAmmoAR2_AltFire": 0,
+					"DesiredAmmoAR2": 0.4,
+					"DesiredAmmoPistol": 0.5,
+					"DesiredAmmoRPG_Round": 0,
+					"DesiredAmmoCrossbow": 0,
+					"DesiredArmor": 0.3,
+					"DesiredAmmo357": 0,
+					"DesiredAmmoSMG1": 0.5,
+					"DesiredAmmoGrenade": 0.1,
+					"DesiredAmmoSMG1_Grenade": 0.1,
+					"DesiredAmmoBuckshot": 0.5,
+					"DesiredHealth": 1
+				},
+				"appearance": 0,
+				"Maxs": "[17.2693 15.3114 24.2812]",
+				"Mins": "[-15.298 -17.2547 -0.2813]",
+				"class": "item_ammo_ar2",
+				"Name": "",
+				"FlexScale": 1,
+				"amount": 8,
+				"Pos": "[5578.0776 -12296.6406 199.1324]",
+				"CurHealth": 25,
+				"health": 25,
+				"Class": "item_item_crate",
+				"Model": "models/items/item_item_crate.mdl",
+				"Angle": "{7.0193 10.1247 1.1863}"
+			},
+			"1334": {
+				"Skin": 0,
+				"MaxHealth": 20,
+				"ColGroup": 0,
+				"Persistent": false,
+				"PhysicsObjects": {
+					"0": {
+						"Sleep": true,
+						"Pos": "[5556.1826 -12321.3633 218.9285]",
+						"Frozen": false,
+						"Angle": "{7.0995 -5.1217 89.3731}"
+					}
+				},
+				"dynamic_values": {
+					"DesiredAmmoAR2_AltFire": 0,
+					"DesiredAmmoAR2": 0.4,
+					"DesiredAmmoPistol": 0.5,
+					"DesiredAmmoRPG_Round": 0,
+					"DesiredAmmoCrossbow": 0,
+					"DesiredArmor": 0.3,
+					"DesiredAmmo357": 0,
+					"DesiredAmmoSMG1": 0.5,
+					"DesiredAmmoGrenade": 0.1,
+					"DesiredAmmoSMG1_Grenade": 0.1,
+					"DesiredAmmoBuckshot": 0.5,
+					"DesiredHealth": 1
+				},
+				"appearance": 0,
+				"Maxs": "[17.2693 15.3114 24.2812]",
+				"Mins": "[-15.298 -17.2547 -0.2813]",
+				"class": "item_box_buckshot",
+				"Name": "",
+				"FlexScale": 1,
+				"amount": 5,
+				"Pos": "[5556.1826 -12321.3633 218.9285]",
+				"CurHealth": 25,
+				"health": 25,
+				"Class": "item_item_crate",
+				"Model": "models/items/item_item_crate.mdl",
+				"Angle": "{7.0995 -5.1217 89.3731}"
+			},
+			"1337": {
+				"Skin": 0,
+				"MaxHealth": 20,
+				"ColGroup": 0,
+				"Persistent": false,
+				"PhysicsObjects": {
+					"0": {
+						"Sleep": true,
+						"Pos": "[9140.5312 8025.3154 2048.4507]",
+						"Frozen": false,
+						"Angle": "{0.7823 -135.4849 -0.1682}"
+					}
+				},
+				"dynamic_values": {
+					"DesiredAmmoAR2_AltFire": 0,
+					"DesiredAmmoAR2": 0.4,
+					"DesiredAmmoPistol": 0.5,
+					"DesiredHealth": 1,
+					"DesiredAmmoRPG_Round": 0,
+					"DesiredArmor": 0.3,
+					"DesiredAmmo357": 0,
+					"DesiredAmmoSMG1": 0.5,
+					"DesiredAmmoGrenade": 0.1,
+					"DesiredAmmoSMG1_Grenade": 0.1,
+					"DesiredAmmoBuckshot": 0.5,
+					"DesiredAmmoCrossbow": 0
+				},
+				"appearance": 0,
+				"Maxs": "[17.2693 15.3114 24.2812]",
+				"Mins": "[-15.298 -17.2547 -0.2813]",
+				"class": "item_ammo_ar2",
+				"Name": "",
+				"FlexScale": 1,
+				"amount": 8,
+				"Pos": "[9140.5312 8025.3154 2048.4507]",
+				"CurHealth": 25,
+				"health": 25,
+				"Class": "item_item_crate",
+				"Model": "models/items/item_item_crate.mdl",
+				"Angle": "{0.7823 -135.4849 -0.1682}"
+			}
+		}
+	},
+	"lctn": [
+		{
+			"pos": "[4696.7949 -8249.0117 590.4255]",
+			"dummy": true,
+			"ang": "{0 0 0}",
+			"reg": "Beach",
+			"name": "Disable All Thumpers"
+		},
+		{
+			"pos": "[1286.5212 1620.958 662.9513]",
+			"ang": "{0 0 0}",
+			"reg": "Bunker",
+			"name": "Vent Room in Bunker"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{89.9999 89.968 180}",
+			"pos": "[9280.8447 8757.0566 2175.6257]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{90 -0.0188 180}",
+			"pos": "[7867.4121 -10618.3633 254.468]",
+			"reg": "Cave",
+			"name": "Cave"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 -152.8328 0}",
+			"pos": "[7693.7969 -10477.8262 174.2359]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -146.6729 0}",
+			"pos": "[7481.2676 -10547.71 182.4712]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -137.928 0}",
+			"pos": "[7316.1992 -10579.4922 194.7165]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -135.343 0}",
+			"pos": "[7128.3838 -10764.7178 203.8116]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -135.343 0}",
+			"pos": "[6966.2432 -10924.9932 207.9781]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -135.068 0}",
+			"pos": "[6819.2168 -11070.7002 210.3975]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -135.068 0}",
+			"pos": "[6634.4219 -11255.0498 204.3219]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -135.783 0}",
+			"pos": "[6407.335 -11424.459 172.6445]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 176.0921 0}",
+			"pos": "[7691.2466 -10694.9102 178.362]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -169.553 0}",
+			"pos": "[7383.1357 -10760.5586 158.4703]",
+			"reg": "Cave",
+			"name": "Cave"
+		},
+		{
+			"ang": "{0 -90.7128 0}",
+			"pos": "[9286 8689.5166 2109.4771]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 -90.7128 0}",
+			"pos": "[9284.1348 8539.0781 2092.4011]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 -90.7128 0}",
+			"pos": "[9282.4971 8407.0635 2077.4053]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 -90.2177 0}",
+			"pos": "[9278.6768 8272.3848 2062.2061]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		},
+		{
+			"ang": "{0 -90.7127 0}",
+			"pos": "[9276.7617 8112.6816 2051.8735]",
+			"reg": "Sewer",
+			"name": "Sewer"
+		}
+	],
+	"start": [],
+	"del": []
+}
