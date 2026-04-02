@@ -1,0 +1,10 @@
+LightmappedGeneric {
+    $basetexture "apadventure/simpleglass.vtf"
+    $envmap env_cubemap
+    $envmaptint "[.2 .2 .2]"
+    $envmapcontrast 1
+    $envmapsaturation 1
+    //$alphatest 1
+    $translucent 1
+    $surfaceprop glass
+}

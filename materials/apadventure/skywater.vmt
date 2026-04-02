@@ -1,0 +1,6 @@
+Patch {
+    include materials/gm_construct/water_13.vmt
+    replace {
+        $bottommaterial "null"
+    }
+}

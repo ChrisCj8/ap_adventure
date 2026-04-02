@@ -1,0 +1,5 @@
+"Sprite" {
+    $basetexture "apadventure/apicon64"
+    $spriteorientation vp_parallel
+    $spriteorigin "[.5 .5]"
+}

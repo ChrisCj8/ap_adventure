@@ -1,0 +1,5 @@
+LightmappedGeneric {
+    $basetexture "apadventure\devgrid.vtf"
+    $basetexturetransform "center .5 .5 scale 1 1 rotate 0 translate .00390625 .00390625"
+    $color "{117 194 117}"
+}
