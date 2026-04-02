@@ -16,7 +16,7 @@ local rfile = file.Read
 
 local function trackerreset(ply)
     netstart("APAdvTrackerReset")
-        netstring(APADV_MAPGROUP)
+        netstring(APADV_MAPGROUP or "")
     if ply then
         netsend(ply)
     else
