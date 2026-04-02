@@ -1,0 +1,188 @@
+{
+	"reg": {
+		"After Rooftops": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Props"
+			]
+		},
+		"Entrance": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Outside House": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Props"
+			]
+		},
+		"Church": {
+			"cond": [
+				"Ammo_Buckshot"
+			]
+		},
+		"House": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Props"
+			]
+		},
+		"After House": {
+			"cond": [
+				"Ammo_Buckshot"
+			]
+		},
+		"Shotgun Roof": {
+			"cond": [
+				"Ammo_Buckshot"
+			]
+		}
+	},
+	"connect": {
+		"After Rooftops": {
+			"Outside House": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Entrance": {
+			"Shotgun Roof": {
+				"twoway": true,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Shotgun Roof": {
+			"After Rooftops": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"House": {
+			"After Rooftops": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			},
+			"After House": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			},
+			"Outside House": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMelee"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"After House": {
+			"Church": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		}
+	}
+}

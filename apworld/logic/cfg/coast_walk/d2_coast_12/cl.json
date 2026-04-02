@@ -1,0 +1,129 @@
+{
+	"reg": {
+		"Bunker": {
+			"cond": [
+				"Ammo_SMG1",
+				"Props_Explosive",
+				"Props",
+				"Ammo_Pistol",
+				"Ammo_Buckshot",
+				"Antlions_Controllable",
+				"Ammo_AR2"
+			]
+		},
+		"Cave": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Antlions_Controllable",
+				"Ammo_AR2"
+			]
+		},
+		"Cliffside": {
+			"cond": [
+				"Antlions_Controllable"
+			]
+		},
+		"Beach": {
+			"cond": [
+				"Ammo_SMG1",
+				"Ammo_Buckshot",
+				"Ammo_Pistol",
+				"Antlions_Controllable",
+				"Ammo_AR2"
+			]
+		},
+		"Below Cliff": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Ammo_SMG1",
+				"Ammo_AR2"
+			]
+		},
+		"Sewer": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Antlions_Controllable",
+				"Ammo_AR2"
+			]
+		}
+	},
+	"connect": {
+		"Bunker": {
+			"Below Cliff": {
+				"twoway": true
+			}
+		},
+		"Cave": {
+			"Beach": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"AntlionControl"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Cliffside": {
+			"Sewer": {
+				"twoway": true,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"AntlionControl"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Beach": {
+			"Bunker": {
+				"twoway": true
+			},
+			"Cave": {
+				"twoway": false
+			}
+		},
+		"Below Cliff": {
+			"Cliffside": {
+				"twoway": true
+			},
+			"Beach": {
+				"twoway": false
+			}
+		}
+	}
+}

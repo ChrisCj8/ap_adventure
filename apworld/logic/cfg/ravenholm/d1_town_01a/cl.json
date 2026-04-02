@@ -1,0 +1,48 @@
+{
+	"reg": {
+		"Hospital": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Entrance": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Street": {
+			"cond": [
+				"Props"
+			]
+		}
+	},
+	"connect": {
+		"Entrance": {
+			"Street": {
+				"twoway": false
+			}
+		},
+		"Street": {
+			"Hospital": {
+				"twoway": true,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		}
+	}
+}

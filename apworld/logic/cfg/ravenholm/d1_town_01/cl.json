@@ -1,0 +1,91 @@
+{
+	"reg": {
+		"Exit Alley": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Entrance": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Factory": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Tool Sheds": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Plaza": {
+			"cond": [
+				"Props"
+			]
+		}
+	},
+	"connect": {
+		"Exit Alley": {
+			"Plaza": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"WeakMelee"
+					],
+					"type": "capab"
+				}
+			}
+		},
+		"Entrance": {
+			"Tool Sheds": {
+				"twoway": true,
+				"access": {
+					"capab": [
+						"WeakMelee"
+					],
+					"type": "capab"
+				}
+			}
+		},
+		"Factory": {
+			"Exit Alley": {
+				"twoway": false
+			}
+		},
+		"Tool Sheds": {
+			"Plaza": {
+				"twoway": true,
+				"access": {
+					"capab": [
+						"WeakMelee"
+					],
+					"type": "capab"
+				}
+			}
+		},
+		"Plaza": {
+			"Factory": {
+				"twoway": true,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		}
+	}
+}

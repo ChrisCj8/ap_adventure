@@ -1,0 +1,15 @@
+{
+	"name": "Generic Filler",
+	"items": {
+		"Full Ammo": {
+			"file": "full_ammo",
+			"wgt": 10,
+			"min": 0
+		},
+		"Full Restore": {
+			"file": "full_restore",
+			"wgt": 10,
+			"min": 0
+		}
+	}
+}

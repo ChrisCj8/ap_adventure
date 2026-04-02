@@ -1,0 +1,87 @@
+{
+	"exit": {
+		"Blue/Yellow Hut Lower": {
+			"reg": "Blue/Yellow Hut Lower"
+		},
+		"Red Hut Upper": {
+			"reg": "Red Hut"
+		},
+		"Red Hut Lower": {
+			"reg": "Red Hut"
+		},
+		"Behind Blue/Yellow Hut": {
+			"reg": "Outside"
+		},
+		"Lone Wall": {
+			"reg": "Outside"
+		},
+		"Blue Sewer": {
+			"reg": "Blue Sewer"
+		},
+		"Green Hut": {
+			"reg": "Green Hut"
+		},
+		"Yellow Hut Upper": {
+			"reg": "Yellow Hut Upper"
+		}
+	},
+	"entr": {
+		"Blue/Yellow Hut Lower": {
+			"reg": "Blue/Yellow Hut Lower"
+		},
+		"Red Hut Upper": {
+			"reg": "Red Hut"
+		},
+		"Red Hut Lower": {
+			"reg": "Red Hut"
+		},
+		"Blue Sewer": {
+			"reg": "Blue Sewer"
+		},
+		"Lone Wall": {
+			"reg": "Outside"
+		},
+		"Behind Blue/Yellow Hut": {
+			"reg": "Outside"
+		},
+		"Green Hut": {
+			"reg": "Green Hut"
+		},
+		"Yellow Hut Upper": {
+			"reg": "Yellow Hut Upper"
+		}
+	},
+	"start": [
+		"Outside"
+	],
+	"lctn": {
+		"Red Hut": {
+			"Behind Planks in Red Hut": {
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"WimpyMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"GravityGun"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Green Hut": {
+			"In Green Hut": []
+		},
+		"Outside": {
+			"Behind Green Hut": [],
+			"Red Hut Roof": []
+		}
+	}
+}

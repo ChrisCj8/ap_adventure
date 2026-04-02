@@ -1,0 +1,10 @@
+{
+	"name": "Funny",
+	"items": {
+		"Funny": {
+			"file": "funny",
+			"wgt": 5,
+			"min": 0
+		}
+	}
+}

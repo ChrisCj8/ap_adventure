@@ -1,0 +1,24 @@
+{
+	"exit": {
+		"Exit": {
+			"reg": "Floor 3"
+		},
+		"Entrance": {
+			"reg": "Floor 1"
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Floor 1",
+			"access": {
+				"capab": [
+					"AntlionControl"
+				],
+				"type": "capab"
+			}
+		},
+		"Exit": {
+			"reg": "Floor 3"
+		}
+	}
+}

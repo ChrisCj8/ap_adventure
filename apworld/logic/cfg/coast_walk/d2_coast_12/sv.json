@@ -1,0 +1,26 @@
+{
+	"exit": {
+		"Sewer": {
+			"reg": "Sewer"
+		},
+		"Cave": {
+			"reg": "Cave"
+		}
+	},
+	"entr": {
+		"Cave": {
+			"reg": "Cave"
+		},
+		"Sewer": {
+			"reg": "Sewer"
+		}
+	},
+	"lctn": {
+		"Bunker": {
+			"Vent Room in Bunker": []
+		},
+		"Beach": {
+			"Disable All Thumpers": []
+		}
+	}
+}

@@ -1,0 +1,172 @@
+{
+	"name": "HL2 Weapons",
+	"items": {
+		"Pulse Rifle": {
+			"condcapab": {
+				"Ammo_AR2AltFire": [
+					"DissolveDamage"
+				],
+				"Ammo_AR2": [
+					"DecentShortRange",
+					"DecentMidRange",
+					"BulletDamage"
+				]
+			},
+			"file": "ar2",
+			"group": [
+				"Assault Rifle"
+			],
+			"min": 1
+		},
+		"Crossbow": {
+			"condcapab": {
+				"Ammo_XBowBolt": [
+					"StrongLongRange",
+					"BulletDamage",
+					"NeverGibDamage"
+				]
+			},
+			"file": "crossbow",
+			"group": [
+				"Crossbow"
+			],
+			"min": 1
+		},
+		"Bugbait": {
+			"req_cond": true,
+			"condcapab": {
+				"Antlions_Controllable": []
+			},
+			"file": "bugbait",
+			"capab": [
+				"AntlionFriendly",
+				"AntlionControl",
+				"BugbaitTrigger"
+			],
+			"min": 1
+		},
+		"SMG": {
+			"condcapab": {
+				"Ammo_SMG1_Grenade": [
+					"DecentAOE",
+					"BlastDamage"
+				],
+				"Ammo_SMG1": [
+					"DecentShortRange",
+					"DecentMidRange",
+					"BulletDamage"
+				]
+			},
+			"file": "smg",
+			"group": [
+				"Submachine Gun"
+			],
+			"min": 1
+		},
+		"Shotgun": {
+			"condcapab": {
+				"Ammo_Buckshot": [
+					"StrongShortRange",
+					"BulletDamage",
+					"BuckshotDamage"
+				]
+			},
+			"file": "shotgun",
+			"group": [
+				"Shotgun"
+			],
+			"min": 1
+		},
+		"9mm Pistol": {
+			"condcapab": {
+				"Ammo_Pistol": [
+					"DecentShortRange",
+					"WeakMidRange",
+					"WimpyLongRange",
+					"MidRangeSpray",
+					"BulletDamage",
+					"WeakDamage"
+				]
+			},
+			"file": "pistol",
+			"group": [
+				"Pistol"
+			],
+			"min": 1
+		},
+		"Gravity Gun": {
+			"condcapab": {
+				"Props": [
+					"StrongShortRange",
+					"DecentMidRange"
+				]
+			},
+			"file": "gravgun",
+			"capab": [
+				"WimpyShortRange",
+				"GravityGun"
+			],
+			"min": 1
+		},
+		"Grenades": {
+			"condcapab": {
+				"Ammo_Grenade": [
+					"DecentAOE",
+					"BlastDamage",
+					"MediumArcProjectile",
+					"PhysicsProjectile",
+					"SmallProjectile",
+					"MediumExplosion",
+					"MediumSizeExplosion"
+				]
+			},
+			"file": "grenade",
+			"group": [
+				"Grenade"
+			],
+			"min": 1
+		},
+		"Crowbar": {
+			"file": "crowbar",
+			"group": [
+				"Melee Weapon"
+			],
+			"capab": [
+				"DecentMelee",
+				"ClubDamage"
+			],
+			"min": 1
+		},
+		".357 Magnum": {
+			"condcapab": {
+				"Ammo_357": [
+					"StrongShortRange",
+					"StrongMidRange",
+					"BulletDamage"
+				]
+			},
+			"file": "revolver",
+			"group": [
+				"Magnum Pistol",
+				"Revolver"
+			],
+			"min": 1
+		},
+		"RPG Launcher": {
+			"condcapab": {
+				"Ammo_RPG_Round": [
+					"DecentAOE",
+					"BlastDamage",
+					"Projectile",
+					"FlyingProjectile",
+					"HeliKiller"
+				]
+			},
+			"file": "rpg",
+			"group": [
+				"Rocket Launcher"
+			],
+			"min": 1
+		}
+	}
+}

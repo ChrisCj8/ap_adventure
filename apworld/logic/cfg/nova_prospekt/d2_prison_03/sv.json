@@ -1,0 +1,40 @@
+{
+	"exit": {
+		"Entrance": {
+			"reg": "Showers"
+		},
+		"Exit": {
+			"reg": "Exit"
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Showers",
+			"access": {
+				"type": "or",
+				"nodes": [
+					{
+						"capab": [
+							"StrongShortRange"
+						],
+						"type": "capab"
+					},
+					{
+						"capab": [
+							"StrongMelee"
+						],
+						"type": "capab"
+					}
+				]
+			}
+		}
+	},
+	"lctn": {
+		"Showers": {
+			"Defeat Shower Guard": []
+		},
+		"After Field": {
+			"Lambda Cache": []
+		}
+	}
+}

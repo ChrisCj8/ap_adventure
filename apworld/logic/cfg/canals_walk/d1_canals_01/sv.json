@@ -1,0 +1,60 @@
+{
+	"exit": {
+		"Entrance": {
+			"reg": "Entrance"
+		},
+		"Exit": {
+			"reg": "Main",
+			"access": {
+				"type": "or",
+				"nodes": [
+					{
+						"capab": [
+							"DecentMelee"
+						],
+						"type": "capab"
+					},
+					{
+						"type": "and",
+						"nodes": [
+							{
+								"type": "or",
+								"nodes": [
+									{
+										"capab": [
+											"DecentShortRange"
+										],
+										"type": "capab"
+									},
+									{
+										"capab": [
+											"DecentMidRange"
+										],
+										"type": "capab"
+									}
+								]
+							},
+							{
+								"capab": [
+									"WimpyMelee"
+								],
+								"type": "capab"
+							}
+						]
+					}
+				]
+			}
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Entrance"
+		}
+	},
+	"lctn": {
+		"Main": {
+			"Stopped Police Brutality": [],
+			"Lambda Cache": []
+		}
+	}
+}

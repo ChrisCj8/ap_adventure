@@ -1,0 +1,23 @@
+{
+	"exit": {
+		"Exit": {
+			"reg": "Exit"
+		},
+		"Entrance": {
+			"reg": "Entrance"
+		}
+	},
+	"entr": {
+		"Exit": {
+			"reg": "Exit"
+		},
+		"Entrance": {
+			"reg": "Entrance"
+		}
+	},
+	"lctn": {
+		"Exit": {
+			"Lambda Cache": []
+		}
+	}
+}

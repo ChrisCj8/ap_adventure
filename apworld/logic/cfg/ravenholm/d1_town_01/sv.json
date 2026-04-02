@@ -1,0 +1,33 @@
+{
+	"exit": {
+		"Entrance": {
+			"reg": "Entrance"
+		},
+		"Exit": {
+			"reg": "Exit Alley"
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Entrance"
+		},
+		"Exit": {
+			"reg": "Exit Alley"
+		}
+	},
+	"lctn": {
+		"Factory": {
+			"Next to Power Switch": [],
+			"Lambda Cache after Vent": []
+		},
+		"Exit Alley": {
+			"Lambda Cache behind Gate": []
+		},
+		"Entrance": {
+			"Next to sleeping Zombie": []
+		},
+		"Plaza": {
+			"In the Fire": []
+		}
+	}
+}

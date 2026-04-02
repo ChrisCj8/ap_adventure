@@ -1,0 +1,200 @@
+{
+	"reg": {
+		"Rebel Base": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Ammo_357",
+				"Ammo_Pistol"
+			]
+		},
+		"Train Tracks": {
+			"cond": [
+				"Ammo_Buckshot"
+			]
+		},
+		"Mine Exit": {
+			"cond": [
+				"Ammo_Grenade"
+			]
+		},
+		"Warehouse Yard": {
+			"cond": [
+				"Ammo_SMG1",
+				"Ammo_AR2",
+				"Ammo_Grenade"
+			]
+		}
+	},
+	"connect": {
+		"Train Tracks": {
+			"Warehouse Yard": {
+				"twoway": false
+			},
+			"Mine Exit": {
+				"twoway": false
+			}
+		},
+		"Mine Exit": {
+			"Train Tracks": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"type": "and",
+							"nodes": [
+								{
+									"type": "or",
+									"nodes": [
+										{
+											"capab": [
+												"MediumArcProjectile",
+												"MediumSizeOrLargerExplosion"
+											],
+											"type": "capab"
+										},
+										{
+											"capab": [
+												"MediumSizeOrLargerExplosion",
+												"FlyingProjectile"
+											],
+											"type": "capab"
+										}
+									]
+								},
+								{
+									"type": "and",
+									"nodes": [
+										{
+											"capab": [
+												"WeakMelee"
+											],
+											"type": "capab"
+										},
+										{
+											"type": "or",
+											"nodes": [
+												{
+													"capab": [
+														"DecentMelee"
+													],
+													"type": "capab"
+												},
+												{
+													"capab": [
+														"DecentShortRange"
+													],
+													"type": "capab"
+												},
+												{
+													"capab": [
+														"DecentMidRange"
+													],
+													"type": "capab"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "bhop"
+						}
+					]
+				}
+			}
+		},
+		"Warehouse Yard": {
+			"Rebel Base": {
+				"twoway": true,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			},
+			"Train Tracks": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"type": "and",
+							"nodes": [
+								{
+									"type": "or",
+									"nodes": [
+										{
+											"capab": [
+												"MediumArcProjectile",
+												"MediumSizeOrLargerExplosion"
+											],
+											"type": "capab"
+										},
+										{
+											"capab": [
+												"MediumSizeOrLargerExplosion",
+												"FlyingProjectile"
+											],
+											"type": "capab"
+										}
+									]
+								},
+								{
+									"type": "and",
+									"nodes": [
+										{
+											"capab": [
+												"WeakMelee"
+											],
+											"type": "capab"
+										},
+										{
+											"type": "or",
+											"nodes": [
+												{
+													"capab": [
+														"DecentMelee"
+													],
+													"type": "capab"
+												},
+												{
+													"capab": [
+														"DecentShortRange"
+													],
+													"type": "capab"
+												},
+												{
+													"capab": [
+														"DecentMidRange"
+													],
+													"type": "capab"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"type": "bhop"
+						}
+					]
+				}
+			}
+		}
+	}
+}

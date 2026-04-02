@@ -1,0 +1,33 @@
+{
+	"exit": {
+		"Entrance": {
+			"reg": "Pre-Ambush"
+		},
+		"Exit": {
+			"reg": "Post-Ambush"
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Pre-Ambush",
+			"access": {
+				"capab": [
+					"DecentMelee"
+				],
+				"type": "capab"
+			}
+		}
+	},
+	"lctn": {
+		"Pre-Ambush": {
+			"Matts Supplies": []
+		},
+		"Post-Ambush": {
+			"Lambda Cache": [],
+			"Manhack Vent": []
+		},
+		"Ambush": {
+			"Rappelling Metrocop": []
+		}
+	}
+}

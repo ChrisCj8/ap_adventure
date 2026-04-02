@@ -1,0 +1,21 @@
+{
+	"exit": {
+		"Entrance": {
+			"reg": "Entrance"
+		},
+		"Exit": {
+			"reg": "After Vent",
+			"access": {
+				"capab": [
+					"MediumExplosion"
+				],
+				"type": "capab"
+			}
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Entrance"
+		}
+	}
+}

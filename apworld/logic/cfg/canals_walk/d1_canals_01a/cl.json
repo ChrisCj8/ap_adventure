@@ -1,0 +1,10 @@
+{
+	"reg": {
+		"Main": {
+			"cond": [
+				"Ammo_Pistol",
+				"Props"
+			]
+		}
+	}
+}

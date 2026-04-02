@@ -1,0 +1,61 @@
+{
+	"exit": {
+		"Exit": {
+			"reg": "Cell Block",
+			"access": {
+				"type": "or",
+				"nodes": [
+					{
+						"capab": [
+							"DecentMidRange"
+						],
+						"type": "capab"
+					},
+					{
+						"capab": [
+							"DecentShortRange"
+						],
+						"type": "capab"
+					}
+				]
+			}
+		},
+		"Entrance": {
+			"reg": "Control Room"
+		}
+	},
+	"entr": {
+		"Exit": {
+			"reg": "Cell Block"
+		},
+		"Entrance": {
+			"reg": "Control Room"
+		}
+	},
+	"lctn": {
+		"Control Room": {
+			"Defended Control Room": []
+		},
+		"Cell Block": {
+			"Defended Cell Block": {
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"DecentShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		}
+	}
+}

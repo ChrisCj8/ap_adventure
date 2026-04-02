@@ -1,0 +1,58 @@
+{
+	"reg": {
+		"Main": {
+			"cond": [
+				"Ammo_Pistol"
+			]
+		},
+		"Entrance": {
+			"cond": []
+		}
+	},
+	"connect": {
+		"Entrance": {
+			"Main": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"type": "and",
+							"nodes": [
+								{
+									"type": "or",
+									"nodes": [
+										{
+											"capab": [
+												"WeakShortRange"
+											],
+											"type": "capab"
+										},
+										{
+											"capab": [
+												"WeakMidRange"
+											],
+											"type": "capab"
+										}
+									]
+								},
+								{
+									"capab": [
+										"WimpyMelee"
+									],
+									"type": "capab"
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	}
+}

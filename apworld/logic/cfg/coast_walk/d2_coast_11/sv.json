@@ -1,0 +1,25 @@
+{
+	"exit": {
+		"Entry": {
+			"reg": "Entry"
+		},
+		"Exit": {
+			"reg": "Enclave"
+		}
+	},
+	"entr": {
+		"Entry": {
+			"reg": "Entry"
+		}
+	},
+	"lctn": {
+		"Enclave": {
+			"Inside Antlion Guard": []
+		},
+		"Beach": {
+			"Lambda Cache": [],
+			"Pier near Shore": [],
+			"Side Path": []
+		}
+	}
+}

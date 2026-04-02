@@ -1,0 +1,71 @@
+{
+	"reg": {
+		"Rooftops": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Props"
+			]
+		},
+		"Entrance Alley": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Exit House": {
+			"cond": [
+				"Props"
+			]
+		}
+	},
+	"connect": {
+		"Rooftops": {
+			"Exit House": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Entrance Alley": {
+			"Rooftops": {
+				"twoway": true
+			}
+		},
+		"Exit House": {
+			"Entrance Alley": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		}
+	}
+}

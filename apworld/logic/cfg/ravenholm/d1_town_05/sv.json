@@ -1,0 +1,26 @@
+{
+	"exit": {
+		"Mine Exit": {
+			"reg": "Mine Exit"
+		},
+		"Rebel Base": {
+			"reg": "Rebel Base"
+		}
+	},
+	"entr": {
+		"Rebel Base": {
+			"reg": "Rebel Base"
+		},
+		"Mine Exit": {
+			"reg": "Mine Exit"
+		}
+	},
+	"lctn": {
+		"Warehouse Yard": {
+			"In Train Car": []
+		},
+		"Mine Exit": {
+			"Lambda Cache": []
+		}
+	}
+}

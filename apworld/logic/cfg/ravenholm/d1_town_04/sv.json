@@ -1,0 +1,15 @@
+{
+	"exit": {
+		"Entrance": {
+			"reg": "Entrance"
+		},
+		"Exit": {
+			"reg": "Exit"
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Entrance"
+		}
+	}
+}

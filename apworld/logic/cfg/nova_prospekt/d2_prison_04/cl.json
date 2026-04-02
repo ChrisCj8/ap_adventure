@@ -1,0 +1,45 @@
+{
+	"reg": {
+		"Floor 2": {
+			"cond": [
+				"Ammo_AR2",
+				"Ammo_SMG1",
+				"Antlions_Controllable",
+				"Props"
+			]
+		},
+		"Floor 1": {
+			"cond": [
+				"Ammo_SMG1",
+				"Antlions_Controllable",
+				"Props"
+			]
+		},
+		"Floor 3": {
+			"cond": [
+				"Ammo_SMG1",
+				"Props",
+				"Ammo_Buckshot",
+				"Antlions_Controllable",
+				"Ammo_AR2"
+			]
+		}
+	},
+	"connect": {
+		"Floor 2": {
+			"Floor 3": {
+				"twoway": false
+			}
+		},
+		"Floor 1": {
+			"Floor 2": {
+				"twoway": false
+			}
+		},
+		"Floor 3": {
+			"Floor 1": {
+				"twoway": false
+			}
+		}
+	}
+}

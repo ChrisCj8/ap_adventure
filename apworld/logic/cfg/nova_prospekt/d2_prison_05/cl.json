@@ -1,0 +1,24 @@
+{
+	"reg": {
+		"Main": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Antlions_Controllable",
+				"Ammo_AR2"
+			]
+		},
+		"Guard Arena": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Ammo_AR2"
+			]
+		}
+	},
+	"connect": {
+		"Main": {
+			"Guard Arena": {
+				"twoway": false
+			}
+		}
+	}
+}

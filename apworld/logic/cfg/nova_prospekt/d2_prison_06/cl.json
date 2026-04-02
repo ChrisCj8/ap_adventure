@@ -1,0 +1,49 @@
+{
+	"reg": {
+		"Before Vent": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Ammo_SMG1"
+			]
+		},
+		"Entrance": {
+			"cond": [
+				"Ammo_SMG1"
+			]
+		},
+		"After Vent": {
+			"cond": [
+				"Ammo_Grenade"
+			]
+		}
+	},
+	"connect": {
+		"Entrance": {
+			"Before Vent": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"DecentShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Before Vent": {
+			"After Vent": {
+				"twoway": false
+			}
+		}
+	}
+}

@@ -1,0 +1,44 @@
+{
+	"exit": {
+		"Church": {
+			"reg": "Church"
+		},
+		"Dark Alley": {
+			"reg": "Outside House"
+		},
+		"Entrance": {
+			"reg": "Entrance"
+		},
+		"Through House": {
+			"reg": "House"
+		}
+	},
+	"entr": {
+		"Church": {
+			"reg": "Church"
+		},
+		"Dark Alley": {
+			"reg": "Outside House"
+		},
+		"Entrance": {
+			"reg": "Entrance"
+		},
+		"Through House": {
+			"reg": "House"
+		}
+	},
+	"lctn": {
+		"Church": {
+			"By Church": []
+		},
+		"Shotgun Roof": {
+			"Gift from Grigori": []
+		},
+		"Entrance": {
+			"Side Room in Shotgun Building": []
+		},
+		"Outside House": {
+			"Bedroom": []
+		}
+	}
+}

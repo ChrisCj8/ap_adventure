@@ -1,0 +1,25 @@
+{
+	"exit": {
+		"Hospital": {
+			"reg": "Hospital"
+		},
+		"Entrance": {
+			"reg": "Entrance"
+		}
+	},
+	"entr": {
+		"Hospital": {
+			"reg": "Hospital"
+		},
+		"Entrance": {
+			"reg": "Entrance"
+		}
+	},
+	"lctn": {
+		"Street": {
+			"Lambda Cache": [],
+			"Dark Alleyway": [],
+			"Behind Breakable Grate": []
+		}
+	}
+}

@@ -1,0 +1,32 @@
+{
+	"exit": {
+		"Entrance": {
+			"reg": "Main",
+			"access": {
+				"capab": [
+					"AntlionControl"
+				],
+				"type": "capab"
+			}
+		},
+		"Exit": {
+			"reg": "Guard Arena"
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Main",
+			"access": {
+				"capab": [
+					"AntlionControl"
+				],
+				"type": "capab"
+			}
+		}
+	},
+	"lctn": {
+		"Main": {
+			"Lambda Cache": []
+		}
+	}
+}

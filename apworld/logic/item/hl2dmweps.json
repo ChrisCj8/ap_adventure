@@ -1,0 +1,30 @@
+{
+	"name": "HL2DM Weapons",
+	"items": {
+		"S.L.A.M.": {
+			"condcapab": {
+				"Ammo_slam": [
+					"BlastDamage",
+					"Trap",
+					"RemoteBomb",
+					"MediumExplosion",
+					"MediumSizeExplosion"
+				]
+			},
+			"file": "slam",
+			"group": [],
+			"min": 1
+		},
+		"Stunstick": {
+			"file": "stunstick",
+			"group": [
+				"Melee Weapon"
+			],
+			"capab": [
+				"DecentMelee",
+				"ClubDamage"
+			],
+			"min": 1
+		}
+	}
+}

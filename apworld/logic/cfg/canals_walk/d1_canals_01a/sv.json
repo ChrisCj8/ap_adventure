@@ -1,0 +1,48 @@
+{
+	"exit": {
+		"Entrance": {
+			"reg": "Main"
+		},
+		"Exit": {
+			"reg": "Main"
+		}
+	},
+	"entr": {
+		"Entrance": {
+			"reg": "Main",
+			"access": {
+				"type": "and",
+				"nodes": [
+					{
+						"type": "or",
+						"nodes": [
+							{
+								"capab": [
+									"WeakShortRange"
+								],
+								"type": "capab"
+							},
+							{
+								"capab": [
+									"WeakMidRange"
+								],
+								"type": "capab"
+							}
+						]
+					},
+					{
+						"capab": [
+							"DecentMelee"
+						],
+						"type": "capab"
+					}
+				]
+			}
+		}
+	},
+	"lctn": {
+		"Main": {
+			"Lambda Cache": []
+		}
+	}
+}

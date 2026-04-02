@@ -1,0 +1,39 @@
+{
+	"reg": {
+		"Pre-Ambush": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Post-Ambush": {
+			"cond": [
+				"Ammo_SMG1",
+				"Props"
+			]
+		},
+		"Ambush": {
+			"cond": [
+				"Ammo_SMG1",
+				"Props"
+			]
+		}
+	},
+	"connect": {
+		"Pre-Ambush": {
+			"Ambush": {
+				"twoway": false
+			}
+		},
+		"Ambush": {
+			"Post-Ambush": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"DecentMidRange"
+					],
+					"type": "capab"
+				}
+			}
+		}
+	}
+}

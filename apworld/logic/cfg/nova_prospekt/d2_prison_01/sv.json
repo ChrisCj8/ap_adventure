@@ -1,0 +1,21 @@
+{
+	"exit": {
+		"Sewer": {
+			"reg": "Sewer"
+		},
+		"Exit": {
+			"reg": "Exit"
+		}
+	},
+	"entr": {
+		"Sewer": {
+			"reg": "Sewer"
+		}
+	},
+	"lctn": {
+		"Prison Yard": {
+			"Sewer Basin": [],
+			"On Turnt Over Dumpster": []
+		}
+	}
+}

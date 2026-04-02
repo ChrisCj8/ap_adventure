@@ -1,0 +1,65 @@
+{
+	"reg": {
+		"Showers": {
+			"cond": [
+				"Props_Explosive",
+				"Props"
+			]
+		},
+		"After Field": {
+			"cond": []
+		},
+		"Exit": {
+			"cond": []
+		},
+		"Cells": {
+			"cond": []
+		}
+	},
+	"connect": {
+		"Showers": {
+			"Cells": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMidRange"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"AntlionControl"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"After Field": {
+			"Exit": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"WeakMelee"
+					],
+					"type": "capab"
+				}
+			}
+		},
+		"Cells": {
+			"After Field": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"GravityGun"
+					],
+					"type": "capab"
+				}
+			}
+		}
+	}
+}

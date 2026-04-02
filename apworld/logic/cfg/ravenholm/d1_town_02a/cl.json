@@ -1,0 +1,63 @@
+{
+	"reg": {
+		"Exit": {
+			"cond": []
+		},
+		"Entrance": {
+			"cond": [
+				"Props"
+			]
+		},
+		"Graveyard": {
+			"cond": [
+				"Props"
+			]
+		}
+	},
+	"connect": {
+		"Entrance": {
+			"Graveyard": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		},
+		"Graveyard": {
+			"Exit": {
+				"twoway": false,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"StrongMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			}
+		}
+	}
+}
