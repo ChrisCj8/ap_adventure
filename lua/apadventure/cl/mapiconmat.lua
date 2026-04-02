@@ -69,5 +69,3 @@ net.Receive("APAdvMapIconMat",function()
     local map = net.ReadString()
     apAdventure.GetMapIconMat(map)
 end)
-
-print("yeah")

@@ -36,5 +36,3 @@ function PLY:FinishMove( move )
 end
 
 player_manager.RegisterClass("player_apadv",PLY,"player_sandbox")
-
-print("updated player")
