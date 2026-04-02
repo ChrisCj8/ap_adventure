@@ -296,6 +296,10 @@ local function OnRunID(packet)
         local slotdata = APADV_SLOT.slotData
         local room = APADV_SLOT.Room
 
+        if slotdata.ver > 1 then
+            ErrorNoHalt("The version of apAdventure this slot was generated for is newer than the one this server is running. This will most likely cause issues.")
+        end
+
         APADV.InitSaveData(saveid)
         
         if APADV_SAVEID or !next(APADV_LASTMAPTBL) then
