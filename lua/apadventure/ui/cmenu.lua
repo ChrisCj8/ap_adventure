@@ -943,17 +943,17 @@ return function(window)
         local drawerpnl = vgui.Create("DHTML",helpdrawer)
         drawerpnl:DockMargin(5,0,5,3)
         drawerpnl:Dock(FILL)
-        drawerpnl:OpenURL("asset://garrysmod/apadv_guide/base.html")
+        drawerpnl:OpenURL("asset://garrysmod/data_static/apadventure/guide/base.txt")
 
         local function loadguide(guide)
             local text = ""
             if guide then
-                local path = "apadv_guide/"..language.GetPhrase("apadventure.guidefolder").."/"..guide..".html"
+                local path = "data_static/apadventure/guide/"..language.GetPhrase("apadventure.guidefolder").."/"..guide..".txt"
                 local found
                 if file.Exists(path,"GAME") then
                     found = true
                 else
-                    path = "apadv_guide/en/"..guide..".html"
+                    path = "data_static/apadventure/guide/en/"..guide..".txt"
                     if file.Exists(path,"GAME") then
                         found = true
                     end
