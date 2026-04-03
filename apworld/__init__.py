@@ -906,13 +906,13 @@ class APADVWorld(World):
 
         if unconnectedtwoways and (entrsleft or exitsleft):
             last = unconnectedtwoways.popitem()
-            last_data = last[2]
+            last_data = last[1]
             if entrsleft > exitsleft:
                 last_data = (last_data[1],last_data[3])
-                unconnectedexits[last[1]] = last_data
+                unconnectedexits[last[0]] = last_data
                 exitsleft += 1
             else:
-                unconnectedentrs[last[1]] = last_data
+                unconnectedentrs[last[0]] = last_data
                 entrsleft += 1
 
         onewaysleft = min(entrsleft,exitsleft)
