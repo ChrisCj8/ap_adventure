@@ -379,7 +379,7 @@ local function opentracker(window)
 end
 
 list.Set("DesktopWindows","apAdventureTracker",{
-    icon = "apadventure/apicon64.png",
+    icon = "archipelago/ap64.png",
     title = "#apadventure.tracker.title",
     width = 700,
     height = 500,

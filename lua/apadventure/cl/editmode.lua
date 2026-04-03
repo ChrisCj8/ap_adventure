@@ -16,7 +16,7 @@ local prettyprintcvar = CreateConVar("apadventure_prettyprintcfgs",0,FCVAR_ARCHI
     0,1)
 
 list.Set("DesktopWindows","apAdventureEditor",{
-    icon = "apadventure/apicon64.png",
+    icon = "archipelago/ap64.png",
     title = "#apadventure.editor.title",
     width = 800,
     height = 500,
