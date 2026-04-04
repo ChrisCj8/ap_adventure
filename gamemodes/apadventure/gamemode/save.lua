@@ -21,8 +21,8 @@ function APADV.InitSaveData(saveid)
             APADV_PLYSAVE[croppedname] = util.JSONToTable(file.Read(plydir..v,"DATA"))
         end
 
-        if APADV_SAVEDATA.itemsused then
-            APADV_ITEMSUSED = APADV_SAVEDATA.itemsused
+        if APADV_SAVEDATA._itemsused then
+            APADV_ITEMSUSED = APADV_SAVEDATA._itemsused
         end
 
         if APADV_SAVEDATA._tracker then
@@ -59,7 +59,7 @@ hook.Add("ShutDown","apAdvStoreSaveData",function()
     local savedir = "apadventure/sav/"..APADV_SAVEID.."/"
 
     if APADV_ITEMSUSED and next(APADV_ITEMSUSED) != nil then
-        APADV_SAVEDATA.itemsused = APADV_ITEMSUSED
+        APADV_SAVEDATA._itemsused = APADV_ITEMSUSED
     end
 
     for k,v in pairs(APADV_SAVEDATA) do

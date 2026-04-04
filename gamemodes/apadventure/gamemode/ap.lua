@@ -307,8 +307,8 @@ local function OnRunID(packet)
             if map == slotdata.startmap then
                 APADV_USESTART = slotdata.startregion
                 APADV.LoadCfg(slotdata.startgroup)
-            elseif APADV_SAVEDATA.visited and APADV_SAVEDATA.visited[map] then
-                local groupname, grouptbl = next(APADV_SAVEDATA.visited[map])
+            elseif APADV_SAVEDATA._visited and APADV_SAVEDATA._visited[map] then
+                local groupname, grouptbl = next(APADV_SAVEDATA._visited[map])
                 APADV_ENTRNAME = next(grouptbl)
                 APADV.LoadCfg(groupname)
             else

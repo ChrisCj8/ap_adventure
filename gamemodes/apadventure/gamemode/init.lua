@@ -33,10 +33,10 @@ function GM:PreCleanupMap()
 end
 
 function APADV.MarkEntrance(map,group,name)
-    APADV_SAVEDATA.visited = APADV_SAVEDATA.visited or {}
-    APADV_SAVEDATA.visited[map] = APADV_SAVEDATA.visited[map] or {}
-    APADV_SAVEDATA.visited[map][group] = APADV_SAVEDATA.visited[map][group] or {}
-    APADV_SAVEDATA.visited[map][group][name] = true
+    APADV_SAVEDATA._visited = APADV_SAVEDATA._visited or {}
+    APADV_SAVEDATA._visited[map] = APADV_SAVEDATA._visited[map] or {}
+    APADV_SAVEDATA._visited[map][group] = APADV_SAVEDATA._visited[map][group] or {}
+    APADV_SAVEDATA._visited[map][group][name] = true
 end
 
 function APADV.DoMapTransition(map,group,entrname)
