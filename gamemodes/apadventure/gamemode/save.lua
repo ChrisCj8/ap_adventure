@@ -3,8 +3,28 @@ APADV = APADV or {}
 APADV_SAVEDATA = APADV_SAVEDATA or {}
 APADV_PLYSAVE = ADADV_SAVEPLYS or {}
 
+local saveinit
+local awaitingdata = {}
+
+local max = math.max
+
+local FromJSON = util.JSONToTable
+local ToJSON = util.TableToJSON
+local fileR = file.Read
+local fileW = file.Write
+
+local function applysave(ply,sav)
+    ply:SetHealth(max(ply:GetMaxHealth()/3,sav.health))
+    ply:SetArmor(max(ply:Armor(),sav.armor))
+
+    for k,v in pairs(sav.ammo) do
+        ply:SetAmmo(max(v,ply:GetAmmoCount(k)),k)
+    end
+end
+
 function APADV.InitSaveData(saveid)
     print("Initializing Save Data", saveid)
+    saveinit = true
     local savedir = "apadventure/sav/"..saveid.."/"
     APADV_SAVEDATA = {}
     APADV_PLYSAVE = {}
@@ -12,13 +32,18 @@ function APADV.InitSaveData(saveid)
         local savfiles = file.Find(savedir.."*.json","DATA")
         for k,v in ipairs(savfiles) do
             local croppedname = string.sub(v,0,-6)
-            APADV_SAVEDATA[croppedname] = util.JSONToTable(file.Read(savedir..v,"DATA"))
+            APADV_SAVEDATA[croppedname] = FromJSON(fileR(savedir..v,"DATA"))
         end
         local plydir = savedir.."ply/"
         local plysav = file.Find(plydir.."*.json","DATA")
         for k,v in ipairs(plysav) do
             local croppedname = string.sub(v,0,-6)
-            APADV_PLYSAVE[croppedname] = util.JSONToTable(file.Read(plydir..v,"DATA"))
+            local plydata = FromJSON(fileR(plydir..v,"DATA"))
+            APADV_PLYSAVE[croppedname] = plydata
+            local awaiting = awaitingdata[croppedname]
+            if awaiting then
+                applysave(awaiting,plydata)
+            end
         end
 
         if APADV_SAVEDATA._itemsused then
@@ -33,6 +58,8 @@ function APADV.InitSaveData(saveid)
     else
         file.CreateDir(savedir.."ply/")
     end
+    saveinit = true
+    awaitingdata = nil
 end
 
 local function StorePlyData(ply)
@@ -63,7 +90,7 @@ hook.Add("ShutDown","apAdvStoreSaveData",function()
     end
 
     for k,v in pairs(APADV_SAVEDATA) do
-        file.Write(savedir..k..".json",util.TableToJSON(v))
+        fileW(savedir..k..".json",ToJSON(v))
     end
 
     for k,v in player.Iterator() do
@@ -72,7 +99,7 @@ hook.Add("ShutDown","apAdvStoreSaveData",function()
 
     local plydir = savedir.."ply/"
     for k,v in pairs(APADV_PLYSAVE) do
-        file.Write(plydir..k..".json",util.TableToJSON(v))
+        fileW(plydir..k..".json",ToJSON(v))
     end
 
     APADV_TRACKER:SaveToFile(savedir.."_tracker.json")
@@ -90,12 +117,8 @@ hook.Add("PlayerSpawn","apAdvApplyPlySave", function(ply)
     local sid = ply.APADV_STEAMID64
     local plysav = APADV_PLYSAVE[sid]
     if plysav then
-        timer.Simple(0,function()
-            ply:SetArmor(math.max(ply:Armor(),plysav.armor))
-
-            for k,v in pairs(plysav.ammo) do
-                ply:SetAmmo(math.max(v,ply:GetAmmoCount(k)),k)
-            end
-        end)
+        timer.Simple(0,function() applysave(ply,plysav) end)
+    elseif !saveinit then
+        awaitingdata[sid] = ply
     end
 end)
