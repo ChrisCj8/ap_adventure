@@ -53,7 +53,7 @@ singlepickschema = Schema(Or({
 class ConfigCherryPick(OptionDict):
     """This option allows you to cherrypick single maps from a Config Group.
     
-    Check the options guide for more Information on how this option works."""
+    Check the options guide for more information on how this option works."""
     display_name = "Config Cherrypicking"
     default = {}
     schema = singlepickschema
@@ -62,12 +62,12 @@ class ConfigBlacklist(OptionDict):
     """This option allows you to pick maps from a Config Group that should not be added to your run.
     
     The defaults for this setting contain some maps that don't play very well in this mode, but still
-    had configs made for them for the sake of completion.
+    had configs made for them for the sake of covering all maps.
     
     Blacklisting maps that have not actually been added through the previous options
     should not cause problems.
     
-    Check the options guide for more Information on how this option works."""
+    Check the options guide for more information on how this option works."""
     display_name = "Config Blacklist"
     default = {
         "ravenholm": ["d1_town_02a","d1_town_04"],
@@ -92,7 +92,7 @@ class ItemSets(OptionSet):
 class ItemCherryPick(OptionDict):
     """This option allows you to cherrypick single items from an Item Set.
     
-    Check the options guide for more Information on how this option works."""
+    Check the options guide for more information on how this option works."""
     display_name = "Item Cherrypicking"
     default = {}
     schema = singlepickschema
@@ -100,7 +100,7 @@ class ItemCherryPick(OptionDict):
 class ItemBlacklist(OptionDict):
     """This option allows you to blacklist single items from an Item Set.
     
-    Check the options guide for more Information on how this option works."""
+    Check the options guide for more information on how this option works."""
     display_name = "Item Blacklist"
     default = {}
     schema = singlepickschema
@@ -141,7 +141,7 @@ class BunnyHop(Choice):
     Choosing "never" maintains this behavior, "item" removes it after
     receiving an item and "always" will disable it from the start.
     
-    The latter two options also provide an Autohop."""
+    The latter two options also provide an autohop."""
     display_name = "Bunnyhop"
     option_never = 1
     option_item = 2
@@ -149,14 +149,14 @@ class BunnyHop(Choice):
     default = 1
 
 class BunnyHopLogic(Toggle):
-    """Should the player be expected to BunnyHop to reach certain areas?
-    Ignored if BunnyHop is set to "never"."""
+    """Should the player be expected to Bunnyhop to reach certain areas?
+    Ignored if bhop is set to "never"."""
     display_name = "Bunnyhop Logic"
 
 
 class GeneratePUML(Toggle):
-    """Generates a PlantUML Diagram showing all of the worlds Regions and Locations, 
-    which may be helpful for debugging."""
+    """Generates a PlantUML Diagram showing all of the worlds regions and locations, 
+    which may be helpful for debugging configs you've made."""
     display_name = "Generate PUML"
 
 class WriteDebug(Toggle):
