@@ -118,9 +118,6 @@ function APADV_TRACKER:Build()
         local locsbyreg = {}
         local locacc = svcfg.lctnaccess or {}
         local locpre = groupn.." - "..mapn.." - "
-        
-
-        --PrintTable(svcfg.lctn)
 
         for k,v in pairs(svcfg.lctn) do
             local locn = locpre..v.name
@@ -131,7 +128,7 @@ function APADV_TRACKER:Build()
                 local reach = slotlocs[locid] and 0 or 3
                 local loc = {
                     reach = reach,
-                    acc = locacc[locn]
+                    acc = locacc[v.name]
                 }
                 
                 local reg = v.reg
@@ -153,13 +150,6 @@ function APADV_TRACKER:Build()
                 self:SendLocationUpdate(groupn,mapn,locn,reach)
             end
         end
-
-        --[[ if clcfg.item then
-            local items = {}
-            for k,v in pairs(clcfg.item) do
-                
-            end
-        end ]]
 
         local conntbl = {}
 
@@ -486,7 +476,7 @@ function APADV_TRACKER:Query()
                     else
                         if istable(iv.acc) then
                             local out, override = evalrule(iv.acc,reg.cond,map,group)
-                            reach = max(out,basereach)
+                            reach = min(max(out,basereach),3)
                             if override then
                                 iv.acc = override
                             end
