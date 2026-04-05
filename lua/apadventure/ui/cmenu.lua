@@ -437,85 +437,13 @@ return function(window)
         regeditpnl.ContentsVisible = true
         regeditpnl.ShowContents = ShowContents
 
-            local regammopnl = vgui.Create("DCollapsibleCategory",regeditpnl) 
-            regammopnl:SetPos(5,5)
-            regammopnl:SetLabel("#apadventure.editor.reg.condpnl")
-
-                local ammotypes = game.GetAmmoTypes()
-
-                local curammolist = {}
-
-                local ammochecks = {}
-                local i = 1
-                
-                local ammoselect = vgui.Create("DComboBox",regammopnl)
-                ammoselect:SetPos(5,25)
-
-                for k,v in ipairs(ammotypes) do
-                    ammoselect:AddChoice("Ammo_"..v)
-                end
-
-                local otherconds = {
-                    "Props",
-                    "Props_Sharp",
-                    "Props_Explosive",
-                    "Antlions_Controllable"
-                }
-
-                for k,v in ipairs(otherconds) do
-                    ammoselect:AddChoice(v)
-                end
-
-                local ammoaddbtn = ImageButton(regammopnl,"icon16/add.png")
-                local ammodelbtn = ImageButton(regammopnl,"icon16/delete.png")
-
-                local ammolist = vgui.Create("DListView",regammopnl)
-                ammolist:SetPos(5,52)
-                ammolist:AddColumn("#apadventure.editor.reg.condcol")
-
-                function ammoaddbtn:DoClick()
-                    local newcondtext, newconddata = ammoselect:GetSelected()
-                    local newcond = newcondtext or newconddata
-                    if newcond and !regeditpnl.curreg.ammo[newcond] then
-                        ammolist:AddLine(newcond)
-                        regeditpnl.curreg.ammo[newcond] = true
-                    end
-                end
-
-                function ammodelbtn:DoClick()
-                    for k,v in ipairs(ammolist:GetSelected()) do
-                        local cond = v:GetValue(1)
-                        ammolist:RemoveLine(v:GetID())
-                        regeditpnl.curreg.ammo[cond] = nil
-                    end
-                end
-
-                function ammolist:UpdateAmmo()
-                    for k,v in pairs(self:GetLines()) do
-                        self:RemoveLine(v:GetID())
-                    end
-                    local ammotbl = regeditpnl.curreg.ammo
-                    for k,v in pairs(ammotbl) do
-                        self:AddLine(k)
-                    end
-                end
-
-                local oldlayout = regammopnl.PerformLayout
-                function regammopnl:PerformLayout(w,h)
-                    oldlayout(self,w,h)
-
-                    ammoaddbtn:SetPos(w-26-18,28)
-                    ammodelbtn:SetPos(w-26,28)
-                    ammoselect:SetSize(w-52,22)
-                    ammolist:SetSize(w-10,250)
-                end
-
+            local regcondpnl = include("apadventure/ui/condpnl.lua")(regeditpnl)
             regeditpnl:ShowContents(false)
 
             local oldlayout = regeditpnl.PerformLayout
             function regeditpnl:PerformLayout(w,h)
                 oldlayout(self,w,h)
-                regammopnl:SetWidth(w-30)
+                regcondpnl:SetWidth(w-30)
             end
         
         function regaddbtn:DoClick()
@@ -547,7 +475,7 @@ return function(window)
             local newtbl = regtbl[pnl:GetValue(1)]
             newtbl.ammo = newtbl.ammo or {}
             regeditpnl.curreg = newtbl
-            ammolist:UpdateAmmo()
+            regcondpnl:SetTargetTbl(newtbl.ammo)
             regeditpnl:ShowContents(true)
         end
 
