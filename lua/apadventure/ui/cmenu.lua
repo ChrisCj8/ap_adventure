@@ -438,6 +438,7 @@ return function(window)
         regeditpnl.ShowContents = ShowContents
 
             local regcondpnl = include("apadventure/ui/condpnl.lua")(regeditpnl)
+            regcondpnl:SetLabel("#apadventure.editor.reg.condpnl")
             regeditpnl:ShowContents(false)
 
             local oldlayout = regeditpnl.PerformLayout
