@@ -1,10 +1,10 @@
-return function(parent,tbl)
+return function(parent,targettbl,desiredh)
 
-local targettbl = tbl or {}
+desiredh = desiredh or 250
 
 local condpnl = vgui.Create("DCollapsibleCategory",parent) 
 condpnl:SetPos(5,5)
-condpnl:SetLabel("#apadventure.editor.reg.condpnl")
+condpnl:SetLabel("#apadventure.editor.condpnl")
 
 local condselect = vgui.Create("DComboBox",condpnl)
 condselect:SetPos(5,25)
@@ -62,6 +62,7 @@ function condpnl:SetTargetTbl(tbl)
         condlist:AddLine(k)
     end
 end
+condpnl:SetTargetTbl(targettbl or {})
 
 local oldlayout = condpnl.PerformLayout
 function condpnl:PerformLayout(w,h)
@@ -70,7 +71,7 @@ function condpnl:PerformLayout(w,h)
     addbtn:SetPos(w-26-18,28)
     delbtn:SetPos(w-26,28)
     condselect:SetSize(w-52,22)
-    condlist:SetSize(w-10,250)
+    condlist:SetSize(w-10,desiredh)
 end
 
 return condpnl end
