@@ -115,6 +115,7 @@ return function(parent,targetheight)
 
     local nodepnl = vgui.Create("DPanel",container)
     local nodepnloldlayout = nodepnl.PerformLayout
+    nodepnl.OldLayout = nodepnloldlayout
     nodepnl:SetPos(210,55)
 
     function accesstree:OnNodeSelected(node)
