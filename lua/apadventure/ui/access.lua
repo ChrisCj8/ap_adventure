@@ -113,7 +113,7 @@ return function(parent,targetheight)
         end
     end
 
-    local nodepnl = vgui.Create("DPanel",container)
+    local nodepnl = vgui.Create("DScrollPanel",container)
     local nodepnloldlayout = nodepnl.PerformLayout
     nodepnl.OldLayout = nodepnloldlayout
     nodepnl:SetPos(210,55)
