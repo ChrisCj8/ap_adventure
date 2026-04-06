@@ -408,6 +408,7 @@ function APADV_TRACKER:Query()
             ["capab"] = function(node)
                 local capabs = node.capab
                 local first = capabs[1]
+                local cond = node.override or conds
                 if !first then return 1,1 end
 
                 local function checkitem(id)
@@ -419,7 +420,7 @@ function APADV_TRACKER:Query()
                             if !itemcond then return false end
                             local missing = true
                             for ik,iv in pairs(itemcond) do
-                                if iv[v] and conds[ik] then
+                                if iv[v] and cond[ik] then
                                     missing = false
                                     break
                                 end
@@ -441,7 +442,7 @@ function APADV_TRACKER:Query()
                     end
                 end
 
-                for k,v in pairs(conds) do
+                for k,v in pairs(cond) do
                     local condtbl = condcapabtbl[k]
                     if condtbl then
                         local candidates = condtbl[first]
@@ -521,10 +522,14 @@ function APADV_TRACKER:Query()
 
         if exittbl then
             for ik,iv in pairs(exittbl) do
+                print(ik)
+                PrintTable(iv)
                 local tgt = iv.tgt
                 local tgtgr = tgt.group
                 local tgtmap = tgt.map
                 local tgtentr = entrs[tgtgr][tgtmap][tgt.entr]
+                PrintTable(entrs[tgtgr][tgtmap])
+                print(tgt,tgtgr,tgtmap,tgtentr)
                 local tgtregn = tgtentr.reg
                 local tgtreg = regtbl[tgtgr][tgtmap][tgtregn]
                 if tgtreg.reach > basereach then

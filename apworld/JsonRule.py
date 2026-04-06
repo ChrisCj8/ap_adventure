@@ -52,25 +52,27 @@ def eval_json_rule(rule,state : CollectionState,world,region):
                             hascapabs = True
                             break  
                 
-            if not hascapabs and region.conditions:
-                #print(f"couldn't fullfill normal capability check, trying conditional capabilities for region {region}")
-                for cond in region.conditions:
-                    #print(f"trying condition {cond}")
-                    if cond in world.condcapabtbl:
-        
-                        for itemname,itemcapabs in world.condcapabtbl[cond].items():
-                            #print(f"testing conditional capabilities for {itemname}")
-                            if state.has(itemname,player):
-                                allcapabs = True
-                                for cap in capab:
-                                    if not cap in itemcapabs:
-                                        allcapabs = False
+            if not hascapabs:
+                conds = region.conditions
+                if "override" in rule:
+                    conds = rule["override"]
+                if conds:
+                    #print(f"couldn't fullfill normal capability check, trying conditional capabilities for region {region}")
+                    for cond in conds:
+                        #print(f"trying condition {cond}")
+                        if cond in world.condcapabtbl:
+                            for itemname,itemcapabs in world.condcapabtbl[cond].items():
+                                #print(f"testing conditional capabilities for {itemname}")
+                                if state.has(itemname,player):
+                                    allcapabs = True
+                                    for cap in capab:
+                                        if not cap in itemcapabs:
+                                            allcapabs = False
+                                            break
+                                    if allcapabs:
+                                        hascapabs = True
+                                        #print(f"{itemname} had the required capabilities")
                                         break
-                                if allcapabs:
-                                    hascapabs = True
-                                    #print(f"{itemname} had the required capabilities")
-                                    break
-                                                     
             return hascapabs
         case _:
             #print(False)
@@ -132,6 +134,14 @@ def preprocess_json_rule(rule,world,region):
             else:
                 return rule
         case "capab":
+            if "override" in rule:
+                ammomerge = world.ammomerge
+                conds = set()
+                for v in rule["override"]:
+                    conds.add(v)
+                    if v in ammomerge:
+                        conds.update(ammomerge[v])
+                rule["override"] = conds
             world.usedcapabs.update(rule["capab"])
             return rule
         case "mapitem":

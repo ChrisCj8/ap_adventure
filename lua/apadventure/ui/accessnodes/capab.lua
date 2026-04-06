@@ -2,6 +2,8 @@ local NODE = {
     Icon = "icon16/gun.png"
 }
 
+local UImake = vgui.Create
+
 local capabs = {
     "WimpyMelee",
     "WeakMelee",
@@ -51,14 +53,16 @@ local capabs = {
 
 function NODE.Panel(parent)
 
-    local capselectiontypebtn = vgui.Create("DImageButton",parent)
+    local nodetbl = parent.nodetbl
+
+    local capselectiontypebtn = UImake("DImageButton",parent)
     capselectiontypebtn:SetSize(16,16)
     capselectiontypebtn:SetImage("icon16/pencil.png")
     capselectiontypebtn:SetPos(5,7)
     
     local textinputactive = false
 
-    local capselect = vgui.Create("DComboBox",parent)
+    local capselect = UImake("DComboBox",parent)
     capselect:SetPos(25,5)
     local first = true
     for k,v in ipairs(capabs) do
@@ -66,23 +70,23 @@ function NODE.Panel(parent)
         first = false
     end
 
-    local capnamein = vgui.Create("DTextEntry",parent)
+    local capnamein = UImake("DTextEntry",parent)
     capnamein:SetPos(25,5)
     capnamein:SetVisible(false)
 
-    local capaddbtn = vgui.Create("DImageButton",parent)
+    local capaddbtn = UImake("DImageButton",parent)
     capaddbtn:SetSize(16,16)
     capaddbtn:SetImage("icon16/add.png")
 
-    local capdelbtn = vgui.Create("DImageButton",parent)
+    local capdelbtn = UImake("DImageButton",parent)
     capdelbtn:SetSize(16,16)
     capdelbtn:SetImage("icon16/delete.png")
 
-    local caplist = vgui.Create("DListView",parent)
+    local caplist = UImake("DListView",parent)
     caplist:SetPos(5,30)
     caplist:AddColumn("Capability")
 
-    for k,v in ipairs(parent.nodetbl.capab) do
+    for k,v in ipairs(nodetbl.capab) do
         caplist:AddLine(v)
     end
 
@@ -108,7 +112,7 @@ function NODE.Panel(parent)
         else
             _, data = capselect:GetSelected()
         end
-        local captbl = parent.nodetbl.capab
+        local captbl = nodetbl.capab
         local add = true
         for k,v in ipairs(captbl) do
             if v == data then
@@ -123,7 +127,7 @@ function NODE.Panel(parent)
     end
 
     function capdelbtn:DoClick()
-        captbl = parent.nodetbl.capab
+        captbl = nodetbl.capab
         local changed
         for k,v in ipairs(caplist:GetSelected()) do
             local val = v:GetValue(1)
@@ -142,18 +146,43 @@ function NODE.Panel(parent)
                 i = i + 1
                 newlist[i] = v
             end
-            parent.nodetbl.capab = newlist
+            nodetbl.capab = newlist
         end
     end
 
+    local hasoverride = istable(nodetbl.override)
+
+    local overridecheck = UImake("DCheckBoxLabel",parent)
+    overridecheck:SetDark(true)
+    overridecheck:SetText("#apadventure.editor.capab.override")
+    overridecheck:SetValue(hasoverride)
+
+    local storedtbl = nodetbl.override or {}
+    local condpnl = include("apadventure/ui/condpnl.lua")(parent,storedtbl,150)
+    condpnl:SetExpanded(hasoverride)
+
+    function overridecheck:OnChange(val)
+        nodetbl.override = val and storedtbl or nil
+    end
+
+    local oldlayout = parent.PerformLayout
     function parent:PerformLayout(w,h)
         --itemnamein:SetSize(w-10,22)
+        self:OldLayout(self,w,h)
+        w = self:InnerWidth()
+        local capabh = h-100
 
         capselect:SetSize(w-70,22)
         capnamein:SetSize(w-70,22)
-        caplist:SetSize(w-10,h-35)
+        caplist:SetSize(w-10,capabh-35)
         capaddbtn:SetPos(w-5-16-20,7)
         capdelbtn:SetPos(w-5-16,7)
+
+        overridecheck:SetPos(5,capabh)
+        overridecheck:SetSize(w-10,22)
+
+        condpnl:SetPos(5,capabh+22)
+        condpnl:SetWidth(w-10)
     end
 end
 
