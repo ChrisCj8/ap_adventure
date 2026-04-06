@@ -81,6 +81,18 @@ function APADV_TRACKER:SendTrackerData(ply)
     end
 end
 
+function APADV_TRACKER:ApplyAmmomerge(tbl)
+    for k,v in pairs(tbl) do
+        local match = self.ammomerge[k]
+        if match then
+            for ik,iv in ipairs(match) do
+                tbl[iv] = true
+            end
+        end
+    end
+    return tbl
+end
+
 function APADV_TRACKER:Build()
     local starttime = SysTime()
     local slot = APADV_SLOT
@@ -96,6 +108,18 @@ function APADV_TRACKER:Build()
     local locnametomap = {}
 
     trackerreset()
+
+    local ammotbl = {}
+
+    for k,v in pairs(slotdata.ammomerge) do
+        local new = {}
+        for ik,iv in ipairs(v) do
+            new[ik] = "Ammo_"..iv
+        end
+        ammotbl["Ammo_"..k] = new
+    end
+
+    self.ammomerge = ammotbl
 
     local function buildmaptracker(groupn,mapn)
         --print("building tracker table for "..mapn.." in "..groupn)
@@ -214,7 +238,7 @@ function APADV_TRACKER:Build()
 
         for k,v in pairs(clcfg.reg) do
             local reg = {
-                cond = v.ammo,
+                cond = self:ApplyAmmomerge(v.ammo),
                 locs = locsbyreg[k],
                 conn = conntbl[k],
                 exit = exittbl[k],
@@ -408,7 +432,11 @@ function APADV_TRACKER:Query()
             ["capab"] = function(node)
                 local capabs = node.capab
                 local first = capabs[1]
-                local cond = node.override or conds
+                if node.override then
+                    node.cond = self:ApplyAmmomerge(node.override)
+                    node.override = nil
+                end
+                local cond = node.cond or conds
                 if !first then return 1,1 end
 
                 local function checkitem(id)
@@ -616,6 +644,7 @@ function APADV_TRACKER:SaveToFile(path)
         entr = self.entr,
         regs = self.regs,
         query = self.query,
+        ammo = self.ammomerge,
         locnametomap = self.locnametomap,
     })
 end
@@ -625,5 +654,6 @@ function APADV_TRACKER:LoadFromTable(data)
     self.regs = data.regs
     self.query = data.query
     self.locnametomap = data.locnametomap
+    self.ammo = data.ammomerge
     self.runid = APADV_SAVEID
 end
