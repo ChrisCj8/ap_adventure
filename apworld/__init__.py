@@ -628,8 +628,8 @@ class APADVWorld(World):
         except:
             mcguffin_desired = 4
 
+        self.mcguffin_goal = 1
         if mcguffin_desired <= 0:
-            mcguffin_desired = 0
             self.mcguffin_goal = 1
 
         if poolsize < self.locallocs:
