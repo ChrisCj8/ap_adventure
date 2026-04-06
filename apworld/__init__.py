@@ -930,7 +930,7 @@ class APADVWorld(World):
 
             reg2.connect(reg1,f"{reg2.name} -> {reg1.name} (from remaining)",
                 self.make_intermap_rule(reg1,data_a[2],reg2,data_b[2]))
-            self.add_connectinfo(reg1,data_a[0],reg2,data_b[0])
+            self.add_connectinfo(reg2,data_b[0],reg1,data_a[0])
 
             del unconnectedentrs[keys1[pick1]]
             del unconnectedexits[keys2[pick2]]
