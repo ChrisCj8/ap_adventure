@@ -550,14 +550,10 @@ function APADV_TRACKER:Query()
 
         if exittbl then
             for ik,iv in pairs(exittbl) do
-                print(ik)
-                PrintTable(iv)
                 local tgt = iv.tgt
                 local tgtgr = tgt.group
                 local tgtmap = tgt.map
                 local tgtentr = entrs[tgtgr][tgtmap][tgt.entr]
-                PrintTable(entrs[tgtgr][tgtmap])
-                print(tgt,tgtgr,tgtmap,tgtentr)
                 local tgtregn = tgtentr.reg
                 local tgtreg = regtbl[tgtgr][tgtmap][tgtregn]
                 if tgtreg.reach > basereach then
