@@ -2,8 +2,8 @@
 	"reg": {
 		"Showers": {
 			"cond": [
-				"Props_Explosive",
-				"Props"
+				"Props",
+				"Props_Explosive"
 			]
 		},
 		"After Field": {
@@ -27,6 +27,10 @@
 							"capab": [
 								"DecentMidRange"
 							],
+							"override": {
+								"Ammo_SMG1": true,
+								"Ammo_AR2": true
+							},
 							"type": "capab"
 						},
 						{

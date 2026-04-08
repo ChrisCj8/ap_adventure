@@ -24,7 +24,25 @@
 			]
 		}
 	},
-	"entraccess": [],
+	"entraccess": {
+		"Entrance": {
+			"type": "or",
+			"nodes": [
+				{
+					"capab": [
+						"DecentShortRange"
+					],
+					"type": "capab"
+				},
+				{
+					"capab": [
+						"DecentMidRange"
+					],
+					"type": "capab"
+				}
+			]
+		}
+	},
 	"lctnaccess": {
 		"Defended Cell Block": {
 			"type": "or",

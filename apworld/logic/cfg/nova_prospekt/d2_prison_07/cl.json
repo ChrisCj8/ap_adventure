@@ -9,7 +9,11 @@
 			]
 		},
 		"Control Room": {
-			"cond": []
+			"cond": [
+				"Ammo_Buckshot",
+				"Ammo_SMG1",
+				"Ammo_AR2"
+			]
 		}
 	},
 	"connect": {

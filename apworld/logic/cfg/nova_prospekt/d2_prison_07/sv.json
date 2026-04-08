@@ -29,7 +29,24 @@
 			"reg": "Cell Block"
 		},
 		"Entrance": {
-			"reg": "Control Room"
+			"reg": "Control Room",
+			"access": {
+				"type": "or",
+				"nodes": [
+					{
+						"capab": [
+							"DecentShortRange"
+						],
+						"type": "capab"
+					},
+					{
+						"capab": [
+							"DecentMidRange"
+						],
+						"type": "capab"
+					}
+				]
+			}
 		}
 	},
 	"lctn": {
