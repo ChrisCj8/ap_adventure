@@ -312,7 +312,7 @@ end
 function apAdventure.LoadCfg(gname,dodelete)
     assert(!(gname == "" or !isstring(gname)),"Invalid Group Name")
     local path = "apadventure/cfg/"..gname.."/"..game.GetMap().."/sv.json"
-    local json = file.Read(path,"DATA")
+    local json = file.Read(path,"DATA") or file.Read("data_static/"..path,"GAME") 
 
     game.CleanUpMap()
     apAdventure.LoadClientTbl(gname)

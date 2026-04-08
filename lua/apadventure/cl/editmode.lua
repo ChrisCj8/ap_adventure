@@ -51,14 +51,16 @@ net.Receive("APAdvActiveCfgClear",function()
     editcfg = apAdventure.EditCfg
     apAdvDelHalos = {}
     apAdvSaveHalos = {}
-    local groupjson = file.Read("apadventure/cfg/"..gname.."/group.json","DATA")
+    local path = "apadventure/cfg/"..gname.."/group.json"
+    local groupjson = file.Read(path,"DATA") or file.Read("data_static/"..path,"GAME")
     if groupjson then
         local tbl = util.JSONToTable(groupjson)
         if tbl then
             editcfg.GroupInfo = tbl.rules
         end
     end
-    local json = file.Read("apadventure/cfg/"..gname.."/"..game.GetMap().."/cl.json","DATA")
+    path = "apadventure/cfg/"..gname.."/"..game.GetMap().."/cl.json"
+    local json = file.Read(path,"DATA") or file.Read("data_static/"..path,"GAME")
     print(json)
     if json then
         local tbl = util.JSONToTable(json)
