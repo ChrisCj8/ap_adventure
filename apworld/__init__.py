@@ -630,7 +630,7 @@ class APADVWorld(World):
 
         self.mcguffin_goal = 1
         if mcguffin_desired <= 0:
-            self.mcguffin_goal = 1
+            mcguffin_desired = 0
 
         if poolsize < self.locallocs:
             missingitems = self.locallocs - poolsize
