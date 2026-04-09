@@ -12,27 +12,20 @@
 				"Ammo_SMG1": true,
 				"Props": true
 			}
-		},
-		"Ambush": {
-			"ammo": {
-				"Ammo_SMG1": true,
-				"Props": true
-			}
 		}
 	},
 	"connect": {
 		"Pre-Ambush": {
-			"Ambush": {
-				"twoway": false
-			}
-		},
-		"Ambush": {
 			"Post-Ambush": {
 				"twoway": false,
 				"access": {
 					"capab": [
 						"DecentMidRange"
 					],
+					"override": {
+						"Ammo_SMG1": true,
+						"Props": true
+					},
 					"type": "capab"
 				}
 			}

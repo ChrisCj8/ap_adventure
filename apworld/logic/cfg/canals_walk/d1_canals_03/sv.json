@@ -20,14 +20,13 @@
 	},
 	"lctn": {
 		"Pre-Ambush": {
+			"Rappelling Metrocop": [],
+			"Vent Room": [],
 			"Matts Supplies": []
 		},
 		"Post-Ambush": {
 			"Lambda Cache": [],
 			"Manhack Vent": []
-		},
-		"Ambush": {
-			"Rappelling Metrocop": []
 		}
 	}
 }

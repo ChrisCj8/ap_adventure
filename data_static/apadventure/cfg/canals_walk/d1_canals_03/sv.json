@@ -28,7 +28,7 @@
 			"pos": "[-1597.3552 51.9178 -956.218]",
 			"dummy": true,
 			"ang": "{0 0 0}",
-			"reg": "Ambush",
+			"reg": "Pre-Ambush",
 			"name": "Rappelling Metrocop"
 		},
 		{
@@ -42,6 +42,12 @@
 			"ang": "{0 0 0}",
 			"reg": "Post-Ambush",
 			"name": "Manhack Vent"
+		},
+		{
+			"pos": "[-1733.4519 880.2355 -809.29]",
+			"ang": "{0 0 0}",
+			"reg": "Pre-Ambush",
+			"name": "Vent Room"
 		}
 	],
 	"exit": [
