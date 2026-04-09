@@ -39,17 +39,21 @@ function ENT:Think()
 end
 
 if CLIENT then
+    local start3d2d = cam.Start3D2D
+    local end3d2d = cam.End3D2D
+    local drawtext = draw.DrawText
+    local drawwirebox = render.DrawWireframeBox
 
     function ENT:Draw(fl)
         local textfacing = apAdventure.TextFacing
         self:DrawModel(fl)
         local pos = self:GetPos()
         local dummy = self:GetIsDummy()
-        cam.Start3D2D(pos,textfacing,.5)
-            draw.DrawText("Region: "..self:GetRegion().."\n Name: "..self:GetLctnName()..( dummy and "\nDUMMY" or ""),"BudgetLabel",0,-100,color_white,TEXT_ALIGN_CENTER)
-        cam.End3D2D()
+        start3d2d(pos,textfacing,.5)
+            drawtext("Region: "..self:GetRegion().."\n Name: "..self:GetLctnName()..( dummy and "\nDUMMY" or ""),"BudgetLabel",0,-100,color_white,TEXT_ALIGN_CENTER)
+        end3d2d()
         if dummy then return end
-        render.DrawWireframeBox(pos,angle_zero,self.boundmins,self.boundmaxs,color_white)
+        drawwirebox(pos,angle_zero,self.boundmins,self.boundmaxs,color_white)
     end
 
     return
