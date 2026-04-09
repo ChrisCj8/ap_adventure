@@ -187,3 +187,7 @@ function apAdventure.SendNotification(text,type,len,snd,ply)
         net.Broadcast()
     end
 end
+
+function apAdventure.ToolTrailWarn(loc,ply)
+    apAdventure.SendNotification("#apadventure.toolui.trailwarn."..loc,1,4,nil,ply)
+end

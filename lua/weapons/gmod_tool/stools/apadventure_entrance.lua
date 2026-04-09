@@ -82,9 +82,13 @@ end
 
 function TOOL:LeftClick(tr)
     if !tr.Hit then return end
-    local ent = tr.Entity
     local region = self:GetClientInfo("region")
+    if region[1] == " " then apAdventure.ToolTrailWarn("regstart",self:GetOwner()) return end
+    if region[#region] == " " then apAdventure.ToolTrailWarn("regend",self:GetOwner()) return end
     local name = self:GetClientInfo("name")
+    if name[1] == " " then apAdventure.ToolTrailWarn("entrstart",self:GetOwner()) return end
+    if name[#name] == " " then apAdventure.ToolTrailWarn("entrend",self:GetOwner()) return end
+    local ent = tr.Entity
     if ent:GetClass() == "apadventure_entrance_editor" then
         ent:SetRegion(region)
         ent:SetEntrName(name)
@@ -107,9 +111,13 @@ function TOOL:LeftClick(tr)
 end
 
 function TOOL:Reload()
-    local ent = ents.Create("apadventure_entrance_editor")
     local region = self:GetClientInfo("region")
+    if region[1] == " " then apAdventure.ToolTrailWarn("regstart",self:GetOwner()) return end
+    if region[#region] == " " then apAdventure.ToolTrailWarn("regend",self:GetOwner()) return end
     local name = self:GetClientInfo("name")
+    if name[1] == " " then apAdventure.ToolTrailWarn("entrstart",self:GetOwner()) return end
+    if name[#name] == " " then apAdventure.ToolTrailWarn("entrend",self:GetOwner()) return end
+    local ent = ents.Create("apadventure_entrance_editor")
     if !IsValid(ent) then return end
     local user = self:GetOwner()
     local userfeet = user:GetPos()

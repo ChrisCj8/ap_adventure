@@ -24,8 +24,10 @@ end
 
 function TOOL:LeftClick(tr)
     if !tr.Hit then return end
-    local ent = tr.Entity
     local region = self:GetClientInfo("region")
+    if region[1] == " " then apAdventure.ToolTrailWarn("regstart",self:GetOwner()) return end
+    if region[#region] == " " then apAdventure.ToolTrailWarn("regend",self:GetOwner()) return end
+    local ent = tr.Entity
     if ent:GetClass() == "apadventure_start_editor" then
         ent:SetRegion(region)
     else
@@ -54,8 +56,10 @@ function TOOL:RightClick(tr)
 end
 
 function TOOL:Reload()
-    local ent = ents.Create("apadventure_start_editor")
     local region = self:GetClientInfo("region")
+    if region[1] == " " then apAdventure.ToolTrailWarn("regstart",self:GetOwner()) return end
+    if region[#region] == " " then apAdventure.ToolTrailWarn("regend",self:GetOwner()) return end
+    local ent = ents.Create("apadventure_start_editor")
     if !IsValid(ent) then return end
     local user = self:GetOwner()
     ent:SetPos(user:GetPos())

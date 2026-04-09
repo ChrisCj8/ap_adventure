@@ -35,10 +35,14 @@ end
 
 function TOOL:LeftClick(tr)
     if !tr.Hit then return end
-    local ent = tr.Entity
     local region = self:GetClientInfo("region")
+    if region[1] == " " then apAdventure.ToolTrailWarn("regstart",self:GetOwner()) return end
+    if region[#region] == " " then apAdventure.ToolTrailWarn("regend",self:GetOwner()) return end
     local name = self:GetClientInfo("name")
+    if name[1] == " " then apAdventure.ToolTrailWarn("locstart",self:GetOwner()) return end
+    if name[#name] == " " then apAdventure.ToolTrailWarn("locend",self:GetOwner()) return end
     local isdummy = self:GetClientBool("isdummy")
+    local ent = tr.Entity
     if ent:GetClass() == "apadventure_location_editor" then
         ent:SetRegion(region)
         ent:SetLctnName(name)
