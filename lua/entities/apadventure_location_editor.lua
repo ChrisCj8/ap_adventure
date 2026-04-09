@@ -20,9 +20,9 @@ local bboxmaxs = Vector(10,10,20)
 
 function ENT:Initialize()
     BaseClass.Initialize(self)
-    self:SetModel("models/apapdventure/location_pickup.mdl")
-    self:SetCollisionGroup( COLLISION_GROUP_WORLD )
-    self:PhysicsInitBox( bboxmins,bboxmaxs )
+    self:SetModel("models/apadventure/location_pickup.mdl")
+    self:SetCollisionGroup(COLLISION_GROUP_WORLD)
+    self:PhysicsInitBox(bboxmins,bboxmaxs)
     local phys = self:GetPhysicsObject()
     self.boundmins, self.boundmaxs = self:GetCollisionBounds()
     self.CopyRegionName = self.GetRegion

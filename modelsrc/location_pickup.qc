@@ -1,4 +1,4 @@
-$modelname "apapdventure/location_pickup.mdl"
+$modelname "apadventure/location_pickup.mdl"
 $cdmaterials "apadventure/models/"
 
 $bodygroup Main {
