@@ -5,8 +5,8 @@
 - familiarity with Archipelago - This is not a great first introduction for people who are new to AP, I would recommend playing a few other games in AP first to get a feel for how things work.
     - Knowing how to edit YAMLs manually is a hard requirement, as this implementation features some non-standard YAML settings which the Web UI and Options Creator cannot handle.
 - Garry's Mod
-- Half-Life 2 (not strictly required, but the default configs included are mainly made for HL2 maps, so you'll want it for your test run)
-- [GWSockets](https://github.com/FredyH/GWSockets/releases) - more info on which version to grab further down
+- Half-Life 2 (Not strictly required, but the default configs included are mainly made for HL2 maps, so you'll want it for your test run.)
+- [GWSockets](https://github.com/FredyH/GWSockets/releases) - More information on which version to grab can be found further down.
 - GMAP
 - apAdventure itself
 
@@ -45,7 +45,7 @@
 
     3. Install the apAdventure apworld like any other apworld.
 
-    4. (Optional) After starting the Archipelago Launcher with the apAdventure apworld installed, open up the `host.yaml` file in your Archipelago install folder. There should be a new section in it called `gmod_apadv_options` with a single setting called `gmodpath`. Put the path to your GMod installation folder here. (Should be something like `../steamapps/common/GarrysMod/`, you may have to replace the backslashes (\\) with normal slashes (/) if you're copying it from your address bar, since the YAML format treats backslashes differently.)
+    4. (Optional) After starting the Archipelago Launcher with the apAdventure apworld installed, open up the `host.yaml` file in your Archipelago install folder. There should be a new section in it called `gmod_apadv_options` with a single setting called `gmodpath`. Put the path to your GMod installation folder here. (It should end with `../steamapps/common/GarrysMod/`, you may have to replace the backslashes (\\) with normal slashes (/) if you're copying it from your address bar, since the YAML format treats backslashes differently.)
     
         Doing this lets Archipelago load map configs and item sets you create in GMod directly from your data folder, meaning you won't have to copy them to your Archipelago folder every time you want to test them out.
 
@@ -63,7 +63,7 @@ Whenever a Map Config is saved or Item Set is processed, GMod will write logic d
 
 Logic data from different players can be "merged" together, as long as all Map Groups and Item Sets using the same name are identical between all players.
 
-Note that if the host DOES have the GMod path set up in their `host.yaml` and is also loading logic data from `gmod_apadv/logic/`, the generator will prioritize loading the files from the GMod folder over the ones in the Archipelago folder.
+Note that if the host DOES have the GMod path set up in their `host.yaml` and is also loading logic data from `gmod_apadv/logic/`, the generator will prioritize loading the files from the GMod folder over the ones in the Archipelago folder. Logic data in these folders can also override the logic data included in the apworld.
 
 ## Playing
 
@@ -82,12 +82,12 @@ Note that if the host DOES have the GMod path set up in their `host.yaml` and is
     GMods Lua Environment gets paused when the game is paused in singleplayer, which eventually causes the game to lose connection with the AP server. Changing this console variable stops the game from pausing when the player brings up the main menu as if they were playing in multiplayer, which prevents this.\
     The game reconnects automatically after this happens, but this is still an option if you want other players to not get spammed with (dis)connection messages.
 
-## Optional Commands
+## Commands
 
 ### Any Mode
 
 #### Console Commands
-- `apadventure_save_manager` - Opens a window that lets you manage local save data from apAdventure, which is created every time you connect a new slot in a multiworld. You should clear these out occasionally. This window can also be accessed through the apAdventure editor window in Sandbox.
+- `apadventure_save_manager` - Opens a window that lets you manage local save data from apAdventure, which is created every time you connect to a new slot in a multiworld. You should clear these out occasionally. This window can also be accessed through the apAdventure editor window in Sandbox.
 - `apadventure_dump_ammotypes` - Prints out the names of all ammotypes that currently exist in the game. This mainly exists to help people figure out the names of addon-added ammo types for the `ammo_merge` YAML option.
 
 ### Sandbox
