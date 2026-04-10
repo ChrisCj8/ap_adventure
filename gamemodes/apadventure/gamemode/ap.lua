@@ -105,6 +105,28 @@ local function processcapabs(capabs)
     return capabs
 end
 
+local mcguffincount 
+local mcguffingoal
+
+util.AddNetworkString("APAdvMcGuffinInfo")
+
+local function updatemcguffininfo(ply)
+    net.Start("APAdvMcGuffinInfo")
+        net.WriteFloat(mcguffincount)
+        net.WriteFloat(mcguffingoal)
+    if ply then
+        net.Send(ply)
+    else
+        net.Broadcast()
+    end
+end
+
+hook.Add("PlayerInitialSpawn","APADV_SendMcGuffinCount",function(ply)
+    if mcguffingoal then
+        updatemcguffininfo(ply)
+    end
+end)
+
 local function ApAdvRegisterItemHandlers()
 
     if APADV.ItemUnregisterFuncs then
@@ -230,11 +252,13 @@ local function ApAdvRegisterItemHandlers()
         end
     end
 
-    local goalcount = APADV_SLOT.slotData.mcguffin_goal
+    mcguffingoal = APADV_SLOT.slotData.mcguffin_goal
     handle[toID["McGuffin"]] = function(iList)
-        if iList[goalcount] != nil then
+        if iList[mcguffingoal] != nil then
             APADV_SLOT:SendGoal()
         end
+        mcguffincount = #iList
+        updatemcguffininfo()
     end
 
     if slotdata.bhop == 2 then

@@ -4,6 +4,8 @@ local grouploccount = {}
 local netrstring = net.ReadString
 local netruint = net.ReadUInt
 
+local locstr = language.GetPhrase
+
 local statustocolor = {
     [0] = Color(200,200,200),
     [1] = Color(200,255,200),
@@ -21,6 +23,21 @@ net.Receive("APAdvTrackerReset",function()
     grouploccount = {}
     if IsValid(trackwindow) then
         trackwindow:Remove()
+    end
+end)
+
+local mcguffincount
+local mcguffingoal
+
+local function setwindowtitle()
+    trackwindow:SetTitle(locstr("apadventure.tracker.title").." - "..string.Interpolate(locstr("apadventure.tracker.title.goalinfo"),{goal=mcguffingoal,num=mcguffincount}))
+end
+
+net.Receive("APAdvMcGuffinInfo",function()
+    mcguffincount =  net.ReadFloat()
+    mcguffingoal = net.ReadFloat()
+    if IsValid(trackwindow) then
+        setwindowtitle()
     end
 end)
 
@@ -171,6 +188,10 @@ local uimake = vgui.Create
 local function opentracker(window)
 
     trackwindow = window
+
+    if mcguffingoal then
+        setwindowtitle()
+    end
 
     local tree = uimake("DTree",window)
 
