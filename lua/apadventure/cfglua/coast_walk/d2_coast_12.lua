@@ -4,6 +4,7 @@ local entbyid = ents.GetMapCreatedEntity
 
 if APADV_ENTRNAME == "Sewer" then
     entsbyname("tunnel_zombie")[1]:Remove()
+    entsbyname("antlion_fight_music")[1]:Remove()
 
     --local trigger = entbyid()
 
