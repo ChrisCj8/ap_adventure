@@ -3,19 +3,19 @@
 		"Bunker": {
 			"cond": [
 				"Ammo_SMG1",
-				"Props_Explosive",
+				"Ammo_AR2",
 				"Props",
 				"Ammo_Pistol",
 				"Ammo_Buckshot",
 				"Antlions_Controllable",
-				"Ammo_AR2"
+				"Props_Explosive"
 			]
 		},
 		"Cave": {
 			"cond": [
 				"Ammo_Buckshot",
-				"Antlions_Controllable",
-				"Ammo_AR2"
+				"Ammo_SMG1",
+				"Antlions_Controllable"
 			]
 		},
 		"Cliffside": {
@@ -27,23 +27,20 @@
 			"cond": [
 				"Ammo_SMG1",
 				"Ammo_Buckshot",
-				"Ammo_Pistol",
-				"Antlions_Controllable",
-				"Ammo_AR2"
-			]
-		},
-		"Below Cliff": {
-			"cond": [
-				"Ammo_Buckshot",
-				"Ammo_SMG1",
-				"Ammo_AR2"
+				"Antlions_Controllable"
 			]
 		},
 		"Sewer": {
 			"cond": [
 				"Ammo_Buckshot",
-				"Antlions_Controllable",
-				"Ammo_AR2"
+				"Ammo_SMG1",
+				"Antlions_Controllable"
+			]
+		},
+		"Below Cliff": {
+			"cond": [
+				"Ammo_Buckshot",
+				"Ammo_SMG1"
 			]
 		}
 	},
@@ -57,24 +54,36 @@
 			"Beach": {
 				"twoway": false,
 				"access": {
-					"type": "or",
+					"type": "and",
 					"nodes": [
 						{
-							"capab": [
-								"StrongShortRange"
-							],
-							"type": "capab"
+							"type": "or",
+							"nodes": [
+								{
+									"capab": [
+										"StrongShortRange"
+									],
+									"type": "capab"
+								},
+								{
+									"capab": [
+										"DecentMidRange"
+									],
+									"type": "capab"
+								},
+								{
+									"capab": [
+										"AntlionControl"
+									],
+									"type": "capab"
+								}
+							]
 						},
 						{
 							"capab": [
-								"DecentMidRange"
+								"WeakMelee"
 							],
-							"type": "capab"
-						},
-						{
-							"capab": [
-								"AntlionControl"
-							],
+							"override": [],
 							"type": "capab"
 						}
 					]
@@ -85,24 +94,36 @@
 			"Sewer": {
 				"twoway": true,
 				"access": {
-					"type": "or",
+					"type": "and",
 					"nodes": [
 						{
-							"capab": [
-								"StrongShortRange"
-							],
-							"type": "capab"
+							"type": "or",
+							"nodes": [
+								{
+									"capab": [
+										"StrongShortRange"
+									],
+									"type": "capab"
+								},
+								{
+									"capab": [
+										"DecentMidRange"
+									],
+									"type": "capab"
+								},
+								{
+									"capab": [
+										"AntlionControl"
+									],
+									"type": "capab"
+								}
+							]
 						},
 						{
 							"capab": [
-								"DecentMidRange"
+								"WeakMelee"
 							],
-							"type": "capab"
-						},
-						{
-							"capab": [
-								"AntlionControl"
-							],
+							"override": [],
 							"type": "capab"
 						}
 					]

@@ -7,11 +7,11 @@
 	"entraccess": [],
 	"lctnaccess": [],
 	"sav": {
-		"Mins": "[-1 -12347.0811 -1]",
+		"Mins": "[-1 -12347.1104 -1]",
 		"Constraints": [],
-		"Maxs": "[9204.4766 8051.2891 2081.24]",
+		"Maxs": "[9204.6514 8051.2119 2081.1821]",
 		"Entities": {
-			"1336": {
+			"1374": {
 				"Skin": 0,
 				"MaxHealth": 20,
 				"ColGroup": 0,
@@ -19,9 +19,50 @@
 				"PhysicsObjects": {
 					"0": {
 						"Sleep": true,
-						"Pos": "[9179.6758 8044.7246 2064.9656]",
+						"Pos": "[5598.9556 -12278.6182 196.5086]",
 						"Frozen": false,
-						"Angle": "{86.2144 175.4203 -118.5232}"
+						"Angle": "{6.3436 -26.7346 -3.2205}"
+					}
+				},
+				"dynamic_values": {
+					"DesiredAmmoAR2_AltFire": 0,
+					"DesiredAmmoAR2": 0.4,
+					"DesiredAmmoPistol": 0.5,
+					"DesiredHealth": 1,
+					"DesiredAmmoRPG_Round": 0,
+					"DesiredArmor": 0.3,
+					"DesiredAmmo357": 0,
+					"DesiredAmmoSMG1": 0.5,
+					"DesiredAmmoGrenade": 0.1,
+					"DesiredAmmoSMG1_Grenade": 0.1,
+					"DesiredAmmoBuckshot": 0.5,
+					"DesiredAmmoCrossbow": 0
+				},
+				"appearance": 0,
+				"Maxs": "[17.2693 15.3114 24.2812]",
+				"Mins": "[-15.298 -17.2547 -0.2813]",
+				"class": "item_ammo_smg1",
+				"Name": "",
+				"FlexScale": 1,
+				"amount": 4,
+				"Pos": "[5598.9556 -12278.6182 196.5086]",
+				"CurHealth": 25,
+				"health": 25,
+				"Class": "item_item_crate",
+				"Model": "models/items/item_item_crate.mdl",
+				"Angle": "{6.3436 -26.7346 -3.2205}"
+			},
+			"1376": {
+				"Skin": 0,
+				"MaxHealth": 20,
+				"ColGroup": 0,
+				"Persistent": false,
+				"PhysicsObjects": {
+					"0": {
+						"Sleep": true,
+						"Pos": "[9179.8262 8044.6333 2064.9001]",
+						"Frozen": false,
+						"Angle": "{86.1853 175.5235 -118.4849}"
 					}
 				},
 				"dynamic_values": {
@@ -45,14 +86,14 @@
 				"Name": "",
 				"FlexScale": 1,
 				"amount": 3,
-				"Pos": "[9179.6758 8044.7246 2064.9656]",
+				"Pos": "[9179.8262 8044.6333 2064.9001]",
 				"CurHealth": 25,
 				"health": 25,
 				"Class": "item_item_crate",
 				"Model": "models/items/item_item_crate.mdl",
-				"Angle": "{86.2144 175.4203 -118.5232}"
+				"Angle": "{86.1853 175.5235 -118.4849}"
 			},
-			"1335": {
+			"1375": {
 				"Skin": 0,
 				"MaxHealth": 20,
 				"ColGroup": 0,
@@ -60,50 +101,9 @@
 				"PhysicsObjects": {
 					"0": {
 						"Sleep": true,
-						"Pos": "[5578.0776 -12296.6406 199.1324]",
+						"Pos": "[5556.3584 -12321.3965 218.9286]",
 						"Frozen": false,
-						"Angle": "{7.0193 10.1247 1.1863}"
-					}
-				},
-				"dynamic_values": {
-					"DesiredAmmoAR2_AltFire": 0,
-					"DesiredAmmoAR2": 0.4,
-					"DesiredAmmoPistol": 0.5,
-					"DesiredAmmoRPG_Round": 0,
-					"DesiredAmmoCrossbow": 0,
-					"DesiredArmor": 0.3,
-					"DesiredAmmo357": 0,
-					"DesiredAmmoSMG1": 0.5,
-					"DesiredAmmoGrenade": 0.1,
-					"DesiredAmmoSMG1_Grenade": 0.1,
-					"DesiredAmmoBuckshot": 0.5,
-					"DesiredHealth": 1
-				},
-				"appearance": 0,
-				"Maxs": "[17.2693 15.3114 24.2812]",
-				"Mins": "[-15.298 -17.2547 -0.2813]",
-				"class": "item_ammo_ar2",
-				"Name": "",
-				"FlexScale": 1,
-				"amount": 8,
-				"Pos": "[5578.0776 -12296.6406 199.1324]",
-				"CurHealth": 25,
-				"health": 25,
-				"Class": "item_item_crate",
-				"Model": "models/items/item_item_crate.mdl",
-				"Angle": "{7.0193 10.1247 1.1863}"
-			},
-			"1334": {
-				"Skin": 0,
-				"MaxHealth": 20,
-				"ColGroup": 0,
-				"Persistent": false,
-				"PhysicsObjects": {
-					"0": {
-						"Sleep": true,
-						"Pos": "[5556.1826 -12321.3633 218.9285]",
-						"Frozen": false,
-						"Angle": "{7.0995 -5.1217 89.3731}"
+						"Angle": "{7.1079 -5.0798 89.4034}"
 					}
 				},
 				"dynamic_values": {
@@ -127,14 +127,14 @@
 				"Name": "",
 				"FlexScale": 1,
 				"amount": 5,
-				"Pos": "[5556.1826 -12321.3633 218.9285]",
+				"Pos": "[5556.3584 -12321.3965 218.9286]",
 				"CurHealth": 25,
 				"health": 25,
 				"Class": "item_item_crate",
 				"Model": "models/items/item_item_crate.mdl",
-				"Angle": "{7.0995 -5.1217 89.3731}"
+				"Angle": "{7.1079 -5.0798 89.4034}"
 			},
-			"1337": {
+			"6": {
 				"Skin": 0,
 				"MaxHealth": 20,
 				"ColGroup": 0,
@@ -142,38 +142,38 @@
 				"PhysicsObjects": {
 					"0": {
 						"Sleep": true,
-						"Pos": "[9140.5312 8025.3154 2048.4507]",
+						"Pos": "[9135.0225 8021.6338 2047.392]",
 						"Frozen": false,
-						"Angle": "{0.7823 -135.4849 -0.1682}"
+						"Angle": "{15.9675 -148.9497 -5.8082}"
 					}
 				},
+				"appearance": 0,
+				"Maxs": "[17.2693 15.3114 24.2812]",
+				"FlexScale": 1,
+				"Mins": "[-15.298 -17.2547 -0.2813]",
+				"class": "item_ammo_smg1",
+				"Name": "",
+				"health": 25,
+				"amount": 4,
+				"Pos": "[9135.0225 8021.6338 2047.392]",
+				"CurHealth": 25,
 				"dynamic_values": {
 					"DesiredAmmoAR2_AltFire": 0,
 					"DesiredAmmoAR2": 0.4,
 					"DesiredAmmoPistol": 0.5,
-					"DesiredHealth": 1,
 					"DesiredAmmoRPG_Round": 0,
+					"DesiredAmmoCrossbow": 0,
 					"DesiredArmor": 0.3,
 					"DesiredAmmo357": 0,
 					"DesiredAmmoSMG1": 0.5,
 					"DesiredAmmoGrenade": 0.1,
 					"DesiredAmmoSMG1_Grenade": 0.1,
 					"DesiredAmmoBuckshot": 0.5,
-					"DesiredAmmoCrossbow": 0
+					"DesiredHealth": 1
 				},
-				"appearance": 0,
-				"Maxs": "[17.2693 15.3114 24.2812]",
-				"Mins": "[-15.298 -17.2547 -0.2813]",
-				"class": "item_ammo_ar2",
-				"Name": "",
-				"FlexScale": 1,
-				"amount": 8,
-				"Pos": "[9140.5312 8025.3154 2048.4507]",
-				"CurHealth": 25,
-				"health": 25,
 				"Class": "item_item_crate",
 				"Model": "models/items/item_item_crate.mdl",
-				"Angle": "{0.7823 -135.4849 -0.1682}"
+				"Angle": "{15.9675 -148.9497 -5.8082}"
 			}
 		}
 	},
