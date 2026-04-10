@@ -24,7 +24,8 @@
 
     2. Navigate to your GMod install folder. (Right-Click the game in your Steam Library, Manage > Browse local files)
 
-    3. Put the .dll file(s) in the `GarrysMod\garrysmod\lua\bin\` directory. ( The final path should be something like `GarrysMod\garrysmod\lua\bin\gmsv_gwsockets_***.dll`)
+    3. Put the .dll file(s) in the `GarrysMod\garrysmod\lua\bin\` directory. (The final path should be something like `GarrysMod\garrysmod\lua\bin\gmsv_gwsockets_***.dll`)
+        - Yes, the name of these .dll files is supposed to start with `gmsv`, even if you're not installing this on a server.
 
 2. Install GMAP and apAdventure
 
