@@ -83,6 +83,18 @@ Note that if the host DOES have the GMod path set up in their `host.yaml` and is
     GMods Lua Environment gets paused when the game is paused in singleplayer, which eventually causes the game to lose connection with the AP server. Changing this console variable stops the game from pausing when the player brings up the main menu as if they were playing in multiplayer, which prevents this.\
     The game reconnects automatically after this happens, but this is still an option if you want other players to not get spammed with (dis)connection messages.
 
+## Making your own Configs
+
+apAdventure adds new Toolgun modes and an editor to the Sandbox Gamemode which can be used to create Map Configs. The new tools are located in the apAdventure Tool Category and the editor can be found by opening the Context Menu (normally opened by holding "C") and clicking the Archipelago icon on the left side of the screen. More documentation for these tools is included ingame.
+
+Configs can also have additional functionality added to them through config scripts, but this functionality is currently undocumented. These scripts are automatically loaded from `lua/apadventure/cfglua/[group name]/[map name].lua`, if you're a developer who wants to attempt to use this feature you can try referencing the existing scripts for now.
+
+If you're a mapper who wants to make a custom map for apAdventure, the gamemode includes some custom map entities which you can place in your map to interact with Archipelago without the need for coding knowledge. A .fgd for these custom entities is included in the releases.
+
+## Custom Items
+
+apAdventure allows custom items to be defined through Lua, but this feature is currently undocumented. If you want to try making custom items anyways, you can reference the existing item sets in `lua/apadventure/itemsets/`. Once you have created an item set in Lua, you can process it into logic data for the generator to read through the `apadventure_editor_processitemdefs "[set name]"` command ingame. Note that this command will not work on the menu screen, it needs to be used in sandbox.
+
 ## Commands
 
 ### Any Mode
