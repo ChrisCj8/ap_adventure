@@ -165,6 +165,22 @@ function NODE.Panel(parent)
         nodetbl.override = val and storedtbl or nil
     end
 
+    local helppnl = UImake("DForm",parent)
+    helppnl:SetLabel("#apadventure.editor.capab.help")
+    helppnl:Help("#apadventure.editor.capab.helpbase")
+    local helplink1 = helppnl:Help("#apadventure.editor.capab.helpideflink")
+    helplink1:SetColor(Color(56,56,255))
+    function helplink1:DoClick() gui.OpenURL("https://github.com/ChrisCj8/ap_adventure/tree/main/lua/apadventure/itemsets") end
+    helplink1:SetCursor("hand")
+    local helplink2 = helppnl:Help("#apadventure.editor.capab.helpimplied")
+    helplink2:SetColor(Color(56,56,255))
+    function helplink2:DoClick() gui.OpenURL("https://github.com/ChrisCj8/ap_adventure/blob/main/data_static/apadventure/impliedcapabilities.json") end
+    helplink2:SetCursor("hand")
+    helppnl:Help("#apadventure.editor.capab.helpmulti")
+    helppnl:Help("#apadventure.editor.capab.helpcond")
+    helppnl:Help("#apadventure.editor.capab.helpoverride")
+    helppnl:Help("#apadventure.editor.capab.helpsave")
+
     local oldlayout = parent.PerformLayout
     function parent:PerformLayout(w,h)
         --itemnamein:SetSize(w-10,22)
@@ -183,6 +199,9 @@ function NODE.Panel(parent)
 
         condpnl:SetPos(5,capabh+22)
         condpnl:SetWidth(w-10)
+
+        helppnl:SetPos(5,condpnl:GetTall()+capabh+27)
+        helppnl:SetWidth(w-10)
     end
 end
 
