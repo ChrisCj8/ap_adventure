@@ -1,1 +1,3 @@
-<p>The Connection Tab is where you establish connections between the Regions you have created in the Region Tab.</p>
+<p>The Connection Tab is where you establish connections between the regions you have created in the Region Tab.</p>
+<p>Most of the access rules in your config should be set on the connections in here, as placing the same access rules on the same locations creates unnecessary work for the generator.</p>
+<p>Note that for nodes that check regional conditions, the conditions used will be the ones set on the origin region (the one in the "From" column). If you set a connection to be a two-way, the generator will use the conditions from the target region when creating the access rules for the other connection.</p>
