@@ -11,13 +11,21 @@ def ProcessCfgs():
     worldcfgdir = worldpath.joinpath("cfg")
     worlditemdir = worldpath.joinpath("item")
 
-    gmodpath = get_settings().gmod_apadv_options["gmodpath"]
+    try:
+        gmodpath = get_settings().gmod_apadv_options["gmodpath"]
+    except:
+        gmodpath = False
 
-    apdir = user_path("gmod_apadv/logic/")
-    apcfgdir = Path(apdir+"cfg")
+    apdir = Path(user_path("gmod_apadv/"))
+    if not apdir.is_dir():
+        apdir.mkdir()
+    aplogicdir = apdir.joinpath("logic")
+    if not aplogicdir.is_dir():
+        aplogicdir.mkdir()
+    apcfgdir = aplogicdir.joinpath("cfg")
     if not apcfgdir.is_dir():
         apcfgdir.mkdir()
-    apitemdir = Path(apdir+"item")
+    apitemdir = aplogicdir.joinpath("item")
     if not apitemdir.is_dir():
         apitemdir.mkdir()
 
