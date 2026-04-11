@@ -154,7 +154,7 @@ function NODE.Panel(parent)
 
     local overridecheck = UImake("DCheckBoxLabel",parent)
     overridecheck:SetDark(true)
-    overridecheck:SetText("#apadventure.editor.capab.override")
+    overridecheck:SetText("#apadventure.node.capab.override")
     overridecheck:SetValue(hasoverride)
 
     local storedtbl = nodetbl.override or {}
@@ -166,20 +166,20 @@ function NODE.Panel(parent)
     end
 
     local helppnl = UImake("DForm",parent)
-    helppnl:SetLabel("#apadventure.editor.capab.help")
-    helppnl:Help("#apadventure.editor.capab.helpbase")
-    local helplink1 = helppnl:Help("#apadventure.editor.capab.helpideflink")
+    helppnl:SetLabel("#apadventure.node.capab.help")
+    helppnl:Help("#apadventure.node.capab.helpbase")
+    local helplink1 = helppnl:Help("#apadventure.node.capab.helpideflink")
     helplink1:SetColor(Color(56,56,255))
     function helplink1:DoClick() gui.OpenURL("https://github.com/ChrisCj8/ap_adventure/tree/main/lua/apadventure/itemsets") end
     helplink1:SetCursor("hand")
-    local helplink2 = helppnl:Help("#apadventure.editor.capab.helpimplied")
+    local helplink2 = helppnl:Help("#apadventure.node.capab.helpimplied")
     helplink2:SetColor(Color(56,56,255))
     function helplink2:DoClick() gui.OpenURL("https://github.com/ChrisCj8/ap_adventure/blob/main/data_static/apadventure/impliedcapabilities.json") end
     helplink2:SetCursor("hand")
-    helppnl:Help("#apadventure.editor.capab.helpmulti")
-    helppnl:Help("#apadventure.editor.capab.helpcond")
-    helppnl:Help("#apadventure.editor.capab.helpoverride")
-    helppnl:Help("#apadventure.editor.capab.helpsave")
+    helppnl:Help("#apadventure.node.capab.helpmulti")
+    helppnl:Help("#apadventure.node.capab.helpcond")
+    helppnl:Help("#apadventure.node.capab.helpoverride")
+    helppnl:Help("#apadventure.node.capab.helpsave")
 
     local oldlayout = parent.PerformLayout
     function parent:PerformLayout(w,h)
