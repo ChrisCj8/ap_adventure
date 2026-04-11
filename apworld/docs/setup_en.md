@@ -7,8 +7,8 @@
 - Garry's Mod
 - Half-Life 2 (Not strictly required, but the default configs included are mainly made for HL2 maps, so you'll want it for your test run.)
 - [GWSockets](https://github.com/FredyH/GWSockets/releases) - More information on which version to grab can be found further down.
-- GMAP
-- apAdventure itself
+- [GMAP](https://github.com/ChrisCj8/gm_ap/releases/tag/Main)
+- [apAdventure itself](https://github.com/ChrisCj8/ap_adventure/releases)
 
 ## Installation (for Players)
 
