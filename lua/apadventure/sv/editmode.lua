@@ -189,13 +189,27 @@ function apAdventure.LoadClientTbl(name)
     net.Send(apAdventure.GetListenHost())
 end
 
-function apAdventure.StoreCfg(groupoverride)
+local overwritecvar = CreateConVar("apadventure_editor_allow_static_overwrite",0,FCVAR_ARCHIVE,"Whether or not the user is allowed to add to/overwrite configs in config groups that already exist in the data_static folder.",
+    0,1)
+
+function apAdventure.StoreCfg(groupn)
     local srctbl = apAdventure.EditCfg
-    if isstring(groupoverride) and groupoverride != "" then srctbl.Group = groupoverride end
-    if srctbl.Group == "" or !isstring(srctbl.Group) then return end
+    if !isstring(groupn) or groupn == "" then 
+        groupn = srctbl.Group
+    else
+        srctbl.Group = groupn
+    end
+    if !isstring(groupn) or groupn == "" then return end
+
+    if !overwritecvar:GetBool() then
+        if file.IsDir("data_static/apadventure/cfg/"..groupn.."/","GAME") then
+            apAdventure.SendNotification("#apadventure.editor.error.saveoverstatic",1,5,nil,apAdventure.GetListenHost())
+            return
+        end
+    end
     local listenhost = player.GetByID(1)
     net.Start("APAdvSaveCfg")
-        net.WriteString(srctbl.Group)
+        net.WriteString(groupn)
     net.Send(listenhost) --hope that this is always the listen server host
     local savpre = {}
     local i = 1
@@ -301,10 +315,10 @@ function apAdventure.StoreCfg(groupoverride)
     }
 
     local prettyprint = prettyprintcvar:GetBool()
-    local dir = "apadventure/cfg/"..srctbl.Group.."/"..game.GetMap()
+    local dir = "apadventure/cfg/"..groupn.."/"..game.GetMap()
     file.CreateDir(dir)
     file.Write(dir.."/sv.json",util.TableToJSON(outtbl,prettyprint))
-    local apdir = "apadventure/logic/cfg/"..srctbl.Group.."/"..game.GetMap()
+    local apdir = "apadventure/logic/cfg/"..groupn.."/"..game.GetMap()
     file.CreateDir(apdir)
     file.Write(apdir.."/sv.json",util.TableToJSON(apAdventure.SvCfgToLogic(outtbl),prettyprint))
 end
