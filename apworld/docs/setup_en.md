@@ -18,7 +18,7 @@
 
         Whether or not you need the 32 or 64-bit version of GWSockets doesn't depend on your OS, but on whether or not you're playing on the 64-bit branch of GMod. If you don't know what that means or think you may want to switch between the two in the future you can just get both, GMod will automatically load the correct version.
 
-        GMAP was mainly coded on GWSockets 1.2.0, 1.3 should work but hasn't been tested much.
+        GMAP was mainly coded on GWSockets 1.3.0, 1.4.x should work but hasn't been tested much.
 
         Linux is also completely untested.
 
