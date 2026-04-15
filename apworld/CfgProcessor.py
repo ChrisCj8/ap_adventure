@@ -7,6 +7,8 @@ from pathlib import Path
 
 def ProcessCfgs():
 
+    warnings = list()
+
     worldpath = resources.files(__package__).joinpath("logic")
     worldcfgdir = worldpath.joinpath("cfg")
     worlditemdir = worldpath.joinpath("item")
@@ -161,10 +163,10 @@ def ProcessCfgs():
             clpath = path.joinpath("cl.json")
             svpath = path.joinpath("sv.json")
             if not svpath.is_file():
-                #self.add_warning(f"could not find serverside save for {map} from {gr}")
+                warnings.append(f"could not find serverside save for {map} from {gr}")
                 continue
             if not clpath.is_file():
-                #self.add_warning(f"could not find clientside save for {map} from {gr}")
+                warnings.append(f"could not find clientside save for {map} from {gr}")
                 continue
             cljson = json.load(clpath.open())
 
@@ -176,7 +178,7 @@ def ProcessCfgs():
                 newmap.regions[k] = v
 
             if not newmap.regions:
-                #self.add_warning(f"map {map} from {gr} has no regions, discarded")
+                warnings.append(f"map {map} from {gr} has no regions, discarded")
                 continue
 
             if "connect" in cljson:
@@ -239,4 +241,10 @@ def ProcessCfgs():
 
     print(str(item_set_table))
 
-    return (item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table, location_name_to_id) # this sucks !
+    warnpath = apdir.joinpath("cfgprocessor_warnings.log")
+    if warnings:
+        warnpath.open("w").writelines(warnings)
+    elif warnpath.is_file():
+        warnpath.unlink()
+
+    return (item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table, location_name_to_id, len(warnings)) # this sucks !

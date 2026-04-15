@@ -117,6 +117,7 @@ class APADVWorld(World):
     duplicate_item_names = processout[3]
     map_table = processout[4]
     location_name_to_id = processout[5]
+    warncount = processout[6]
 
     locs = int(0)
     itemtypes = int(1)
@@ -153,11 +154,10 @@ class APADVWorld(World):
         if self.dodebug:
             self.debuginfo.append(warning) 
 
-
-    def debuglog(self,debug: str):
-        if self.dodebug:
-            self.debuginfo.append(debug)
-            print(debug)
+    def cfgprocesserrormsg(self):
+        if self.warncount:
+            return f"\nThe config processor encountered {self.warncount} issue(s) while processing configs, check the cfgprocessor_warnings.log file in the gmod_apadv directory in your AP Install Folder to see if something went wrong while processing configs."
+        return ""
 
     def get_item_flags(self,name):
         if not name in self.item_table:
@@ -236,7 +236,7 @@ class APADVWorld(World):
             if group in maptbl:
                 maps[group] = maptbl[group]
             else:
-                self.add_warning(f"config_groups tried to add group {group}, which does not exist")
+                raise OptionError(f"Slot {self.player_name} tried add config group {group} to their pool, which could not be found.{self.cfgprocesserrormsg()}")
 
         for pickgroup, pickmaps in options.config_cherrypick.items():
             if pickgroup in maps:
@@ -248,7 +248,7 @@ class APADVWorld(World):
                 if map in mapgroup:
                     newmaps[map] = mapgroup[map]
                 else:
-                    self.add_warning(f"config_cherrypick tried to add map {map}, which was not present in group {pickgroup}")
+                    raise OptionError(f"Slot {self.player_name} tried to use config_cherrypick to add the map {map} to their run, which was not present in group {pickgroup}.{self.cfgprocesserrormsg()}")
 
             maps[pickgroup] = newmaps
 
@@ -260,8 +260,6 @@ class APADVWorld(World):
             for map in blmaps:
                 if map in delgroup:
                     del delgroup[map]
-                else:
-                    self.add_warning(f"config_blacklist tried to remove map {map}, which was not present in group {blgroup}")
 
         emptygroups = list()
 
@@ -273,7 +271,7 @@ class APADVWorld(World):
             del maps[k]
 
         if not maps:
-            raise OptionError(f"Slot {self.player_name} did not have any valid maps selected in their Options.")
+            raise OptionError(f"Slot {self.player_name} did not have any valid maps selected in their Options.{self.cfgprocesserrormsg()}")
 
         self.chosen_maps = maps
 
@@ -332,7 +330,7 @@ class APADVWorld(World):
                     register_item(item)
                 self.loadeditemsets.append(isetname)
             else:
-                self.add_warning(f"itemset {isetname} could not be loaded")
+                raise OptionError(f"Slot {self.player_name} tried to add item set {isetname} to their run, which could not be found.{self.cfgprocesserrormsg()}")
 
         for isetname,picks in options.item_cherrypick.items():
             if not picks or isetname in chosenisets:
@@ -348,7 +346,7 @@ class APADVWorld(World):
                 if load:
                     items_to_load[isetname] = load
             else:
-                self.add_warning(f"itemset {isetname} could not be loaded")
+                raise OptionError(f"Slot {self.player_name} tried to use item_cherrypick to add items from item set {isetname} to their run, which could not be found.{self.cfgprocesserrormsg()}")
 
         self.items_to_create = itempool
         self.items_dontload = items_dontload
