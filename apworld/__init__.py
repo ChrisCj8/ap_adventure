@@ -2,7 +2,6 @@ import typing
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, ItemClassification, Region, Location, Tutorial
 from Options import OptionError
-from .Settings import APADVSettings
 from .Options import APADVGameOptions
 from .JsonRule import eval_json_rule, preprocess_json_rule
 from .ImpliedCapabilities import ProcessCapabs

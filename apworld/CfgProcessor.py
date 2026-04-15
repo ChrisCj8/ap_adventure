@@ -13,14 +13,37 @@ def ProcessCfgs():
     worldcfgdir = worldpath.joinpath("cfg")
     worlditemdir = worldpath.joinpath("item")
 
-    try:
-        gmodpath = get_settings().gmod_apadv_options["gmodpath"]
-    except:
-        gmodpath = False
-
     apdir = Path(user_path("gmod_apadv/"))
     if not apdir.is_dir():
         apdir.mkdir()
+
+    pathfile = apdir.joinpath("gmodpath.txt")
+    if pathfile.is_file():
+        file = pathfile.open("r")
+        path = file.readline()
+        if path[-1:] == "\n":
+            path = path[:-1]
+        gmodpath = Path(path)
+    else:
+        file = pathfile.open("w")
+        try:
+            path = get_settings().gmod_apadv_options["gmodpath"]
+            gmodpath = Path(path)
+        except:
+            path = ""
+            gmodpath = False
+        file.write(path)
+
+    if gmodpath:
+        if not gmodpath.is_dir():
+            warnings.append(f"gmod path \"{gmodpath}\" does not lead to a valid directory")
+            gmodpath = False
+        else:
+            gmodpath = gmodpath.joinpath("garrysmod/")
+            if not gmodpath.is_dir():
+                warnings.append(f"gmod path \"{gmodpath}\" does not seem to lead to a gmod install directory, make sure you have set your path properly")
+                gmodpath = False
+
     aplogicdir = apdir.joinpath("logic")
     if not aplogicdir.is_dir():
         aplogicdir.mkdir()
@@ -40,7 +63,7 @@ def ProcessCfgs():
         itempaths[gr.name] = gr
     
     if gmodpath:
-        dir = Path(gmodpath+"/garrysmod/data/apadventure/logic/item/")
+        dir = gmodpath.joinpath("data/apadventure/logic/item/")
         if dir.is_dir():
             for gr in dir.iterdir():
                 if gr.name[-5:] == ".json":
@@ -119,7 +142,7 @@ def ProcessCfgs():
 
     gmodcfgdir = False
     if gmodpath:
-        gmodcfgdir = Path(gmodpath+"/garrysmod/data/apadventure/logic/cfg/")
+        gmodcfgdir = gmodpath.joinpath("data/apadventure/logic/cfg/")
         if gmodcfgdir.is_dir():
             for gr in gmodcfgdir.iterdir():
                 if gr.name in grouppaths:
