@@ -24,19 +24,17 @@ if CLIENT then
     local start3d2d = cam.Start3D2D
     local end3d2d = cam.End3D2D
     local drawtext = draw.DrawText
+    local drawbox = render.DrawWireframeBox
+    local mins, maxs = Vector(-16,-16,0), Vector(16,16,72)
+    local col = Color(50,255,50)
 
     function ENT:Draw(fl)
         self:DrawModel(fl)
-        --render.DepthRange(0,0)
-        --render.OverrideDepthEnable(true,true)
-        local textfacing = apAdventure.TextFacing
         local pos = self:GetPos()
-        start3d2d(pos,textfacing,.5)
+        drawbox(pos,angle_zero,mins,maxs,col)
+        start3d2d(pos,apAdventure.TextFacing,.5)
             drawtext("Region: "..self:GetRegion(),"BudgetLabel",0,-100,color_white,TEXT_ALIGN_CENTER)
         end3d2d()
-        --render.DrawWireframeBox(pos,angle_zero,self.boundmins,self.boundmaxs,color_white)
-        --render.OverrideDepthEnable(false,false)
-        --render.DepthRange(0,1)
     end
 
     return
