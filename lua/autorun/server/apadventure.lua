@@ -2,7 +2,6 @@
 include("apadventure/sv/mapiconmat.lua")
 
 AddCSLuaFile("apadventure/cl/mapiconmat.lua")
-AddCSLuaFile("apadventure/ui/savemanage.lua")
 
 local playingApAdv = engine.ActiveGamemode() == "apadventure"
 
@@ -21,10 +20,16 @@ end
 if engine.ActiveGamemode() == "sandbox" then
     AddCSLuaFile("apadventure/editmode_shared.lua")
     AddCSLuaFile("apadventure/cl/editmode.lua")
-    AddCSLuaFile("apadventure/ui/cmenu.lua")
+    local uifiles = file.Find("apadventure/ui/*.lua","lsv")
+    for k,v in ipairs(uifiles) do
+        AddCSLuaFile("apadventure/ui/"..v)
+    end
+    AddCSLuaFile("apadventure/cfgsettings.lua")
     apAdventure.EditMode = true
     include("apadventure/editmode_shared.lua")
     include("apadventure/sv/editmode.lua")
+else
+    AddCSLuaFile("apadventure/ui/savemanage.lua")
 end
 
 util.AddNetworkString("APAdvAreaPortalInfo")
