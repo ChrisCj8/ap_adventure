@@ -43,6 +43,7 @@ function TOOL:LeftClick(tr)
             undo.SetPlayer(self:GetOwner())
         undo.Finish()
     end
+    return apAdventure.SpoofToolShot(self,tr)
 end
 
 function TOOL:RightClick(tr)
