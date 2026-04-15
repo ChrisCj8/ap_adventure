@@ -123,7 +123,6 @@ class APADVWorld(World):
 
     registereditemsets = dict()
 
-    settings: typing.ClassVar[APADVSettings]
     options_dataclass = APADVGameOptions
     options: APADVGameOptions
 
