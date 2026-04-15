@@ -75,11 +75,13 @@ end
 function TOOL:LeftClick(tr)
     if !tr.Hit then return end
     local region = self:GetClientInfo("region")
-    if region[1] == " " then apAdventure.ToolTrailWarn("regstart",self:GetOwner()) return end
-    if region[#region] == " " then apAdventure.ToolTrailWarn("regend",self:GetOwner()) return end
+    if region == "" then apAdventure.ToolWarn("noreg",self:GetOwner()) return end
+    if region[1] == " " then apAdventure.ToolWarn("reglead",self:GetOwner()) return end
+    if region[#region] == " " then apAdventure.ToolWarn("regtrail",self:GetOwner()) return end
     local name = self:GetClientInfo("name")
-    if region[1] == " " then apAdventure.ToolTrailWarn("exitstart",self:GetOwner()) return end
-    if region[#region] == " " then apAdventure.ToolTrailWarn("exitend",self:GetOwner()) return end
+    if name == "" then apAdventure.ToolWarn("noexit",self:GetOwner()) return end
+    if name[1] == " " then apAdventure.ToolWarn("exitlead",self:GetOwner()) return end
+    if name[#name] == " " then apAdventure.ToolWarn("exittrail",self:GetOwner()) return end
     local ent = tr.Entity
     if ent:GetClass() == "apadventure_exit_editor" then
         ent:SetRegion(region)

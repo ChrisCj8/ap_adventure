@@ -83,11 +83,13 @@ end
 function TOOL:LeftClick(tr)
     if !tr.Hit then return end
     local region = self:GetClientInfo("region")
-    if region[1] == " " then apAdventure.ToolTrailWarn("regstart",self:GetOwner()) return end
-    if region[#region] == " " then apAdventure.ToolTrailWarn("regend",self:GetOwner()) return end
+    if region == "" then apAdventure.ToolWarn("noreg",self:GetOwner()) return end
+    if region[1] == " " then apAdventure.ToolWarn("reglead",self:GetOwner()) return end
+    if region[#region] == " " then apAdventure.ToolWarn("regtrail",self:GetOwner()) return end
     local name = self:GetClientInfo("name")
-    if name[1] == " " then apAdventure.ToolTrailWarn("entrstart",self:GetOwner()) return end
-    if name[#name] == " " then apAdventure.ToolTrailWarn("entrend",self:GetOwner()) return end
+    if name == "" then apAdventure.ToolWarn("noentr",self:GetOwner()) return end
+    if name[1] == " " then apAdventure.ToolWarn("entrlead",self:GetOwner()) return end
+    if name[#name] == " " then apAdventure.ToolWarn("entrtrail",self:GetOwner()) return end
     local ent = tr.Entity
     if ent:GetClass() == "apadventure_entrance_editor" then
         ent:SetRegion(region)
@@ -112,11 +114,13 @@ end
 
 function TOOL:Reload()
     local region = self:GetClientInfo("region")
-    if region[1] == " " then apAdventure.ToolTrailWarn("regstart",self:GetOwner()) return end
-    if region[#region] == " " then apAdventure.ToolTrailWarn("regend",self:GetOwner()) return end
+    if region == "" then apAdventure.ToolWarn("noreg",self:GetOwner()) return end
+    if region[1] == " " then apAdventure.ToolWarn("reglead",self:GetOwner()) return end
+    if region[#region] == " " then apAdventure.ToolWarn("regtrail",self:GetOwner()) return end
     local name = self:GetClientInfo("name")
-    if name[1] == " " then apAdventure.ToolTrailWarn("entrstart",self:GetOwner()) return end
-    if name[#name] == " " then apAdventure.ToolTrailWarn("entrend",self:GetOwner()) return end
+    if name == "" then apAdventure.ToolWarn("noentr",self:GetOwner()) return end
+    if name[1] == " " then apAdventure.ToolWarn("entrlead",self:GetOwner()) return end
+    if name[#name] == " " then apAdventure.ToolWarn("entrtrail",self:GetOwner()) return end
     local ent = ents.Create("apadventure_entrance_editor")
     if !IsValid(ent) then return end
     local user = self:GetOwner()

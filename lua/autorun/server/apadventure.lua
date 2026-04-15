@@ -193,6 +193,6 @@ function apAdventure.SendNotification(text,type,len,snd,ply)
     end
 end
 
-function apAdventure.ToolTrailWarn(loc,ply)
-    apAdventure.SendNotification("#apadventure.toolui.trailwarn."..loc,1,4,nil,ply)
+function apAdventure.ToolWarn(loc,ply)
+    apAdventure.SendNotification("#apadventure.toolwarn."..loc,1,4,nil,ply)
 end
