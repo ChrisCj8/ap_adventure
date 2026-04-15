@@ -46,7 +46,7 @@
 
     3. Install the apAdventure apworld like any other apworld.
 
-    4. (Optional) After starting the Archipelago Launcher with the apAdventure apworld installed, open up the `host.yaml` file in your Archipelago install folder. There should be a new section in it called `gmod_apadv_options` with a single setting called `gmodpath`. Put the path to your GMod installation folder here. (It should end with `../steamapps/common/GarrysMod/`, you may have to replace the backslashes (\\) with normal slashes (/) if you're copying it from your address bar, since the YAML format treats backslashes differently.)
+    4. (Optional) After starting the Archipelago Launcher with the apAdventure apworld installed, a new folder called "gmod_apadv" should have been created in your Archipelago install directory, containing a file called "gmodpath.txt". Put the path to your GMod install folder into this file. The path should end with `../steamapps/common/GarrysMod/`.
     
         Doing this lets Archipelago load map configs and item sets you create in GMod directly from your data folder, meaning you won't have to copy them to your Archipelago folder every time you want to test them out.
 
@@ -108,6 +108,7 @@ apAdventure allows custom items to be defined through Lua, but this feature is c
 #### Console Commands
 - `apadventure_patch_changelevel 0/1` - Controls whether or not apAdventure should replace `trigger_changelevel` brush entities with its own custom version, which disables its normal functionality and makes it visible to you, stopping you from accidentally triggering level transitions and making you more aware of where they are. Defaults to 0.
 - `apadventure_patch_loadsaved 0/1` - Controls whether or not apAdventure should replace `player_loadsaved` point entities with its own custom version, which disables it's normal functionality. These entities normally exist to reload the game whenever the player reaches a certain fail state, which may be triggered accidentally while editing configs, causing you to lose progress. Defaults to 0.
+- `apadventure_editor_allow_static_overwrite 0/1` - Allows players to save maps into map groups that also exist in data_static (the configs included with the apworld). Mainly exists to prevent people from accidentally overwriting stuff that they shouldn't. You can turn this on if you think you know what you're doing. Defaults to 0.
 - `apadventure_editor_processitemdefs "[name]"` - Converts an item set defined in Lua into a JSON format so the generator can use it. You won't need this if you're not making your own item sets.
 
 ### apAdventure only
