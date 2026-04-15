@@ -149,13 +149,18 @@ class APADVWorld(World):
     def add_warning(self,warning):
         self.warnings.append(warning)
         print(warning)
-        if self.dodebug:
-            self.debuginfo.append(warning) 
+        #if self.dodebug:
+        #    self.debuginfo.append(warning) 
 
     def cfgprocesserrormsg(self):
         if self.warncount:
             return f"\nThe config processor encountered {self.warncount} issue(s) while processing configs, check the cfgprocessor_warnings.log file in the gmod_apadv directory in your AP Install Folder to see if something went wrong while processing configs."
         return ""
+
+    #def debuglog(self,debug: str):
+    #    if self.dodebug:
+    #        self.debuginfo.append(debug)
+    #        print(debug)
 
     def get_item_flags(self,name):
         if not name in self.item_table:
@@ -201,7 +206,7 @@ class APADVWorld(World):
         item = APADVItem(name, flags, self.item_name_to_id[name], self.player)
         if reflag:
             self.items_to_reflag.append(item)
-        self.debuglog(f"created item {name} with flags {flags}")
+        #self.debuglog(f"created item {name} with flags {flags}")
         return item
 
     def get_filler_item_name(self):
@@ -214,11 +219,11 @@ class APADVWorld(World):
 
         options = self.options
 
-        if options.write_debug:
-            self.dodebug = True
-            self.debuginfo = list()
-        else:
-            self.dodebug = False
+        #if options.write_debug:
+        #    self.dodebug = True
+        #    self.debuginfo = list()
+        #else:
+        #    self.dodebug = False
 
         self.bhop = options.bhop
 
@@ -370,7 +375,7 @@ class APADVWorld(World):
                     unfinished = True
                     break
         
-        self.debuglog(f"processed ammo merge options: {ammomergeopt}")
+        #self.debuglog(f"processed ammo merge options: {ammomergeopt}")
 
         ammomergedict = dict()
 
@@ -380,7 +385,7 @@ class APADVWorld(World):
                 entry.remove(iv)
                 ammomergedict[iv] = entry
 
-        self.debuglog(f"ammo merge dictionary: {ammomergedict}")
+        #self.debuglog(f"ammo merge dictionary: {ammomergedict}")
 
         self.ammomerge_out = ammomergedict
 
@@ -401,7 +406,7 @@ class APADVWorld(World):
         self.multiworld.regions.append(menu)
         self.menuregion = menu
 
-        self.debuglog(f"creating regions for {self.player_name}")
+        #self.debuglog(f"creating regions for {self.player_name}")
         startcandidates = list()
 
         ammomerge = self.ammomerge
@@ -418,7 +423,7 @@ class APADVWorld(World):
                 continue
 
             for mapname,map in groupmaps.items():
-                self.debuglog(f"processing regions for {mapname} in {groupname}")
+                #self.debuglog(f"processing regions for {mapname} in {groupname}")
                 mapregs = dict()
                 
                 for k,v in map.regions.items():
@@ -446,10 +451,10 @@ class APADVWorld(World):
                     mapregs[k] = newreg
 
                     if "startcandidate" in v:
-                        self.debuglog(f"{k} is a starting candidate")
+                        #self.debuglog(f"{k} is a starting candidate")
                         startcandidates.append(StartRegion(newreg,map,k))
 
-                    self.debuglog("creating region "+map.bspname+" - "+ k)
+                    #self.debuglog("creating region "+map.bspname+" - "+ k)
 
                 for k,v in map.entrances.items():
                     reg = mapregs[v["reg"]]
@@ -466,7 +471,7 @@ class APADVWorld(World):
                     entrdata = (k,reg,access)
                     entrs[name] = entrdata
                     reg.onewayins[name] = entrdata
-                    self.debuglog("adding entrace "+k+" to "+v["reg"])
+                    #self.debuglog("adding entrace "+k+" to "+v["reg"])
 
                 for k,v in map.exits.items():
                     reg = mapregs[v["reg"]]
@@ -502,37 +507,37 @@ class APADVWorld(World):
                         rule_a = None
                         rule_b = None
                         if "access" in iv:
-                            self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
+                            #self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
                             acctbl = preprocess_json_rule(iv["access"],self,reg_a)
-                            self.debuglog(f"processed access rule: {str(acctbl)}")
+                            #self.debuglog(f"processed access rule: {str(acctbl)}")
                             acctype = acctbl["type"]
                             if acctype == "never":
                                 rule_a = False
                                 self.add_warning(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed")
                             elif acctype != "always":
                                 rule_a = lambda state, acctbl=acctbl, world=self, region=reg_a: eval_json_rule(acctbl,state,world,region)
-                                self.debuglog(f"registering access rule for {ik} and {k} with table {acctbl}" )
+                                #self.debuglog(f"registering access rule for {ik} and {k} with table {acctbl}" )
                             if iv["twoway"]:
-                                self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
+                                #self.debuglog(f"preprocessing access rule: {str(iv["access"])}")
                                 acctbl = preprocess_json_rule(iv["access"],self,reg_b)
-                                self.debuglog(f"processed access rule: {str(acctbl)}")
+                                #self.debuglog(f"processed access rule: {str(acctbl)}")
                                 acctype = acctbl["type"]
                                 if acctype == "never":
                                     rule_b = False
                                     self.add_warning(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed")
                                 elif acctype != "always":
                                     rule_b = lambda state, acctbl=acctbl, world=self, region=reg_b: eval_json_rule(acctbl,state,world,region)
-                                    self.debuglog(f"registering access rule for {k} and {ik} with table {acctbl}" )
+                                    #self.debuglog(f"registering access rule for {k} and {ik} with table {acctbl}" )
                             else:
                                 rule_b = False
                         elif not iv["twoway"]:
                             rule_b = False
                         
                         if rule_a != False:
-                            self.debuglog(f"making connection between {k} and {ik} with rule {rule_a}" )
+                            #self.debuglog(f"making connection between {k} and {ik} with rule {rule_a}" )
                             reg_a.connect(reg_b,f"{map.bspname} - {k} -> {ik}",rule_a)
                         if rule_b != False:
-                            self.debuglog(f"making connection between {ik} and {k} with rule {rule_b}" )
+                            #self.debuglog(f"making connection between {ik} and {k} with rule {rule_b}" )
                             reg_b.connect(reg_a,f"{map.bspname} - {ik} -> {k}",rule_b)
 
                 for k,v in mapregs.items():
@@ -665,7 +670,7 @@ class APADVWorld(World):
         for v in self.items_to_reflag:
             oldflag = v.classification
             v.classification = self.get_item_flags(v.name)
-            self.debuglog(f"updated flags for {v.name} from {oldflag} to {v.classification}")
+            #self.debuglog(f"updated flags for {v.name} from {oldflag} to {v.classification}")
         
         self.multiworld.itempool.extend(itempool)
 
@@ -769,7 +774,7 @@ class APADVWorld(World):
                         if not twowayname in unconnectedexits:
                             exit_reach += 1
                         if twowayname in deadends:
-                            self.debuglog(f"placing this would clear a dead end")
+                            #self.debuglog(f"placing this would clear a dead end")
                             deadendscleared += 1
                 for exitname in reg.onewayouts.keys():
                     if not (exitname in unconnectedexits):
@@ -778,12 +783,12 @@ class APADVWorld(World):
                 if not trying in deadends:
                     deadends.add(trying)
                     deadcount += 1
-                    self.debuglog(f"amount of dead ends: {deadcount}, {str(deadends)}")
-                else:
-                    self.debuglog(f"{trying} was already in our dead ends")
+                    #self.debuglog(f"amount of dead ends: {deadcount}, {str(deadends)}")
+                #else:
+                    #self.debuglog(f"{trying} was already in our dead ends")
                 can_place = False
 
-            self.debuglog(f"can we place {trying} with a reach of {exit_reach}? {can_place}")
+            #self.debuglog(f"can we place {trying} with a reach of {exit_reach}? {can_place}")
             
             if can_place:
                 twoway = trying in trying_reg.twoways
@@ -798,7 +803,7 @@ class APADVWorld(World):
                     del unconnectedtwoways[target_name]
                     connectedtwoways.add(target_name)
                     connectedtwoways.add(trying)
-                    self.debuglog(f"trying to connect {trying_reg.name} and {target_reg.name}")
+                    #self.debuglog(f"trying to connect {trying_reg.name} and {target_reg.name}")
                     targetentracctbl = target_data[2]
                     targetexitacctbl = target_data[3]
                     tryingexitacctbl = trying_data[3]
@@ -815,23 +820,23 @@ class APADVWorld(World):
                     if twoway:
                         connectedtwoways.add(trying)
                 else:
-                    self.debuglog(f"couldn't find a place to connect {trying}")
+                    #self.debuglog(f"couldn't find a place to connect {trying}")
                     continue
 
-                self.debuglog(f"trying to connect {target_reg.name} and {trying_reg.name}")
+                #self.debuglog(f"trying to connect {target_reg.name} and {trying_reg.name}")
                 entracctbl = trying_data[2]
                 
                 target_reg.connect(trying_reg,f"{target_name} -> {trying}",
                     self.make_intermap_rule(trying_reg,entracctbl,target_reg,targetexitacctbl))
                 self.add_connectinfo(target_reg,target_data[0],trying_reg,trying_data[0])
                 available_exits = len(unconnectedtwoways) + len(unconnectedexits)
-                self.debuglog(f"available exits before checking new reachables: {available_exits}")
+                #self.debuglog(f"available exits before checking new reachables: {available_exits}")
                 del unplacedentrs[trying]
 
                 if trying in deadends:
                     deadends.remove(trying)
                     deadcount -= 1
-                    self.debuglog(f"amount of dead ends: {deadcount}, {str(deadends)}")
+                    #self.debuglog(f"amount of dead ends: {deadcount}, {str(deadends)}")
                 
                 for reg in reach:
                     for twoway,homereg in reg.twoways.items():
@@ -842,7 +847,7 @@ class APADVWorld(World):
                             if twoway in deadends:
                                 deadends.remove(twoway)
                                 deadcount -= 1
-                                self.debuglog(f"amount of dead ends: {deadcount}, {str(deadends)}")
+                                #self.debuglog(f"amount of dead ends: {deadcount}, {str(deadends)}")
                             available_exits += 1
                     for exit,homereg in reg.onewayouts.items():
                         if not exit in connectedexits:
@@ -851,22 +856,22 @@ class APADVWorld(World):
                     for entr,homereg in reg.onewayins.items():
                         if entr != trying:
                             unconnectedentrs[entr] = homereg
-                            self.debuglog(f"removing {entr} from unplaced entrances")
+                            #self.debuglog(f"removing {entr} from unplaced entrances")
                             if entr in unplacedentrs:
                                 del unplacedentrs[entr]
 
-                self.debuglog(f"available exits after checking new reachables: {available_exits}")
+                #self.debuglog(f"available exits after checking new reachables: {available_exits}")
 
                 untriedentrs = set(unplacedentrs.keys())
         
             if not unplacedentrs:
                 unfinished = False
 
-        self.debuglog(f"dead ends left after first placements: {str(deadends)}")
+        #self.debuglog(f"dead ends left after first placements: {str(deadends)}")
 
-        self.debuglog(f"Unconnected Entrances: {str(unconnectedentrs)}")
-        self.debuglog(f"Unconnected Exits: {str(unconnectedexits)}")
-        self.debuglog(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
+        #self.debuglog(f"Unconnected Entrances: {str(unconnectedentrs)}")
+        #self.debuglog(f"Unconnected Exits: {str(unconnectedexits)}")
+        #self.debuglog(f"Unconnected Two-Ways: {str(unconnectedtwoways)}")
 
         twowaysleft = len(unconnectedtwoways)
         while twowaysleft > 1:
@@ -934,8 +939,8 @@ class APADVWorld(World):
             entrsleft -= 1
             exitsleft -= 1
 
-        self.debuglog(f"Unconnected Entrances: {str(unconnectedentrs)}")
-        self.debuglog(f"Unconnected Exits: {str(unconnectedexits)}")
+        #self.debuglog(f"Unconnected Entrances: {str(unconnectedentrs)}")
+        #self.debuglog(f"Unconnected Exits: {str(unconnectedexits)}")
 
         # the menu is connected at the end because the reachtest function can't handle it 
         # and doing it like this is probably faster than making it check if every region it tests is not the menu
@@ -943,7 +948,7 @@ class APADVWorld(World):
         startreg.connect(menu)
         menu.connect(startreg)
 
-        self.debuglog(f"connecting regions took {time()-starttime} seconds")
+        #self.debuglog(f"connecting regions took {time()-starttime} seconds")
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("McGuffin", self.player, self.mcguffin_goal)
@@ -989,9 +994,9 @@ class APADVWorld(World):
             warnlog = open(filenamestart+"warnings.txt","x")
             for warn in self.warnings:
                 warnlog.write(warn+"\n")
-        if self.dodebug and len(self.debuginfo) > 0:
-            debugfile = open(filenamestart+"debug.txt","x")
-            for debug in self.debuginfo:
-                debugfile.write(debug+"\n")
+        #if self.dodebug and len(self.debuginfo) > 0:
+        #    debugfile = open(filenamestart+"debug.txt","x")
+        #    for debug in self.debuginfo:
+        #        debugfile.write(debug+"\n")
 
 

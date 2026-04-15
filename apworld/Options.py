@@ -159,10 +159,10 @@ class GeneratePUML(Toggle):
     which may be helpful for debugging configs you've made."""
     display_name = "Generate PUML"
 
-class WriteDebug(Toggle):
-    """Saves some debug info."""
-    visibility = Visibility.none
-    display_name = "Debug Log"
+#class WriteDebug(Toggle):
+#    """Saves some debug info."""
+#    visibility = Visibility.none
+#    display_name = "Debug Log"
 
 @dataclass
 class APADVGameOptions(PerGameCommonOptions):
@@ -178,5 +178,5 @@ class APADVGameOptions(PerGameCommonOptions):
     item_blacklist: ItemBlacklist
     ammo_merge: AmmoMerge
     generate_puml: GeneratePUML
-    write_debug: WriteDebug
+    #write_debug: WriteDebug
     start_inventory_from_pool: StartInventoryPool
