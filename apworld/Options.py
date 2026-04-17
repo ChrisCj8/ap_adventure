@@ -75,6 +75,38 @@ class ConfigBlacklist(OptionDict):
     }
     schema = singlepickschema
 
+class StartGroup(FreeText):
+    """What group your starting map should be picked from. Normally, your starting map is picked at random 
+    from all maps that have starting points set, but this option lets you set a filter for a certain group.
+    
+    An empty string (the default setting) disables the filter.
+    
+    This option mainly exists for cases where the same map exists in multiple groups,
+    you probably won't have to set this."""
+
+    default = ""
+
+class StartMap(FreeText):
+    """The name of your starting map. Functions similarly to the start_group setting,
+    but filters after the map name instead.
+
+    Looks for the file name of the map. (ap_orange, gm_construct, etc., without extensions)
+    
+    Currently, apAdventure only includes a single starting map, so you won't have to set
+    this option unless you have made your own configs with starting points."""
+
+    default = ""
+
+class StartRegion(FreeText):
+    """If your selected starting map has start points placed in multiple regions,
+    you can use this setting to chose what region you want to start in.
+    
+    The starting map included with apAdventure does not have multiple starting regions,
+    so you can ignore this option unless you have made your own configs with
+    multiple starting regions."""
+
+    default = ""
+
 class ItemSets(OptionSet):
     """Item Sets to use for generation.
     
@@ -173,6 +205,9 @@ class APADVGameOptions(PerGameCommonOptions):
     config_groups: ConfigGroups
     config_cherrypick: ConfigCherryPick
     config_blacklist: ConfigBlacklist
+    start_group: StartGroup
+    start_map: StartMap
+    start_region: StartRegion
     item_sets: ItemSets
     item_cherrypick: ItemCherryPick
     item_blacklist: ItemBlacklist

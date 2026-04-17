@@ -416,7 +416,13 @@ class APADVWorld(World):
 
         maps = self.chosen_maps
 
+        groupstartfilter = self.options.start_group
+        mapstartfilter = self.options.start_map
+        regionstartfilter = self.options.start_region
+
         for groupname,groupmaps in maps.items():
+
+            dogroupstartfilter = groupstartfilter == "" or groupstartfilter == groupname
 
             if not groupname in self.map_table:
                 self.add_warning(f"map group {groupname} does not exist")
@@ -425,6 +431,8 @@ class APADVWorld(World):
             for mapname,map in groupmaps.items():
                 #self.debuglog(f"processing regions for {mapname} in {groupname}")
                 mapregs = dict()
+
+                startfilter = dogroupstartfilter and mapstartfilter == "" or mapstartfilter == mapname
                 
                 for k,v in map.regions.items():
                     newreg = Region(f"{map.group} - {map.bspname} - {k}",self.player,self.multiworld)
@@ -450,7 +458,7 @@ class APADVWorld(World):
 
                     mapregs[k] = newreg
 
-                    if "startcandidate" in v:
+                    if "startcandidate" in v and startfilter and regionstartfilter == "" or regionstartfilter == k:
                         #self.debuglog(f"{k} is a starting candidate")
                         startcandidates.append(StartRegion(newreg,map,k))
 
