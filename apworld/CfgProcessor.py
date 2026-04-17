@@ -67,7 +67,7 @@ def ProcessCfgs():
         if dir.is_dir():
             for gr in dir.iterdir():
                 if gr.name[-5:] == ".json":
-                    itempaths[gr.name[:-5]] = gr
+                    itempaths[gr.name] = gr
 
     class ItemSet:
         def __init__(self,name,nicename):
