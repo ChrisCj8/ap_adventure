@@ -10,6 +10,7 @@ ITEM.ConditionalCapabilities = {
     ["Ammo_SMG1"] = {"DecentShortRange","DecentMidRange","BulletDamage"},
     ["Ammo_SMG1_Grenade"] = {"DecentAOE","BlastDamage"}
 }
+ITEM.StartGroup = { SMG = 10 }
 
 ITEM.Class = "weapon_smg1"
 

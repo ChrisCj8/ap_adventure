@@ -24,6 +24,9 @@
 				"DecentMelee",
 				"ClubDamage"
 			],
+			"starttag": {
+				"Melee": 10
+			},
 			"min": 1
 		}
 	}

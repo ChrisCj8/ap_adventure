@@ -285,37 +285,51 @@ class APADVWorld(World):
         item_blacklist = options.item_blacklist
         duplicate_item_names = set()
 
+        starttags = set(options.start_item_groups)
+        starttags.add("Melee")
+
         itempool = dict()
+        starterpool = dict()
+        startweights = dict()
 
         def register_item(item):
             name = item.name
             if name in self.duplicate_item_names:
                 duplicate_item_names.add(name)
             name = item.long_name # move this into the last if condition when implementing short item names
+            info = item.info
 
-            self.item_table[name] = (self.item_name_to_id[name],None,item.info)
+            self.item_table[name] = (self.item_name_to_id[name],None,info)
 
-            if "wgt" in item.info:
-                self.fillers[name] = item.info["wgt"]
+            if "wgt" in info:
+                self.fillers[name] = info["wgt"]
                 self.filleramt += 1
-            if "min" in item.info and item.info["min"] > 0:
-                itempool[name] = item.info["min"]
-            if "capab" in item.info:
-                finalcapabs = ProcessCapabs(set(item.info["capab"]))
-                item.info["capab"] = finalcapabs
+            if "min" in info and info["min"] > 0:
+                itempool[name] = info["min"]
+            if "capab" in info:
+                finalcapabs = ProcessCapabs(set(info["capab"]))
+                info["capab"] = finalcapabs
                 capabentry = CapabTblEntry(name,finalcapabs)
                 for capab in finalcapabs:
                     if not capab in self.capabilitytbl:
                         self.capabilitytbl[capab] = list()
                     
                     self.capabilitytbl[capab].append(capabentry)
-            if "condcapab" in item.info:
-                for cond,capabs in item.info["condcapab"].items():
+            if "condcapab" in info:
+                for cond,capabs in info["condcapab"].items():
                     if not cond in self.condcapabtbl:
                         self.condcapabtbl[cond] = dict()
                     capabs = ProcessCapabs(set(capabs))
-                    item.info["condcapab"][cond] = capabs
+                    info["condcapab"][cond] = capabs
                     self.condcapabtbl[cond][name] = capabs
+            if "starttag" in info:
+                for k,v in info["starttag"].items():
+                    if k in starttags:
+                        if not k in startweights or startweights[k] < v:
+                            starterpool[k] = [name]
+                            startweights[k] = v
+                        elif startweights[k] == v:
+                            starterpool[k].append(name)
 
         for isetname in chosenisets:
             if isetname in self.item_set_table:        
@@ -351,6 +365,21 @@ class APADVWorld(World):
             else:
                 raise OptionError(f"Slot {self.player_name} tried to use item_cherrypick to add items from item set {isetname} to their run, which could not be found.{self.cfgprocesserrormsg()}")
 
+        starteritems = []
+
+        for k,v in starterpool.items():
+            if len(v) == 1:
+                choice = v[0]
+            else:
+                choice = v[self.random.randint(0,len(v)-1)]
+            if choice in itempool:
+                if itempool[choice] == 1:
+                    itempool.pop(choice)
+                else:
+                    itempool[choice] -= 1
+            starteritems.append(choice)
+
+        self.starteritems = starteritems
         self.items_to_create = itempool
         self.items_dontload = items_dontload
         self.items_to_load = items_to_load
@@ -602,6 +631,9 @@ class APADVWorld(World):
             while i < info["amt"]:
                 itempool.append(self.create_item(iname))
                 i += 1
+
+        for v in self.starteritems:
+            self.multiworld.push_precollected(self.create_item(v))
 
         for iname,amt in self.items_to_create.items():
             info =  item_table[iname][2]

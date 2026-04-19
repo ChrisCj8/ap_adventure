@@ -137,6 +137,19 @@ class ItemBlacklist(OptionDict):
     default = {}
     schema = singlepickschema
 
+class StartItemGroups(OptionSet):
+    """What types of starting items you want.
+    
+    Items may be marked as being part of a certain start item group.
+    You can enter the name of one of these groups here to be granted one item of each type.
+    You will also always be granted a starting melee weapon.
+    
+    Currently, the available item types are "Pistol","Shotgun","Magnum","SMG" and "Grenade".
+    Custom item sets may also add their own types.
+    """
+    display_name = "Starting Item Groups"
+    default = {"Pistol"}
+
 class AmmoMerge(OptionList):
     """This option allows ammo types to be merged together.
 
@@ -211,6 +224,7 @@ class APADVGameOptions(PerGameCommonOptions):
     item_sets: ItemSets
     item_cherrypick: ItemCherryPick
     item_blacklist: ItemBlacklist
+    start_item_groups: StartItemGroups
     ammo_merge: AmmoMerge
     generate_puml: GeneratePUML
     #write_debug: WriteDebug

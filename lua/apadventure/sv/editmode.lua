@@ -459,6 +459,7 @@ local function ProcessItemGroup(groupname)
                 group = deftbl.Groups,
                 condcapab = deftbl.ConditionalCapabilities,
                 capab = deftbl.Capabilities,
+                starttag = deftbl.StartGroup,
                 file = string.sub(v,0,-5)
             }
             if deftbl.RequireCondition then

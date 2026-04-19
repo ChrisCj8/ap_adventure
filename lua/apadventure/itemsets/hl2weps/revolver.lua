@@ -10,6 +10,7 @@ ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
     ["Ammo_357"] = {"StrongShortRange","StrongMidRange","BulletDamage"}
 }
+ITEM.StartGroup = { Magnum = 10 }
 
 ITEM.Class = "weapon_357"
 

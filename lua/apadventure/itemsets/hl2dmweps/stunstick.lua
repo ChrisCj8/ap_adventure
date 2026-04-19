@@ -7,6 +7,7 @@ ITEM.Groups = {
 }
 ITEM.MinAmt = 1
 ITEM.Capabilities = {"DecentMelee","ClubDamage"}
+ITEM.StartGroup = { Melee = 10 }
 
 ITEM.Class = "weapon_stunstick"
 
