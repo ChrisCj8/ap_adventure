@@ -577,6 +577,7 @@ class APADVWorld(World):
                             #self.debuglog(f"making connection between {ik} and {k} with rule {rule_b}" )
                             reg_b.connect(reg_a,f"{map.bspname} - {ik} -> {k}",rule_b)
 
+                cfgadded = False
                 for k,v in mapregs.items():
                     if test_accessibility({v},set()):
                         reglocs = list()
@@ -595,11 +596,13 @@ class APADVWorld(World):
                         v.locations = reglocs
                         self.multiworld.regions.append(v)
                         self.regconds.update(v.conditions)
+                        cfgadded = True
                     else:
                         self.add_warning(f"Region {v.name} was removed because it was impossible to reach")
 
-                for k,v in map.items.items():
-                    mapitems[f"{groupname} - {mapname} - {k}"] = v
+                if cfgadded:
+                    for k,v in map.items.items():
+                        mapitems[f"{groupname} - {mapname} - {k}"] = v
 
         if not startcandidates:
             raise RuntimeError(self.player_name+" had no configs with valid starting regions selected")
