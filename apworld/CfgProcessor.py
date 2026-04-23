@@ -151,6 +151,7 @@ def ProcessCfgs():
                     grouppaths[gr.name] = [gr]
 
     map_table = dict()
+    group_data = dict()
 
     foundgroups = 0
 
@@ -171,6 +172,7 @@ def ProcessCfgs():
 
         groupmaps = dict()
         mappaths = dict()
+        grjson = False
 
         for grpath in grdirs:
             print(f"group folder found at: {grpath}")
@@ -178,6 +180,11 @@ def ProcessCfgs():
                 print(f"map found at: {path}")
                 if path.is_dir():
                     mappaths[path.name] = path
+                elif path.name == "group.json":
+                    grjson = path
+
+        if grjson:
+            group_data[gr] = json.load(grjson.open())
 
         for map,path in mappaths.items():
             print("processing "+map)
@@ -253,6 +260,8 @@ def ProcessCfgs():
                     itemtypes += 1
                     item_name_to_id[f"{gr} - {map} - {iname}"] = itemtypes
 
+            if "info" in cljson:
+                newmap.info = cljson["info"]
 
             groupmaps[map] = newmap
             #del newmap, cljson, svjson
@@ -270,4 +279,4 @@ def ProcessCfgs():
     elif warnpath.is_file():
         warnpath.unlink()
 
-    return (item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table, location_name_to_id, len(warnings)) # this sucks !
+    return (item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table, location_name_to_id, group_data, len(warnings)) # this sucks !

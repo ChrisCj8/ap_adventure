@@ -50,11 +50,21 @@ function apAdventure.ClCfgToLogic(cfg)
         }
     end
 
+    local info = {}
+    local settinginfo = apAdventure.CfgSettings
+
+    for k,v in pairs(cfg.info) do
+        local cursetinfo = settinginfo[k]
+        if cursetinfo and cursetinfo.togen and !(istable(v) and !next(v)) then
+            info[k] = v
+        end
+    end
 
     return {
         item = cfg.item,
         reg = reg,
-        connect = cfg.connect
+        connect = cfg.connect,
+        info = next(info) and info or nil
     }
 end
 
@@ -110,5 +120,21 @@ function apAdventure.SvCfgToLogic(cfg)
         entr = entr,
         lctn = lctn,
         start = start,
+    }
+end
+
+function apAdventure.GrCfgToLogic(cfg)
+    local info = {}
+    local settinginfo = apAdventure.CfgSettings
+
+    for k,v in pairs(cfg.rules) do
+        local cursetinfo = settinginfo[k]
+        if cursetinfo and cursetinfo.togen and !(istable(v) and !next(v)) then
+            info[k] = v
+        end
+    end
+
+    return {
+        info = next(info) and info or nil
     }
 end

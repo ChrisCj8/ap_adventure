@@ -27,6 +27,11 @@ list.Set("DesktopWindows","apAdventureEditor",{
     end
 })
 
+local fWrite = file.Write
+local fRead = file.Read
+local mkdir = file.CreateDir
+local fromJSON = util.JSONToTable
+local toJSON = util.TableToJSON
 
 local editcfg = apAdventure.EditCfg
 
@@ -52,18 +57,18 @@ net.Receive("APAdvActiveCfgClear",function()
     apAdvDelHalos = {}
     apAdvSaveHalos = {}
     local path = "apadventure/cfg/"..gname.."/group.json"
-    local groupjson = file.Read(path,"DATA") or file.Read("data_static/"..path,"GAME")
+    local groupjson = fRead(path,"DATA") or fRead("data_static/"..path,"GAME")
     if groupjson then
-        local tbl = util.JSONToTable(groupjson)
+        local tbl = fromJSON(groupjson)
         if tbl then
             editcfg.GroupInfo = tbl.rules
         end
     end
     path = "apadventure/cfg/"..gname.."/"..game.GetMap().."/cl.json"
-    local json = file.Read(path,"DATA") or file.Read("data_static/"..path,"GAME")
+    local json = fRead(path,"DATA") or fRead("data_static/"..path,"GAME")
     print(json)
     if json then
-        local tbl = util.JSONToTable(json)
+        local tbl = fromJSON(json)
         PrintTable(tbl)
         if tbl then 
             editcfg.Regions = tbl.reg or {}
@@ -106,15 +111,20 @@ net.Receive("APAdvSaveCfg",function()
     local map = game.GetMap()
 
     local dir = "apadventure/cfg/"..gname
-    file.CreateDir(dir.."/"..map)
-    file.Write(dir.."/group.json",util.TableToJSON(groupout,prettyprint))
-    file.Write(dir.."/"..map.."/cl.json",util.TableToJSON(outtbl,prettyprint))
+    local logicdir = "apadventure/logic/cfg/"..gname
+    mkdir(dir.."/"..map)
+    mkdir(logicdir.."/"..map)
+    fWrite(dir.."/group.json",toJSON(groupout,prettyprint))
+    fWrite(dir.."/"..map.."/cl.json",toJSON(outtbl,prettyprint))
+
+    local grlogic = apAdventure.GrCfgToLogic(groupout)
+    if grlogic then
+        fWrite(logicdir.."/group.json",toJSON(grlogic,prettyprint))
+    end
 
     local cllogic = apAdventure.ClCfgToLogic(outtbl)
     if !cllogic then return end
-    dir = "apadventure/logic/cfg/"..gname.."/"..map
-    file.CreateDir(dir)
-    file.Write(dir.."/cl.json",util.TableToJSON(cllogic,prettyprint))
+    fWrite(logicdir.."/"..map.."/cl.json",toJSON(cllogic,prettyprint))
 end)
 
 function apAdventure.UpdateGroup(gname)
@@ -123,16 +133,16 @@ function apAdventure.UpdateGroup(gname)
     if !next(folders) then return end
     for k,v in ipairs(folders) do
         local mappath = gdir..v.."/"
-        local svfile = file.Read(mappath.."sv.json")
-        local clfile = file.Read(mappath.."cl.json")
+        local svfile = fRead(mappath.."sv.json")
+        local clfile = fRead(mappath.."cl.json")
         if svfile and clfile then
-            local svtbl = util.JSONToTable(svfile)
-            local cltbl = util.JSONToTable(clfile)
+            local svtbl = fromJSON(svfile)
+            local cltbl = fromJSON(clfile)
             if svtbl and cltbl then
                 --[[ local newpath = "apadventure/cfg/"..gname.."/"..v.."/"
-                file.CreateDir(newpath) ]]
-                file.Write(mappath.."sv.json",util.TableToJSON(apAdventure.UpdateConfig(svtbl,"sv")))
-                file.Write(mappath.."cl.json",util.TableToJSON(apAdventure.UpdateConfig(cltbl,"cl")))
+                mkdir(newpath) ]]
+                fWrite(mappath.."sv.json",toJSON(apAdventure.UpdateConfig(svtbl,"sv")))
+                fWrite(mappath.."cl.json",toJSON(apAdventure.UpdateConfig(cltbl,"cl")))
             elseif !svtbl and !cltbl then
                 print("server and client cfgs for map "..v.." in group "..gname.."could not be processed into a table")
             elseif !svtbl then
@@ -149,11 +159,11 @@ function apAdventure.UpdateGroup(gname)
         end
     end
     if file.Exists(gdir.."group.json","DATA") then
-        local groupfile = file.Read(gdir.."group.json")
+        local groupfile = fRead(gdir.."group.json")
         if groupfile then
-            local grouptbl = util.JSONToTable(groupfile)
+            local grouptbl = fromJSON(groupfile)
             if grouptbl then
-                file.Write("apadventure/cfg/"..gname.."/group.json",util.TableToJSON(apAdventure.UpdateConfig(grouptbl,"gr")))
+                fWrite("apadventure/cfg/"..gname.."/group.json",toJSON(apAdventure.UpdateConfig(grouptbl,"gr")))
             else
                 print("group file for group "..gname.."could not be processed into a table")
             end
@@ -179,20 +189,20 @@ function apAdventure.ProcessGroupLogic(gname)
     if !next(folders) then return end
     for k,v in ipairs(folders) do
         local mappath = gdir..v.."/"
-        local svfile = file.Read(mappath.."sv.json")
-        local clfile = file.Read(mappath.."cl.json")
+        local svfile = fRead(mappath.."sv.json")
+        local clfile = fRead(mappath.."cl.json")
         if svfile and clfile then
-            local svtbl = util.JSONToTable(svfile)
-            local cltbl = util.JSONToTable(clfile)
+            local svtbl = fromJSON(svfile)
+            local cltbl = fromJSON(clfile)
             if svtbl and cltbl then
                 local newpath = "apadventure/logic/cfg/"..gname.."/"..v.."/"
                 local svlogic = apAdventure.SvCfgToLogic(svtbl)
                 if svlogic then
                     local cllogic = apAdventure.ClCfgToLogic(cltbl)
                     if cllogic then
-                        file.CreateDir(newpath)
-                        file.Write(newpath.."sv.json",util.TableToJSON(svlogic,true))
-                        file.Write(newpath.."cl.json",util.TableToJSON(cllogic,true))
+                        mkdir(newpath)
+                        fWrite(newpath.."sv.json",toJSON(svlogic,true))
+                        fWrite(newpath.."cl.json",toJSON(cllogic,true))
                     else
                         print("client cfg for map "..v.." in group "..gname.."could not be processed into logic")
                     end
@@ -343,7 +353,7 @@ net.Receive("APAdvAccess",function()
     local type = net.ReadUInt(2)
     local acctbl = apAdventure[accesstbls[type]]
     local json = "[]"
-    if acctbl then json = util.TableToJSON(acctbl) end
+    if acctbl then json = toJSON(acctbl) end
     local done
 
     repeat
@@ -366,7 +376,7 @@ net.Receive("APAdvAccessCopy",function()
     if net.ReadBool() then
         local type = net.ReadUInt(2)
         local targetkey = accesstbls[type]
-        local accesstbl = util.JSONToTable(entrmsg)
+        local accesstbl = fromJSON(entrmsg)
         if accesstbl then
             apAdventure[targetkey] = accesstbl
         else
@@ -432,7 +442,7 @@ local areaportalstr = ""
 net.Receive("APAdvAreaPortalInfo",function()
     areaportalstr = areaportalstr..net.ReadString()
     if net.ReadBool() then
-        apAdventure.AreaPortalInfo = util.JSONToTable(areaportalstr)
+        apAdventure.AreaPortalInfo = fromJSON(areaportalstr)
         areaportalstr = ""
     end
 end)

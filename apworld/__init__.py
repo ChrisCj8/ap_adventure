@@ -116,7 +116,8 @@ class APADVWorld(World):
     duplicate_item_names = processout[3]
     map_table = processout[4]
     location_name_to_id = processout[5]
-    warncount = processout[6]
+    group_data = processout[6]
+    warncount = processout[7]
 
     locs = int(0)
     itemtypes = int(1)
@@ -428,7 +429,7 @@ class APADVWorld(World):
 
         self.ammomerge = ammomerge_int
 
-                    
+
 
     def create_regions(self):
         menu = Region("Menu",self.player,self.multiworld)
@@ -452,6 +453,11 @@ class APADVWorld(World):
         for groupname,groupmaps in maps.items():
 
             dogroupstartfilter = groupstartfilter == "" or groupstartfilter == groupname
+
+            if groupname in self.group_data:
+                grdata = self.group_data[groupname]
+            else:
+                grdata = False
 
             if not groupname in self.map_table:
                 self.add_warning(f"map group {groupname} does not exist")

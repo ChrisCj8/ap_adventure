@@ -109,7 +109,7 @@ end
 
 local drawerconv = CreateClientConVar("apadventure_editor_help_drawer_state",1,true,false,"Used to save the state of the help drawer in the Editor UI.",0,1)
 
-local mapsettings = apAdventure.CfgSettings
+local mapsettings = apAdventure.CfgSettingsOrdered
 
 local mapsettingslookup = {}
 

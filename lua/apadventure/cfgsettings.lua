@@ -76,6 +76,7 @@ if CLIENT then
     }
 
     local loadedtbls = {}
+    local settingslookup = {}
 
     for k,v in ipairs(settings) do
         if needpreset[v.type] then
@@ -92,13 +93,16 @@ if CLIENT then
                 end
             end
         end
+        settingslookup[v.name] = v
     end
-    apAdventure.CfgSettings = settings
+    apAdventure.CfgSettingsOrdered = settings
+    apAdventure.CfgSettings = settingslookup
 else
     local processed = {}
     for k,v in ipairs(settings) do
         processed[v.name] = {
-            default = v.default
+            default = v.default,
+            togen = v.togen
         }
     end
     apAdventure.CfgSettings = processed
