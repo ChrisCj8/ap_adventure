@@ -121,6 +121,8 @@ local numwdefaultcolor
 local checkboxdefaultcolor = color_black
 local lightblue = Color(100,167,255)
 
+local reqpnl = include("apadventure/ui/require.lua")
+
 return function(window)
     local mbar = vgui.Create("DMenuBar",window)
     mbar:DockMargin(-2,-5,-2,0)
@@ -237,6 +239,31 @@ return function(window)
                     },
                     h = 22
                 }
+            end,
+            requi = function(tbl)
+                local reqpnl = reqpnl(groupcfgpnl)
+                groupruleselements = groupruleselements + 1
+                grouprulesplacegroups[groupruleselements] = {
+                    pnls = {
+                        {pnl=reqpnl}
+                    },
+                    h = 22
+                }
+                local curtbl = grouprulesplacegroups[groupruleselements]
+                local valname = tbl.name
+                grouptbl[valname] = grouptbl[valname] or {}
+                reqpnl:SetTargetTbl(grouptbl[valname])
+                groupupdatecount = groupupdatecount + 1
+                groupupdate[groupupdatecount] = {
+                    p = function(val)
+                        reqpnl:SetTargetTbl(val)
+                        grouptbl[valname] = val
+                    end,
+                    n = valname
+                }
+                function reqpnl:SetOuterHeight(h)
+                    curtbl.h = h
+                end
             end
         }
 
@@ -375,6 +402,31 @@ return function(window)
                     h = 22
                 }
                 infoinputs[valname] = check
+            end,
+            requi = function(tbl)
+                local reqpnl = reqpnl(mapcfgpnl)
+                mapruleselements = mapruleselements + 1
+                maprulesplacegroups[mapruleselements] = {
+                    pnls = {
+                        {pnl=reqpnl}
+                    },
+                    h = 22
+                }
+                local curtbl = maprulesplacegroups[mapruleselements]
+                local valname = tbl.name
+                infotbl[valname] = infotbl[valname] or {}
+                reqpnl:SetTargetTbl(infotbl[valname])
+                mapupdatecount = mapupdatecount + 1
+                mapupdate[mapupdatecount] = {
+                    p = function(val)
+                        reqpnl:SetTargetTbl(val)
+                        infotbl[valname] = val
+                    end,
+                    n = valname
+                }
+                function reqpnl:SetOuterHeight(h)
+                    curtbl.h = h
+                end
             end
         }
 
@@ -824,7 +876,13 @@ return function(window)
         for k,v in ipairs(groupupdate) do
             local name = v.n
             local ruleinfo = mapsettingslookup[name]
-            v.p:SetValue(grouptbl[name] or ruleinfo.default)
+            local p = v.p
+            local val = grouptbl[name] or istable(ruleinfo.default) and table.Copy(ruleinfo.default) or ruleinfo.default
+            if isfunction(p) then
+                p(val)
+            else
+                p:SetValue(val)
+            end
         end
 
         infotbl = cfg.Info
@@ -832,7 +890,13 @@ return function(window)
         for k,v in ipairs(mapupdate) do
             local name = v.n
             local ruleinfo = mapsettingslookup[name]
-            v.p:SetValue(infotbl[name] or grouptbl[name] or ruleinfo.default)
+            local p = v.p
+            local val = infotbl[name] or !ruleinfo.noinherit and grouptbl[name] or istable(ruleinfo.default) and table.Copy(ruleinfo.default) or ruleinfo.default
+            if isfunction(p) then
+                p(val)
+            else
+                p:SetValue(val)
+            end
         end
 
         reglist:LoadInfo(cfg.Regions)

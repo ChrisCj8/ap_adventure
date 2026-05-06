@@ -97,6 +97,14 @@ return function(window)
 
     connectbtn.HoverHint,dcbtn.Hoverhint = "connect","connect"
 
+    local requirebtn = UImake("DButton",background)
+    requirebtn:SetText("#apadventure.connect.require")
+    requirebtn:SetPos(5,185)
+    function requirebtn:DoClick()
+        include("apadventure/gamemode/ui/require.lua")()
+    end
+    requirebtn.HoverHint = "require"
+
     function presetselect:OnSelect(_,val)
         local data = util.JSONToTable(file.Read("apadventure/connect/"..val..".json","DATA"))
         adrin:SetText(data.a or "")
@@ -105,11 +113,11 @@ return function(window)
     end
 
     local presetnamein = UImake("DTextEntry",background)
-    presetnamein:SetPos(5,185)
+    presetnamein:SetPos(5,215)
 
     local presetsavebtn = UImake("DButton",background)
     presetsavebtn:SetText("#apadventure.connect.presetsave")
-    presetsavebtn:SetPos(100,185)
+    presetsavebtn:SetPos(100,215)
     presetsavebtn:SetSize(90,22)
 
     presetnamein.HoverHint,presetsavebtn.HoverHint = "presetsave","presetsave"
@@ -140,7 +148,7 @@ return function(window)
     end
 
     local hintlbl = Label(background,"#apadventure.connect.hint.initial")
-    hintlbl:SetPos(5,215)
+    hintlbl:SetPos(5,245)
     hintlbl:SetWrap(true)
     hintlbl:SetAutoStretchVertical(true)
 
@@ -165,9 +173,10 @@ return function(window)
         connectbtn:SetSize(hw,22)
         dcbtn:SetSize(hw,22)
         dcbtn:SetPos(10+hw,155)
+        requirebtn:SetSize(w-10,22)
 
         presetnamein:SetSize(w-10-95,22)
-        presetsavebtn:SetPos(w-95,185)
+        presetsavebtn:SetPos(w-95,215)
 
         hintlbl:SetWide(w-10)
     end

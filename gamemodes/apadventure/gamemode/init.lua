@@ -16,6 +16,7 @@ include("tracker.lua")
 
 util.AddNetworkString("apAdvConnectionInfo")
 util.AddNetworkString("ApAdvConnectionState")
+util.AddNetworkString("ApAdvRequirements")
 
 APADV_LASTMAPTBL = APADV_LASTMAPTBL or {}
 APADV_NEXTMAPTBL = APADV_NEXTMAPTBL or {}
@@ -27,6 +28,8 @@ RunConsoleCommand("gmod_maxammo",0)
 RunConsoleCommand("ai_disabled",0)
 
 local BASEGM = baseclass.Get("gamemode_base")
+
+local substr = string.sub
 
 function GM:PreCleanupMap()
     APADV.MapItemCounters = {}
@@ -169,7 +172,7 @@ end
 
 function GM:PlayerSay(ply,txt)
     if strstart(txt,"/ap ") then
-        if checksayperms(ply) then apsay(string.sub(txt,5,-1)) end
+        if checksayperms(ply) then apsay(substr(txt,5,-1)) end
         return ""
     end
     return txt
@@ -178,4 +181,112 @@ end
 concommand.Add("apadv_apsay",function(ply,_,_,txt)
     print(ply)
     if ply == NULL or checksayperms(ply) then apsay(txt) end
+end)
+
+function APADV.ProcessRequirements(reqs)
+    local games, addons, addonlookup, miscinfo, unknown = {},{},{},{},{}
+    local info = {
+        addons = addonlookup
+    }
+
+    for k,v in ipairs(engine.GetAddons()) do
+        addonlookup[v.wsid] = v
+    end
+
+    local tagfuncs = {}
+    local files = file.Find("gamemodes/apadventure/gamemode/require/sv/*.lua","GAME")
+    for k,v in ipairs(files) do
+        local tbl = include("apadventure/gamemode/require/sv/"..v)
+        tagfuncs[substr(v,0,-5)] = tbl.DoCheck
+    end
+
+    local tagstartfuncs = {
+        game = function(tag)
+            games[tag] = false
+        end,
+        wsid = function(tag)
+            addons[tag] = false
+        end
+    }
+
+    for k,v in ipairs(reqs) do
+        
+        if tagfuncs[v] then
+            local out = tagfuncs[v](info)
+            if out then
+                local addoncheck = out.checkaddon
+                local msg = out.msg
+                local status = out.status
+                if addoncheck then
+                    if isstring(addoncheck) then
+                        addons[addoncheck] = false
+                    elseif istable(addoncheck) then
+                        for ik,iv in ipairs(addoncheck) do
+                            addons[iv] = false
+                        end
+                    end
+                end
+                if msg then
+                    if status and( !isnumber(status) or status % 1 != 0 ) then
+                        status = nil
+                    end
+                    if isstring(msg) then msg = {msg} end
+                    if istable(msg) then
+                        miscinfo[#miscinfo+1] = {
+                            status = status,
+                            msg = msg,
+                            tag = v,
+                        }
+                    end
+                end
+            end
+        else
+            local tagstart = substr(v,0,4)
+            if tagstartfuncs[tagstart] then
+                tagstartfuncs[tagstart](substr(v,5,-1))
+            else
+                unknown[#unknown+1] = v
+            end
+        end
+    end
+
+    for k,v in ipairs(engine.GetGames()) do
+        if games[v.folder] != nil then
+            games[v.folder] = v.mounted
+        end
+    end
+
+    for k,v in pairs(addons) do
+        local lookup = addonlookup[k]
+        addons[k] = lookup and lookup.mounted or false
+    end
+
+    return {
+        addons = addons,
+        games = games,
+        misc = miscinfo,
+        unknown = unknown,
+        lastcheck = APADV_SAVEID,
+    }
+end
+
+local substr = string.sub
+net.Receive("ApAdvRequirements",function(len,ply)
+    local clreqs = net.ReadString()
+    if APADV_SLOT then
+        --if !APADV_SLOT.requireinfo or APADV_SLOT.requireinfo.lastcheck != APADV_SAVEID then
+            APADV_SLOT.requireinfo = APADV.ProcessRequirements(APADV_SLOT.slotData.requirements)
+        --end
+        local json = util.TableToJSON(APADV_SLOT.requireinfo)
+        local done
+        repeat
+            local msg = substr(json,1,60000)
+            json = substr(json,60001,-1)
+            done = json[1] == ""
+            net.Start("ApAdvRequirements")
+                net.WriteString(msg)
+                net.WriteBool(done)
+            net.Send(ply)
+        until (done)
+    end
 end)

@@ -15,6 +15,21 @@ list.Set("DesktopWindows","apAdventureConnect",{
     end
 })
 
+local json = ""
+net.Receive("ApAdvRequirements",function() 
+    json = json..net.ReadString()
+    if net.ReadBool() then
+        local reqs = util.JSONToTable(json,false,true)
+        json = ""
+        local ui = APADV_REQUIREMENTS and APADV_REQUIREMENTS.ui
+        APADV_REQUIREMENTS = reqs
+        APADV_REQUIREMENTS.ui = ui
+        if ispanel(ui) and IsValid(ui) then
+            ui:OnRequirementsUpdate()
+        end
+    end
+end)
+
 local warnred = Color(255,0,0)
 local scrh, scrw = ScrH(), ScrW()
 

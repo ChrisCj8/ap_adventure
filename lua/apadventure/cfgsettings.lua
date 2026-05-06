@@ -68,6 +68,13 @@ local settings = {
         name = "godmode",
         type = "check"
     },
+    {
+        name = "requirements",
+        type = "requi",
+        default = {},
+        togen = true,
+        noinherit = true
+    }
 }
 
 if CLIENT then

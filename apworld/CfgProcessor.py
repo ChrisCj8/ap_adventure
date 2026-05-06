@@ -85,9 +85,9 @@ def ProcessCfgs():
     itemtypes = 0
 
     base_item_table = {
-        "Nothing":( 1, ItemClassification.filler, None ),
-        "McGuffin":( 2, ItemClassification.progression, None ),
-        "Bunnyhop":( 3, ItemClassification.progression, None )
+        "Nothing":( 1, ItemClassification.filler, None , None),
+        "McGuffin":( 2, ItemClassification.progression, None , None),
+        "Bunnyhop":( 3, ItemClassification.progression, None , None)
     }
 
     item_name_to_id = dict()
@@ -125,6 +125,9 @@ def ProcessCfgs():
 
                     print("added item "+newitem.long_name)
                     newiset.items[iname] = newitem 
+            if "reqs" in setjson:
+                newiset.requirements = set(setjson["reqs"])
+
             item_set_table[iset[:-5]] = newiset
         else:
             print(f"{setpath} does not exist")

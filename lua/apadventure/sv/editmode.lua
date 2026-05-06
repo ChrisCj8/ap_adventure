@@ -442,8 +442,16 @@ local function ProcessItemGroup(groupname)
     local grouppath = "apadventure/itemsets/"..groupname
     local groupdef = include(grouppath..".lua")
     --PrintTable(groupdef)
+    local reqs = groupdef.Requirements
+    if isstring(reqs) then
+        reqs = {reqs}
+    elseif !istable(reqs) then
+        ErrorNoHalt("Requirements for group "..groupname.." were set to invalid type "..type(reqs))
+        reqs = nil
+    end
     local out = {
         name = groupdef.Name,
+        reqs = reqs,
         items = {},
     }
     local itemtbl = out.items

@@ -145,6 +145,7 @@ class APADVWorld(World):
         self.usedcapabs_known = False
         self.regconds = set()
         self.regconds_known = False
+        self.requirements = set()
         self.items_to_reflag = list()
         
     def add_warning(self,warning):
@@ -168,10 +169,11 @@ class APADVWorld(World):
             return None
         data = self.item_table[name]
         flags = data[1]
-        info = data[2]
+        item = data[2]
         if flags == None:
-            if info:
+            if item.info:
                 flags = ItemClassification.filler
+                info = item.info
                 if self.usedcapabs_known:
                     if "capab" in info:
                         capab = info["capab"]
@@ -300,7 +302,7 @@ class APADVWorld(World):
             name = item.long_name # move this into the last if condition when implementing short item names
             info = item.info
 
-            self.item_table[name] = (self.item_name_to_id[name],None,info)
+            self.item_table[name] = (self.item_name_to_id[name],None,item)
 
             if "wgt" in info:
                 self.fillers[name] = info["wgt"]
@@ -440,6 +442,8 @@ class APADVWorld(World):
         startcandidates = list()
 
         ammomerge = self.ammomerge
+
+        cfgrequirements = set()
 
         mapitems = dict()
         entrs = dict()
@@ -610,6 +614,11 @@ class APADVWorld(World):
                     for k,v in map.items.items():
                         mapitems[f"{groupname} - {mapname} - {k}"] = v
 
+                    if grdata and "info" in grdata and "requirements" in grdata["info"]:
+                        cfgrequirements.update(grdata["info"]["requirements"])
+                    if "requirements" in map.info:
+                        cfgrequirements.update(map.info["requirements"])
+
         if not startcandidates:
             raise RuntimeError(self.player_name+" had no configs with valid starting regions selected")
 
@@ -619,6 +628,7 @@ class APADVWorld(World):
         self.rando_entrances = entrs
         self.usedcapabs_known = True
         self.regconds_known = True
+        self.requirements.update(cfgrequirements)
 
     def create_items(self):
 
@@ -626,6 +636,8 @@ class APADVWorld(World):
         item_table = self.item_table
         fillers = list[APADVItem]()
         usefuls = list[APADVItem]()
+
+        itemreqs = set()
 
         if self.bhop == 2:
             bhop = self.create_item("Bunnyhop")
@@ -645,7 +657,9 @@ class APADVWorld(World):
             self.multiworld.push_precollected(self.create_item(v))
 
         for iname,amt in self.items_to_create.items():
-            info =  item_table[iname][2]
+            item = item_table[iname][2]
+            info = item.info
+            iset = item.set
             if "req_cond" in info:
                 if not "condcapab" in info:
                     self.add_warning(f"item {iname} requires conditions to be fulfilled in order to be placed, but has no conditional capabilities defined")
@@ -657,7 +671,10 @@ class APADVWorld(World):
                         break
                 if not req:
                     continue
-                
+            if iset:
+                if hasattr(iset,"requirements"):
+                    itemreqs.update(iset.requirements)
+
             i = 0
             while i < amt:
                 newitem = self.create_item(iname)
@@ -720,7 +737,8 @@ class APADVWorld(World):
             oldflag = v.classification
             v.classification = self.get_item_flags(v.name)
             #self.debuglog(f"updated flags for {v.name} from {oldflag} to {v.classification}")
-        
+
+        self.requirements.update(itemreqs)
         self.multiworld.itempool.extend(itempool)
 
     def make_intermap_rule(self,entr_reg,entr_acctbl,exit_reg,exit_acctbl):
@@ -1022,6 +1040,7 @@ class APADVWorld(World):
             "itemsets":self.loadeditemsets,
             "items_dontload":self.items_dontload,
             "items_to_load":self.items_to_load,
+            "requirements":self.requirements,
             "startmap":self.startpick.map.bspname,
             "startgroup":self.startpick.map.group,
             "startregion":self.startpick.regname,
