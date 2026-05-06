@@ -149,9 +149,15 @@ local permhooks = {
 
 for k,v in ipairs(permhooks) do
     local ogfunc = SBOX[v]
-    GM[v] = function (self,ply,...)
-        if !sv_cheats:GetBool() then return false end
-        return ogfunc(self,ply,...)
+    if ogfunc then
+        GM[v] = function (self,ply,...)
+            if !sv_cheats:GetBool() then return false end
+            return ogfunc(self,ply,...)
+        end
+    else
+        GM[v] = function (self,ply)
+            if !sv_cheats:GetBool() then return false end
+        end
     end
 end
 
