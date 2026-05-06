@@ -57,10 +57,12 @@ def ProcessCfgs():
     itempaths = dict[str, Path]()
 
     for gr in worlditemdir.iterdir():
-        itempaths[gr.name] = gr
+        if gr.name[-5:] == ".json":
+            itempaths[gr.name] = gr
 
     for gr in apitemdir.iterdir():
-        itempaths[gr.name] = gr
+        if gr.name[-5:] == ".json":
+            itempaths[gr.name] = gr
     
     if gmodpath:
         dir = gmodpath.joinpath("data/apadventure/logic/item/")
