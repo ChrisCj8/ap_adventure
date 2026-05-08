@@ -170,9 +170,6 @@ function list:OnRowRightClick(ln,pnl)
     menu:MakePopup()
 end
 
-function basepnl:SetOuterHeight(h) end
-
-
 local function addtag(tag,new)
     if tagtopos[tag] then return end
 

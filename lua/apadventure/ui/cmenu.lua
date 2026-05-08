@@ -1,16 +1,15 @@
 local editcfg = apAdventure.EditCfg
+local UImake = vgui.Create
+local band = bit.band
 
-local bool2yn = {
-    [true] = "yes",
-    [false] = "no"
-}
+local bool2yn = { [true] = "yes", [false] = "no" }
 
 local function LocStrExists(str)
     return language.GetPhrase(str) != str
 end
 
 local function BitFlipper(inval,flip,onoff)
-    local biton = bit.band(inval,flip) != 0
+    local biton = band(inval,flip) != 0
     if biton and !onoff then
         return inval - flip
     elseif !biton and onoff then
@@ -33,37 +32,40 @@ local function ShowContents(self,show)
 end
 
 local function ImageButton(parent,image) 
-    local btn = vgui.Create("DImageButton",parent)
+    local btn = UImake("DImageButton",parent)
     btn:SetImage(image)
     btn:SetSize(16,16)
     return btn
 end
 
 local function Label(parent,locstr)
-    local lbl = vgui.Create("DLabel",parent)
+    local lbl = UImake("DLabel",parent)
     lbl:SetDark(true)
     lbl:SetText("#apadventure.editor."..locstr..".label")
     return lbl
 end
 
 local function LabelTextInput(parent,locstr)
-    return Label(parent,locstr), vgui.Create("DTextEntry",parent)
+    return Label(parent,locstr), UImake("DTextEntry",parent)
 end
 
 local function LabelNumWang(parent,locstr)
-    return Label(parent,locstr), vgui.Create("DNumberWang",parent)
+    return Label(parent,locstr), UImake("DNumberWang",parent)
 end
 
 local function LabelNumWangWithPreset(parent,locstr,presettbl)
-    local label, numw = LabelNumWang(parent,locstr)
-    local presetsel = vgui.Create("DComboBox",parent)
+    local base = UImake("DPanel",parent)
+    base:SetPaintBackground(false)
+    base:SetSize(100,22)
+    local label, numw = LabelNumWang(base,locstr)
+    local presetsel = UImake("DComboBox",base)
     for k,v in ipairs(presettbl) do
         presetsel:AddChoice(v.val.." - "..v.name,v.val,v.default,v.icon)
     end
     function presetsel:OnSelect(ind,val,data)
         numw:SetValue(data)
     end
-    return label, numw, presetsel
+    return base, label, numw, presetsel
 end
 
 local helpbubble
@@ -74,9 +76,7 @@ local function HelpPopup(helptext,w,creator)
 
     if !creator then return end
 
-    local h = 10
-
-    local pnl = vgui.Create("DPanel")
+    local pnl = UImake("DPanel")
     pnl:SetBackgroundColor(helppnlclr)
     pnl.creator = creator
     function pnl:Think()
@@ -85,18 +85,18 @@ local function HelpPopup(helptext,w,creator)
             self:Remove()
         end
     end
-    
-    local text = vgui.Create("DLabel",pnl)
+
+    local text = UImake("DLabel",pnl)
     text:SetPos(5,5)
     text:SetSize(w-10,10)
     text:SetWrap(true)
     text:SetAutoStretchVertical(true)
     text:SetTextColor(color_black) -- set the color to black here rather than using set dark in case derma skins set it to something weird
     text:SetText(helptext)
-    
-    local cursorx , cursory = gui.MousePos() 
 
-    timer.Simple(0,function() 
+    local cursorx, cursory = gui.MousePos()
+
+    timer.Simple(0,function()
         local _,texth = text:GetSize()
         pnl:SetSize(w,texth+10)
         pnl:SetPos(cursorx-w-30,cursory-(texth/2)-5)
@@ -112,20 +112,20 @@ local drawerconv = CreateClientConVar("apadventure_editor_help_drawer_state",1,t
 local mapsettings = apAdventure.CfgSettingsOrdered
 local mapsettingslookup = apAdventure.CfgSettings
 
-local numwdefaultcolor 
+local numwdefaultcolor
 local checkboxdefaultcolor = color_black
 local lightblue = Color(100,167,255)
 
 local reqpnl = include("apadventure/ui/require.lua")
 
 return function(window)
-    local mbar = vgui.Create("DMenuBar",window)
+    local mbar = UImake("DMenuBar",window)
     mbar:DockMargin(-2,-5,-2,0)
 
     local configloaded = editcfg.Group != ""
     local filemenu = mbar:AddMenu("#apadventure.editor.menu.file")
     filemenu:AddOption("#apadventure.editor.menu.file.load",function() include("apadventure/ui/loadmenu.lua")() end)
-    local reloadoption = filemenu:AddOption("#apadventure.editor.menu.file.reload",function() 
+    local reloadoption = filemenu:AddOption("#apadventure.editor.menu.file.reload",function()
         RunConsoleCommand("apadventure_editor_loadcfg")
     end)
     --reloadoption:SetIcon("icon16/arrow_refresh.png")
@@ -140,44 +140,43 @@ return function(window)
     local miscmenu = mbar:AddMenu("#apadventure.editor.menu.misc")
     miscmenu:AddOption("#apadventure.editor.menu.misc.savemanage",function() RunConsoleCommand("apadventure_save_manager") end)
 
-    local tabs = vgui.Create("DPropertySheet",window)
+    local tabs = UImake("DPropertySheet",window)
     tabs:SetPos(5,50)
 
-    local grouptbl = editcfg.GroupInfo
-    local infotbl = editcfg.Info
+    local grouptbl, infotbl = editcfg.GroupInfo, editcfg.Info
+    local groupupdate, groupupdatecount, mapupdate, mapupdatecount, infoinputs  = {},0,{},0,{}
 
-    local groupupdate = {}
-    local groupupdatecount = 0
-    local mapupdate = {}
-    local mapupdatecount = 0
-
-    local infoinputs = {}
-
-    local groupcfgpnl = vgui.Create("DScrollPanel")
+    local groupcfgpnl = UImake("DScrollPanel")
+    local groupcfgcanvas = groupcfgpnl:GetCanvas()
     groupcfgpnl:SetPaintBackground(true)
+    groupcfgcanvas:DockPadding(5,5,5,5)
     local newtab = tabs:AddSheet("#apadventure.editor.tab.group",groupcfgpnl)
     newtab.Tab.guide = "grouptab"
 
-        local grouprulesplacegroups = {}
-        local groupruleselements = 0
-        
-        local grouppanelbuilders = {
-            numwpreset = function(tbl)
-                local valname = tbl.name
+        local grouppnlbuild = {
+            numwpreset = function(tbl,valname)
                 local default = tbl.default
-                local lbl, numw, pres = LabelNumWangWithPreset(groupcfgpnl,valname,tbl.presets)
+                local base, lbl, numw, pres = LabelNumWangWithPreset(groupcfgcanvas,valname,tbl.presets)
+                lbl:SetPos(0,0)
+                lbl:SetSize(100,22)
+                numw:SetPos(105,0)
+                numw:SetSize(50,22)
+                pres:SetPos(160,0)
+                function base:PerformLayout(w,h)
+                    pres:SetSize(w-160,22)
+                end
                 numwdefaultcolor = numwdefaultcolor or numw:GetTextColor()
                 numw:SetMinMax(tbl.min,tbl.max)
                 local laststate
                 local oldvalue = grouptbl[valname] or default
-                function numw:OnValueChanged(val) 
+                function numw:OnValueChanged(val)
                     if val == default then
                         grouptbl[valname] = nil
                         if !laststate then
                             laststate = true
                             numw:SetTextColor(lightblue)
                         end
-                    else    
+                    else
                         grouptbl[valname] = val
                         if laststate then
                             laststate = false
@@ -192,25 +191,14 @@ return function(window)
                 end
                 numw:SetValue(grouptbl[valname] or default)
                 groupupdatecount = groupupdatecount + 1
-                groupupdate[groupupdatecount] = {
-                    p = numw,
-                    n = valname
-                }
-                groupruleselements = groupruleselements + 1
-                grouprulesplacegroups[groupruleselements] = {
-                    pnls = {
-                        { pnl = lbl, w = 100 },
-                        { pnl = numw, w = 50 },
-                        { pnl = pres }
-                    },
-                    h = 22
-                }
+                groupupdate[groupupdatecount] = { p = numw, n = valname }
+                return base
             end,
-            check = function(tbl)
-                local valname = tbl.name
-                local check = vgui.Create("DCheckBoxLabel",groupcfgpnl)
+            check = function(tbl,valname)
+                local check = UImake("DCheckBoxLabel",groupcfgcanvas)
                 check:SetText("#apadventure.editor."..valname..".label")
                 check:SetDark(true)
+                check.helppos = check:GetTall()/2-8
                 checkboxdefaultcolor = checkboxdefaultcolor or check.Label:GetTextColor()
                 local oldval = default
                 function check:OnChange(val)
@@ -223,29 +211,11 @@ return function(window)
                 end
                 check:SetValue(grouptbl[valname] or default)
                 groupupdatecount = groupupdatecount + 1
-                groupupdate[groupupdatecount] = {
-                    p = check,
-                    n = valname
-                }
-                groupruleselements = groupruleselements + 1
-                grouprulesplacegroups[groupruleselements] = {
-                    pnls = {
-                        {pnl=check}
-                    },
-                    h = 22
-                }
+                groupupdate[groupupdatecount] = { p = check, n = valname }
+                return check, 2
             end,
-            requi = function(tbl)
+            requi = function(tbl,valname)
                 local reqpnl = reqpnl(groupcfgpnl)
-                groupruleselements = groupruleselements + 1
-                grouprulesplacegroups[groupruleselements] = {
-                    pnls = {
-                        {pnl=reqpnl}
-                    },
-                    h = 22
-                }
-                local curtbl = grouprulesplacegroups[groupruleselements]
-                local valname = tbl.name
                 grouptbl[valname] = grouptbl[valname] or {}
                 reqpnl:SetTargetTbl(grouptbl[valname])
                 groupupdatecount = groupupdatecount + 1
@@ -256,82 +226,75 @@ return function(window)
                     end,
                     n = valname
                 }
-                function reqpnl:SetOuterHeight(h)
-                    curtbl.h = h
-                end
+                return reqpnl
             end
         }
 
+        local helppnls = {}
         for k,v in ipairs(mapsettings) do
-            grouppanelbuilders[v.type](v)
-            local helpstr = "apadventure.editor."..v.name..".help"
+            local settingname = v.name
+            local pnl, dockbonus = grouppnlbuild[v.type](v,settingname)
+            local helpstr = "apadventure.editor."..settingname..".help"
+            groupcfgcanvas:Add(pnl)
+            pnl:Dock(TOP)
+            pnl:DockMargin(5,dockbonus or 0,25,5+(dockbonus or 0))
+
             if LocStrExists(helpstr) then
-                local help = ImageButton(groupcfgpnl,"icon16/help.png")
+                local help = ImageButton(groupcfgcanvas,"icon16/help.png")
                 function help:DoClick()
-                    cfgw = groupcfgpnl:GetSize()
+                    local cfgw = groupcfgpnl:GetSize()
                     HelpPopup("#"..helpstr,cfgw-100,self)
                 end
-                grouprulesplacegroups[groupruleselements].help = help
+                pnl.help = help
+                helppnls[#helppnls+1] = pnl
             end
         end
 
-        local oldlayout = groupcfgpnl.PerformLayout
-        function groupcfgpnl:PerformLayout(w,h)
-            
-            oldlayout(self,w,h)
-            w = self:InnerWidth()
-            local curh = 5
-            for k,v in ipairs(grouprulesplacegroups) do
-                local curw = 5
-                for ik,iv in ipairs(v.pnls) do
-                    local iw = iv.w or (w - 26 - curw) 
-                    iv.pnl:SetPos(curw,curh)
-                    iv.pnl:SetSize(iw,v.h)
-                    curw = curw + iw + 5
-                end
-
-                if v.help then
-                    v.help:SetPos(w-20,curh+2)
-                end
-
-                curh = curh + (v.h or 22) + 5
+        function groupcfgcanvas:PerformLayout(w,h)
+            for k,v in ipairs(helppnls) do
+                local x,y = v:GetPos()
+                v.help:SetPos(w-25,y+(v.helppos or 2))
             end
-
+            groupcfgpnl:InvalidateLayout()
         end
 
-    local mapcfgpnl = vgui.Create("DScrollPanel")
+    local mapcfgpnl = UImake("DScrollPanel")
+    local mapcfgcanvas = mapcfgpnl:GetCanvas()
     mapcfgpnl:SetPaintBackground(true)
+    mapcfgcanvas:DockPadding(5,5,5,5)
     newtab = tabs:AddSheet("#apadventure.editor.tab.map",mapcfgpnl)
     newtab.Tab.guide = "maptab"
 
-        local maprulesplacegroups = {}
-        local mapruleselements = 0
-
-        local mapnicenamelbl, mapnicenamein = LabelTextInput(mapcfgpnl,"nicename")
-        mapnicenamein:SetValue(infotbl.nicename or "") 
+        local base = UImake("DPanel",parent)
+        base:SetPaintBackground(false)
+        base:SetSize(100,22)
+        local mapnicenamelbl, mapnicenamein = LabelTextInput(base,"nicename")
+        mapnicenamein:SetPos(105,0)
+        mapnicenamein:SetValue(infotbl.nicename or "")
         function mapnicenamein:OnChange()
             local val = self:GetValue()
-            if val == "" then
-                infotbl.nicename = nil
-            else
-                infotbl.nicename = val
-            end
+            infotbl.nicename = val != "" and val or nil
         end
-        mapruleselements = mapruleselements + 1
-        maprulesplacegroups[mapruleselements] = {
-            pnls = {
-                {pnl=mapnicenamelbl,w=100},
-                {pnl=mapnicenamein}
-            },
-            h = 22
-        }
+        function base:PerformLayout(w,h)
+            mapnicenamein:SetSize(w-105,22)
+        end
+        mapcfgcanvas:Add(base)
+        base:Dock(TOP)
+        base:DockMargin(5,2,25,7)
 
         local rulespanelbuilders = {
-            numwpreset = function(tbl)
+            numwpreset = function(tbl,valname)
                 --InfoNumwPreset(tbl.name,tbl.presets,tbl.default,tbl.min,tbl.max)
-                local valname = tbl.name
                 local default = tbl.default
-                local lbl, numw, pres = LabelNumWangWithPreset(mapcfgpnl,valname,tbl.presets)
+                local base, lbl, numw, pres = LabelNumWangWithPreset(mapcfgcanvas,valname,tbl.presets)
+                lbl:SetPos(0,0)
+                lbl:SetSize(100,22)
+                numw:SetPos(105,0)
+                numw:SetSize(50,22)
+                pres:SetPos(160,0)
+                function base:PerformLayout(w,h)
+                    pres:SetSize(w-160,22)
+                end
                 numw:SetMinMax(tbl.min,tbl.max)
                 numwdefaultcolor = numwdefaultcolor or numw:GetTextColor()
                 local laststate
@@ -343,8 +306,8 @@ return function(window)
                             laststate = true
                             numw:SetTextColor(lightblue)
                         end
-                    else    
-                        infotbl[valname] = val 
+                    else
+                        infotbl[valname] = val
                         if laststate then
                             laststate = false
                             numw:SetTextColor(numwdefaultcolor)
@@ -353,26 +316,15 @@ return function(window)
                 end
                 numw:SetValue(infotbl[valname] or grouptbl[valname] or default)
                 mapupdatecount = mapupdatecount + 1
-                mapupdate[mapupdatecount] = {
-                    p = numw,
-                    n = valname
-                }
-                mapruleselements = mapruleselements + 1
-                maprulesplacegroups[mapruleselements] = {
-                    pnls = {
-                        { pnl = lbl, w = 100 },
-                        { pnl = numw, w = 50 },
-                        { pnl = pres }
-                    },
-                    h = 22
-                }
+                mapupdate[mapupdatecount] = { p = numw, n = valname }
                 infoinputs[valname] = numw
+                return base
             end,
-            check = function(tbl)
-                local valname = tbl.name
-                local check = vgui.Create("DCheckBoxLabel",mapcfgpnl)
+            check = function(tbl,valname)
+                local check = UImake("DCheckBoxLabel",mapcfgcanvas)
                 check:SetText("#apadventure.editor."..valname..".label")
                 check:SetDark(true)
+                check.helppos = check:GetTall()/2-8
                 checkboxdefaultcolor = checkboxdefaultcolor or check.Label:GetTextColor()
                 function check:OnChange(val)
                     if val == grouptbl[valname] then
@@ -385,30 +337,12 @@ return function(window)
                 end
                 check:SetValue(infotbl[valname] or grouptbl[valname] or default)
                 mapupdatecount = mapupdatecount + 1
-                mapupdate[mapupdatecount] = {
-                    p = check,
-                    n = valname
-                }
-                mapruleselements = mapruleselements + 1
-                maprulesplacegroups[mapruleselements] = {
-                    pnls = {
-                        {pnl=check}
-                    },
-                    h = 22
-                }
+                mapupdate[mapupdatecount] = { p = check, n = valname }
                 infoinputs[valname] = check
+                return check, 2
             end,
-            requi = function(tbl)
+            requi = function(tbl,valname)
                 local reqpnl = reqpnl(mapcfgpnl)
-                mapruleselements = mapruleselements + 1
-                maprulesplacegroups[mapruleselements] = {
-                    pnls = {
-                        {pnl=reqpnl}
-                    },
-                    h = 22
-                }
-                local curtbl = maprulesplacegroups[mapruleselements]
-                local valname = tbl.name
                 infotbl[valname] = infotbl[valname] or {}
                 reqpnl:SetTargetTbl(infotbl[valname])
                 mapupdatecount = mapupdatecount + 1
@@ -419,67 +353,55 @@ return function(window)
                     end,
                     n = valname
                 }
-                function reqpnl:SetOuterHeight(h)
-                    curtbl.h = h
-                end
+                return reqpnl
             end
         }
 
+        local helppnls = {}
         for k,v in ipairs(mapsettings) do
-            rulespanelbuilders[v.type](v)
+            local pnl, dockbonus = rulespanelbuilders[v.type](v,v.name)
             local helpstr = "apadventure.editor."..v.name..".help"
+            mapcfgcanvas:Add(pnl)
+            pnl:Dock(TOP)
+            pnl:DockMargin(5,dockbonus or 0,25,5+(dockbonus or 0))
+
             if LocStrExists(helpstr) then
-                local help = ImageButton(mapcfgpnl,"icon16/help.png")
+                local help = ImageButton(mapcfgcanvas,"icon16/help.png")
                 function help:DoClick()
-                    cfgw = mapcfgpnl:GetSize()
+                    local cfgw = mapcfgpnl:GetSize()
                     HelpPopup("#"..helpstr,cfgw-100,self)
                 end
-                maprulesplacegroups[mapruleselements].help = help
+                pnl.help = help
+                helppnls[#helppnls+1] = pnl
             end
         end
 
         local oldlayout = mapcfgpnl.PerformLayout
-        function mapcfgpnl:PerformLayout(w,h)
-            
-            oldlayout(self,w,h)
-            w = self:InnerWidth()
-            local curh = 5
-            --mapstartcandidatecheck:SetSize(w-10,22)
-            for k,v in ipairs(maprulesplacegroups) do
-                local curw = 5
-                for ik,iv in ipairs(v.pnls) do
-                    local iw = iv.w or (w - 26 - curw) 
-                    iv.pnl:SetPos(curw,curh)
-                    iv.pnl:SetSize(iw,v.h)
-                    curw = curw + iw + 5
-                end
-
-                if v.help then
-                    v.help:SetPos(w-20,curh+2)
-                end
-
-                curh = curh + (v.h or 22) + 5
+        function mapcfgcanvas:PerformLayout(w,h)
+            for k,v in ipairs(helppnls) do
+                local x,y = v:GetPos()
+                v.help:SetPos(w-25,y+(v.helppos or 2))
             end
-            
+            mapcfgpnl:InvalidateLayout()
         end
 
-    local regpnl = vgui.Create("DPanel")
+    local regpnl = UImake("DPanel")
     newtab = tabs:AddSheet("#apadventure.editor.tab.reg",regpnl)
     newtab.Tab.guide = "regiontab"
 
         local regtbl
 
-        local regnamein = vgui.Create("DTextEntry",regpnl)
+        local regnamein = UImake("DTextEntry",regpnl)
         regnamein:SetPos(5,5)
-        
-        local reglist = vgui.Create("DListView",regpnl)
+
+        local reglist = UImake("DListView",regpnl)
         reglist:SetPos(5,30)
         reglist:AddColumn("#apadventure.editor.reg.regcol")
 
         local regaddbtn = ImageButton(regpnl,"icon16/add.png")
         local regdelbtn = ImageButton(regpnl,"icon16/delete.png")
 
-        local regeditpnl = vgui.Create("DScrollPanel",regpnl)
+        local regeditpnl = UImake("DScrollPanel",regpnl)
         regeditpnl:SetPos(160,30)
         regeditpnl.ContentsVisible = true
         regeditpnl.ShowContents = ShowContents
@@ -493,16 +415,14 @@ return function(window)
                 oldlayout(self,w,h)
                 regcondpnl:SetWidth(w-30)
             end
-        
+
         function regaddbtn:DoClick()
             local name = regnamein:GetValue()
             if name == "" then ErrorNotif("noregname") return end
             if name[1] == " " then ErrorNotif("regleadspace") return end
             if name[#name] == " " then ErrorNotif("regtrailspace") return end
             if !regtbl[name] then
-                regtbl[name] = {
-                    ammo = {},
-                }
+                regtbl[name] = { ammo = {} }
                 local ln = reglist:AddLine(name)
                 regeditpnl:ShowContents(true)
             end
@@ -512,7 +432,7 @@ return function(window)
             local didstuff
             for k,v in ipairs(reglist:GetSelected()) do
                 local name = v:GetValue(1)
-                regtbl[name] = nil 
+                regtbl[name] = nil
                 reglist:RemoveLine(v:GetID())
                 didstuff = true
             end
@@ -528,7 +448,7 @@ return function(window)
         end
 
         function reglist:OnRowRightClick(id,pnl)
-            local menu = vgui.Create("DMenu")
+            local menu = UImake("DMenu")
             menu:AddOption("#apadventure.editor.reg.rclick.copyname",function()
                 SetClipboardText(pnl:GetValue(1))
             end)
@@ -556,35 +476,34 @@ return function(window)
             regeditpnl:SetSize(w-165,h-35)
         end
 
-    local connpnl = vgui.Create("DPanel")
+    local connpnl = UImake("DPanel")
     newtab = tabs:AddSheet("#apadventure.editor.tab.conn",connpnl)
     newtab.Tab.guide = "connecttab"
-    
+
         local conntbl
 
-        local curcon = false
-        local curconline = false
+        local curcon, curconline = false, false
 
-        local connlist = vgui.Create("DListView",connpnl)
+        local connlist = UImake("DListView",connpnl)
         connlist:SetPos(5,30)
         connlist:AddColumn("#apadventure.editor.conn.fromcol")
         connlist:AddColumn("#apadventure.editor.conn.tocol")
         connlist:AddColumn("#apadventure.editor.conn.twcol")
 
-        local connfromin = vgui.Create("DTextEntry",connpnl)
+        local connfromin = UImake("DTextEntry",connpnl)
         connfromin:SetPos(5,5)
 
-        local conntoin = vgui.Create("DTextEntry",connpnl)
+        local conntoin = UImake("DTextEntry",connpnl)
         conntoin:SetPos(5,5)
 
         local connaddbtn = ImageButton(connpnl,"icon16/add.png")
         local conndelbtn = ImageButton(connpnl,"icon16/delete.png")
 
-        local coneditpnl = vgui.Create("DPanel",connpnl)
+        local coneditpnl = UImake("DPanel",connpnl)
         coneditpnl.ContentsVisible = true
         coneditpnl.ShowContents = ShowContents
-        
-            local contwowaycheck = vgui.Create("DCheckBoxLabel",coneditpnl)
+
+            local contwowaycheck = UImake("DCheckBoxLabel",coneditpnl)
             contwowaycheck:SetText("#apadventure.editor.conn.twowaycheck")
             contwowaycheck:SetDark(true)
             contwowaycheck:SetPos(5,5)
@@ -606,16 +525,11 @@ return function(window)
 
         local function newconn(from,to)
             conntbl[from] = conntbl[from] or {}
-
             if conntbl[from][to] then return end
-
             local tbl = {twoway = false}
-
             conntbl[from][to] = tbl
-
             connlist:AddLine(from,to,bool2yn[false])
             coneditpnl:ShowContents(true)
-
             return tbl
         end
 
@@ -624,9 +538,9 @@ return function(window)
             local to = conntoin:GetValue()
             if from == "" then ErrorNotif("nosrcname") return end
             if from[1] == " " then ErrorNotif("srcleadspace") return end
-            if from[#from] == " " then ErrorNotif("srctrailspace") return end
             if to == "" then ErrorNotif("notgtname") return end
             if to[1] == " " then ErrorNotif("tgtleadspace") return end
+            if from[#from] == " " then ErrorNotif("srctrailspace") return end
             if to[#to] == " " then ErrorNotif("tgttrailspace") return end
             newconn(from,to)
         end
@@ -656,12 +570,12 @@ return function(window)
 
             conaccessedit:LoadTbl(curcon)
             contwowaycheck:SetChecked(curcon.twoway)
-            
+
             coneditpnl:ShowContents(true)
         end
 
         function connlist:OnRowRightClick(id,pnl)
-            local menu = vgui.Create("DMenu")
+            local menu = UImake("DMenu")
             menu:AddOption("#apadventure.editor.conn.rclick.copyfrom",function()
                 SetClipboardText(pnl:GetValue(1))
             end)
@@ -676,8 +590,7 @@ return function(window)
                 if tbl then
                     local src = conntbl[to][from]
                     tbl.access = table.Copy(src.access)
-                    tbl.twoway = false
-                    src.twoway = false
+                    tbl.twoway, src.twoway = false, false
                     pnl:SetValue(3,"no")
                 end
             end)
@@ -700,10 +613,10 @@ return function(window)
         connlist:LoadInfo(editcfg.Connections)
 
         function connpnl:PerformLayout(w,h)
-            connfromin:SetSize((w-55)/2,22)
-
-            conntoin:SetSize((w-55)/2,22)
-            conntoin:SetPos((w-55)/2+10,5)
+            local w1 = (w-55)/2
+            connfromin:SetSize(w1,22)
+            conntoin:SetSize(w1,22)
+            conntoin:SetPos(w1+10,5)
 
             connaddbtn:SetPos(w-42,8)
 
@@ -714,21 +627,21 @@ return function(window)
             coneditpnl:SetPos(310,30)
             coneditpnl:SetSize(w-315,h-35)
         end
-    
-    local mapitempnl = vgui.Create("DPanel")
+
+    local mapitempnl = UImake("DPanel")
     newtab = tabs:AddSheet("#apadventure.editor.tab.mapitem",mapitempnl)
     newtab.Tab.guide = "mapitemtab"
 
         local mapitemtbl
 
-        local mapitemnamein = vgui.Create("DTextEntry",mapitempnl)
+        local mapitemnamein = UImake("DTextEntry",mapitempnl)
         mapitemnamein:SetPos(5,5)
 
         local mapitemaddbtn = ImageButton(mapitempnl,"icon16/add.png")
         local mapitemcopybtn = ImageButton(mapitempnl,"icon16/page_copy.png")
         local mapitemdelbtn = ImageButton(mapitempnl,"icon16/delete.png")
 
-        local mapitemlist = vgui.Create("DListView",mapitempnl)
+        local mapitemlist = UImake("DListView",mapitempnl)
         mapitemlist:SetPos(5,30)
         mapitemlist:AddColumn("#apadventure.editor.mapitem.itemcol")
 
@@ -744,7 +657,7 @@ return function(window)
         end
         mapitemlist:LoadMapItems(editcfg.MapItems)
 
-        local mapitemeditpnl = vgui.Create("DPanel",mapitempnl)
+        local mapitemeditpnl = UImake("DPanel",mapitempnl)
         mapitemeditpnl:SetPos(160,30)
         mapitemeditpnl.ContentsVisible = true
         mapitemeditpnl.ShowContents = ShowContents
@@ -753,20 +666,18 @@ return function(window)
             mapitemamtlbl:SetPos(5,5)
 
             mapitemamtin:SetMin(1)
-            
             mapitemamtin:SetSize(40,22)
             function mapitemamtin:OnValueChanged(val)
                 mapitemeditpnl.itemtbl.amt = math.floor(val)
             end
 
             local function FlagCheck(locstr,flag)
-                local check = vgui.Create("DCheckBoxLabel",mapitemeditpnl)
+                local check = UImake("DCheckBoxLabel",mapitemeditpnl)
                 check:SetDark(true)
                 check:SetText("#apadventure.editor.mapitem."..locstr..".label")
                 function check:OnChange(val)
                     mapitemeditpnl.itemtbl.fl = BitFlipper(mapitemeditpnl.itemtbl.fl,flag,val)
                 end
-
                 return check
             end
 
@@ -783,7 +694,6 @@ return function(window)
 
             function mapitemprogressioncheck:OnChange(val)
                 mapitemeditpnl.itemtbl.fl = BitFlipper(mapitemeditpnl.itemtbl.fl,1,val)
-
                 if !val then
                     mapitemskipbalancecheck:SetValue(false)
                     mapitemdepriocheck:SetValue(false)
@@ -809,21 +719,18 @@ return function(window)
             local tbl = pnl.itemtbl
             mapitemeditpnl.itemtbl = tbl
             mapitemamtin:SetValue(tbl.amt)
-            mapitemprogressioncheck:SetValue(bit.band(tbl.fl,1) != 0)
-            mapitemusefulcheck:SetValue(bit.band(tbl.fl,2) != 0)
-            mapitemtrapcheck:SetValue(bit.band(tbl.fl,4) != 0)
-            mapitemskipbalancecheck:SetValue(bit.band(tbl.fl,8) != 0)
-            mapitemdepriocheck:SetValue(bit.band(tbl.fl,16) != 0)
+            mapitemprogressioncheck:SetValue(band(tbl.fl,1) != 0)
+            mapitemusefulcheck:SetValue(band(tbl.fl,2) != 0)
+            mapitemtrapcheck:SetValue(band(tbl.fl,4) != 0)
+            mapitemskipbalancecheck:SetValue(band(tbl.fl,8) != 0)
+            mapitemdepriocheck:SetValue(band(tbl.fl,16) != 0)
             mapitemeditpnl:ShowContents(true)
         end
 
         function mapitemaddbtn:DoClick()
             local name = mapitemnamein:GetValue()
             if name == "" or mapitemtbl[name] != nil then return end
-            mapitemtbl[name] = {
-                amt = 1,
-                fl = 0
-            }
+            mapitemtbl[name] = {amt = 1, fl = 0 }
             local ln = mapitemlist:AddLine(name)
             ln.itemtbl = mapitemtbl[name]
         end
@@ -833,10 +740,7 @@ return function(window)
             local src = srcpnl.itemtbl
             local name = mapitemnamein:GetValue()
             if name == "" or mapitemtbl[name] != nil then return end
-            mapitemtbl[name] = {
-                amt = src.amt,
-                fl = src.fl
-            }
+            mapitemtbl[name] = { amt = src.amt, fl = src.fl }
             local ln = mapitemlist:AddLine(name)
             ln.itemtbl = mapitemtbl[name]
         end
@@ -853,57 +757,41 @@ return function(window)
 
         function mapitempnl:PerformLayout(w,h)
             mapitemnamein:SetSize(w-70,22)
-
             mapitemaddbtn:SetPos(w-62,8)
             mapitemcopybtn:SetPos(w-42,8)
             mapitemdelbtn:SetPos(w-22,8)
-
             mapitemlist:SetSize(150,h-35)
-
             mapitemeditpnl:SetSize(w-165,h-35)
         end
 
     function window:UpdateInfo(cfg)
         editcfg = cfg
-
         grouptbl = cfg.GroupInfo
 
         for k,v in ipairs(groupupdate) do
-            local name = v.n
+            local name, p = v.n, v.p
             local ruleinfo = mapsettingslookup[name]
-            local p = v.p
             local val = grouptbl[name] or istable(ruleinfo.default) and table.Copy(ruleinfo.default) or ruleinfo.default
-            if isfunction(p) then
-                p(val)
-            else
-                p:SetValue(val)
-            end
+            if isfunction(p) then p(val) else p:SetValue(val) end
         end
 
         infotbl = cfg.Info
 
         for k,v in ipairs(mapupdate) do
-            local name = v.n
+            local name, p = v.n, v.p
             local ruleinfo = mapsettingslookup[name]
-            local p = v.p
             local val = infotbl[name] or !ruleinfo.noinherit and grouptbl[name] or istable(ruleinfo.default) and table.Copy(ruleinfo.default) or ruleinfo.default
-            if isfunction(p) then
-                p(val)
-            else
-                p:SetValue(val)
-            end
+            if isfunction(p) then p(val) else p:SetValue(val) end
         end
 
         reglist:LoadInfo(cfg.Regions)
         connlist:LoadInfo(cfg.Connections)
         mapitemlist:LoadMapItems(cfg.MapItems)
-
         reloadoption:SetEnabled(true)
         saveoption:SetEnabled(true)
-
     end
 
-    local helpdrawer = vgui.Create("DDrawer",window)
+    local helpdrawer = UImake("DDrawer",window)
     helpdrawer:SetOpenSize(200)
     if drawerconv:GetBool() then
         helpdrawer:SetOpenTime(0)
@@ -924,48 +812,32 @@ return function(window)
     function helpdrawer:TestHover(scrx,scry)
         local x, y = self:ScreenToLocal(scrx,scry)
         if y < 0 then return end
-        local w,h = self:GetSize()
+        local w, h = self:GetSize()
         return (w-x)+(h-y) > 30
     end
-        
-        local drawerpnl = vgui.Create("DHTML",helpdrawer)
+
+        local drawerpnl = UImake("DHTML",helpdrawer)
         drawerpnl:DockMargin(5,0,5,3)
         drawerpnl:Dock(FILL)
         drawerpnl:OpenURL("asset://garrysmod/data_static/apadventure/guide/base.txt")
 
         local function loadguide(guide)
-            local text = ""
+            local txt
             if guide then
-                local path = "data_static/apadventure/guide/"..language.GetPhrase("apadventure.guidefolder").."/"..guide..".txt"
-                local found
-                if file.Exists(path,"GAME") then
-                    found = true
-                else
-                    path = "data_static/apadventure/guide/en/"..guide..".txt"
-                    if file.Exists(path,"GAME") then
-                        found = true
-                    end
-                end
-
-                if found then
-                    text = string.JavascriptSafe(file.Read(path,"GAME"))
-                end
+                txt = file.Read("data_static/apadventure/guide/"..language.GetPhrase("apadventure.guidefolder").."/"..guide..".txt","GAME") or
+                    file.Read("data_static/apadventure/guide/en/"..guide..".txt","GAME")
+                txt = txt and string.JavascriptSafe(txt)
             end
-            drawerpnl:QueueJavascript("loadcontent(\""..text.."\")")
+            drawerpnl:QueueJavascript("loadcontent(\""..(txt or "").."\")")
         end
-
         loadguide(tabs:GetActiveTab().guide)
 
-    function tabs:OnActiveTabChanged(_,tab)
-        local guide = tab.guide
-        loadguide(guide)
-    end
+    function tabs:OnActiveTabChanged(_,tab) loadguide(tab.guide) end
 
     window:SetSizable(true)
     local oldlayout = window.PerformLayout
-    function window:PerformLayout(width,height)
-        oldlayout(self,width,height)
-        local _,drawerh = helpdrawer:GetSize()
-        tabs:SetSize(width-10,height-55-drawerh)
+    function window:PerformLayout(w,h)
+        oldlayout(self,w,h)
+        tabs:SetSize(w-10,h-55-helpdrawer:GetTall())
     end
 end
