@@ -299,7 +299,6 @@ function basepnl:PerformLayout(w,h)
     taginput:SetSize(w-226,22)
 
     list:SetSize(w-10,150)
-    self:SetOuterHeight(h)
 end
 
 return basepnl
