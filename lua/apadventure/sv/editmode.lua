@@ -445,8 +445,8 @@ local function ProcessItemGroup(groupname)
     local reqs = groupdef.Requirements
     if isstring(reqs) then
         reqs = {reqs}
-    elseif !istable(reqs) then
-        ErrorNoHalt("Requirements for group "..groupname.." were set to invalid type "..type(reqs))
+    elseif reqs and !istable(reqs) then
+        ErrorNoHalt("Requirements for group "..groupname.." were set to invalid type "..type(reqs).."\n")
         reqs = nil
     end
     local out = {
