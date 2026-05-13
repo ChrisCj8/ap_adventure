@@ -7,7 +7,7 @@ ITEM.Groups = {
 }
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-    ["Ammo_XBowBolt"] = {"StrongLongRange","BulletDamage","NeverGibDamage"}
+    ["Ammo_XBowBolt"] = {"StrongLongRange","BulletDamage","NeverGibDamage","VeryFastProjectile","TinyProjectile"}
 }
 
 ITEM.Class = "weapon_crossbow"

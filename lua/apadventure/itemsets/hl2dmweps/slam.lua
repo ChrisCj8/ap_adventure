@@ -5,7 +5,7 @@ ITEM.Type = "Weapon"
 ITEM.Groups = {}
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-    ["Ammo_slam"] = {"BlastDamage","Trap","RemoteBomb","MediumExplosion","MediumSizeExplosion"}
+    ["Ammo_slam"] = {"BlastDamage","Trap","RemoteBomb","MediumDamageExplosion","MediumSizeExplosion","TinyArcProjectile"}
 }
 
 ITEM.Class = "weapon_slam"

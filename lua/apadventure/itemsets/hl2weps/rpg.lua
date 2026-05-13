@@ -7,7 +7,7 @@ ITEM.Groups = {
 }
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-    ["Ammo_RPG_Round"] = {"DecentAOE","BlastDamage","Projectile","FlyingProjectile","HeliKiller"}
+    ["Ammo_RPG_Round"] = {"DecentAOE","BlastDamage","FlyingProjectile","HeliKiller","MediumSizeProjectile","StrongExplosion"}
 }
 
 ITEM.Class = "weapon_rpg"
