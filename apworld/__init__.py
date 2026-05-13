@@ -1,11 +1,13 @@
 import typing
 from worlds.AutoWorld import World, WebWorld
+from worlds.LauncherComponents import Component, components, Type as CompType
 from BaseClasses import Item, ItemClassification, Region, Location, Tutorial
 from Options import OptionError
 from .Options import APADVGameOptions
 from .JsonRule import eval_json_rule, preprocess_json_rule
 from .ImpliedCapabilities import ProcessCapabs
 from .CfgProcessor import ProcessCfgs
+from .CfgIndex import MapIndex, ItemIndex
 from timeit import default_timer as time
 
 class APADVItem(Item):
@@ -97,6 +99,18 @@ class APADVWebWorld(WebWorld):
         ["ChrisCj"]
     )]
 
+processout = ProcessCfgs()
+
+def DoMapIndex():
+    MapIndex(processout)
+
+def DoItemIndex():
+    ItemIndex(processout)
+
+components.append(Component("apAdventure - Generate Map Index", component_type=CompType.TOOL, func=DoMapIndex,
+    description="Generate a Text File containing information about all loaded map configs."))
+components.append(Component("apAdventure - Generate Item Index", component_type=CompType.TOOL, func=DoItemIndex,
+    description="Generate a Text File containing information about all loaded item sets."))
 
 class APADVWorld(World):
     """\"I wish someone would make a mod.\"\n
@@ -105,8 +119,6 @@ class APADVWorld(World):
 
     game = "GMod - apAdventure"
     web = APADVWebWorld()
-
-    processout = ProcessCfgs()
 
     # i hate this
 
