@@ -36,13 +36,8 @@ def eval_json_rule(rule,state : CollectionState,world,region):
             #print(False)
             return False
 
-nevernode = {
-    "type": "never"
-}
-
-alwaysnode = {
-    "type": "always"
-}
+nevernode = {"type":"never"}
+alwaysnode = {"type":"always"}
 
 def preprocess_json_rule(rule,world,region):
     rule = rule.copy()
@@ -60,36 +55,56 @@ def preprocess_json_rule(rule,world,region):
             else:
                 return nevernode
         case "and":
-            i = 0
-            nodes = rule["nodes"]
-            for v in nodes:
-                v = preprocess_json_rule(v,world,region)
-                if v == nevernode:
+            newnodes = []
+            for v in rule["nodes"]:
+                pr = preprocess_json_rule(v,world,region)
+                ntype = pr["type"]
+                if ntype == "never":
                     return nevernode
-                if v == alwaysnode:
-                    nodes.pop(i)
-                i += 1
-            if not nodes:
+                if ntype != "always":
+                    newnodes.append(pr)
+            if not newnodes:
                 return alwaysnode
-            if len(nodes) == 1:
-                return nodes[0]
+            if len(newnodes) == 1:
+                return newnodes[0]
+            rule["nodes"] = newnodes
             return rule
         case "or":
-            i = 0
-            nodes = rule["nodes"]
-            for v in nodes:
-                v = preprocess_json_rule(v,world,region)
-                if v == alwaysnode:
-                    return alwaysnode
-                elif v == nevernode:
-                    nodes.pop(i)
+            newnodes = []
+            hasany = set()
+            for v in rule["nodes"]:
+                pr = preprocess_json_rule(v,world,region)
+                match pr["type"]:
+                    case "always":
+                        return alwaysnode
+                    case "never":
+                        continue
+                    case "hasany":
+                        hasany.update(pr["items"])
+                    case "has" if pr["count"] == 1:
+                        hasany.add(pr["item"])
+                    case _:
+                        newnodes.append(pr)
+
+            if hasany:
+                if len(hasany) > 1:
+                    newnodes.append({
+                        "type":"hasany",
+                        "items":hasany
+                    })
                 else:
-                    i += 1
-            if not nodes:
+                    newnodes.append({
+                        "type":"has",
+                        "item":hasany.pop(),
+                        "count":1
+                    })
+
+            if not newnodes:
                 return nevernode
-            if len(nodes) == 1:
-                return nodes[0]
+            if len(newnodes) == 1:
+                return newnodes[0]
             else:
+                rule["nodes"] = newnodes
                 return rule
         case "capab":
             capab = "capab" in rule and rule["capab"]
