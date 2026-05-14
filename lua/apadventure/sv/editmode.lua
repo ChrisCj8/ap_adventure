@@ -192,6 +192,10 @@ end
 local overwritecvar = CreateConVar("apadventure_editor_allow_static_overwrite",0,FCVAR_ARCHIVE,"Whether or not the user is allowed to add to/overwrite configs in config groups that already exist in the data_static folder.",
     0,1)
 
+local savenagcvar = CreateConVar("apadventure_editor_save_warnings",1,FCVAR_ARCHIVE,
+    "apAdventure will normally show players a bunch of different warnings to catch common mistakes people make when making configs. You can set this ConVar to 0 to disable them if you think you know what you're doing.",
+    0,1)
+
 function apAdventure.StoreCfg(groupn)
     local srctbl = apAdventure.EditCfg
     if !isstring(groupn) or groupn == "" then 
@@ -321,6 +325,15 @@ function apAdventure.StoreCfg(groupn)
     local apdir = "apadventure/logic/cfg/"..groupn.."/"..game.GetMap()
     file.CreateDir(apdir)
     file.Write(apdir.."/sv.json",util.TableToJSON(apAdventure.SvCfgToLogic(outtbl),prettyprint))
+
+    if savenagcvar:GetBool() then
+        if !next(entr) then
+            apAdventure.SendNotification("#apadventure.editor.warning.noentr",0,10,nil,listenhost)
+        end
+        if next(start) and !next(exit) then
+            apAdventure.SendNotification("#apadventure.editor.warning.startnoexit",0,10,nil,listenhost)
+        end
+    end
 end
 
 function apAdventure.LoadCfg(gname,dodelete)
@@ -346,7 +359,6 @@ function apAdventure.LoadCfg(gname,dodelete)
         })
         return 
     end
-
 
     local gtbl = util.JSONToTable(json)
 
