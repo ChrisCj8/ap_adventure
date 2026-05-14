@@ -18,6 +18,30 @@ if CLIENT then
         cPnl:TextEntry("#apadventure.toolui.region","apadventure_start_region")
         cPnl:Help("#tool.apadventure_start.help1")
         cPnl:Help("#tool.apadventure_start.help2")
+
+        local warnpnl = vgui.Create("DPanel")
+        warnpnl:SetBackgroundColor(Color(255,255,200))
+        local warntxt = vgui.Create("DLabel",warnpnl)
+        warntxt:SetText("#tool.apadventure_start.warn")
+        warntxt:SetPos(5+32+5,5)
+        warntxt:SetWrap(true)
+        warntxt:SetAutoStretchVertical(true)
+        warntxt:SetDark(true)
+        local warnicon = vgui.Create("DImage",warnpnl)
+        warnicon:SetImage("vgui/notices/hint")
+        warnicon:SetSize(32,32)
+        warnicon:SetPos(5,5)
+
+        local max = math.max
+
+        function warnpnl:PerformLayout(w,h)
+            warntxt:SetWidth(w-42)
+            h = max(warntxt:GetTall()+10,42)
+            self:SetHeight(h)
+            warnicon:SetPos(5,(h-10)/2-11)
+        end
+
+        cPnl:AddItem(warnpnl)
     end
     return
 end
