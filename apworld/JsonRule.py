@@ -8,6 +8,11 @@ def eval_json_rule(rule,state : CollectionState,world,region):
             return True
         case "has":
             return state.has(rule["item"],player,rule["count"])
+        case "hasany":
+            for v in rule["items"]:
+                if state.has(v,player):
+                    return True
+            return False
         case "or":
             #print(False)
             out = False
@@ -27,53 +32,6 @@ def eval_json_rule(rule,state : CollectionState,world,region):
             return out
         case "bhop":
             return state.has("Bunnyhop",player)
-        case "capab":
-            capab = rule["capab"]
-            #print(capab)
-            #print(world.capabilitytbl)
-            #print(world.capabilitytbl[capab[0]])
-            if len(capab) == 0:
-                #print(True)
-                return True
-            hascapabs = False
-            if capab[0] in world.capabilitytbl:
-                hascapabs = False
-                #print(world.capabilitytbl[capab[0]])
-                for item in world.capabilitytbl[capab[0]]:
-                    #print(f"Do we have {item.name}? - {state.has(item.name,player)}")
-                    if state.has(item.name,player):
-                        allcapabs = True
-                        for cap in capab:
-                            #print(f"Is {cap} in {item.capabilities}? - {cap in item.capabilities}")
-                            if not cap in item.capabilities:
-                                allcapabs = False
-                                break
-                        if allcapabs:
-                            hascapabs = True
-                            break  
-                
-            if not hascapabs:
-                conds = region.conditions
-                if "override" in rule:
-                    conds = rule["override"]
-                if conds:
-                    #print(f"couldn't fullfill normal capability check, trying conditional capabilities for region {region}")
-                    for cond in conds:
-                        #print(f"trying condition {cond}")
-                        if cond in world.condcapabtbl:
-                            for itemname,itemcapabs in world.condcapabtbl[cond].items():
-                                #print(f"testing conditional capabilities for {itemname}")
-                                if state.has(itemname,player):
-                                    allcapabs = True
-                                    for cap in capab:
-                                        if not cap in itemcapabs:
-                                            allcapabs = False
-                                            break
-                                    if allcapabs:
-                                        hascapabs = True
-                                        #print(f"{itemname} had the required capabilities")
-                                        break
-            return hascapabs
         case _:
             #print(False)
             return False
@@ -134,6 +92,9 @@ def preprocess_json_rule(rule,world,region):
             else:
                 return rule
         case "capab":
+            capab = "capab" in rule and rule["capab"]
+            if not capab:
+                return alwaysnode
             if "override" in rule:
                 ammomerge = world.ammomerge
                 conds = set()
@@ -141,9 +102,47 @@ def preprocess_json_rule(rule,world,region):
                     conds.add(v)
                     if v in ammomerge:
                         conds.update(ammomerge[v])
-                rule["override"] = conds
-            world.usedcapabs.update(rule["capab"])
-            return rule
+            else:
+                conds = region.conditions
+
+            candidates = set()
+            capab1 = capab[0]
+
+            if capab1 in world.capabilitytbl:
+                for item in world.capabilitytbl[capab1]:
+                    allcapabs = True
+                    for cap in capab:
+                        if not cap in item.capabilities:
+                            allcapabs = False
+                            break
+                    if allcapabs:
+                        candidates.add(item.name)
+
+            for cond in conds:
+                if cond in world.condcapabtbl:
+                    for itemname,itemcapabs in world.condcapabtbl[cond].items():
+                        allcapabs = True
+                        for cap in capab:
+                            if not cap in itemcapabs:
+                                allcapabs = False
+                                break
+                        if allcapabs:
+                            candidates.add(itemname)
+
+            if not candidates:
+                return nevernode
+
+            world.usedcapabs.update(capab)
+            if len(candidates) == 1:
+                return {
+                    "type":"has",
+                    "item":candidates.pop(),
+                    "count":1
+                }
+            return {
+                "type":"hasany",
+                "items":candidates
+            }
         case "mapitem":
             if rule["count"] <= 0:
                 return alwaysnode
