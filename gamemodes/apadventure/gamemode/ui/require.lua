@@ -36,12 +36,12 @@ local a,b,c,d = gamecat:GetDockPadding()
 gamecat:DockPadding(a,b,c,d+5)
 
 local function gamepnllayout(self,w,h)
-    local pnlw = (w-20)/3
-    self.nametxt:SetPos(5,0)
+    local pnlw = (w-40)/3
+    self.nametxt:SetPos(25,0)
     self.nametxt:SetSize(pnlw,22)
-    self.cltxt:SetPos(pnlw+10,0)
+    self.cltxt:SetPos(pnlw+30,0)
     self.cltxt:SetSize(pnlw,22)
-    self.svtxt:SetPos(2*pnlw+15,0)
+    self.svtxt:SetPos(2*pnlw+35,0)
     self.svtxt:SetSize(pnlw,22)
 end
 
@@ -252,6 +252,13 @@ local function BuildLists()
         pnl = UImake("DPanel",gamecat)
         pnl:Dock(TOP)
         pnl:DockMargin(5,0,5,5)
+        local iconpath = "games/16/"..k..".png"
+        if file.Exists("materials/"..iconpath,"GAME") then
+            local icon = UImake("DImage",pnl)
+            icon:SetSize(16,16)
+            icon:SetPos(4,4)
+            icon:SetImage(iconpath)
+        end
         local nametxt = UImake("DLabel",pnl)
         local cltxt = UImake("DLabel",pnl)
         local svtxt = UImake("DLabel",pnl)
