@@ -64,13 +64,6 @@ nametxt:SetText("#apadventure.require.game.name")
 cltxt:SetText("#apadventure.require.game.cl")
 svtxt:SetText("#apadventure.require.game.sv")
 
---[[ local help = UImake("DCollapsibleCategory",gamecat)
-gamecat.help = help
-help:Dock(TOP)
-help:DockMargin(5,5,5,5)
-help:SetLabel("#apadventure.require.game.help")
-help:SetExpanded(false) ]]
-
 local addoncat = catlist:Add("#apadventure.require.addon")
 addoncat:DockPadding(a,b,c,d+5)
 
@@ -177,12 +170,6 @@ local statustocolor = {green, yellow, red}
 
 local function BuildLists()
 
-    --[[ local alladdons = APADV_REQUIREMENTS.alladdonslookup
-    if !alladdons then
-        alladdons = apAdventure.ListToLookUp(APADV_REQUIREMENTS.alladdons)
-        APADV_REQUIREMENTS.alladdonslookup = alladdons
-    end ]]
-
     local addons = {}
 
     for k,v in ipairs(engine.GetAddons()) do
@@ -240,11 +227,9 @@ local function BuildLists()
     end
 
     tail:SetParent(addoncat)
-
     local head = gamecat.head
-    --local help = gamecat.help
+
     head:SetParent()
-    --help:SetParent()
     gamecat:Clear()
     head:SetParent(gamecat)
     local pnl
@@ -283,7 +268,7 @@ local function BuildLists()
             svtxt:SetText("#apadventure.require.game."..(v and "mount" or "nomount"))
         end
     end
-    --help:SetParent(gamecat)
+
     othercat:Clear()
     local first = 5
     for k,v in ipairs(APADV_REQUIREMENTS.misc) do
@@ -299,8 +284,6 @@ local function BuildLists()
             txt:SetWrap(true)
             txt:SetAutoStretchVertical(true)
             txt:SetPos(5,5)
-            --txt:Dock(FILL)
-            --txt:DockMargin(5,5,5,5)
             txt:SetDark(true)
             local text
             for ik,iv in ipairs(v.msg) do
