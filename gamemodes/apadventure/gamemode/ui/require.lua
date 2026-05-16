@@ -149,15 +149,36 @@ local helpcat = catlist:Add("#apadventure.require.help")
 
 local a,b,c,d = helpcat:GetDockPadding()
 helpcat:DockPadding(a,b,c,5)
-for k,v in ipairs({"intro","games","addon","addon.select","addon.preset","addon.usepreset","addon.presetload","other"}) do
-    local txt = UImake("DLabel",helpcat)
-    txt:SetText("#apadventure.require.help."..v)
+
+local function makehelplbl(str,parent)
+    local txt = UImake("DLabel",parent)
+    txt:SetText("#apadventure.require.help."..str)
     txt:DockMargin(5,5,5,5)
     --first = 0
     txt:Dock(TOP)
     txt:SetWrap(true)
     txt:SetDark(true)
     txt:SetAutoStretchVertical(true)
+    return txt
+end
+
+makehelplbl("intro",helpcat)
+
+local helpdata = {
+    { l = "game", c = {"intro"} },
+    { l = "addon", c = {"intro","select","preset","usepreset","presetload"} },
+    { l = "other", c = {"intro"} },
+}
+
+for k,v in ipairs(helpdata) do
+    local cat = UImake("DCollapsibleCategory",helpcat)
+    cat:DockMargin(5,5,5,5)
+    cat:SetLabel("#apadventure.require."..v.l)
+    cat:Dock(TOP)
+    local locstrstart = v.l.."."
+    for ik,iv in ipairs(v.c) do
+        makehelplbl(locstrstart..iv,cat)
+    end
 end
 
 APADV_REQUIREMENTS.ui = window
