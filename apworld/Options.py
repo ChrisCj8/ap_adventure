@@ -71,7 +71,8 @@ class ConfigBlacklist(OptionDict):
     display_name = "Config Blacklist"
     default = {
         "ravenholm": ["d1_town_02a","d1_town_04"],
-        "nova_prospekt": ["d2_prison_06"]
+        "nova_prospekt": ["d2_prison_06"],
+        "hls_unforeseen_consequences": ["c1a1g"],
     }
     schema = singlepickschema
 
