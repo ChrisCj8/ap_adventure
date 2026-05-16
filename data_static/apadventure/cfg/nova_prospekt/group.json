@@ -1,12 +1,15 @@
 {
 	"rules": {
 		"walkspd": 150,
-		"sprintspd": 320,
 		"respawn": false,
+		"requirements": [
+			"gamehl2"
+		],
 		"hev": true,
-		"runspd": 190,
+		"godmode": false,
 		"stopspd": 100,
-		"frctn": 4,
-		"godmode": false
+		"sprintspd": 320,
+		"runspd": 190,
+		"frctn": 4
 	}
 }

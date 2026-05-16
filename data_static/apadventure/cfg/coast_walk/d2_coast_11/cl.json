@@ -1,21 +1,23 @@
 {
 	"ver": "v1_1",
-	"info": [],
+	"info": {
+		"requirements": []
+	},
 	"reg": {
 		"Entry": {
 			"ammo": []
 		},
 		"Beach": {
 			"ammo": {
-				"Ammo_AR2": true,
-				"Props": true
+				"Props": true,
+				"Ammo_AR2": true
 			}
 		},
 		"Guard Arena": {
 			"ammo": {
 				"Ammo_Buckshot": true,
-				"Ammo_AR2": true,
-				"Props": true
+				"Props": true,
+				"Ammo_AR2": true
 			}
 		},
 		"Enclave": {

@@ -5,87 +5,78 @@
 	"entraccess": [],
 	"lctnaccess": [],
 	"sav": {
-		"Mins": "[-6513.5532 -1 -1]",
+		"Mins": "[-6513.7842 -1 -1]",
 		"Constraints": [],
-		"Maxs": "[1 8158.4946 906.2391]",
+		"Maxs": "[1 8158.5273 906.2499]",
 		"Entities": {
-			"1130": {
+			"1084": {
 				"Skin": 0,
-				"Mins": "[-4.5597 -2.6329 -0.975]",
 				"MaxHealth": 0,
 				"ColGroup": 11,
 				"Persistent": false,
 				"Name": "",
-				"Model": "models/weapons/w_grenade.mdl",
+				"Mins": "[-4.5597 -2.6329 -0.975]",
+				"CurHealth": 0,
+				"Pos": "[-6506.1216 8155.0894 898.2993]",
 				"PhysicsObjects": {
 					"0": {
 						"Sleep": true,
-						"Pos": "[-6502.8857 8146.1128 898.3141]",
+						"Pos": "[-6506.1216 8155.0894 898.2993]",
 						"Frozen": false,
-						"Angle": "{-39.5941 -50.3022 89.6541}"
+						"Angle": "{-23.0674 35.5871 90.8898}"
 					}
 				},
-				"Pos": "[-6502.8857 8146.1128 898.3141]",
-				"CurHealth": 0,
 				"Class": "weapon_frag",
 				"FlexScale": 1,
 				"Maxs": "[3.764 2.2008 9.7652]",
-				"sligwolf_internalTable": {
-					"isDuped": true
-				},
-				"Angle": "{-39.5941 -50.3022 89.6541}"
+				"Model": "models/weapons/w_grenade.mdl",
+				"Angle": "{-23.0674 35.5871 90.8898}"
 			},
-			"1128": {
+			"1085": {
 				"Skin": 0,
-				"Mins": "[-4.5597 -2.6329 -0.975]",
 				"MaxHealth": 0,
 				"ColGroup": 11,
 				"Persistent": false,
 				"Name": "",
-				"Model": "models/weapons/w_grenade.mdl",
+				"Mins": "[-4.5597 -2.6329 -0.975]",
+				"CurHealth": 0,
+				"Pos": "[-6508.9155 8152.0967 896.3619]",
 				"PhysicsObjects": {
 					"0": {
 						"Sleep": true,
-						"Pos": "[-6506.1284 8155.0874 898.3095]",
+						"Pos": "[-6508.9155 8152.0967 896.3619]",
 						"Frozen": false,
-						"Angle": "{-20.7301 35.5451 90.761}"
+						"Angle": "{-1.669 0.71 0.4584}"
 					}
 				},
-				"Pos": "[-6506.1284 8155.0874 898.3095]",
-				"CurHealth": 0,
 				"Class": "weapon_frag",
 				"FlexScale": 1,
 				"Maxs": "[3.764 2.2008 9.7652]",
-				"sligwolf_internalTable": {
-					"isDuped": true
-				},
-				"Angle": "{-20.7301 35.5451 90.761}"
+				"Model": "models/weapons/w_grenade.mdl",
+				"Angle": "{-1.669 0.71 0.4584}"
 			},
-			"1129": {
+			"1086": {
 				"Skin": 0,
-				"Mins": "[-4.5597 -2.6329 -0.975]",
 				"MaxHealth": 0,
 				"ColGroup": 11,
 				"Persistent": false,
 				"Name": "",
-				"Model": "models/weapons/w_grenade.mdl",
+				"Mins": "[-4.5597 -2.6329 -0.975]",
+				"CurHealth": 0,
+				"Pos": "[-6502.9409 8146.1709 898.2564]",
 				"PhysicsObjects": {
 					"0": {
 						"Sleep": true,
-						"Pos": "[-6508.8813 8152.1597 896.3616]",
+						"Pos": "[-6502.9409 8146.1709 898.2564]",
 						"Frozen": false,
-						"Angle": "{1.0633 1.8334 0.7896}"
+						"Angle": "{-42.9459 -49.8303 89.508}"
 					}
 				},
-				"Pos": "[-6508.8813 8152.1597 896.3616]",
-				"CurHealth": 0,
 				"Class": "weapon_frag",
 				"FlexScale": 1,
 				"Maxs": "[3.764 2.2008 9.7652]",
-				"sligwolf_internalTable": {
-					"isDuped": true
-				},
-				"Angle": "{1.0633 1.8334 0.7896}"
+				"Model": "models/weapons/w_grenade.mdl",
+				"Angle": "{-42.9459 -49.8303 89.508}"
 			}
 		}
 	},
