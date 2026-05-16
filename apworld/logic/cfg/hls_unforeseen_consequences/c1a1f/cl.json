@@ -1,0 +1,17 @@
+{
+	"reg": {
+		"Main": {
+			"cond": []
+		},
+		"Exit": {
+			"cond": []
+		}
+	},
+	"connect": {
+		"Main": {
+			"Exit": {
+				"twoway": false
+			}
+		}
+	}
+}

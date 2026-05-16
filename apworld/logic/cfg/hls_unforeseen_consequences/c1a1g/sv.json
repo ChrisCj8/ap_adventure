@@ -1,0 +1,12 @@
+{
+	"exit": {
+		"Main": {
+			"reg": "Main"
+		}
+	},
+	"entr": {
+		"Main": {
+			"reg": "Main"
+		}
+	}
+}

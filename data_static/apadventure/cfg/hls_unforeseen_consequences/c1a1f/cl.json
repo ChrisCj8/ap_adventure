@@ -1,0 +1,19 @@
+{
+	"ver": "v1_1",
+	"info": [],
+	"reg": {
+		"Main": {
+			"ammo": []
+		},
+		"Exit": {
+			"ammo": []
+		}
+	},
+	"connect": {
+		"Main": {
+			"Exit": {
+				"twoway": false
+			}
+		}
+	}
+}

@@ -1,0 +1,314 @@
+{
+	"ver": "v1",
+	"delname": [],
+	"exitaccess": [],
+	"entraccess": {
+		"Entrance": {
+			"capab": [
+				"WeakMelee"
+			],
+			"type": "capab"
+		}
+	},
+	"lctnaccess": [],
+	"sav": {
+		"Constraints": [],
+		"Entities": []
+	},
+	"lctn": [
+		{
+			"pos": "[21.6173 -1036.1248 -2688.7407]",
+			"ang": "{0 0 0}",
+			"reg": "After Platform Elevator",
+			"name": "In Box"
+		}
+	],
+	"exit": [
+		{
+			"ang": "{90 90 0}",
+			"pos": "[-1512.6968 1176.2812 -2679.4719]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{89.9988 -0.4928 180}",
+			"pos": "[-1040.2511 1400.4779 -2678.5942]",
+			"reg": "Exit Elevator",
+			"name": "Side Room"
+		},
+		{
+			"ang": "{90 180 0}",
+			"pos": "[-1056.2812 1399.5956 -2982.8528]",
+			"reg": "Canal",
+			"name": "Canal Side Room"
+		}
+	],
+	"entr": [
+		{
+			"ang": "{0 -0.1725 0}",
+			"pos": "[-279.466 -2889.1116 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -0.1725 0}",
+			"pos": "[-279.1781 -2793.5046 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.1975 0}",
+			"pos": "[-34.663 -2808.8645 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.1975 0}",
+			"pos": "[-32.5521 -2897.1453 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.1975 0}",
+			"pos": "[-34.567 -2993.5659 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.1975 0}",
+			"pos": "[-137.6427 -2994.4565 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.1975 0}",
+			"pos": "[-139.5018 -3077.3499 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.4175 0}",
+			"pos": "[-34.4323 -3085.5872 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.4175 0}",
+			"pos": "[-29.0274 -3170.1553 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.4175 0}",
+			"pos": "[-131.2377 -3173.4331 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.4175 0}",
+			"pos": "[-134.7832 -3258.605 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.4175 0}",
+			"pos": "[-27.2719 -3264.6399 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.4175 0}",
+			"pos": "[-27.553 -3349.5171 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -91.4175 0}",
+			"pos": "[-142.9035 -3346.9634 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -92.2675 0}",
+			"pos": "[-127.1697 -2801.0554 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 -92.2675 0}",
+			"pos": "[-131.6021 -2912.9998 -255.9688]",
+			"reg": "Entrance",
+			"name": "Entrance"
+		},
+		{
+			"ang": "{0 93.2361 0}",
+			"pos": "[-1593.4823 1216.5242 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 93.2361 0}",
+			"pos": "[-1502.4689 1221.6721 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 90.4311 0}",
+			"pos": "[-1424.923 1225.8728 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 90.4311 0}",
+			"pos": "[-1425.5537 1310.0244 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 90.4311 0}",
+			"pos": "[-1502.486 1312.5084 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 90.4311 0}",
+			"pos": "[-1589.8438 1311.8546 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 90.4311 0}",
+			"pos": "[-1600.1133 1390.2993 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 90.4311 0}",
+			"pos": "[-1497.2926 1393.7153 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 90.4311 0}",
+			"pos": "[-1425.9729 1394.2502 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 -0.8688 0}",
+			"pos": "[-1580.442 1505.0352 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 0.1212 0}",
+			"pos": "[-1579.0823 1603.5375 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 0.8362 0}",
+			"pos": "[-1502.1545 1607.3835 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 0.8362 0}",
+			"pos": "[-1494.925 1509.8138 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 0.8362 0}",
+			"pos": "[-1431.4768 1507.6785 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 0.8362 0}",
+			"pos": "[-1427.0105 1599.4037 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Elevator"
+		},
+		{
+			"ang": "{0 -92.1736 0}",
+			"pos": "[-1075.3755 1411.6083 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Side Room"
+		},
+		{
+			"ang": "{0 -90.8535 0}",
+			"pos": "[-1077.1676 1342.9182 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Side Room"
+		},
+		{
+			"ang": "{0 -90.6335 0}",
+			"pos": "[-1078.3209 1261.9248 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Side Room"
+		},
+		{
+			"ang": "{0 -90.6335 0}",
+			"pos": "[-1079.3047 1173.432 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Side Room"
+		},
+		{
+			"ang": "{0 179.0014 0}",
+			"pos": "[-1203.6868 1083.8447 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Side Room"
+		},
+		{
+			"ang": "{0 179.0014 0}",
+			"pos": "[-1205.3953 985.7465 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Side Room"
+		},
+		{
+			"ang": "{0 -179.2935 0}",
+			"pos": "[-1199.1034 1166.2238 -2735.9688]",
+			"reg": "Exit Elevator",
+			"name": "Side Room"
+		},
+		{
+			"ang": "{0 -91.1033 0}",
+			"pos": "[-1084.9574 1376.3197 -3039.9688]",
+			"reg": "Canal",
+			"name": "Canal Side Room"
+		},
+		{
+			"ang": "{0 -91.1033 0}",
+			"pos": "[-1087.1511 1262.5488 -3039.9688]",
+			"reg": "Canal",
+			"name": "Canal Side Room"
+		},
+		{
+			"ang": "{0 -91.1033 0}",
+			"pos": "[-1089.5813 1136.5693 -3039.9688]",
+			"reg": "Canal",
+			"name": "Canal Side Room"
+		},
+		{
+			"ang": "{0 -88.8483 0}",
+			"pos": "[-1090.1536 1025.5814 -3039.9688]",
+			"reg": "Canal",
+			"name": "Canal Side Room"
+		},
+		{
+			"ang": "{0 -0.4633 0}",
+			"pos": "[-1049.1165 955.1693 -3039.9688]",
+			"reg": "Canal",
+			"name": "Canal Side Room"
+		},
+		{
+			"ang": "{0 -87.7483 0}",
+			"pos": "[-940.9922 948.3797 -3039.9688]",
+			"reg": "Canal",
+			"name": "Canal Side Room"
+		}
+	],
+	"start": [],
+	"del": []
+}

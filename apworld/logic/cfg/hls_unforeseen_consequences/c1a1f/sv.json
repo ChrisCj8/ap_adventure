@@ -1,0 +1,32 @@
+{
+	"exit": {
+		"Start": {
+			"reg": "Main"
+		},
+		"End": {
+			"reg": "Exit"
+		},
+		"Security Door": {
+			"reg": "Main",
+			"access": {
+				"capab": [
+					"WimpyMelee"
+				],
+				"type": "capab"
+			}
+		}
+	},
+	"entr": {
+		"Security Door": {
+			"reg": "Main"
+		},
+		"Start": {
+			"reg": "Main"
+		}
+	},
+	"lctn": {
+		"Exit": {
+			"Dead Security Officer": []
+		}
+	}
+}

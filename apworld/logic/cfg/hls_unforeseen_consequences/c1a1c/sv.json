@@ -1,0 +1,38 @@
+{
+	"exit": {
+		"Elevator": {
+			"reg": "Exit Elevator"
+		},
+		"Side Room": {
+			"reg": "Exit Elevator"
+		},
+		"Canal Side Room": {
+			"reg": "Canal"
+		}
+	},
+	"entr": {
+		"Canal Side Room": {
+			"reg": "Canal"
+		},
+		"Elevator": {
+			"reg": "Exit Elevator"
+		},
+		"Entrance": {
+			"reg": "Entrance",
+			"access": {
+				"capab": [
+					"WeakMelee"
+				],
+				"type": "capab"
+			}
+		},
+		"Side Room": {
+			"reg": "Exit Elevator"
+		}
+	},
+	"lctn": {
+		"After Platform Elevator": {
+			"In Box": []
+		}
+	}
+}

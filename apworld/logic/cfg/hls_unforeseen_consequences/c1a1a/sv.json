@@ -1,0 +1,23 @@
+{
+	"exit": {
+		"Exit": {
+			"reg": "Main"
+		},
+		"Start": {
+			"reg": "Main"
+		}
+	},
+	"entr": {
+		"Exit": {
+			"reg": "Main"
+		},
+		"Start": {
+			"reg": "Main"
+		}
+	},
+	"lctn": {
+		"Main": {
+			"Gordons Locker": []
+		}
+	}
+}

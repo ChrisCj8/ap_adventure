@@ -1,0 +1,16 @@
+{
+	"rules": {
+		"respawn": false,
+		"requirements": [
+			"gamehl1"
+		],
+		"frctn": 4,
+		"stopspd": 100,
+		"hev": false,
+		"godmode": false,
+		"grav": 800,
+		"sprintspd": 320,
+		"runspd": 320,
+		"jump": 268.33
+	}
+}

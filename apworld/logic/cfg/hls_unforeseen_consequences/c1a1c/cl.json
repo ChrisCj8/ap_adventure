@@ -1,0 +1,39 @@
+{
+	"reg": {
+		"Entrance": {
+			"cond": []
+		},
+		"Canal": {
+			"cond": []
+		},
+		"Exit Elevator": {
+			"cond": []
+		},
+		"After Platform Elevator": {
+			"cond": []
+		}
+	},
+	"connect": {
+		"Exit Elevator": {
+			"Canal": {
+				"twoway": false,
+				"access": {
+					"capab": [
+						"WeakMelee"
+					],
+					"type": "capab"
+				}
+			}
+		},
+		"Entrance": {
+			"After Platform Elevator": {
+				"twoway": false
+			}
+		},
+		"After Platform Elevator": {
+			"Canal": {
+				"twoway": false
+			}
+		}
+	}
+}

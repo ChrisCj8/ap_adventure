@@ -1,0 +1,35 @@
+{
+	"exit": {
+		"End": {
+			"reg": "Main"
+		},
+		"Start": {
+			"reg": "Main"
+		}
+	},
+	"entr": {
+		"End": {
+			"reg": "Main",
+			"access": {
+				"capab": [
+					"DecentMelee"
+				],
+				"type": "capab"
+			}
+		},
+		"Start": {
+			"reg": "Main",
+			"access": {
+				"capab": [
+					"DecentMelee"
+				],
+				"type": "capab"
+			}
+		}
+	},
+	"lctn": {
+		"Main": {
+			"In Armory": []
+		}
+	}
+}

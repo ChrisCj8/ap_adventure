@@ -1,0 +1,35 @@
+{
+	"exit": {
+		"End": {
+			"reg": "Main",
+			"access": {
+				"capab": [
+					"WeakMelee"
+				],
+				"type": "capab"
+			}
+		},
+		"Start": {
+			"reg": "Main"
+		}
+	},
+	"entr": {
+		"End": {
+			"reg": "Main",
+			"access": {
+				"capab": [
+					"WeakMelee"
+				],
+				"type": "capab"
+			}
+		},
+		"Start": {
+			"reg": "Main"
+		}
+	},
+	"lctn": {
+		"Main": {
+			"Next to dead security officer": []
+		}
+	}
+}

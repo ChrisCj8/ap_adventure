@@ -1,0 +1,11 @@
+{
+	"ver": "v1_1",
+	"info": {
+		"requirements": []
+	},
+	"reg": {
+		"Main": {
+			"ammo": []
+		}
+	}
+}
