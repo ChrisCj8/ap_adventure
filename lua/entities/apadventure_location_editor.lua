@@ -15,16 +15,14 @@ function ENT:SetupDataTables()
     self:NetworkVar("Bool",0,"IsDummy",{KeyName="isdummy",Edit={type="Boolean"}})
 end
 
-local bboxmins = Vector(-10,-10,0)
-local bboxmaxs = Vector(10,10,20)
+local bboxmins, bboxmaxs = Vector(-10,-10,0), Vector(10,10,20)
 
 function ENT:Initialize()
     BaseClass.Initialize(self)
     self:SetModel("models/apadventure/location_pickup.mdl")
     self:SetCollisionGroup(COLLISION_GROUP_WORLD)
-    self:PhysicsInitBox(bboxmins,bboxmaxs)
-    local phys = self:GetPhysicsObject()
-    self.boundmins, self.boundmaxs = self:GetCollisionBounds()
+    self:PhysicsInitStatic(SOLID_BBOX)
+    self:SetCollisionBounds(bboxmins,bboxmaxs)
     self.CopyRegionName = self.GetRegion
     if CLIENT then return end
     local spin = self:AddLayeredSequence(self:LookupSequence("rotate"),1)
@@ -53,7 +51,7 @@ if CLIENT then
             drawtext("Region: "..self:GetRegion().."\n Name: "..self:GetLctnName()..( dummy and "\nDUMMY" or ""),"BudgetLabel",0,-100,color_white,TEXT_ALIGN_CENTER)
         end3d2d()
         if dummy then return end
-        drawwirebox(pos,angle_zero,self.boundmins,self.boundmaxs,color_white)
+        drawwirebox(pos,angle_zero,bboxmins,bboxmaxs,color_white)
     end
 
     return

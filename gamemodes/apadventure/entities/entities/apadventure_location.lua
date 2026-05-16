@@ -7,16 +7,14 @@ DEFINE_BASECLASS("base_gmodentity")
 
 APADV_LOCENTS = APADV_LOCENTS or {}
 
-local bboxmins = Vector(-10,-10,0)
-local bboxmaxs = Vector(10,10,20)
+local bboxmins, bboxmaxs = Vector(-10,-10,0), Vector(10,10,20)
 
 function ENT:Initialize()
     BaseClass.Initialize(self)
     self:SetModel("models/apadventure/location_pickup.mdl")
-    self:PhysicsInitBox(bboxmins,bboxmaxs)
+    self:PhysicsInitStatic(SOLID_BBOX)
+    self:SetCollisionBounds(bboxmins,bboxmaxs)
     self:SetSolidFlags(bit.bor(FSOLID_NOT_SOLID,FSOLID_TRIGGER))
-    local phys = self:GetPhysicsObject()
-    phys:EnableGravity(false)
     if CLIENT then return end
     local spin = self:AddLayeredSequence(self:LookupSequence("rotate"),1)
     local bob = self:AddLayeredSequence(self:LookupSequence("bob"),2)
