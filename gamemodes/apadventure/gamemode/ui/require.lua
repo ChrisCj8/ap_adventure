@@ -149,7 +149,7 @@ local helpcat = catlist:Add("#apadventure.require.help")
 
 local a,b,c,d = helpcat:GetDockPadding()
 helpcat:DockPadding(a,b,c,5)
-for k,v in ipairs({"intro","games","addon","addon.select","addon.preset","addon.usepreset","other"}) do
+for k,v in ipairs({"intro","games","addon","addon.select","addon.preset","addon.usepreset","addon.presetload","other"}) do
     local txt = UImake("DLabel",helpcat)
     txt:SetText("#apadventure.require.help."..v)
     txt:DockMargin(5,5,5,5)
