@@ -1,5 +1,7 @@
 return {
     PostCfgLoad = function(self)
-        ents.FindByName("lk1")[1]:Fire("Lock")
+        for k,v in ipairs(ents.FindByName("lk1")) do
+            v:Fire("Lock")
+        end
     end
 }
