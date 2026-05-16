@@ -42,6 +42,10 @@ class ConfigGroups(OptionSet):
 
     Configs are organized into groups so maps related to each other (such as maps from the same chapter in HL2)
     can be grouped together and share certain settings.
+
+    Not all configs are enabled by default. If you want to see what configs are available, you can use the
+    "apAdventure - Generate Map Index" tool in your launcher to get a list of all available config groups 
+    and the maps in them.
     """
     display_name = "Config Groups"
     default = {"orange_hub","canals_walk","ravenholm","coast_walk","nova_prospekt"}
@@ -112,6 +116,10 @@ class ItemSets(OptionSet):
     """Item Sets to use for generation.
     
     Similarly to Map Configs, Items related to each other are grouped together in Item Sets.
+
+    Not all Item Sets are enabled by default. If you want to see what sets are available, you can use the
+    "apAdventure - Generate Item Index" tool in your launcher to get a list of all available item sets
+    and the items in them.
     
     The Generator will automatically check which of the items chosen are relevant to progression
     and remove items that are not logically required if there is not enough space for them.
