@@ -60,6 +60,10 @@ function APADV.DoMapTransition(map,group,entrname)
         end
         APADV.LoadCfg(group)
         return
+    elseif !file.Exists("maps/"..map..".bsp","GAME") then
+        -- lazy, but this shouldn't happen too often in theory so it should be fine, i feel like setting up a network string and callback for this is excessive
+        BroadcastLua("notification.AddLegacy(string.gsub(language.GetPhrase(\"#apadventure.warning.mapmissing\"),\"{m}\",\""..map.."\"),NOTIFY_ERROR,5)")
+        return
     end
     local checknum = math.random(999999)
     APADV_NEXTMAPTBL.checknum = checknum
