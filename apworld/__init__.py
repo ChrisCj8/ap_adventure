@@ -904,6 +904,7 @@ class APADVWorld(World):
                     del unconnectedexits[target_name]
                     target_reg = target_data[1]
                     connectedexits.add(target_name)
+                    targetexitacctbl = target_data[2]
                     if twoway:
                         connectedtwoways.add(trying)
                 elif unconnectedtwoways:
