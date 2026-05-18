@@ -839,8 +839,12 @@ class APADVWorld(World):
                     placedeadends = True
                     untriedentrs = set(unplacedentrs.keys())
                 else:
-                    raise RuntimeError(f"""apAdventure ran out of placeable entrances for {self.player_name}, 
-                                        their config selections probably contain too many dead ends""")
+                    raise RuntimeError(f"apAdventure could not place all entrances for Slot {self.player_name},"+
+                        "their config selections probably contain too many dead ends\n"+
+                        f"unplaced entrances ({len(unplacedentrs)}): {unplacedentrs}\n"+
+                        f"placed, but unconnected entrances ({len(unconnectedentrs)}): {unconnectedentrs}\n"+
+                        f"unconnected exits ({len(unconnectedexits)}): {unconnectedexits}\n"+
+                        f"unconnected two-ways ({len(unconnectedtwoways)}): {unconnectedtwoways}\n")
             trying = rand.choice(list(untriedentrs))
             trying_data = unplacedentrs[trying]
             trying_reg = trying_data[1]
