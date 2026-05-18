@@ -9,6 +9,7 @@
 - [GWSockets](https://github.com/FredyH/GWSockets/releases) - More information on which version to grab can be found further down.
 - [GMAP](https://github.com/ChrisCj8/gm_ap/releases)
 - [apAdventure itself](https://github.com/ChrisCj8/ap_adventure/releases)
+- Other games or workshop content may also be required depending on what configs are chosen for your run, apAdventure has a requirements system that you can use to check what else you need in game, and can create a addon preset for you to download/activate required workshop items automatically.
 
 ## Installation (for Players)
 
@@ -79,7 +80,8 @@ Note that if the host DOES have the GMod path set up in their `host.yaml` and is
     - The reason you can't enter this information on the map selection screen directly is because that screen does not offer a password field that hides whatever you're putting into it.
 7. Hit "Connect". If you are not in the right starting map for your current run, you will be sent there automatically.
     - When reconnecting to an already started run later, you can also go straight to a map you have already visited. You will only be sent back to your starting map if you visit a map you have not reached through a level transition before. You can use this to "fast travel" to already visited maps.
-8. (Optional, only in singleplayer) Open the console and type in `sv_pause_sp 0`.\
+8. Once connected, you can click the "Check Requirements" button to open the requirements menu. This menu lets you check if all requirements needed for your run are installed. Further explanations on how to use this menu can be found ingame.
+9. (Optional, only in singleplayer) Open the console and type in `sv_pause_sp 0`.\
     GMods Lua Environment gets paused when the game is paused in singleplayer, which eventually causes the game to lose connection with the AP server. Changing this console variable stops the game from pausing when the player brings up the main menu as if they were playing in multiplayer, which prevents this.\
     The game reconnects automatically after this happens, but this is still an option if you want other players to not get spammed with (dis)connection messages.
 
