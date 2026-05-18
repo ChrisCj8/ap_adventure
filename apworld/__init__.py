@@ -824,13 +824,18 @@ class APADVWorld(World):
         deadends = set()
         deadcount = 0
         placedeadends = False
+        ow2tw = False
+        couldconnectow = False
 
         unfinished = bool(unplacedentrs)
 
         while unfinished:
-            
             if not untriedentrs:
-                if deadcount <= available_exits:
+                if not ow2tw and couldconnectow:
+                    ow2tw = True
+                    couldconnectow = False
+                    untriedentrs = set(unplacedentrs.keys())
+                elif not placedeadends and deadcount <= available_exits:
                     placedeadends = True
                     untriedentrs = set(unplacedentrs.keys())
                 else:
@@ -868,7 +873,7 @@ class APADVWorld(World):
                 can_place = False
 
             #self.debuglog(f"can we place {trying} with a reach of {exit_reach}? {can_place}")
-            
+
             if can_place:
                 twoway = trying in trying_reg.twoways
                 target_reg = None
@@ -888,7 +893,6 @@ class APADVWorld(World):
                     tryingexitacctbl = trying_data[3]
                     trying_reg.connect(target_reg,f"{trying} -> {target_name}",
                         self.make_intermap_rule(target_reg,targetentracctbl,trying_reg,tryingexitacctbl))
-                    
                     self.add_connectinfo(trying_reg,trying_data[0],target_reg,target_data[0])
                 elif unconnectedexits:
                     target_name = rand.choice(list(unconnectedexits.keys()))
@@ -898,9 +902,21 @@ class APADVWorld(World):
                     connectedexits.add(target_name)
                     if twoway:
                         connectedtwoways.add(trying)
+                elif unconnectedtwoways:
+                    if ow2tw:
+                        target_name = rand.choice(list(unconnectedtwoways.keys()))
+                        target_data = unconnectedtwoways[target_name]
+                        target_reg = target_data[1]
+                        del unconnectedtwoways[target_name]
+                        connectedtwoways.add(target_name)
+                        #self.debuglog(f"trying to connect {trying_reg.name} and {target_reg.name}")
+                        targetexitacctbl = target_data[3]
+                        ow2tw = False
+                    else:
+                        couldconnectow = True
+                        continue
                 else:
-                    #self.debuglog(f"couldn't find a place to connect {trying}")
-                    continue
+                    raise RuntimeError(f"Entrance {trying} for Player {self.player} could not be connected. Something went wrong during Entrance Randmoization.")
 
                 #self.debuglog(f"trying to connect {target_reg.name} and {trying_reg.name}")
                 entracctbl = trying_data[2]
