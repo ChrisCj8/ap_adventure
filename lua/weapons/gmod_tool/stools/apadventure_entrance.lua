@@ -163,6 +163,6 @@ function TOOL:RightClick(tr)
             apAdventure.CopyAccessTbl(owner,name,ent.APAdvAccessTableType,1)
         end
     end
-    
+
     return ray
 end
