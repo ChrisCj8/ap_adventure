@@ -113,8 +113,8 @@ return {
                 if input == "Start" then
                     local name = ent:GetName()
                     if name == "lcs_message_room5_entry" or name == "lcs_message_croom2_search" then
-                        apAdventure.SendNotification("You have already cleared this wave and can skip it by not touching the turrets.",3,10)
-                        timer.Simple(1,function() apAdventure.SendNotification("The force fields are down and won't turn on unless you decide to start the wave again.",3,10) end)
+                        apAdventure.SendNotification("#apadventure.mapcfg.hl2.d2_prison_07.waveclearhint1",3,10)
+                        timer.Simple(1,function() apAdventure.SendNotification("#apadventure.mapcfg.hl2.d2_prison_07.waveclearhint2",3,10) end)
                         hook.Remove("AcceptInput",self)
                     end
                 end
