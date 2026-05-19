@@ -65,20 +65,11 @@ return {
         end)
 
         local cellsfinished_logic = entsbyname("logic_room5_assault_finished")[1]
-        local manhackmaker = entsbyname("maker_manhack_room5_1")[1]
-        local manhackson
 
-        hook.Add("AcceptInput",cellsfinished_logic,function(self,ent,input) 
-            if !manhackson then
-                if ent == manhackmaker and input == "Enable" then
-                    manhackson = true
-                end
-                return
-            end
-            
-            if ent == self and input == "Trigger" then
+        hook.Add("AcceptInput",cellsfinished_logic,function(self,_,_,_,caller) 
+            if caller == self then
                 APADV.SendMapLocation("Defended Cell Block")
-                cellsfieldstate(false) 
+                cellsfieldstate(false)
                 hook.Remove("AcceptInput",self)
             end
         end)
