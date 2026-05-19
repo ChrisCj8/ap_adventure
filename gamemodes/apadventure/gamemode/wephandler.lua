@@ -3,7 +3,10 @@ APADV_WEPS = APADV_WEPS or {}
 
 ApAdvWeps = ApAdvWeps or {}
 
+local sv_cheats = GetConVar("Sv_cheats")
+
 function GM:PlayerCanPickupWeapon(ply,wep)
+    if sv_cheats:GetBool() then return true end
     local canpick = APADV_WEPS[wep:GetClass()]
     if !canpick then
         local ammo = wep:GetPrimaryAmmoType()
