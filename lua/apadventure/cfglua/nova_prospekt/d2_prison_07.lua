@@ -1,15 +1,9 @@
-//func_room5_field_gate_3
-//func_room5_field_gate_4
-//door_room5_gate_3
-//door_room5_gate_4
-
 local entsbyname = ents.FindByName
 local entbyid = ents.GetMapCreatedEntity
 
-local croomgate 
+local croomgate
 
-// don't forget to make this local again
-function croomfieldstate(state)
+local function croomfieldstate(state)
     local brush = state and "Enable" or "Disable"
     local skin = state and 0 or 1
     for k,v in ipairs(entsbyname("shield_model_1")) do v:SetSkin(skin) end
@@ -20,7 +14,7 @@ function croomfieldstate(state)
     entsbyname("forcefield1_sound_close")[1]:Fire(state and "StartSound" or "StopSound")
 end
 
-function cellsfieldstate(state)
+local function cellsfieldstate(state)
     local brush = state and "Enable" or "Disable"
     local sndfar = state and 100 or 0
     local snd = state and "StartSound" or "StopSound"
@@ -46,12 +40,6 @@ return {
         for k,v in ipairs(entsbyname("turret_buddy")) do
             v:AddSpawnFlags(512)
         end
-
-        --[[ hook.Add("EntityTakeDamage",self,function(self,ent,dmg)
-            if ent:GetClass() == "npc_combine_s" then
-                dmg:ScaleDamage(5)
-            end
-        end) ]]
 
         entbyid(1890):Remove() -- the trigger that closes the bars that would normally stop players from returning to the entrance
 
