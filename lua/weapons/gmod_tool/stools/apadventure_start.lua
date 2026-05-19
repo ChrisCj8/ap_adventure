@@ -43,6 +43,16 @@ if CLIENT then
 
         cPnl:AddItem(warnpnl)
     end
+
+    if game.SinglePlayer() then return end
+
+    function TOOL:Reload()
+        local toolgun = self:GetWeapon()
+        toolgun:EmitSound(toolgun.ShootSound)
+        toolgun:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+        self:GetOwner():SetAnimation(PLAYER_ATTACK1)
+    end
+
     return
 end
 
@@ -99,4 +109,8 @@ function TOOL:Reload()
         undo.AddEntity(ent)
         undo.SetPlayer(user)
     undo.Finish()
+    local toolgun = self:GetWeapon()
+    toolgun:EmitSound(toolgun.ShootSound)
+    toolgun:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    user:SetAnimation(PLAYER_ATTACK1)
 end
