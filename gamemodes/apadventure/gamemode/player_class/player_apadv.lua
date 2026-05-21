@@ -1,7 +1,9 @@
 AddCSLuaFile()
 DEFINE_BASECLASS("player_sandbox")
 
-local PLY = {}
+local PLY = {
+	UnDuckSpeed = 0
+}
 
 function PLY:Loadout()
 	
