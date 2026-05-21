@@ -181,26 +181,20 @@ function NODE.Panel(parent)
     helppnl:Help("#apadventure.node.capab.helpoverride")
     helppnl:Help("#apadventure.node.capab.helpsave")
 
-    local oldlayout = parent.PerformLayout
     function parent:PerformLayout(w,h)
-        --itemnamein:SetSize(w-10,22)
-        self:OldLayout(self,w,h)
-        w = self:InnerWidth()
-        local capabh = h-100
-
         capselect:SetSize(w-70,22)
         capnamein:SetSize(w-70,22)
-        caplist:SetSize(w-10,capabh-35)
-        capaddbtn:SetPos(w-5-16-20,7)
-        capdelbtn:SetPos(w-5-16,7)
+        caplist:SetSize(w-10,215)
+        capaddbtn:SetPos(w-41,7)
+        capdelbtn:SetPos(w-21,7)
 
-        overridecheck:SetPos(5,capabh)
+        overridecheck:SetPos(5,180)
         overridecheck:SetSize(w-10,22)
 
-        condpnl:SetPos(5,capabh+22)
+        condpnl:SetPos(5,202)
         condpnl:SetWidth(w-10)
 
-        helppnl:SetPos(5,condpnl:GetTall()+capabh+27)
+        helppnl:SetPos(5,condpnl:GetTall()+207)
         helppnl:SetWidth(w-10)
     end
 end

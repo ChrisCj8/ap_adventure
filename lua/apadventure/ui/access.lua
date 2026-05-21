@@ -114,18 +114,20 @@ return function(parent,targetheight)
     end
 
     local nodepnl = vgui.Create("DScrollPanel",container)
-    local nodepnloldlayout = nodepnl.PerformLayout
-    nodepnl.OldLayout = nodepnloldlayout
+    local nodepnlcanvas = nodepnl:GetCanvas()
+    local nodepnloldlayout = nodepnlcanvas.PerformLayout
+    nodepnlcanvas.OldLayout = nodepnloldlayout
     nodepnl:SetPos(210,55)
 
     function accesstree:OnNodeSelected(node)
-        nodepnl.PerformLayout = nil
-        nodepnl:Clear()
-        nodepnl.nodetbl = node.tbl
+        nodepnlcanvas.PerformLayout = nodepnloldlayout
+        nodepnlcanvas:Clear()
+        nodepnlcanvas.nodetbl = node.tbl
         local pnlfunc = nodetypes[node.tbl.type].Panel
 
         if isfunction(pnlfunc) then
-            pnlfunc(nodepnl)
+            pnlfunc(nodepnlcanvas)
+            nodepnl:InvalidateLayout()
         end
     end
 
@@ -154,8 +156,8 @@ return function(parent,targetheight)
             addnodes(parentnode,newtbl)
             parentnode:ExpandRecurse(true)
         end
-        nodepnl.PerformLayout = nodepnloldlayout
-        nodepnl:Clear()
+        nodepnlcanvas.PerformLayout = nodepnloldlayout
+        nodepnlcanvas:Clear()
     end
 
     function cutbtn:DoClick()
