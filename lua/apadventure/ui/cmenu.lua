@@ -133,6 +133,7 @@ return function(window)
     local saveoption = filemenu:AddOption("#apadventure.editor.menu.file.save",function() RunConsoleCommand("apadventure_editor_savecfg") end)
     saveoption:SetEnabled(configloaded)
     filemenu:AddOption("#apadventure.editor.menu.file.saveto",function() include("apadventure/ui/savemenu.lua")() end)
+    window.SaveOption, window.ReloadOption = saveoption, reloadoption
 
     local logicmenu = mbar:AddMenu("#apadventure.editor.menu.logic")
     logicmenu:AddOption("#apadventure.editor.menu.logic.updateallcfgs",function() RunConsoleCommand("apadventure_update_all_cfgs") end)

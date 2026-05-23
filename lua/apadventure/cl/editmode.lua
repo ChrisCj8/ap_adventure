@@ -117,6 +117,12 @@ net.Receive("APAdvSaveCfg",function()
     fWrite(dir.."/group.json",toJSON(groupout,prettyprint))
     fWrite(dir.."/"..map.."/cl.json",toJSON(outtbl,prettyprint))
 
+    local editwindow = apAdventure.EditWindow
+    if IsValid(editwindow) then
+        editwindow.SaveOption:SetEnabled(true)
+        editwindow.ReloadOption:SetEnabled(true)
+    end
+
     local grlogic = apAdventure.GrCfgToLogic(groupout)
     if grlogic then
         fWrite(logicdir.."/group.json",toJSON(grlogic,prettyprint))
