@@ -86,7 +86,7 @@ end)
 
 net.Receive("APAdvSaveCfg",function() 
     local gname = net.ReadString()
-
+    editcfg.Group = gname
     print("storing "..gname)
 
     local items = editcfg.MapItems
