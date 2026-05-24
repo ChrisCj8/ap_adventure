@@ -10,7 +10,7 @@ return function(parent,targetheight)
     local container = vgui.Create("DCollapsibleCategory",parent)
     container:SetLabel("#apadventure.ui.accessedit.label")
     container.TargetHeight = targetheight or 300
-    
+
     local basetbl
     local basekey
 
@@ -213,8 +213,8 @@ return function(parent,targetheight)
             end
             accesstree:OnNodeSelected(basenode)
         else
-            nodepnl.PerformLayout = nodepnloldlayout
-            nodepnl:Clear()
+            nodepnlcanvas.PerformLayout = nodepnloldlayout
+            nodepnlcanvas:Clear()
         end
     end
 
