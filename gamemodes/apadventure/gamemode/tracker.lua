@@ -360,8 +360,7 @@ function APADV_TRACKER:Query()
                             sub[k] = override
                         end
                     end
-                    --print(out,subout)
-                    min(out,subout)
+                    out = min(out,subout)
                 end
                 if doresort then
                     if !next(sub) then return out,out end
@@ -374,25 +373,25 @@ function APADV_TRACKER:Query()
                 local sub = node.nodes
                 local doresort
                 if !sub[1] then return out,out end
-                for k,v in ipairs(node.nodes) do
+                for k,v in ipairs(sub) do
                     local subout, override = nodeeval[v.type](v)
-                    max(out,subout)
+                    out = max(out,subout)
                     if override then
                         if override == 3 then return 3,3 end
                         if isnumber(override) then
                             sub[k] = nil
-                            node.min = !node.min and override or min(node.min,override)
+                            node.min = !node.min and override or max(node.min,override)
                             doresort = true
                         else
                             sub[k] = override
                         end
                     end
                 end
+                if out == 1 then return 1,1 end
                 if doresort then
                     if !next(sub) then return out,out end
                     node.nodes = resort(sub)
                 end
-                if out == 1 then return 1,1 end
                 return out
             end,
             ["fix"] = function(node)
