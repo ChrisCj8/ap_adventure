@@ -405,7 +405,7 @@ function APADV_TRACKER:Query()
                     ool = node.skill and maxsk < node.skill
                 end
                 if bhop == 3 or APADV_BHOP and bhop == 2 then
-                    if ool then return 2,2 end
+                    if node.skill and isnumber(slotdata.bhop_logic) and slotdata.bhop_logic < node.skill then return 2,2 end
                     return 1,1
                 end
                 return 3
