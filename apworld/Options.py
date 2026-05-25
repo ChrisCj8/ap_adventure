@@ -202,10 +202,17 @@ class BunnyHop(Choice):
     option_always = 3
     default = 1
 
-class BunnyHopLogic(Toggle):
-    """Should the player be expected to Bunnyhop to reach certain areas?
-    Ignored if bhop is set to "never"."""
+class BunnyHopLogic(FreeText):
+    """Determines how hard Bunnyhops are allowed to be before they are considered out of logic.
+
+    This difficulty rating is oriented around Momentum Mods tier system, with 1 being the easiest
+    and 10 being the hardest. Although unlike Momentum Mod, apAdventure allows fractional values for
+    more granularity.
+
+    Setting this to 0, lower or any other value that can not be converted into a number
+    puts all BHops out of logic. Ignored if bhop is set to "never"""
     display_name = "Bunnyhop Logic"
+    default = 0
 
 
 class GeneratePUML(Toggle):

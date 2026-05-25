@@ -47,13 +47,15 @@ def preprocess_json_rule(rule,world,region):
                 return alwaysnode
             return rule
         case "bhop":
-            if world.bhop_logic:
+            if world.bhop_logic > 0:
+                if "skill" in rule:
+                    if rule["skill"] > world.bhop_logic:
+                        return nevernode
+                    del rule["skill"]
                 if world.bhop == 3:
                     return alwaysnode
-                else:
-                    return rule
-            else:
-                return nevernode
+                return rule
+            return nevernode
         case "and":
             newnodes = []
             for v in rule["nodes"]:

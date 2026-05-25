@@ -206,7 +206,7 @@ class APADVWorld(World):
             else:
                 match data[0]:
                     case "Bunnyhop":
-                        if self.bhop_logic:
+                        if self.bhop_logic != 0:
                             return ItemClassification.progression
                         else:
                             return ItemClassification.useful
@@ -243,9 +243,19 @@ class APADVWorld(World):
         self.bhop = options.bhop
 
         if self.bhop ==  1:
-            self.bhop_logic = False
+            self.bhop_logic = 0
         else:
-            self.bhop_logic = options.bhop_logic
+            num = float(options.bhop_logic.value)
+            if num:
+                if num < 0:
+                    self.bhop_logic = 0
+                elif num > 10:
+                    self.bhop_logic = 10
+                else:
+                    self.bhop_logic = num
+            else:
+                self.bhop_logic = 0
+
 
         maps = dict()
         maptbl = self.map_table
@@ -1066,7 +1076,7 @@ class APADVWorld(World):
         slotdata = {
             "mcguffin_goal":self.mcguffin_goal,
             "bhop":int(self.bhop),
-            "bhop_logic":bool(self.bhop_logic),
+            "bhop_logic":self.bhop_logic,
             "skill":int(self.options.skill),
             "connections":self.connectinfo,
             "cfgs":cfgs,

@@ -398,17 +398,17 @@ function APADV_TRACKER:Query()
                 return node.val
             end,
             ["bhop"] = function(node)
-                local bhop = APADV_SLOT.slotData.bhop
-                if bhop == 2 then 
-                    if APADV_BHOP then 
-                        if APADV_SLOT.slotData.bhop_logic then
-                            return 1,1
-                        end
-                        return 2,2
-                    end
-                    return 3
+                local bhop = slotdata.bhop
+                if bhop == 1 then return 3,3 end
+                local maxsk, ool = slotdata.bhop_logic
+                if isnumber(maxsk) then
+                    ool = node.skill and maxsk < node.skill
                 end
-                if bhop == 3 then return 1,1 else return 3,3 end
+                if bhop == 3 or APADV_BHOP and bhop == 2 then
+                    if ool then return 2,2 end
+                    return 1,1
+                end
+                return 3
             end,
             ["has"] = function(node)
                 local ilist = slotitems[node.id]
