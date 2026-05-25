@@ -399,11 +399,12 @@ function APADV_TRACKER:Query()
             end,
             ["bhop"] = function(node)
                 local bhop = slotdata.bhop
+                --[[
+                    might be able to improve this even more by replacing the bhop function in the nodeeval table before analyzing
+                    all nodes depending on what the "bhop" value in slotdata is set to instead of checking for it inside the function,
+                    but that's gonna require a bit of restructuring and idk how much of an improvement it would be
+                ]]--
                 if bhop == 1 then return 3,3 end
-                local maxsk, ool = slotdata.bhop_logic
-                if isnumber(maxsk) then
-                    ool = node.skill and maxsk < node.skill
-                end
                 if bhop == 3 or APADV_BHOP and bhop == 2 then
                     if node.skill and isnumber(slotdata.bhop_logic) and slotdata.bhop_logic < node.skill then return 2,2 end
                     return 1,1
