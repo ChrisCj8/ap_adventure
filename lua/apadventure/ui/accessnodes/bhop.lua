@@ -9,7 +9,7 @@ end
 function NODE.Panel(parent)
 
     local skilllbl = vgui.Create("DLabel",parent)
-    skilllbl:SetText("#apadventure.node.bhop.skill")
+    skilllbl:SetText("#apadventure.node.schmove.skill")
     skilllbl:SetDark(true)
     skilllbl:SetPos(5,5)
 
@@ -21,11 +21,11 @@ function NODE.Panel(parent)
     end
 
     local help = vgui.Create("DForm",parent)
-    help:SetLabel("#apadventure.node.bhop.help")
+    help:SetLabel("#apadventure.node.shared.help")
     help:Help("#apadventure.node.bhop.helpbase")
-    help:Help("#apadventure.node.bhop.helpskill")
+    help:Help("#apadventure.node.schmove.helpskill")
     help:Help("#apadventure.node.bhop.helppreprocess")
-    help:Help("#apadventure.node.bhop.helpzero")
+    help:Help("#apadventure.node.schmove.helpzero")
     help:SetPos(5,30)
 
     function parent:PerformLayout(w,h)

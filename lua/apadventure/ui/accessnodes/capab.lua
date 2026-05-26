@@ -166,7 +166,7 @@ function NODE.Panel(parent)
     end
 
     local helppnl = UImake("DForm",parent)
-    helppnl:SetLabel("#apadventure.node.capab.help")
+    helppnl:SetLabel("#apadventure.node.shared.help")
     helppnl:Help("#apadventure.node.capab.helpbase")
     local helplink1 = helppnl:Help("#apadventure.node.capab.helpideflink")
     helplink1:SetColor(Color(56,56,255))

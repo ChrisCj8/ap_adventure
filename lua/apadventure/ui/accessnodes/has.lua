@@ -3,7 +3,7 @@ local NODE = {}
 function NODE.Panel(parent)
 
     local itemlbl = vgui.Create("DLabel",parent)
-    itemlbl:SetText("#apadventure.node.has.name")
+    itemlbl:SetText("#apadventure.node.shared.iname")
     itemlbl:SetPos(5,5)
     itemlbl:SetDark(true)
     local itemnamein = vgui.Create("DTextEntry",parent)
@@ -14,7 +14,7 @@ function NODE.Panel(parent)
     end
 
     local countlbl = vgui.Create("DLabel",parent)
-    countlbl:SetText("#apadventure.node.has.count")
+    countlbl:SetText("#apadventure.node.shared.icount")
     countlbl:SetPos(5,30)
     countlbl:SetDark(true)
 
@@ -28,7 +28,7 @@ function NODE.Panel(parent)
     end
 
     local helppnl = vgui.Create("DForm",parent)
-    helppnl:SetLabel("#apadventure.node.has.help")
+    helppnl:SetLabel("#apadventure.node.shared.help")
     helppnl:Help("#apadventure.node.has.helpbase")
     helppnl:Help("#apadventure.node.has.helpdontuse")
 
