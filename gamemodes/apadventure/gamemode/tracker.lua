@@ -407,7 +407,8 @@ function APADV_TRACKER:Query()
                 ]]--
                 if bhop == 1 then return 3,3 end
                 if bhop == 3 or APADV_BHOP and bhop == 2 then
-                    if node.skill and isnumber(slotdata.bhop_logic) and slotdata.bhop_logic < node.skill then return 2,2 end
+                    local logic = slotdata.bhop_logic
+                    if logic == 0 or node.skill and isnumber(logic) and logic < node.skill then return 2,2 end
                     return 1,1
                 end
                 return 3
