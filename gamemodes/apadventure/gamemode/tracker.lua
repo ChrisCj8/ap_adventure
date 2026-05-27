@@ -313,6 +313,7 @@ local function resort(tbl)
         i = i+1
         out[i] = v
     end
+    return out
 end
 
 local evalmeta = {__index = function()
