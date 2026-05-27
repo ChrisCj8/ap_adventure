@@ -212,7 +212,7 @@ function APADV_TRACKER:Build()
                             tgt = exitdata,
                             acc = exitacc[exitn],
                         }
-                        self:SendExitUpdate(groupn,mapn,regn,exitdata.group,exitdata.map,exitdata.entr)
+                        self:SendExitUpdate(groupn,mapn,exitn,exitdata.group,exitdata.map,exitdata.entr)
                     end
                 end
             end
