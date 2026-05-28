@@ -518,8 +518,10 @@ function APADV_TRACKER:Query()
                         end
                     end
                     if reach > 1 then requery = true end
-                    iv.reach = reach
-                    self:SendLocationUpdate(group,map,ik,reach)
+                    if iv.reach != reach then
+                        iv.reach = reach
+                        self:SendLocationUpdate(group,map,ik,reach)
+                    end
                 end
             end
         end
