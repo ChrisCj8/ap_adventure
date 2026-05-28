@@ -333,8 +333,6 @@ function APADV_TRACKER:Query()
     local newquery = {}
     local newqueries = 0
     local regtbl = APADV_TRACKER.regs
-    --local locquery = {}
-    --local locqueries = 0
     local entrs = APADV_TRACKER.entr
     local id2capab = APADV.id2capab
     local capabtbl = APADV.capabtbl
@@ -504,7 +502,7 @@ function APADV_TRACKER:Query()
 
         if reg.locs then
             for ik,iv in pairs(reg.locs) do
-                if iv.reach > basereach then
+                if iv.reach > 1 and iv.reach > basereach then
                     local reach
                     if slotlocs[locnametoid[ik]] then
                         reach = 0
@@ -519,6 +517,7 @@ function APADV_TRACKER:Query()
                             reach = iv.acc or basereach
                         end
                     end
+                    if reach > 1 then requery = true end
                     iv.reach = reach
                     self:SendLocationUpdate(group,map,ik,reach)
                 end
