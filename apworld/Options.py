@@ -214,6 +214,17 @@ class BunnyHopLogic(FreeText):
     display_name = "Bunnyhop Logic"
     default = 0
 
+class SurfLogic(FreeText):
+    """Determines how hard Surfs are allowed to be before they are considered out of logic.
+
+    This difficulty rating is oriented around Momentum Mods tier system, with 1 being the easiest
+    and 10 being the hardest. Although unlike Momentum Mod, apAdventure allows fractional values for
+    more granularity.
+
+    Setting this to 0, lower or any other value that can not be converted into a number
+    puts all Surfs out of logic."""
+    display_name = "Surf Logic"
+    default = 0
 
 class GeneratePUML(Toggle):
     """Generates a PlantUML Diagram showing all of the worlds regions and locations, 
@@ -231,6 +242,7 @@ class APADVGameOptions(PerGameCommonOptions):
     skill: Skill
     bhop: BunnyHop
     bhop_logic: BunnyHopLogic
+    surf_logic: SurfLogic
     config_groups: ConfigGroups
     config_cherrypick: ConfigCherryPick
     config_blacklist: ConfigBlacklist

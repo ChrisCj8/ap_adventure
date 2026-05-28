@@ -56,6 +56,10 @@ def preprocess_json_rule(rule,world,region):
                     return alwaysnode
                 return rule
             return nevernode
+        case "surf":
+            if world.surf_logic > 0 and not "skill" in rule or rule["skill"] <= world.surf_logic:
+                return alwaysnode
+            return nevernode
         case "and":
             newnodes = []
             for v in rule["nodes"]:

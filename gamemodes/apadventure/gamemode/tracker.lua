@@ -412,6 +412,11 @@ function APADV_TRACKER:Query()
                 end
                 return 3
             end,
+            ["surf"] = function(node)
+                local logic = slotdata.surf_logic
+                if logic == 0 or node.skill and isnumber(logic) and logic < node.skill then return 2,2 end
+                return 1,1
+            end,
             ["has"] = function(node)
                 local ilist = slotitems[node.id]
                 if !ilist then return 3 end

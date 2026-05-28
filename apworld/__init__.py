@@ -256,6 +256,16 @@ class APADVWorld(World):
             else:
                 self.bhop_logic = 0
 
+        num = float(options.surf_logic.value)
+        if num:
+            if num < 0:
+                self.surf_logic = 0
+            elif num > 10:
+                self.surf_logic = 10
+            else:
+                self.surf_logic = num
+        else:
+            self.surf_logic = 0
 
         maps = dict()
         maptbl = self.map_table
@@ -570,7 +580,7 @@ class APADVWorld(World):
                         if not ik in mapregs:
                             self.add_warning(f"{map.bspname} in {map.group} tried to make an internal connection to non-existing region \"{ik}\"")
                             continue
-                        
+
                         reg_a: Region = mapregs[k]
                         reg_b: Region = mapregs[ik]
                         rule_a = None
@@ -601,7 +611,7 @@ class APADVWorld(World):
                                 rule_b = False
                         elif not iv["twoway"]:
                             rule_b = False
-                        
+
                         if rule_a != False:
                             #self.debuglog(f"making connection between {k} and {ik} with rule {rule_a}" )
                             reg_a.connect(reg_b,f"{map.bspname} - {k} -> {ik}",rule_a)
@@ -666,7 +676,6 @@ class APADVWorld(World):
             itempool.append(bhop)
             if not self.bhop_logic:
                 usefuls.append(bhop)
-                
 
         for iname,info in self.map_items.items():
             item_table[iname] = (self.item_name_to_id[iname],ItemClassification(info["fl"]),None)
@@ -1077,6 +1086,7 @@ class APADVWorld(World):
             "mcguffin_goal":self.mcguffin_goal,
             "bhop":int(self.bhop),
             "bhop_logic":self.bhop_logic,
+            "surf_logic":self.surf_logic,
             "skill":int(self.options.skill),
             "connections":self.connectinfo,
             "cfgs":cfgs,
