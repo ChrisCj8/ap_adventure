@@ -59,7 +59,7 @@ function APADV.InitSaveData(saveid)
         file.CreateDir(savedir.."ply/")
     end
     saveinit = true
-    awaitingdata = nil
+    awaitingdata = {}
 end
 
 local function StorePlyData(ply)
@@ -74,15 +74,15 @@ local function StorePlyData(ply)
 
     plytbl.ammo = {}
     local ammotbl = plytbl.ammo
-    
+
     for ik,iv in pairs(ply:GetAmmo()) do
         ammotbl[ammotypes[ik]] = iv 
     end
 
 end
 
-hook.Add("ShutDown","apAdvStoreSaveData",function() 
-    if !APADV_SAVEID then return end 
+hook.Add("ShutDown","apAdvStoreSaveData",function()
+    if !APADV_SAVEID then return end
     local savedir = "apadventure/sav/"..APADV_SAVEID.."/"
 
     if APADV_ITEMSUSED and next(APADV_ITEMSUSED) != nil then
@@ -105,11 +105,11 @@ hook.Add("ShutDown","apAdvStoreSaveData",function()
     APADV_TRACKER:SaveToFile(savedir.."_tracker.json")
 end)
 
-hook.Add("DoPlayerDeath","apAdvStoreSaveData",function(ply) 
+hook.Add("DoPlayerDeath","apAdvStoreSaveData",function(ply)
     StorePlyData(ply)
 end)
 
-hook.Add("PlayerDisconnected","apAdvStoreSaveData",function(ply) 
+hook.Add("PlayerDisconnected","apAdvStoreSaveData",function(ply)
     StorePlyData(ply)
 end)
 
