@@ -438,14 +438,8 @@ local function ApAdvFullData(slot)
     slot:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
 end
 
-function APADV.CreateApSlot(addr,slotn,pw,slotdata)
-    local getslotdata = true
-
+function APADV.CreateApSlot(addr,slotn,pw)
     if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
-
-        if slotdata then
-            getslotdata = false
-        end
 
         dp_loaded = false
         handlers_registered = false
@@ -462,9 +456,7 @@ function APADV.CreateApSlot(addr,slotn,pw,slotdata)
             forwardAPchat = true,
             forwardGMODchat = true,
             deathlink = false,
-            getSlotData = getslotdata,
-            dontStore = true,
-            slotData = slotdata
+            dontStore = true
         })
 
         APADV_SLOT.OnItemUpdate = ApAdvItemHandler

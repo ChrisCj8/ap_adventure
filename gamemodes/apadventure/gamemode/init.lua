@@ -44,10 +44,7 @@ end
 
 function APADV.DoMapTransition(map,group,entrname)
     local curmap = game.GetMap()
-    local slotdata
-    if APADV_SLOT and APADV_SLOT.slotData then
-        slotdata = APADV_SLOT.slotData
-    end
+    local slotdata = APADV_SLOT and APADV_SLOT.slotData
     if map == curmap then
         if entrname then
             APADV_ENTRNAME = entrname
@@ -71,8 +68,7 @@ function APADV.DoMapTransition(map,group,entrname)
     APADV_NEXTMAPTBL.apslot = {
         addr = APADV_SLOT.address,
         name = APADV_SLOT.slotName,
-        pw = APADV_SLOT.password, 
-        sd = slotdata
+        pw = APADV_SLOT.password
     }
     APADV_NEXTMAPTBL.loadcfg = {
         m = map,
@@ -106,7 +102,7 @@ if file.Exists("apadventure/leveltransdata.json","DATA") then
 
             local sltbl = lastmaptbl.apslot
             if sltbl then
-                APADV.CreateApSlot(sltbl.addr,sltbl.name,sltbl.pw,sltbl.sd)
+                APADV.CreateApSlot(sltbl.addr,sltbl.name,sltbl.pw)
             end
 
             hook.Add("InitPostEntity","ApAdvCfgLoader",function()
