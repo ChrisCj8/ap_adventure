@@ -509,7 +509,6 @@ function APADV.MapLocationStatus(lctn)
         ErrorNoHalt("Location "..locname.." could not be matched to an ID.")
         return
     end
-    lastlocationtable = table.Copy(APADV_SLOT.Locations)
     return APADV_SLOT.Locations[ID]
 end
 
