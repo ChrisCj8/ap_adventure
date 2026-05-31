@@ -14,7 +14,7 @@ end)
 
 net.Receive("APAdvSaveManageData",function() 
     if IsValid(apAdventure.SaveManager) then
-        apAdventure.SaveManager:ReceiveData(net.ReadString())
+        apAdventure.SaveManager:ReceiveData(net.ReadString(),net.ReadString())
     end
 end)
 

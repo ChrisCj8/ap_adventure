@@ -336,7 +336,7 @@ local dp_loaded = dp_loaded or false
 
 local function OnRunID(packet)
     local runid = packet.value
-    local saveid = runid.."_"..APADV_SLOT.slotName
+    local saveid = runid.."_"..APADV_SLOT.team.."_"..APADV_SLOT.Nr
     if APADV_SAVEID != saveid then
         
         local slotdata = APADV_SLOT.slotData

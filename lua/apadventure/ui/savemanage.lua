@@ -36,16 +36,15 @@ return function()
     local sfind = string.find
     local ssub = string.sub
 
-    function window:ReceiveData(data)
+    function window:ReceiveData(data,name)
         local sep1pos = sfind(data,"_")
         local sep2pos = sfind(data,"_",sep1pos+1)
 
         local time = tonumber(ssub(data,1,sep1pos-1))
         local timestr = os.date("%c",time)
         local seed = ssub(data,sep1pos+1,sep2pos-1)
-        local slot = ssub(data,sep2pos+1,-1)
 
-        local ln = savlist:AddLine(slot,seed,timestr)
+        local ln = savlist:AddLine(name,seed,timestr)
         ln.savename = data
         ln:SetSortValue(3,time)
     end

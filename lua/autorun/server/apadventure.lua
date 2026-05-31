@@ -161,6 +161,7 @@ net.Receive("APAdvSaveManageCmd",function(_,ply)
             for k,v in ipairs(saves) do
                 net.Start("APAdvSaveManageData")
                     net.WriteString(v)
+                    net.WriteString(file.Read("apadventure/sav/"..v.."/name.txt","DATA") or "?")
                 net.Send(ply)
             end
         end,

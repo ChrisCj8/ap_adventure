@@ -57,6 +57,7 @@ function APADV.InitSaveData(saveid)
 
     else
         file.CreateDir(savedir.."ply/")
+        file.Write(savedir.."name.txt",APADV_SLOT.slotName)
     end
     saveinit = true
     awaitingdata = {}
