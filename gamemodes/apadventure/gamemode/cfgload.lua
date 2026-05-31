@@ -41,18 +41,13 @@ function APADV.LoadCfg(group)
     if !json then json = fileR("data_static/"..path,"GAME") end
     if !json then ErrorNoHalt("Could not find a clientside config for map"..map.." in group "..group) return end
     local clcfg = fromJSON(json)
-    
+
     local scriptpath = "apadventure/cfglua/"..group.."/"..map..".lua"
-    if file.Exists(scriptpath,"lsv") then
-        APADV_CFGLUA = include(scriptpath) or {}
-        APADV_CFGLUA.IsValid = CfgLuaValid
-    end
+    APADV_CFGLUA = file.Exists(scriptpath,"lsv") and include(scriptpath) or {}
+    APADV_CFGLUA.IsValid = CfgLuaValid
 
     local infotbl = clcfg.info
-    local grouprules = {} 
-    if groupcfg then
-        grouprules = groupcfg.rules
-    end
+    local grouprules = groupcfg and groupcfg.rules or {}
 
     local settingstbl = apAdventure.CfgSettings
 
@@ -219,6 +214,6 @@ concommand.Add("apadventure_loadcfg",function(ply,cmd,args)
             end
         end
     end
-    
+
     APADV.LoadCfg(gr)
 end,nil,"Loads a config for this map by its group name, if it exists. If a config has already been loaded then this command can be used without any arguments to reload the current config.")

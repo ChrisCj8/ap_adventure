@@ -1,6 +1,7 @@
 APADV = APADV or {}
 
 APADV_ITEMHANDLERS = APADV_ITEMHANDLERS or {}
+APADV_CFGITEMHANDLERS = APADV_CFGITEMHANDLERS or {}
 
 timer.Create("APAdvTrackerQuery",1,0,function() 
     APADV_TRACKER:Query()
@@ -18,6 +19,10 @@ local function ApAdvItemHandler(slot,id,itemlist)
                 iv:Fire(v.input,#itemlist,v.delay)
             end
         end
+    end
+
+    if APADV_CFGITEMHANDLERS[id] then
+        APADV_CFGITEMHANDLERS[id](itemlist)
     end
 
     timer.Start("APAdvTrackerQuery")
@@ -52,24 +57,19 @@ local handlers_registered = handlers_registered or false
 
 APADV_ITEMSUSED = APADV_ITEMSUSED or {}
 
-function APADV.RegisterMapItems(itemtbl)
-    if !itemtbl then
-        itemtbl = APADV.MapItemTbl
-        APADV.MapItemTbl = nil
-    end
-
-    local map = game.GetMap()
+function APADV.RegisterMapItems()
     local toID = APADV_DATAPACK_LOCAL.item_name_to_id
     local itemlist = APADV_SLOT.Items
+    local nameprefix = APADV_MAPGROUP.." - "..APADV_MAP.." - "
+    APADV_MAPITEMCOUNTERS = {}
     for k,v in pairs(APADV.MapItemCounters) do
-        local id = toID[APADV_MAPGROUP.." - "..map.." - "..k]
+        local id = toID[nameprefix..k]
         if id then
             local outtbl = {}
             for ik,iv in ipairs(v) do
                 outtbl[ik] = iv
-                local itemamt = 0
                 local itemtbl = itemlist[id]
-                if itemtbl then itemamt = #itemtbl end
+                local itemamt = itemtbl and #itemtbl or 0
                 for iik,iiv in ipairs(ents.FindByName(iv.target)) do
                     iiv:Fire(iv.input,itemamt,iv.delay)
                 end
@@ -79,6 +79,28 @@ function APADV.RegisterMapItems(itemtbl)
             end
         end 
     end
+
+    local cfghandlers = {}
+
+    if APADV_CFGLUA.ItemFuncs then
+        for k,v in pairs(APADV_CFGLUA.ItemFuncs) do
+            local id = toID[k]
+            if id then cfghandlers[id] = v end
+        end
+    end
+
+    if APADV_CFGLUA.MapItemFuncs then
+        for k,v in pairs(APADV_CFGLUA.MapItemFuncs) do
+            local id = toID[nameprefix..k]
+            if id then cfghandlers[id] = v end
+        end
+    end
+
+    for k,v in pairs(cfghandlers) do
+        ProtectedCall(v,itemlist[k] or {})
+    end
+
+    APADV_CFGITEMHANDLERS = cfghandlers
 end
 
 local tolookup = apAdventure.ListToLookUp
