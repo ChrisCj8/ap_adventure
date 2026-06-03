@@ -413,6 +413,8 @@ local function OnRunID(packet)
         ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
         APADV_CFGLUA.OnFullConnect = nil
     end
+
+    APADV_FULLCONNECT = true
 end
 
 local function OnConnect(self)
@@ -422,11 +424,10 @@ local function OnConnect(self)
 end
 
 local function OnDisconnect(self)
-
+    APADV_FULLCONNECT = false
     net.Start("ApAdvConnectionState")
         net.WriteBool(false)
     net.Broadcast()
-
 end
 
 local function ApAdvDPLoad(slot,datapackage)
