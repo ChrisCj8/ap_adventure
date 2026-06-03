@@ -124,7 +124,7 @@ return function(window)
 
     local configloaded = editcfg.Group != ""
     local filemenu = mbar:AddMenu("#apadventure.editor.menu.file")
-    filemenu:AddOption("#apadventure.editor.menu.file.load",function() include("apadventure/ui/loadmenu.lua")() end)
+    filemenu:AddOption("#apadventure.editor.menu.file.manage",function() include("apadventure/ui/loadmenu.lua")() end)
     local reloadoption = filemenu:AddOption("#apadventure.editor.menu.file.reload",function()
         RunConsoleCommand("apadventure_editor_loadcfg")
     end)
