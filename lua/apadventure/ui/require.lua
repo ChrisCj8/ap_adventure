@@ -244,6 +244,7 @@ end
 
 function wsaddbtn:DoClick()
     local wsaddwindow = UImake("DFrame")
+    wsaddwindow:SetTitle("#apadventure.editor.require.wsui.title")
     wsaddwindow:SetPos(100,100)
     wsaddwindow:SetSize(300,500)
     wsaddwindow:MakePopup()
@@ -251,8 +252,8 @@ function wsaddbtn:DoClick()
 
     local wsaddlist = UImake("DListView",wsaddwindow)
     wsaddlist:SetPos(5,25)
-    wsaddlist:AddColumn("Addon Title")
-    local idcol = wsaddlist:AddColumn("Workshop ID")
+    wsaddlist:AddColumn("#apadventure.editor.require.wsui.list.addon")
+    local idcol = wsaddlist:AddColumn("#apadventure.editor.require.wsui.list.wsid")
     idcol:SetFixedWidth(90)
 
     local idproxies = apAdventure.WSIDProxies
@@ -266,6 +267,7 @@ function wsaddbtn:DoClick()
     end
 
     local addbtn = UImake("DButton",wsaddwindow)
+    addbtn:SetText("#apadventure.editor.require.wsui.addbtn")
     function addbtn:DoClick()
         for k,v in ipairs(wsaddlist:GetSelected()) do
             local id = v:GetValue(2)
