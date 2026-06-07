@@ -210,7 +210,6 @@ function APADV.ProcessRequirements(reqs)
     }
 
     for k,v in ipairs(reqs) do
-        
         if tagfuncs[v] then
             local out = tagfuncs[v](info)
             if out then
@@ -232,10 +231,9 @@ function APADV.ProcessRequirements(reqs)
                     end
                     if isstring(msg) then msg = {msg} end
                     if istable(msg) then
-                        miscinfo[#miscinfo+1] = {
+                        miscinfo[v] = {
                             status = status,
                             msg = msg,
-                            tag = v,
                         }
                     end
                 end

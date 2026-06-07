@@ -292,14 +292,16 @@ local function BuildLists()
 
     othercat:Clear()
     local first = 5
-    for k,v in ipairs(APADV_REQUIREMENTS.misc) do
-        local tag, msg = v.tag, v.msg
-        if tag and msg and next(msg) then
-            pnl = UImake("DPanel",othercat)
+    for k,v in pairs(APADV_REQUIREMENTS.misc) do
+        local msg = v.msg
+        pnl = UImake("DPanel",othercat)
+        pnl:Dock(TOP)
+        pnl:DockMargin(5,first,5,5)
+        first = 0
+        if file.Exists("gamemodes/apadventure/gamemode/require/cl/"..k..".lua","GAME") then
+            include("apadventure/gamemode/require/cl/"..k..".lua")(pnl,v)
+        elseif msg and next(msg) then
             pnl.PerformLayout = otherpnllayout
-            pnl:Dock(TOP)
-            pnl:DockMargin(5,first,5,5)
-            first = 0
             local txt = UImake("DLabel",pnl)
             pnl.txt = txt
             txt:SetWrap(true)
@@ -307,8 +309,8 @@ local function BuildLists()
             txt:SetPos(5,5)
             txt:SetDark(true)
             local text
-            for ik,iv in ipairs(v.msg) do
-                local loc = locstr("apadventure.requiremsg."..v.tag.."."..iv)
+            for ik,iv in ipairs(msg) do
+                local loc = locstr("apadventure.requiremsg."..k.."."..iv)
                 text = !text and loc or text.."\n"..loc
             end
             txt:SetText(text)
