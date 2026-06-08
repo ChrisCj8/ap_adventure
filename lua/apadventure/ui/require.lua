@@ -198,7 +198,6 @@ local function addtag(tag,new)
 
     list:AddLine(tag,desc)
     if new then
-        itemcount = itemcount + 1
         targettbl[itemcount] = tag
         tagtopos[tag] = itemcount
     end
