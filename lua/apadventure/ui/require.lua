@@ -66,6 +66,16 @@ for k,v in ipairs(gamelist) do
     }
 end
 
+if E2Lib then
+    for k,v in ipairs(E2Lib.GetExtensions()) do
+        local name = "E2ex"..v
+        taglist[name] = {
+            n = name,
+            t = locstr("apadventure.editor.require.E2extagdesc")..v
+        }
+    end
+end
+
 return function(parent)
 local basepnl = UImake("DCollapsibleCategory",parent)
 basepnl:SetLabel("#apadventure.editor.require.title")
@@ -184,6 +194,9 @@ local function addtag(tag,new)
         game = function(tagend)
             local gameinfo = taglist[tag]
             desc = gameinfo and gameinfo.t or gametagtitle..tagend
+        end,
+        E2ex = function(tagend)
+            desc = locstr("apadventure.editor.require.E2extagdesc")..tagend
         end
     }
 
@@ -197,6 +210,7 @@ local function addtag(tag,new)
     end
 
     list:AddLine(tag,desc)
+    itemcount = itemcount + 1
     if new then
         targettbl[itemcount] = tag
         tagtopos[tag] = itemcount

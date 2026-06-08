@@ -206,6 +206,14 @@ function APADV.ProcessRequirements(reqs)
         end,
         wsid = function(tag)
             addons[tag] = false
+        end,
+        E2ex = function(tag)
+            local e2tbl = miscinfo.wiree2
+            if e2tbl then
+                e2tbl[tag] = tag
+            else
+                miscinfo.wiree2 = {[tag] = E2Lib.GetExtensionStatus(tag) or false}
+            end
         end
     }
 
