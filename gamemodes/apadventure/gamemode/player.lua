@@ -111,6 +111,11 @@ function GM:PlayerShouldTakeDamage(ply,attkr)
     return true
 end
 
+function GM:GetFallDamage(ply,spd)
+    if APADV_GODMODE then return 0 end
+    return BASEGM:GetFallDamage(ply,spd)
+end
+
 function GM:PlayerLoadout(ply)
     if !APADV_WEPS then return true end
 
