@@ -19,6 +19,8 @@ return function()
     div:SetRight(maplist)
     div:SetLeftWidth(250)
 
+    local reloadfiles
+
     local loadbtn = vgui.Create("DButton",window)
     loadbtn:SetText("#apadventure.loadmenu.loadcfg")
     loadbtn:SetEnabled(false)
@@ -93,7 +95,7 @@ return function()
         end
     end
 
-    local del, filef = file.Delete, file.Find
+    local filew, filer, del, filef, mkdir = file.Write, file.Read, file.Delete, file.Find, file.CreateDir
     local delbtn = vgui.Create("DButton",window)
     delbtn:SetText("#apadventure.loadmenu.delcfg")
     delbtn:SetEnabled(false)
@@ -129,13 +131,161 @@ return function()
                     del(logicpath.."group.json")
                     del(logicpath)
                 end
-
-                grouplist:FindFiles()
-                loadbtn:SetEnabled(false)
-                delbtn:SetEnabled(false)
-                loadgrbtn:SetEnabled(false)
-                for k,v in ipairs(maplist:GetLines()) do maplist:RemoveLine(v:GetID()) end
+                reloadfiles()
             end)
+    end
+
+    local copytgtin = vgui.Create("DTextEntry",window)
+
+    local copybtn = vgui.Create("DButton",window)
+    copybtn:SetText("#apadventure.loadmenu.copycfg")
+    copybtn:SetEnabled(false)
+
+    local movebtn = vgui.Create("DButton",window)
+    movebtn:SetText("#apadventure.loadmenu.movecfg")
+    movebtn:SetEnabled(false)
+
+    local copygrcheck = vgui.Create("DCheckBoxLabel",window)
+    copygrcheck:SetText("#apadventure.loadmenu.copydatacheck")
+    copygrcheck:SetDark(true)
+
+    local fromJSON, toJSON = util.JSONToTable, util.TableToJSON
+    local cltologic, svtologic = apAdventure.ClCfgToLogic, apAdventure.SvCfgToLogic
+    function copycfg(newgr,move)
+        local errorsnd
+        local _,ln = grouplist:GetSelectedLine()
+        if !ln then return end
+        local gr = ln:GetValue(1)
+        local path, newpath = "apadventure/cfg/"..gr.."/", "apadventure/cfg/"..newgr.."/"
+        local logicpath, newlogicpath = "apadventure/logic/cfg/"..gr.."/", "apadventure/logic/cfg/"..newgr.."/"
+        if file.IsDir("data_static/"..newpath,"GAME") and !GetConVar("apadventure_editor_allow_static_overwrite"):GetBool() then
+            notification.AddLegacy("#apadventure.loadmenu.error.movetostatic",NOTIFY_ERROR,3)
+            surface.PlaySound("buttons/button10.wav")
+            return
+        end
+        if !file.IsDir(newpath,"DATA") then mkdir(newpath) end
+        if !file.IsDir(newlogicpath,"DATA") then mkdir(newlogicpath) end
+        for k,v in ipairs(maplist:GetSelected()) do
+            local map = v:GetValue(1)
+            local mappath, maplogicpath = path..map, logicpath..map
+            local newmappath, newmaplogicpath = newpath..map, newlogicpath..map
+            local clpath,svpath = mappath.."/cl.json", mappath.."/sv.json"
+            local clfile = filer(clpath,"DATA")
+            if !clfile then
+                if move then
+                    notification.AddLegacy("#apadventure.loadmenu.error.movestatic",NOTIFY_ERROR,3)
+                    surface.PlaySound("buttons/button10.wav")
+                    del(newpath) -- file.Delete can only remove empty directories so this should be safe
+                    del(newlogicpath)
+                    return
+                end
+                clfile = filer("data_static/"..clpath,"GAME")
+            end
+            local svfile = filer(svpath,"DATA")
+            if !svfile then
+                if move then
+                    notification.AddLegacy("#apadventure.loadmenu.error.movestatic",NOTIFY_ERROR,3)
+                    surface.PlaySound("buttons/button10.wav")
+                    del(newpath) -- file.Delete can only remove empty directories so this should be safe
+                    del(newlogicpath)
+                    return
+                end
+                svfile = filer("data_static/"..svpath,"GAME")
+            end
+
+            local copied
+            if clfile and svfile then
+                cltbl, svtbl = fromJSON(clfile), fromJSON(svfile)
+                if cltbl and svtbl then
+                    cllogic, svlogic = cltologic(cltbl), svtologic(svtbl)
+                    if cllogic and svlogic then
+                        mkdir(newmappath)
+                        mkdir(newmaplogicpath)
+                        copied = filew(newmappath.."/cl.json",clfile) and
+                            filew(newmappath.."/sv.json",svfile) and
+                            filew(newmaplogicpath.."/cl.json",toJSON(cllogic)) and
+                            filew(newmaplogicpath.."/sv.json",toJSON(svlogic))
+                    elseif !cllogic then
+                        notification.AddLegacy(string.Interpolate(language.GetPhrase("#apadventure.loadmenu.error.cantmakecllogic"),{m=map}),NOTIFY_ERROR,3)
+                        errorsnd = true
+                    elseif !svlogic then
+                        notification.AddLegacy(string.Interpolate(language.GetPhrase("#apadventure.loadmenu.error.cantmakesvlogic"),{m=map}),NOTIFY_ERROR,3)
+                        errorsnd = true
+                    end
+                elseif !cltbl then
+                    notification.AddLegacy(string.Interpolate(language.GetPhrase("#apadventure.loadmenu.error.cantmakecllogic"),{m=map}),NOTIFY_ERROR,3)
+                    errorsnd = true
+                elseif !svtbl then
+                    notification.AddLegacy(string.Interpolate(language.GetPhrase("#apadventure.loadmenu.error.cantmakesvlogic"),{m=map}),NOTIFY_ERROR,3)
+                    errorsnd = true
+                end
+                
+            end
+
+            if move and copied then
+                del(clpath); del(svpath); del(mappath);
+                del(maplogicpath.."/cl.json")
+                del(maplogicpath.."/sv.json")
+                del(maplogicpath)
+            elseif !copied then
+                del(newmappath)
+                del(newmaplogicpath)
+            end
+        end
+
+        if copygrcheck:GetChecked() then
+            local grpath = path.."group.json"
+            local grfile = filer(grpath,"DATA")
+            if !grfile then
+                if move then
+                    notification.AddLegacy("#apadventure.loadmenu.error.movestatic",NOTIFY_ERROR,3)
+                    surface.PlaySound("buttons/button10.wav")
+                    del(newpath) -- file.Delete can only remove empty directories so this should be safe
+                    del(newlogicpath)
+                    return
+                end
+                grfile = filer("data_static/"..grpath,"GAME")
+            end
+            if grfile then 
+                filew(newgr,grfile)
+            end
+        end
+
+        local function cleanupempty(path)
+            local files, dirs = filef(path.."*","DATA")
+            if dirs then
+                if !dirs[1] then
+                    for k,v in ipairs(files) do del(path..v) end
+                    del(path)
+                end
+            end
+        end
+
+        cleanupempty(newpath)
+        cleanupempty(newlogicpath)
+        if move then
+            cleanupempty(path)
+            cleanupempty(logicpath)
+        end
+
+        if errorsound then surface.PlaySound("buttons/button10.wav") end
+        reloadfiles()
+    end
+
+    function copybtn:DoClick()
+        local newgr = copytgtin:GetText()
+        if newgr == "" then return end
+        if newgr[1] == " " then return end
+        if newgr[#newgr] == " " then return end
+        copycfg(newgr)
+    end
+
+    function movebtn:DoClick()
+        local newgr = copytgtin:GetText()
+        if newgr == "" then return end
+        if newgr[1] == " " then return end
+        if newgr[#newgr] == " " then return end
+        copycfg(newgr,true)
     end
 
     local listtext = {
@@ -177,11 +327,25 @@ return function()
         loadbtn:SetEnabled(hasmap)
         delbtn:SetEnabled(hasmap)
         loadgrbtn:SetEnabled(true)
+        copybtn:SetEnabled(hasmap)
+        movebtn:SetEnabled(hasmap)
     end
 
     function maplist:OnRowSelected(id,pnl)
         loadbtn:SetEnabled(pnl:GetValue(1) == map)
         delbtn:SetEnabled(true)
+        copybtn:SetEnabled(true)
+        movebtn:SetEnabled(true)
+    end
+
+    reloadfiles = function()
+        grouplist:FindFiles()
+        loadbtn:SetEnabled(false)
+        delbtn:SetEnabled(false)
+        loadgrbtn:SetEnabled(false)
+        copybtn:SetEnabled(false)
+        movebtn:SetEnabled(false)
+        for k,v in ipairs(maplist:GetLines()) do maplist:RemoveLine(v:GetID()) end
     end
 
     local oldlayout = window.PerformLayout
@@ -189,17 +353,30 @@ return function()
         oldlayout(self,w,h)
 
         local iw = w-40
+        local iw2 = w-45
 
-        div:SetSize(w-10,h-70)
+        div:SetSize(w-10,h-100)
 
-        loadbtn:SetPos(15,h-30)
+        loadbtn:SetPos(15,h-60)
         loadbtn:SetSize(iw*.5,25)
 
-        loadgrbtn:SetPos(20+iw*.5,h-30)
+        loadgrbtn:SetPos(20+iw*.5,h-60)
         loadgrbtn:SetSize(iw*.25,25)
 
-        delbtn:SetPos(25+iw*.75,h-30)
+        delbtn:SetPos(25+iw*.75,h-60)
         delbtn:SetSize(iw*.25,25)
+
+        copytgtin:SetPos(15,h-30)
+        copytgtin:SetSize(iw2*.4,25)
+
+        copybtn:SetPos(20+iw*.4,h-30)
+        copybtn:SetSize(iw2*.2,25)
+
+        movebtn:SetPos(25+iw*.6,h-30)
+        movebtn:SetSize(iw2*.2,25)
+
+        copygrcheck:SetPos(30+iw*.8,h-30)
+        copygrcheck:SetSize(iw2*.2,25)
     end
     return window
 end
