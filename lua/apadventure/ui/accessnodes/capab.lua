@@ -184,7 +184,7 @@ function NODE.Panel(parent)
     function parent:PerformLayout(w,h)
         capselect:SetSize(w-70,22)
         capnamein:SetSize(w-70,22)
-        caplist:SetSize(w-10,215)
+        caplist:SetSize(w-10,145)
         capaddbtn:SetPos(w-41,7)
         capdelbtn:SetPos(w-21,7)
 
