@@ -93,6 +93,10 @@ net.Receive("APAdvSaveCfg",function()
     if !next(items) then items = nil end
     local connect = editcfg.Connections
     if !next(connect) then connect = nil end
+    if !next(editcfg.Regions) then
+        notification.AddLegacy("#apadventure.editor.warning.noregs",NOTIFY_ERROR,5)
+        surface.PlaySound("buttons/button10.wav")
+    end
 
     local outtbl = {
         ver = "v1_1",
