@@ -280,7 +280,9 @@ def ProcessCfgs():
 
     warnpath = apdir.joinpath("cfgprocessor_warnings.log")
     if warnings:
-        warnpath.open("w").writelines(warnings)
+        warnfile = warnpath.open("w")
+        for v in warnings:
+            warnfile.write(v+"\n")
     elif warnpath.is_file():
         warnpath.unlink()
 
