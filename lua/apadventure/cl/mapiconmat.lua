@@ -9,30 +9,51 @@ timer.Create("ApAdvMapIconMatReload",2,0, function()
 end)
 
 function apAdventure.GetMapIconMat(map,loadedcb)
-    --print(map)
     if apAdventure.MapIconMats[map] then
-        --return apAdventure.MapIconMats[map].mat
         if isfunction(loadedcb) then
             loadedcb(mat)
         end
     else
-        local bgstring = 'background-image: url("asset://garrysmod/maps/thumb/noicon.png");'
-        if file.Exists("maps/thumb/"..map..".png","GAME") then
-            bgstring = 'background-image: url("asset://garrysmod/maps/thumb/'..map..'.png");'
-        end
+        local iconexists = file.Exists("maps/thumb/"..map..".png","GAME")
         local html = vgui.Create("DHTML")
         html:SetSize(128,128)
-        html:SetHTML([[
+        local fontsize = ((128/#map)*1.5)
+        local htmlcontent = [[
             <head>
                 <style>
                     body {
-                        ]]..bgstring..[[
+                        background-image: url("asset://garrysmod/maps/thumb/]]..(iconexists and map or 'noicon')..[[.png");
                         background-size: cover;
                         overflow: hidden;
+                        padding: 0;
+                    }]]..(iconexists and "" or [[
+
+                    @font-face {
+                        font-family: titlefont;
+                        src: url(asset://garrysmod/resource/fonts/Roboto-Medium.ttf);
                     }
+                    
+                    h1 {
+                        font-family: titlefont;
+                        position: fixed;
+                        text-align: center;
+                        left: 0;
+                        right: 0;
+                        top: ]]..(-fontsize*.5+64)..[[px;
+                        bottom: 0;
+                        margin: 0;
+                        padding: 0;
+                        color: white;
+                        text-shadow: 0 0 5px black;
+                        font-size: ]]..(fontsize)..[[px;
+                    }]])..[[
                 </style>
             </head>
-        ]])
+        ]]
+        if !iconexists then
+            htmlcontent = htmlcontent.."<body><h1>"..map.."</h1></body>"
+        end
+        html:SetHTML(htmlcontent)
         local olddocready = html.OnDocumentReady
         function html:OnFinishLoadingDocument()
             --print("html loaded") 
