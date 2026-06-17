@@ -8,6 +8,11 @@ timer.Create("ApAdvMapIconMatReload",2,0, function()
     end
 end)
 
+local rescvar = CreateClientConVar("apadventure_mapiconmat_resolution",8,true,false,
+    [[What the resolution for Map Icon Materials should be, as a power of two. (8 = 256, 9 = 512, ...)
+    Map Icons are rarely bigger than 512x512, so there's not much of a benefit to setting this higher than 9.
+    This won't update until you load another map.]],4,12)
+
 function apAdventure.GetMapIconMat(map,loadedcb)
     if apAdventure.MapIconMats[map] then
         if isfunction(loadedcb) then
@@ -16,14 +21,16 @@ function apAdventure.GetMapIconMat(map,loadedcb)
     else
         local iconexists = file.Exists("maps/thumb/"..map..".png","GAME")
         local html = vgui.Create("DHTML")
-        html:SetSize(128,128)
-        local fontsize = ((128/#map)*1.5)
+        local res = 2^rescvar:GetInt()
+        html:SetSize(res,res)
+        local fontsize = ((res/#map)*1.5)
         local htmlcontent = [[
             <head>
                 <style>
                     body {
                         background-image: url("asset://garrysmod/maps/thumb/]]..(iconexists and map or 'noicon')..[[.png");
                         background-size: cover;
+                        image-rendering: pixelated;
                         overflow: hidden;
                         padding: 0;
                     }]]..(iconexists and "" or [[
@@ -39,12 +46,12 @@ function apAdventure.GetMapIconMat(map,loadedcb)
                         text-align: center;
                         left: 0;
                         right: 0;
-                        top: ]]..(-fontsize*.5+64)..[[px;
+                        top: ]]..(-fontsize*.5+res/2)..[[px;
                         bottom: 0;
                         margin: 0;
                         padding: 0;
                         color: white;
-                        text-shadow: 0 0 5px black;
+                        text-shadow: 0 0 ]]..(fontsize*.2)..[[px black;
                         font-size: ]]..(fontsize)..[[px;
                     }]])..[[
                 </style>
