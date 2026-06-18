@@ -449,12 +449,11 @@ return function(window)
         end
 
         function reglist:OnRowRightClick(id,pnl)
-            local menu = UImake("DMenu")
+            local menu = DermaMenu()
             menu:AddOption("#apadventure.editor.reg.rclick.copyname",function()
                 SetClipboardText(pnl:GetValue(1))
             end)
-            menu:SetPos(input.GetCursorPos())
-            menu:MakePopup()
+            menu:Open()
         end
 
         function reglist:LoadInfo(tbl)
@@ -576,7 +575,7 @@ return function(window)
         end
 
         function connlist:OnRowRightClick(id,pnl)
-            local menu = UImake("DMenu")
+            local menu = DermaMenu()
             menu:AddOption("#apadventure.editor.conn.rclick.copyfrom",function()
                 SetClipboardText(pnl:GetValue(1))
             end)
@@ -595,8 +594,7 @@ return function(window)
                     pnl:SetValue(3,"no")
                 end
             end)
-            menu:SetPos(input.GetCursorPos())
-            menu:MakePopup()
+            menu:Open()
         end
 
         function connlist:LoadInfo(tbl)

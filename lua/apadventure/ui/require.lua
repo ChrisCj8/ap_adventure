@@ -151,7 +151,7 @@ end
 
 function list:OnRowRightClick(ln,pnl)
     local tag = pnl:GetValue(1)
-    local menu = UImake("DMenu")
+    local menu = DermaMenu()
     menu:AddOption("#apadventure.editor.require.copytag")
     local taginfo = apAdventure.RequireTags[tag]
     if taginfo then
@@ -176,8 +176,7 @@ function list:OnRowRightClick(ln,pnl)
             SetClipboardText(wsid)
         end)
     end
-    menu:SetPos(input.GetCursorPos())
-    menu:MakePopup()
+    menu:Open()
 end
 
 local function addtag(tag,new)
