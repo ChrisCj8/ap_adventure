@@ -297,7 +297,7 @@ return function()
 
     local map = game.GetMap()
 
-    function grouplist:OnRowSelected(id,pnl)
+    function grouplist:OnRowSelected(_,pnl)
         for k,v in ipairs(maplist:GetLines()) do
             maplist:RemoveLine(v:GetID())
         end
@@ -331,11 +331,30 @@ return function()
         movebtn:SetEnabled(hasmap)
     end
 
-    function maplist:OnRowSelected(id,pnl)
+    function grouplist:OnRowRightClick(_,ln)
+        local menu = DermaMenu()
+        menu:AddOption("#apadventure.loadmenu.copygrnametocopyname", function()
+            copytgtin:SetText(ln:GetValue(1))
+        end)
+        menu:AddOption("#apadventure.loadmenu.copygrname", function()
+            SetClipboardText(ln:GetValue(1))
+        end)
+        menu:Open()
+    end
+
+    function maplist:OnRowSelected(_,pnl)
         loadbtn:SetEnabled(pnl:GetValue(1) == map)
         delbtn:SetEnabled(true)
         copybtn:SetEnabled(true)
         movebtn:SetEnabled(true)
+    end
+
+    function maplist:OnRowRightClick(_,ln)
+        local menu = DermaMenu()
+        menu:AddOption("#apadventure.loadmenu.copymapname", function()
+            SetClipboardText(ln:GetValue(1))
+        end)
+        menu:Open()
     end
 
     reloadfiles = function()
