@@ -30,6 +30,12 @@ def eval_json_rule(rule,state : CollectionState,world,region):
                     out = False
                     break
             return out
+        case "min":
+            count = 0
+            for v in rule["nodes"]:
+                if eval_json_rule(v,state,world,region):
+                    count += 1
+            return count >= rule["amt"]
         case "bhop":
             return state.has("Bunnyhop",player)
         case _:
@@ -112,6 +118,35 @@ def preprocess_json_rule(rule,world,region):
             else:
                 rule["nodes"] = newnodes
                 return rule
+        case "min":
+            newnodes = []
+            min = rule["amt"]
+            for v in rule["nodes"]:
+                pr = preprocess_json_rule(v,world,region)
+                type = pr["type"]
+                if type == "always":
+                    min -= 1
+                elif type != "never":
+                    newnodes.append(pr)
+
+            if min < 1:
+                return alwaysnode
+            if min > len(newnodes):
+                return nevernode
+
+            rule["nodes"] = newnodes
+
+            if min == 1:
+                rule["type"] = "or"
+                del rule["amt"]
+                return rule
+            if min == len(newnodes):
+                rule["type"] = "and"
+                del rule["amt"]
+                return rule
+
+            rule["amt"] = min
+            return rule
         case "capab":
             capab = "capab" in rule and rule["capab"]
             if not capab:

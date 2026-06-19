@@ -346,7 +346,7 @@ function APADV_TRACKER:Query()
                 local sub = node.nodes
                 local doresort
                 if !sub[1] then return 3 end
-                for k,v in ipairs(node.nodes) do
+                for k,v in ipairs(sub) do
                     --print("testing type",v.type)
                     local subout, override = nodeeval[v.type](v)
                     if subout == 1 then return 1,1 end
@@ -391,6 +391,84 @@ function APADV_TRACKER:Query()
                     if !next(sub) then return out,out end
                     node.nodes = resort(sub)
                 end
+                return out
+            end,
+            ["min"] = function(node)
+                local sub, min, fix = node.nodes, node.amt, node.fix
+                local count = {}
+                if fix then
+                    for k,v in pairs(fix) do count[k] = v end
+                else
+                    fix = {}
+                    node.fix = fix
+                end
+                local doresort
+                if !sub[1] then return 3 end
+                for k,v in ipairs(sub) do
+                    local subout, override = nodeeval[v.type](v)
+                    local add = true
+                    if override then
+                        if isnumber(override) then
+                            if override < 2 then
+                                min = min-1
+                                if min < 1 then return 1,1 end
+                                add = false
+                            else
+                                fix[override] = (fix[override] or 0) + 1
+                            end
+                            sub[k] = nil
+                            doresort = true
+                        else
+                            sub[k] = override
+                        end
+                    end
+                    if add then
+                        subout = subout < 1 and 1 or subout
+                        local tgt = count[subout]
+                        count[subout] = (tgt or 0) + 1
+                    end
+                end
+
+                local out,total = -1,0
+                repeat
+                    out=out+1
+                    total = (count[out] or 0) + total
+                until out == 3 or total >= min
+
+                if out < 2 then return out,out end
+
+                if doresort then
+                    if !next(sub) then return out,out end
+                    node.nodes = resort(sub)
+                end
+
+                if min < 2 then
+                    local maxn = 1
+                    for k,v in pairs(fix) do
+                        maxn = max(k,maxn)
+                    end
+                    return out, {
+                        type = "or",
+                        nodes = node.nodes,
+                        min = maxn
+                    }
+                end
+                local nodecount = table.Count(sub)
+                if nodecount == min then
+                    local minn = 8
+                    for k,v in pairs(fix) do
+                        minn = min(k,minn)
+                    end
+                    return out, {
+                        type = "and",
+                        nodes = node.nodes,
+                        min = minn
+                    }
+                elseif nodecount < min then
+                    return out,out
+                end
+
+                node.amt = min
                 return out
             end,
             ["fix"] = function(node)
