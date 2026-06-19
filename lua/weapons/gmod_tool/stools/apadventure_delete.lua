@@ -29,7 +29,7 @@ if CLIENT then
             cIdList:AddColumn("#tool.apadventure_delete.idlist.classname")
             cIdList:AddColumn("#tool.apadventure_delete.lists.targetname")
 
-            function cIdList:ProcessDelMark() 
+            function cIdList:ProcessDelMark()
                 for k,v in ipairs(self:GetLines()) do
                     self:RemoveLine(v:GetID())
                 end
@@ -40,30 +40,29 @@ if CLIENT then
             cIdList:ProcessDelMark()
 
             function cIdList:OnRowRightClick(_,ln)
-                local menu = vgui.Create("DMenu")
-                menu:AddOption("#tool.apadventure_delete.copymenu.id",function() 
+                local menu = DermaMenu()
+                menu:AddOption("#tool.apadventure_delete.copymenu.id",function()
                     SetClipboardText(ln:GetValue(1))
                 end)
-                menu:AddOption("#tool.apadventure_delete.copymenu.class",function() 
+                menu:AddOption("#tool.apadventure_delete.copymenu.class",function()
                     SetClipboardText(ln:GetValue(2))
                 end)
-                menu:AddOption("#tool.apadventure_delete.copymenu.name",function() 
+                menu:AddOption("#tool.apadventure_delete.copymenu.name",function()
                     SetClipboardText(ln:GetValue(3))
                 end)
                 menu:AddSpacer()
-                menu:AddOption("#tool.apadventure_delete.copymenu.id2name",function() 
+                menu:AddOption("#tool.apadventure_delete.copymenu.id2name",function()
                     for k,v in ipairs(cIdList:GetSelected()) do
                         local name = v:GetValue(3)
                         if name != "" then
-                            net.Start("APAdvDelNameMark") 
+                            net.Start("APAdvDelNameMark")
                                 net.WriteString(name)
                                 net.WriteBool(true)
                             net.SendToServer()
                         end
                     end
                 end)
-                menu:SetPos(input.GetCursorPos())
-                menu:MakePopup()
+                menu:Open()
             end
 
             local iddelbtn = vgui.Create("DButton",idlistcontainer)
@@ -90,12 +89,12 @@ if CLIENT then
 
             local function addidmark()
                 local id = idmarkin:GetFloat()
-                if !id or id < 1 then 
+                if !id or id < 1 then
                     surface.PlaySound("buttons/button10.wav")
                     return 
                 end
                 local id = math.floor(id)
-                net.Start("APAdvDelMark") 
+                net.Start("APAdvDelMark")
                     net.WriteUInt(id,14)
                     net.WriteBool(true)
                 net.SendToServer()
@@ -123,7 +122,7 @@ if CLIENT then
             namelist:SetHeight(300)
             namelist:AddColumn("#tool.apadventure_delete.lists.targetname")
 
-            function namelist:ProcessDelMark() 
+            function namelist:ProcessDelMark()
                 for k,v in ipairs(self:GetLines()) do
                     self:RemoveLine(v:GetID())
                 end
@@ -134,12 +133,11 @@ if CLIENT then
             namelist:ProcessDelMark()
 
             function namelist:OnRowRightClick(_,ln)
-                local menu = vgui.Create("DMenu")
-                menu:AddOption("#tool.apadventure_delete.copymenu.name",function() 
+                local menu = DermaMenu()
+                menu:AddOption("#tool.apadventure_delete.copymenu.name",function()
                     SetClipboardText(ln:GetValue(1))
                 end)
-                menu:SetPos(input.GetCursorPos())
-                menu:MakePopup()
+                menu:Open()
             end
 
             local namedelbtn = vgui.Create("DButton",namelistcontainer)
@@ -169,7 +167,7 @@ if CLIENT then
                     surface.PlaySound("buttons/button10.wav")
                     return 
                 end
-                net.Start("APAdvDelNameMark") 
+                net.Start("APAdvDelNameMark")
                     net.WriteString(name)
                     net.WriteBool(true)
                 net.SendToServer()
