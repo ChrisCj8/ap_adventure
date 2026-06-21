@@ -17,6 +17,7 @@ include("tracker.lua")
 util.AddNetworkString("apAdvConnectionInfo")
 util.AddNetworkString("ApAdvConnectionState")
 util.AddNetworkString("ApAdvRequirements")
+util.AddNetworkString("ApAdvTickrateNotif")
 
 APADV_LASTMAPTBL = APADV_LASTMAPTBL or {}
 APADV_NEXTMAPTBL = APADV_NEXTMAPTBL or {}

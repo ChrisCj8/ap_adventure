@@ -58,6 +58,29 @@ net.Receive("ApAdvConnectionState", function()
     APADV_NOCONNECTWARN2:SetVisible(!connected)
 end)
 
+local locstr = language.GetPhrase
+local seentickmsg = {}
+local green = Color(40,255,40)
+local function tickmsg(gr,val)
+    seentickmsg[gr] = true
+    chat.AddText(color_white, locstr("apadventure.ticknotif.a"),
+    green, gr,
+    color_white, locstr("apadventure.ticknotif.b"),
+    green, val,
+    color_white, locstr("apadventure.ticknotif.c"), "\n", string.Interpolate(locstr("apadventure.ticknotif.help"),{t=val}))
+end
+
+net.Receive("ApAdvTickrateNotif", function()
+    local gr = net.ReadString()
+    local val = net.ReadFloat()
+    if APADV_POSTENTINIT then
+        if seentickmsg[gr] then return end
+        tickmsg(gr,val)
+    else
+        hook.Add("InitPostEntity","ApAdv_TickRateNotif",function() timer.Simple(3,function() tickmsg(gr,val) end) end)
+    end
+end)
+
 local sv_cheats = GetConVar("sv_cheats")
 
 function GM:SpawnMenuOpen()

@@ -75,6 +75,21 @@ function APADV.LoadCfg(group)
     APADV.PermaDeath = !cfginfo("respawn")
     APADV_GODMODE = cfginfo("godmode")
 
+    local tick = cfginfo("tickrate")
+
+    if tick >= 30 and math.abs(tick-1/engine.TickInterval()) > 1 then
+        net.Start("ApAdvTickrateNotif")
+            net.WriteString(group)
+            net.WriteFloat(tick)
+        net.Broadcast()
+        APADV_DESIREDTICK = {
+            g = group,
+            v = tick
+        }
+    else
+        APADV_DESIREDTICK = nil
+    end
+
     for k,v in ipairs(cfg.del) do
         ents.GetMapCreatedEntity(v):Remove()
     end

@@ -76,6 +76,13 @@ function GM:PlayerInitialSpawn(ply)
     if APADV_TRACKER.runid then
         APADV_TRACKER:SendTrackerData(ply)
     end
+
+    if APADV_DESIREDTICK then
+        net.Start("ApAdvTickrateNotif")
+            net.WriteString(APADV_DESIREDTICK.g)
+            net.WriteFloat(APADV_DESIREDTICK.v)
+        net.Send(ply)
+    end
 end
 
 local resettext_color = Color(222,44,44)

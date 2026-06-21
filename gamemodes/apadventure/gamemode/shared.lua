@@ -13,7 +13,7 @@ function GM:Initialize()
 end
 
 function GM:InitPostEntity()
-    ApAdvPostEntInit = true
+    APADV_POSTENTINIT = true
 end
 
 local sv_cheats = GetConVar("sv_cheats")

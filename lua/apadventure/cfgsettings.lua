@@ -57,6 +57,13 @@ local settings = {
         min = 10
     },
     {
+        name = "tickrate",
+        type = "numwpreset",
+        default = 0,
+        min = 0,
+        max = 128,
+    },
+    {
         name = "hev",
         type = "check"
     },
