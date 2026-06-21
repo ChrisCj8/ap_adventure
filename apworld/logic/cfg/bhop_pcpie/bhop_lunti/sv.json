@@ -1,0 +1,22 @@
+{
+	"exit": {
+		"Start": {
+			"reg": "Main"
+		}
+	},
+	"entr": {
+		"Start": {
+			"reg": "Main",
+			"access": {
+				"type": "bhop",
+				"skill": 2
+			}
+		}
+	},
+	"lctn": {
+		"Main": {
+			"On Pillar in Ramp Section": [],
+			"Finish": []
+		}
+	}
+}

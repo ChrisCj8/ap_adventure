@@ -1,0 +1,13 @@
+{
+	"ver": "v1_1",
+	"info": {
+		"requirements": [
+			"wsid3744611819"
+		]
+	},
+	"reg": {
+		"Main": {
+			"ammo": []
+		}
+	}
+}
