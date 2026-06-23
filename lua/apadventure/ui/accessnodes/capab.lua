@@ -168,14 +168,11 @@ function NODE.Panel(parent)
     local helppnl = UImake("DForm",parent)
     helppnl:SetLabel("#apadventure.node.shared.help")
     helppnl:Help("#apadventure.node.capab.helpbase")
-    local helplink1 = helppnl:Help("#apadventure.node.capab.helpideflink")
+    helppnl:Help("#apadventure.node.capab.helpilist")
+    local helplink1 = helppnl:Help("#apadventure.node.capab.helpimplied")
     helplink1:SetColor(Color(56,56,255))
-    function helplink1:DoClick() gui.OpenURL("https://github.com/ChrisCj8/ap_adventure/tree/main/lua/apadventure/itemsets") end
+    function helplink1:DoClick() gui.OpenURL("https://github.com/ChrisCj8/ap_adventure/blob/main/data_static/apadventure/impliedcapabilities.json") end
     helplink1:SetCursor("hand")
-    local helplink2 = helppnl:Help("#apadventure.node.capab.helpimplied")
-    helplink2:SetColor(Color(56,56,255))
-    function helplink2:DoClick() gui.OpenURL("https://github.com/ChrisCj8/ap_adventure/blob/main/data_static/apadventure/impliedcapabilities.json") end
-    helplink2:SetCursor("hand")
     helppnl:Help("#apadventure.node.capab.helpmulti")
     helppnl:Help("#apadventure.node.capab.helpcond")
     helppnl:Help("#apadventure.node.capab.helpoverride")
