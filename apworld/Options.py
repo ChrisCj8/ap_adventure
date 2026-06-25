@@ -257,3 +257,20 @@ class APADVGameOptions(PerGameCommonOptions):
     generate_puml: GeneratePUML
     #write_debug: WriteDebug
     start_inventory_from_pool: StartInventoryPool
+
+option_presets = {
+    "BHop Sampler": {
+        "mcguffin_count": 100,
+        "bhop" : BunnyHop.option_always,
+        "bhop_logic": 2,
+
+        "item_sets": {"funny"},
+        "item_cherrypick": {
+            "hl2weps": "Crowbar"
+        },
+
+        "config_groups": {"orange_hub","bhop_pcpie","bhop_phaze"},
+
+        "start_item_groups": set(),
+    }
+}
