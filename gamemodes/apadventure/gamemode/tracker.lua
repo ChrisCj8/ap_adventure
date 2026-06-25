@@ -154,7 +154,7 @@ function APADV_TRACKER:Build()
                     reach = reach,
                     acc = locacc[v.name]
                 }
-                
+
                 local reg = v.reg
 
                 if locsbyreg[reg] then
@@ -204,7 +204,7 @@ function APADV_TRACKER:Build()
                     local regn = v.reg
                     exittbl[regn] = exittbl[regn] or {}
                     local regexits = exittbl[regn]
-                    
+
                     local exitn = v.name
                     local exitdata = conndata[exitn]
                     if exitdata and !regexits[exitn] then
@@ -294,7 +294,7 @@ function APADV_TRACKER:Build()
             reg = slotdata.startregion
         }
     }
-    
+
     self.locnametomap = locnametomap
     self.runid = APADV_SAVEID
 
@@ -642,7 +642,7 @@ function APADV_TRACKER:Query()
                 local tgtregn = tgtentr.reg
                 local tgtreg = regtbl[tgtgr][tgtmap][tgtregn]
                 if tgtreg.reach > basereach then
-                    
+
                     local reachinner, override
 
                     if !iv.acc or !next(iv.acc) then

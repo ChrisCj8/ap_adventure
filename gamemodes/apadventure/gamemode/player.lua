@@ -45,10 +45,10 @@ function GM:PlayerSpawn(ply,trans)
             local canspawn = true
             for ik,iv in ipairs(ents.FindInBox(v.pos+boundmins,v.pos+boundmaxs)) do
                 if !allowedcolgroups[iv:GetCollisionGroup()] then
-                    canspawn = false 
+                    canspawn = false
                     break
                 end
-            end 
+            end
             if canspawn then
                 spawnpick = v
                 break
@@ -69,7 +69,7 @@ function GM:PlayerInitialSpawn(ply)
     local connected = tobool(APADV_SLOT and APADV_SLOT.Connected)
     net.Start("ApAdvConnectionState")
         net.WriteBool(connected)
-    net.Send(ply) 
+    net.Send(ply)
 
     ply.APADV_STEAMID64 = ply:SteamID64()
 

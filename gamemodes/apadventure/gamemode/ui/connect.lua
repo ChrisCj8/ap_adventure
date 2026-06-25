@@ -1,4 +1,4 @@
-local UImake = vgui.Create 
+local UImake = vgui.Create
 
 local function Label(parent,text)
     local lbl = UImake("DLabel",parent)
@@ -16,7 +16,7 @@ end
 
 return function(window)
     window:SetSizable(true)
-    
+
     local background = UImake("DPanel",window)
     background:Dock(FILL)
 

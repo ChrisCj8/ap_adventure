@@ -27,7 +27,7 @@ local keyignore = {
 
 function ENT:KeyValue(key,value)
     if keyignore[key] then return end
-    if key == "item" then 
+    if key == "item" then
         self.ItemName = value
     elseif key == "ItemCount" then
         self.OutputAmt = (self.OutputAmt or 0) + 1

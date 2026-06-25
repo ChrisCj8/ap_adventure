@@ -74,7 +74,7 @@ local function addonpnllayout(self,w,h)
     self.nametxt:SetSize(space-idspace-40,22)
     self.idtxt:SetPos(w-idspace-25,0)
     self.idtxt:SetSize(idspace,22)
-    if self.wsbtn then 
+    if self.wsbtn then
         self.wsbtn:SetPos(w-41,3)
         self.excludebtn:SetPos(w-21,3)
     end
@@ -239,7 +239,7 @@ local function BuildLists()
         else
             pnl:SetBackgroundColor(red)
             nametxt:SetText("#apadventure.require.addon.unknown")
-            steamworks.FileInfo(k,function(val) 
+            steamworks.FileInfo(k,function(val)
                 if val then
                     nametxt:SetText(val.title)
                 end

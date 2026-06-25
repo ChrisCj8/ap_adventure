@@ -14,7 +14,7 @@
 ## Installation (for Players)
 
 1.  Install GWSockets
-    
+
     1. Grab the right version of GWSockets depending on your operating system and what version of GMod you're playing.
 
         Whether or not you need the 32 or 64-bit version of GWSockets doesn't depend on your OS, but on whether or not you're playing on the 64-bit branch of GMod. If you don't know what that means or think you may want to switch between the two in the future you can just get both, GMod will automatically load the correct version.
@@ -48,7 +48,7 @@
     3. Install the apAdventure apworld like any other apworld.
 
     4. (Optional) After starting the Archipelago Launcher with the apAdventure apworld installed, a new folder called "gmod_apadv" should have been created in your Archipelago install directory, containing a file called "gmodpath.txt". Put the path to your GMod install folder into this file. The path should end with `../steamapps/common/GarrysMod/`.
-    
+
         Doing this lets Archipelago load map configs and item sets you create in GMod directly from your data folder, meaning you won't have to copy them to your Archipelago folder every time you want to test them out.
 
 ### Recommendations

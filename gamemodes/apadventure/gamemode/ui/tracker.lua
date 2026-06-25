@@ -48,23 +48,23 @@ local function iconpick(loccount)
     local state1 = loccount[1]
     if loccount[1] and loccount[1] > 0 then
         if loccount[2] and loccount[2] > 0 then
-            if loccount[3] and loccount[3] > 0 then 
+            if loccount[3] and loccount[3] > 0 then
                 return "archipelago/tracker/greenyellowred.png"
             end
             return "archipelago/tracker/greenyellow.png"
         end
-        if loccount[3] and loccount[3] > 0 then 
+        if loccount[3] and loccount[3] > 0 then
             return "archipelago/tracker/greenred.png"
         end
         return "archipelago/tracker/green.png"
     end
     if loccount[2] and loccount[2] > 0 then
-        if loccount[3] and loccount[3] > 0 then 
+        if loccount[3] and loccount[3] > 0 then
             return "archipelago/tracker/yellowred.png"
         end
         return "archipelago/tracker/yellow.png"
     end
-    if loccount[3] and loccount[3] > 0 then 
+    if loccount[3] and loccount[3] > 0 then
         return "archipelago/tracker/red.png"
     end
     if loccount[0] and loccount[0] > 0 then
@@ -380,7 +380,7 @@ local function opentracker(window)
     local oldlayout = window.PerformLayout
     function window:PerformLayout(w,h)
         oldlayout(self,w,h)
-        
+
         tree:SetPos(5,30)
         tree:SetSize(150,h-35)
 

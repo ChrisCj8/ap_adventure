@@ -63,7 +63,7 @@ def reachtest(canreach: set,checked: set):
         return newreach
     else:
         return reachtest(newreach,checked)
-    
+
 def test_accessibility(canaccess: set,checked: set):
     done = True
     newaccess = canaccess.copy()
@@ -160,12 +160,12 @@ class APADVWorld(World):
         self.regconds_known = False
         self.requirements = set()
         self.items_to_reflag = list()
-        
+
     def add_warning(self,warning):
         self.warnings.append(warning)
         print(warning)
         #if self.dodebug:
-        #    self.debuginfo.append(warning) 
+        #    self.debuginfo.append(warning)
 
     def cfgprocesserrormsg(self):
         if self.warncount:
@@ -212,7 +212,7 @@ class APADVWorld(World):
                         else:
                             return ItemClassification.useful
         return flags
-    
+
     def create_item(self, name):
         flags = self.get_item_flags(name)
         reflag = False
@@ -230,7 +230,7 @@ class APADVWorld(World):
             return "Nothing"
         else:
             return self.random.choices(list(self.fillers.keys()),self.fillers.values())[0] # took this from ahit, seems like it'd be kinda slow but what do i know
-    
+
     def generate_early(self):
 
         options = self.options
@@ -305,7 +305,7 @@ class APADVWorld(World):
         for k,v in maps.items():
             if not v:
                 emptygroups.append(k)
-        
+
         for k in emptygroups:
             del maps[k]
 
@@ -349,7 +349,7 @@ class APADVWorld(World):
                 for capab in finalcapabs:
                     if not capab in self.capabilitytbl:
                         self.capabilitytbl[capab] = list()
-                    
+
                     self.capabilitytbl[capab].append(capabentry)
             if "condcapab" in info:
                 for cond,capabs in info["condcapab"].items():
@@ -368,7 +368,7 @@ class APADVWorld(World):
                             starterpool[k].append(name)
 
         for isetname in chosenisets:
-            if isetname in self.item_set_table:        
+            if isetname in self.item_set_table:
                 iset = self.item_set_table[isetname]
                 isetitems = iset.items
                 blacklist = False
@@ -421,7 +421,7 @@ class APADVWorld(World):
         self.items_to_load = items_to_load
 
         ammomergeopt = list()
-        
+
         for v in options.ammo_merge:
             ammomergeopt.append(set(v))
 
@@ -439,7 +439,7 @@ class APADVWorld(World):
                 if iunfinished:
                     unfinished = True
                     break
-        
+
         #self.debuglog(f"processed ammo merge options: {ammomergeopt}")
 
         ammomergedict = dict()
@@ -505,7 +505,7 @@ class APADVWorld(World):
                 mapregs = dict()
 
                 startfilter = dogroupstartfilter and mapstartfilter == "" or mapstartfilter == mapname
-                
+
                 for k,v in map.regions.items():
                     newreg = Region(f"{map.group} - {map.bspname} - {k}",self.player,self.multiworld)
                     newreg.locdata = v["lctns"]
@@ -755,13 +755,13 @@ class APADVWorld(World):
                 itempool.remove(fillers.pop(rand.randint(0,filleramt-1)))
                 filleramt -= 1
                 overflow -= 1
-            
+
             usefulamt = len(usefuls)
             while usefuls and overflow > 0:
                 itempool.remove(usefuls.pop(rand.randint(0,usefulamt-1)))
                 usefulamt -= 1
                 overflow -= 1
-            
+
             if overflow != 0:
                 raise RuntimeError(f"{self.player_name} had {overflow} more items than locations which could not be removed")
 
@@ -818,7 +818,7 @@ class APADVWorld(World):
         connectedtwoways = set()
         connectedexits = set()
 
-        available_exits = 0 
+        available_exits = 0
 
         startcandidates = self.startingcandidates
         menu = self.menuregion
@@ -945,7 +945,7 @@ class APADVWorld(World):
 
                 #self.debuglog(f"trying to connect {target_reg.name} and {trying_reg.name}")
                 entracctbl = trying_data[2]
-                
+
                 target_reg.connect(trying_reg,f"{target_name} -> {trying}",
                     self.make_intermap_rule(trying_reg,entracctbl,target_reg,targetexitacctbl))
                 self.add_connectinfo(target_reg,target_data[0],trying_reg,trying_data[0])
@@ -957,7 +957,7 @@ class APADVWorld(World):
                     deadends.remove(trying)
                     deadcount -= 1
                     #self.debuglog(f"amount of dead ends: {deadcount}, {str(deadends)}")
-                
+
                 for reg in reach:
                     for twoway,homereg in reg.twoways.items():
                         if not twoway in connectedtwoways:
@@ -983,7 +983,7 @@ class APADVWorld(World):
                 #self.debuglog(f"available exits after checking new reachables: {available_exits}")
 
                 untriedentrs = set(unplacedentrs.keys())
-        
+
             if not unplacedentrs:
                 unfinished = False
 
@@ -1007,7 +1007,7 @@ class APADVWorld(World):
 
             data_a = unconnectedtwoways[key1]
             data_b = unconnectedtwoways[key2]
-            
+
             reg1 = data_a[1]
             reg2 = data_b[1]
 
@@ -1062,7 +1062,7 @@ class APADVWorld(World):
         #self.debuglog(f"Unconnected Entrances: {str(unconnectedentrs)}")
         #self.debuglog(f"Unconnected Exits: {str(unconnectedexits)}")
 
-        # the menu is connected at the end because the reachtest function can't handle it 
+        # the menu is connected at the end because the reachtest function can't handle it
         # and doing it like this is probably faster than making it check if every region it tests is not the menu
 
         startreg.connect(menu)

@@ -1,7 +1,7 @@
 include("shared.lua")
 include("apadventure/gamemode/ui/tracker.lua")
 
-net.Receive("apAdv_BHopUpdate", function() 
+net.Receive("apAdv_BHopUpdate", function()
     APADV_BHOP = net.ReadBool()
 end)
 
@@ -16,7 +16,7 @@ list.Set("DesktopWindows","apAdventureConnect",{
 })
 
 local json = ""
-net.Receive("ApAdvRequirements",function() 
+net.Receive("ApAdvRequirements",function()
     json = json..net.ReadString()
     if net.ReadBool() then
         local reqs = util.JSONToTable(json,false,true)
@@ -52,7 +52,7 @@ APADV_NOCONNECTWARN2:SetFont("Trebuchet18")
 --[[ APADV_NOCONNECTWARN:SetVisible(false)
 APADV_NOCONNECTWARN2:SetVisible(false) ]]
 
-net.Receive("ApAdvConnectionState", function() 
+net.Receive("ApAdvConnectionState", function()
     local connected = net.ReadBool()
     APADV_NOCONNECTWARN:SetVisible(!connected)
     APADV_NOCONNECTWARN2:SetVisible(!connected)

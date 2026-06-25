@@ -2,7 +2,7 @@ return {
     DoCheck = function(info)
         local addoninfo = info.addons["133300986"]
         if !addoninfo or !addoninfo.mounted then
-            return { 
+            return {
                 checkaddon = "133300986",
                 msg = "noinstall",
                 status = 3,

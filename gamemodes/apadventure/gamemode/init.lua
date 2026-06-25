@@ -76,7 +76,7 @@ function APADV.DoMapTransition(map,group,entrname)
         g = group,
         e = entrname
     }
-    
+
     if entrname then
         APADV.MarkEntrance(map,group,entrname)
     elseif slotdata and slotdata.start == curmap then
@@ -136,7 +136,7 @@ end
 APADV.IsCollector = IsCollector
 
 function GM:SendDeathNotice(attacker,inflictor,victim,flags)
-    if victim.ApAdvDoKillFeed then 
+    if victim.ApAdvDoKillFeed then
         return BASEGM:SendDeathNotice(attacker,inflictor,victim,flags)
     end
 end

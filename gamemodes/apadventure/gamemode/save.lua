@@ -77,7 +77,7 @@ local function StorePlyData(ply)
     local ammotbl = plytbl.ammo
 
     for ik,iv in pairs(ply:GetAmmo()) do
-        ammotbl[ammotypes[ik]] = iv 
+        ammotbl[ammotypes[ik]] = iv
     end
 
 end

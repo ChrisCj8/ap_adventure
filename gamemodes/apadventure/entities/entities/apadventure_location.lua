@@ -41,7 +41,7 @@ end
 function ENT:RemoveLocTblEntry()
     local oldloc = self.LocationName
     if !oldloc then return end
-    local oldloctbl = APADV_LOCENTS[oldloc] 
+    local oldloctbl = APADV_LOCENTS[oldloc]
     if oldloctbl and oldloctbl[self] then
         oldloctbl[self] = nil
         if !next(oldloctbl) then

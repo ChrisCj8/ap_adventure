@@ -6,7 +6,7 @@ impliedcapabilities = load(resources.files(__package__).joinpath("impliedcapabil
 def ProcessCapabs(capabin):
     newcapabs = capabin.copy()
     newamt = 0
-    
+
     for capab in capabin:
         if capab in impliedcapabilities:
             implied = impliedcapabilities[capab]
@@ -14,7 +14,7 @@ def ProcessCapabs(capabin):
                 if not newcap in newcapabs:
                     newcapabs.add(newcap)
                     newamt += 1
-    
+
     if newamt > 0:
         return ProcessCapabs(newcapabs)
     else:

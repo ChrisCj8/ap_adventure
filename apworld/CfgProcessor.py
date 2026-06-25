@@ -63,7 +63,7 @@ def ProcessCfgs():
     for gr in apitemdir.iterdir():
         if gr.name[-5:] == ".json":
             itempaths[gr.name] = gr
-    
+
     if gmodpath:
         dir = gmodpath.joinpath("data/apadventure/logic/item/")
         if dir.is_dir():
@@ -112,7 +112,7 @@ def ProcessCfgs():
             nicename = setjson["name"]
             newiset = ItemSet(iset,nicename)
             if "items" in setjson and isinstance(setjson["items"], dict):
-                
+
                 for iname, idef in setjson["items"].items():
                     print(f"processing {iname}")
                     newitem = SetItem(iname,newiset,idef)
@@ -126,7 +126,7 @@ def ProcessCfgs():
                     item_name_to_id[newitem.long_name] = itemtypes
 
                     print("added item "+newitem.long_name)
-                    newiset.items[iname] = newitem 
+                    newiset.items[iname] = newitem
             if "reqs" in setjson:
                 newiset.requirements = set(setjson["reqs"])
 
@@ -226,18 +226,18 @@ def ProcessCfgs():
                     if v["reg"] in newmap.regions:
                         newmap.entrances[k] = v
                         print("adding entrance "+k+" to map "+map)
-                    else: 
+                    else:
                         print(f"map {map} from {gr} has an entrance placed in non-existing region \"{k}\"")
 
             if not newmap.entrances:
                 print(f"map {map} from {gr} has no entrances, discarded")
                 continue
-            
+
             if "exit" in svjson:
                 for k,v in svjson["exit"].items():
                     if v["reg"] in newmap.regions:
                         newmap.exits[k] = v
-                    else: 
+                    else:
                         print(f"map {map} from {gr} has an exit placed in non-existing region \"{k}\"")
 
             if "lctn" in svjson:
@@ -251,7 +251,7 @@ def ProcessCfgs():
                     else:
                         print(f"map {map} from {gr} has locations assigned to non-existing region \"{k}\"")
 
-            if "start" in svjson:                    
+            if "start" in svjson:
                 for v in svjson["start"]:
                     if v in newmap.regions:
                         newmap.regions[v]["startcandidate"] = True

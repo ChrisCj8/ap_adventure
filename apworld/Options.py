@@ -23,7 +23,7 @@ class Skill(Choice):
     Players will also deal less damage against enemies from both games at higher difficulties.
     (This may not be intended behavior for HL1 enemies, but this is how GMod handles it.)
 
-    Outside of Half-Life, lua coders and map makers are also able to check what this value is set to 
+    Outside of Half-Life, lua coders and map makers are also able to check what this value is set to
     and have their code/maps behave differently depending on it, but this is not very common.
     """
     display_name = "Skill"
@@ -35,7 +35,7 @@ class Skill(Choice):
 
 class ConfigGroups(OptionSet):
     """Config Groups to use for generation.
-    
+
     Map Configs are used by apAdventure to tell the generator what the maps the player wants to play on contain
     and where the gamemode should place exits, locations and whatever else the config creator wants to include
     in their Config.
@@ -44,7 +44,7 @@ class ConfigGroups(OptionSet):
     can be grouped together and share certain settings.
 
     Not all configs are enabled by default. If you want to see what configs are available, you can use the
-    "apAdventure - Generate Map Index" tool in your launcher to get a list of all available config groups 
+    "apAdventure - Generate Map Index" tool in your launcher to get a list of all available config groups
     and the maps in them.
     """
     display_name = "Config Groups"
@@ -56,7 +56,7 @@ singlepickschema = Schema(Or({
 
 class ConfigCherryPick(OptionDict):
     """This option allows you to cherrypick single maps from a Config Group.
-    
+
     Check the options guide for more information on how this option works."""
     display_name = "Config Cherrypicking"
     default = {}
@@ -64,13 +64,13 @@ class ConfigCherryPick(OptionDict):
 
 class ConfigBlacklist(OptionDict):
     """This option allows you to pick maps from a Config Group that should not be added to your run.
-    
+
     The defaults for this setting contain some maps that don't play very well in this mode, but still
     had configs made for them for the sake of covering all maps.
-    
+
     Blacklisting maps that have not actually been added through the previous options
     should not cause problems.
-    
+
     Check the options guide for more information on how this option works."""
     display_name = "Config Blacklist"
     default = {
@@ -81,11 +81,11 @@ class ConfigBlacklist(OptionDict):
     schema = singlepickschema
 
 class StartGroup(FreeText):
-    """What group your starting map should be picked from. Normally, your starting map is picked at random 
+    """What group your starting map should be picked from. Normally, your starting map is picked at random
     from all maps that have starting points set, but this option lets you set a filter for a certain group.
-    
+
     An empty string (the default setting) disables the filter.
-    
+
     This option mainly exists for cases where the same map exists in multiple groups,
     you probably won't have to set this."""
 
@@ -96,7 +96,7 @@ class StartMap(FreeText):
     but filters after the map name instead.
 
     Looks for the file name of the map. (ap_orange, gm_construct, etc., without extensions)
-    
+
     Currently, apAdventure only includes a single starting map, so you won't have to set
     this option unless you have made your own configs with starting points."""
 
@@ -105,7 +105,7 @@ class StartMap(FreeText):
 class StartRegion(FreeText):
     """If your selected starting map has start points placed in multiple regions,
     you can use this setting to chose what region you want to start in.
-    
+
     The starting map included with apAdventure does not have multiple starting regions,
     so you can ignore this option unless you have made your own configs with
     multiple starting regions."""
@@ -114,13 +114,13 @@ class StartRegion(FreeText):
 
 class ItemSets(OptionSet):
     """Item Sets to use for generation.
-    
+
     Similarly to Map Configs, Items related to each other are grouped together in Item Sets.
 
     Not all Item Sets are enabled by default. If you want to see what sets are available, you can use the
     "apAdventure - Generate Item Index" tool in your launcher to get a list of all available item sets
     and the items in them.
-    
+
     The Generator will automatically check which of the items chosen are relevant to progression
     and remove items that are not logically required if there is not enough space for them.
     This process is not perfect though, the generator just checks if the item can fullfill
@@ -132,7 +132,7 @@ class ItemSets(OptionSet):
 
 class ItemCherryPick(OptionDict):
     """This option allows you to cherrypick single items from an Item Set.
-    
+
     Check the options guide for more information on how this option works."""
     display_name = "Item Cherrypicking"
     default = {}
@@ -140,7 +140,7 @@ class ItemCherryPick(OptionDict):
 
 class ItemBlacklist(OptionDict):
     """This option allows you to blacklist single items from an Item Set.
-    
+
     Check the options guide for more information on how this option works."""
     display_name = "Item Blacklist"
     default = {}
@@ -148,11 +148,11 @@ class ItemBlacklist(OptionDict):
 
 class StartItemGroups(OptionSet):
     """What types of starting items you want.
-    
+
     Items may be marked as being part of a certain start item group.
     You can enter the name of one of these groups here to be granted one item of each type.
     You will also always be granted a starting melee weapon.
-    
+
     Currently, the available item types are "Pistol","Shotgun","Magnum","SMG" and "Grenade".
     Custom item sets may also add their own types.
     """
@@ -173,7 +173,7 @@ class AmmoMerge(OptionList):
 
     A list of all of GMods default ammo types can be found here:
     https://wiki.facepunch.com/gmod/Default_Ammo_Types
-    
+
     Alternatively, apAdventure also provides a console command
     called "apadventure_dump_ammotypes" that will dump the names
     of all currently existing ammo types, which can be used to figure
@@ -189,12 +189,12 @@ class AmmoMerge(OptionList):
     ]
 
 class BunnyHop(Choice):
-    """GMods Sandbox gamemode (which this gamemode derives from internally) normally clamps 
-    the players movement speed when they jump off the ground to prevent Bunnyhopping. 
+    """GMods Sandbox gamemode (which this gamemode derives from internally) normally clamps
+    the players movement speed when they jump off the ground to prevent Bunnyhopping.
 
     Choosing "never" maintains this behavior, "item" removes it after
     receiving an item and "always" will disable it from the start.
-    
+
     The latter two options also provide an autohop."""
     display_name = "Bunnyhop"
     option_never = 1
@@ -227,7 +227,7 @@ class SurfLogic(FreeText):
     default = 0
 
 class GeneratePUML(Toggle):
-    """Generates a PlantUML Diagram showing all of the worlds regions and locations, 
+    """Generates a PlantUML Diagram showing all of the worlds regions and locations,
     which may be helpful for debugging configs you've made."""
     display_name = "Generate PUML"
 

@@ -3,16 +3,16 @@ APADV = APADV or {}
 APADV_ITEMHANDLERS = APADV_ITEMHANDLERS or {}
 APADV_CFGITEMHANDLERS = APADV_CFGITEMHANDLERS or {}
 
-timer.Create("APAdvTrackerQuery",1,0,function() 
+timer.Create("APAdvTrackerQuery",1,0,function()
     APADV_TRACKER:Query()
 end)
 timer.Stop("APAdvTrackerQuery")
 
 local function ApAdvItemHandler(slot,id,itemlist)
-    if APADV_ITEMHANDLERS[id] then 
+    if APADV_ITEMHANDLERS[id] then
         APADV_ITEMHANDLERS[id](itemlist)
     end
-    
+
     if APADV_MAPITEMCOUNTERS[id] then
         for k,v in pairs(APADV_MAPITEMCOUNTERS[id]) do
             for ik,iv in ipairs(ents.FindByName(v.target)) do
@@ -32,9 +32,9 @@ APADV_LOCENTS = APADV_LOCENTS or {}
 
 local function ApAdvLocationHandler(slot,id,state)
     local locn = APADV_DATAPACK_LOCAL.location_id_to_name[id]
-    if !locn then 
+    if !locn then
         ErrorNoHalt("Received a Location update for an ID that's not in the DataPackage")
-        return 
+        return
     end
     if state then
         local loctbl = APADV_LOCENTS[locn]
@@ -77,7 +77,7 @@ function APADV.RegisterMapItems()
             if next(outtbl) then
                 APADV_MAPITEMCOUNTERS[id] = outtbl
             end
-        end 
+        end
     end
 
     local cfghandlers = {}
@@ -127,7 +127,7 @@ local function processcapabs(capabs)
     return capabs
 end
 
-local mcguffincount 
+local mcguffincount
 local mcguffingoal
 
 util.AddNetworkString("APAdvMcGuffinInfo")
@@ -284,7 +284,7 @@ local function ApAdvRegisterItemHandlers()
     end
 
     if slotdata.bhop == 2 then
-        handle[toID["Bunnyhop"]] = function(iList) 
+        handle[toID["Bunnyhop"]] = function(iList)
             ApAdvPly.UpdateBHop(iList[1] != nil)
         end
     end
@@ -338,7 +338,7 @@ local function OnRunID(packet)
     local runid = packet.value
     local saveid = runid.."_"..APADV_SLOT.team.."_"..APADV_SLOT.Nr
     if APADV_SAVEID != saveid then
-        
+
         local slotdata = APADV_SLOT.slotData
         local room = APADV_SLOT.Room
 
@@ -347,7 +347,7 @@ local function OnRunID(packet)
         end
 
         APADV.InitSaveData(saveid)
-        
+
         if APADV_SAVEID or !next(APADV_LASTMAPTBL) then
             local map = game.GetMap()
             if map == slotdata.startmap then
@@ -388,7 +388,7 @@ local function OnRunID(packet)
         if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] then
             local mapexits = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]
             for k,v in pairs(APADV_EXITENTS) do
-                if mapexits[v] then 
+                if mapexits[v] then
                     -- the Advanced Color Tool throws errors if this isn't wrapped in a timer
                     timer.Simple(1,function() k:SetMapIcon(mapexits[v].map) end)
                 end
@@ -539,7 +539,7 @@ net.Receive("apAdvConnectionInfo",function(len,ply)
     APADV.CreateApSlot(net.ReadString(),net.ReadString(),net.ReadString())
 end)
 
-concommand.Add("apadv_slot_connect",function(ply) 
+concommand.Add("apadv_slot_connect",function(ply)
     if !APADV_SLOT or !(ply == NULL or ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin")  then return end
     APADV_SLOT:Connect()
 end,nil,"Connects the apAdventure Slot to the Archipelago Server if possible.")

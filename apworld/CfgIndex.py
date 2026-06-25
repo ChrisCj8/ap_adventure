@@ -25,7 +25,7 @@ def MapIndex(processout):
         else:
             file.write("Requirements: None\n")
         file.write("\n")
-        
+
         for mapname,map in gr.items():
             file.write(f"\t{mapname}\n")
             mapinfo = map.info
@@ -59,7 +59,7 @@ def MapIndex(processout):
                     for loc in v["lctns"].keys():
                         writequeue.append(f"\t\t\t\t{loc}\n")
                         loctotal += 1
-            
+
             if writequeue:
                 file.write(f"\t\tLocations: \t{loctotal} total\n")
                 file.writelines(writequeue)

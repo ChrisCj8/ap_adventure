@@ -106,8 +106,8 @@ function APADV.LoadCfg(group)
 
     if isfunction(APADV_CFGLUA.PreDupe) then
         local success, out = pcall(APADV_CFGLUA.PreDupe,dupedata)
-        if success then 
-            dupedata = out 
+        if success then
+            dupedata = out
         else
             ErrorNoHalt("Config Script Function PreDupe for "..map.." in "..group.." caused an Error: \n"..out)
         end
@@ -152,15 +152,15 @@ function APADV.LoadCfg(group)
         exit.ExitName = v.name
         exit:Spawn()
         APADV_EXITENTS[exit] = v.name
-        if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name] then 
-            timer.Simple(2,function() exit:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name].map) end) 
+        if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name] then
+            timer.Simple(2,function() exit:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name].map) end)
         end
     end
 
     local loclist = APADV_SLOT.Locations
     local locnametoid
     if APADV_DATAPACK_LOCAL and APADV_SLOT.Connected then
-        if loclist then 
+        if loclist then
             locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
         end
         APADV.RegisterMapItems(clcfg.item)
@@ -176,7 +176,7 @@ function APADV.LoadCfg(group)
             local locname = group .. " - " .. map .. " - " .. v.name
             -- prevents already checked locations from being placed, but this only works if we're connected when the config is loaded
             -- so this doesn't work all the time since the gamemode doesn't wait for the slot to reconnect when doing a map transition
-            if !locnametoid or loclist[locnametoid[locname]] == false then 
+            if !locnametoid or loclist[locnametoid[locname]] == false then
                 local loc = ents.Create("apadventure_location")
                 loc:SetPos(v.pos)
                 loc:SetAngles(v.ang)
@@ -223,9 +223,9 @@ concommand.Add("apadventure_loadcfg",function(ply,cmd,args)
             local grdir = "apadventure/"..gr.."/"
             if !file.Exists(grdir.."group.json","DATA") then print("group \""..gr.."\" does not exist!") return end
             local mapdir = grdir..game.GetMap()
-            if !file.Exists(mapdir.."/cl.json","DATA") or !file.Exists(mapdir.."/sv.json","DATA") then 
-                print("group \""..gr.."\" does not have a config for this map!") 
-                return 
+            if !file.Exists(mapdir.."/cl.json","DATA") or !file.Exists(mapdir.."/sv.json","DATA") then
+                print("group \""..gr.."\" does not have a config for this map!")
+                return
             end
         end
     end
