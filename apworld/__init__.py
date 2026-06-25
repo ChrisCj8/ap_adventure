@@ -735,8 +735,8 @@ class APADVWorld(World):
             missingitems = self.locallocs - poolsize
 
             if mcguffin_desired > 0:
-                if mcguffin_desired >= poolsize:
-                    mcguffin_desired = poolsize
+                if mcguffin_desired > missingitems:
+                    mcguffin_desired = missingitems
                 self.mcguffin_goal = mcguffin_desired + 1
                 while mcguffin_desired > 0:
                     itempool.append(self.create_item("McGuffin"))
