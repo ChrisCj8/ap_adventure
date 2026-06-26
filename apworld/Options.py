@@ -51,7 +51,7 @@ class ConfigGroups(OptionSet):
     default = {"orange_hub","canals_walk","ravenholm","coast_walk","nova_prospekt","lost_coast"}
 
 singlepickschema = Schema(Or({
-        str: Or(list, str)
+        str: list
     },{}))
 
 class ConfigCherryPick(OptionDict):
@@ -266,7 +266,7 @@ option_presets = {
 
         "item_sets": {"funny"},
         "item_cherrypick": {
-            "hl2weps": "Crowbar"
+            "hl2weps": ["Crowbar"]
         },
 
         "config_groups": {"orange_hub","bhop_pcpie","bhop_phaze"},
