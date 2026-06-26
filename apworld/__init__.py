@@ -390,9 +390,10 @@ class APADVWorld(World):
                 continue
             if isetname in self.item_set_table:
                 iset = self.item_set_table[isetname]
+                bl = isetname in item_blacklist and item_blacklist[isetname]
                 load = set()
                 for iname in picks:
-                    if iname in iset.items:
+                    if iname in iset.items and not (bl and iname in bl):
                         item = iset.items[iname]
                         register_item(item)
                         load.add(item.info["file"])
