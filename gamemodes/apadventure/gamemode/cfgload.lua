@@ -153,7 +153,10 @@ function APADV.LoadCfg(group)
         exit:Spawn()
         APADV_EXITENTS[exit] = v.name
         if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name] then
-            timer.Simple(2,function() exit:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name].map) end)
+            timer.Simple(2,function()
+                if !IsValid(exit) then return end
+                exit:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name].map)
+            end)
         end
     end
 
