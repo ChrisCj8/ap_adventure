@@ -198,10 +198,10 @@ def ProcessCfgs():
             clpath = path.joinpath("cl.json")
             svpath = path.joinpath("sv.json")
             if not svpath.is_file():
-                warnings.append(f"could not find serverside save for {map} from {gr}")
+                warnings.append(f"Could not find serverside logic files for {map} from {gr}. Make sure that your config is valid.")
                 continue
             if not clpath.is_file():
-                warnings.append(f"could not find clientside save for {map} from {gr}")
+                warnings.append(f"Could not find clientside logic files for {map} from {gr}. Make sure that your config is valid.")
                 continue
             cljson = json.load(clpath.open())
 
