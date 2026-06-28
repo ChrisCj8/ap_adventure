@@ -107,14 +107,14 @@ def ProcessCfgs():
 
     for iset,setpath in itempaths.items():
         if setpath.is_file():
-            print(f"processing {setpath}")
+            #print(f"processing {setpath}")
             setjson = json.load(setpath.open())
             nicename = setjson["name"]
             newiset = ItemSet(iset,nicename)
             if "items" in setjson and isinstance(setjson["items"], dict):
 
                 for iname, idef in setjson["items"].items():
-                    print(f"processing {iname}")
+                    #print(f"processing {iname}")
                     newitem = SetItem(iname,newiset,idef)
                     if iname in item_name_to_id:
                         duplicate_item_names.add(iname)
@@ -125,14 +125,14 @@ def ProcessCfgs():
                     itemtypes += 1
                     item_name_to_id[newitem.long_name] = itemtypes
 
-                    print("added item "+newitem.long_name)
+                    #print("added item "+newitem.long_name)
                     newiset.items[iname] = newitem
             if "reqs" in setjson:
                 newiset.requirements = set(setjson["reqs"])
 
             item_set_table[iset[:-5]] = newiset
-        else:
-            print(f"{setpath} does not exist")
+        #else:
+        #    print(f"{setpath} does not exist")
 
     grouppaths = dict[str, Path]()
 
@@ -172,7 +172,7 @@ def ProcessCfgs():
             self.info = dict()
 
     for gr,grdirs in grouppaths.items():
-        print(f"found group {gr} at {grdirs}")
+        #print(f"found group {gr} at {grdirs}")
         foundgroups += 1
 
         groupmaps = dict()
@@ -180,9 +180,9 @@ def ProcessCfgs():
         grjson = False
 
         for grpath in grdirs:
-            print(f"group folder found at: {grpath}")
+            #print(f"group folder found at: {grpath}")
             for path in grpath.iterdir():
-                print(f"map found at: {path}")
+                #print(f"map found at: {path}")
                 if path.is_dir():
                     mappaths[path.name] = path
                 elif path.name == "group.json":
@@ -192,7 +192,7 @@ def ProcessCfgs():
             group_data[gr] = json.load(grjson.open())
 
         for map,path in mappaths.items():
-            print("processing "+map)
+            #print("processing "+map)
 
             newmap = GMADVMap(map,gr)
             clpath = path.joinpath("cl.json")
@@ -225,12 +225,12 @@ def ProcessCfgs():
                 for k,v in svjson["entr"].items():
                     if v["reg"] in newmap.regions:
                         newmap.entrances[k] = v
-                        print("adding entrance "+k+" to map "+map)
+                        #print("adding entrance "+k+" to map "+map)
                     else:
-                        print(f"map {map} from {gr} has an entrance placed in non-existing region \"{k}\"")
+                        warnings.append(f"map {map} from {gr} has an entrance placed in non-existing region \"{k}\"")
 
             if not newmap.entrances:
-                print(f"map {map} from {gr} has no entrances, discarded")
+                warnings.append(f"map {map} from {gr} has no entrances, discarded")
                 continue
 
             if "exit" in svjson:
@@ -238,7 +238,7 @@ def ProcessCfgs():
                     if v["reg"] in newmap.regions:
                         newmap.exits[k] = v
                     else:
-                        print(f"map {map} from {gr} has an exit placed in non-existing region \"{k}\"")
+                        warnings.append(f"map {map} from {gr} has an exit placed in non-existing region \"{k}\"")
 
             if "lctn" in svjson:
                 for k,v in svjson["lctn"].items():
@@ -247,16 +247,15 @@ def ProcessCfgs():
                         for lctnname in v.keys():
                             locations += 1
                             location_name_to_id[f"{gr} - {map} - {lctnname}"] = locations
-
                     else:
-                        print(f"map {map} from {gr} has locations assigned to non-existing region \"{k}\"")
+                        warnings.append(f"map {map} from {gr} has locations assigned to non-existing region \"{k}\"")
 
             if "start" in svjson:
                 for v in svjson["start"]:
                     if v in newmap.regions:
                         newmap.regions[v]["startcandidate"] = True
                     else:
-                        print(f"map {map} from {gr} has starts defined for non-existing region \"{v}\"")
+                        warnings.append(f"map {map} from {gr} has starts defined for non-existing region \"{v}\"")
 
             if "item" in cljson:
                 mapitems = cljson["item"]
@@ -272,11 +271,8 @@ def ProcessCfgs():
             #del newmap, cljson, svjson
         map_table[gr] = groupmaps
 
-
     if foundgroups == 0:
         raise RuntimeError("could not find any valid config groups")
-
-    print(str(item_set_table))
 
     warnpath = apdir.joinpath("cfgprocessor_warnings.log")
     if warnings:
