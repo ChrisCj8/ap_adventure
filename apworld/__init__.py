@@ -765,7 +765,7 @@ class APADVWorld(World):
                 overflow -= 1
 
             if overflow != 0:
-                raise RuntimeError(f"{self.player_name} had {overflow} more items than locations which could not be removed")
+                raise RuntimeError(f"Slot {self.player_name} had {overflow} more items than locations, and no more space could be made to fit all progression items.\nLocation/Item Count: {self.locallocs} / {len(itempool)}\nItem Pool: {itempool}")
 
         for v in self.items_to_reflag:
             oldflag = v.classification
