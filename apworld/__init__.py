@@ -532,8 +532,7 @@ class APADVWorld(World):
                     mapregs[k] = newreg
 
                     if "startcandidate" in v and startfilter and regionstartfilter == "" or regionstartfilter == k:
-                        #self.debuglog(f"{k} is a starting candidate")
-                        startcandidates.append(StartRegion(newreg,map,k))
+                        newreg.startcandidate = True
 
                     #self.debuglog("creating region "+map.bspname+" - "+ k)
 
@@ -640,6 +639,8 @@ class APADVWorld(World):
                         v.locations = reglocs
                         self.multiworld.regions.append(v)
                         self.regconds.update(v.conditions)
+                        if hasattr(v,"startcandidate"):
+                            startcandidates.append(StartRegion(v,map,k))
                         cfgadded = True
                     else:
                         self.add_warning(f"Region {v.name} was removed because it was impossible to reach")
