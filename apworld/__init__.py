@@ -942,7 +942,7 @@ class APADVWorld(World):
                         couldconnectow = True
                         continue
                 else:
-                    raise RuntimeError(f"Entrance {trying} for Player {self.player} could not be connected. Something went wrong during Entrance Randmoization.")
+                    raise RuntimeError(f"Entrance {trying} for slot {self.player} could not be connected. Something went wrong during Entrance Randomization.")
 
                 #self.debuglog(f"trying to connect {target_reg.name} and {trying_reg.name}")
                 entracctbl = trying_data[2]
