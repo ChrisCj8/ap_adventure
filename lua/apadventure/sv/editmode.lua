@@ -453,7 +453,6 @@ end
 local function ProcessItemGroup(groupname)
     local grouppath = "apadventure/itemsets/"..groupname
     local groupdef = include(grouppath..".lua")
-    --PrintTable(groupdef)
     local reqs = groupdef.Requirements
     if isstring(reqs) then
         reqs = {reqs}
@@ -521,7 +520,6 @@ net.Receive("APAdvAccess",function()
                 end
             else
                 ErrorNoHalt("Received Access Table for "..reqname.." was not a valid JSON Table.\n")
-                print(jsonmsg)
             end
             jsonmsg = ""
         else

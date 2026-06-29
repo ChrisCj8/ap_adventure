@@ -179,7 +179,6 @@ function apAdventure.SendNotification(text,type,len,snd,ply)
     elseif type % 1 != 0 or type > 4 or type < 0 then 
         ErrorNoHalt("Invalid Notification Type "..type.." passed to SendNotification")
     end
-    print(text,type,len,snd,ply)
     net.Start("ApAdvNotif")
         net.WriteUInt(type,3)
         net.WriteString(text)

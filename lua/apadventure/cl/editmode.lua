@@ -66,10 +66,8 @@ net.Receive("APAdvActiveCfgClear",function()
     end
     path = "apadventure/cfg/"..gname.."/"..game.GetMap().."/cl.json"
     local json = fRead(path,"DATA") or fRead("data_static/"..path,"GAME")
-    print(json)
     if json then
         local tbl = fromJSON(json)
-        PrintTable(tbl)
         if tbl then 
             editcfg.Regions = tbl.reg or {}
             editcfg.Connections = tbl.connect or {}
@@ -105,7 +103,6 @@ net.Receive("APAdvSaveCfg",function()
         item = items,
         info = editcfg.Info,
     }
-    PrintTable(outtbl)
 
     local groupout = {
         rules = editcfg.GroupInfo
@@ -195,7 +192,6 @@ end
 function apAdventure.ProcessGroupLogic(gname)
     local gdir = "apadventure/cfg/"..gname.."/"
     local _, folders = file.Find(gdir.."*","DATA")
-    PrintTable(folders)
     if !next(folders) then return end
     for k,v in ipairs(folders) do
         local mappath = gdir..v.."/"
