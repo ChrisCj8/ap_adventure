@@ -328,7 +328,7 @@ function apAdventure.StoreCfg(groupn)
 
     if savenagcvar:GetBool() then
         if !next(entr) then
-            apAdventure.SendNotification("#apadventure.editor.warning.noentr",0,10,nil,listenhost)
+            apAdventure.SendNotification("#apadventure.editor.warning.noentr",1,10,nil,listenhost)
         end
         if next(start) and !next(exit) then
             apAdventure.SendNotification("#apadventure.editor.warning.startnoexit",0,10,nil,listenhost)
