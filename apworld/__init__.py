@@ -841,6 +841,9 @@ class APADVWorld(World):
                 unconnectedentrs[entr] = exitdata
                 del unplacedentrs[entr]
 
+        if unplacedentrs and available_exits == 0:
+            raise RuntimeError(f"Can't reach any exits from the start region {startreg} for slot {self.player_name}, their start point is too restrictive.")
+
         untriedentrs = set(unplacedentrs.keys())
 
         deadends = set()
