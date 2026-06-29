@@ -229,6 +229,10 @@ def ProcessCfgs():
                     else:
                         warnings.append(f"map {map} from {gr} has an entrance placed in non-existing region \"{k}\"")
 
+            if not newmap.entrances:
+                warnings.append(f"map {map} from {gr} has no entrances, discarded")
+                continue
+
             if "exit" in svjson:
                 for k,v in svjson["exit"].items():
                     if v["reg"] in newmap.regions:
@@ -246,18 +250,12 @@ def ProcessCfgs():
                     else:
                         warnings.append(f"map {map} from {gr} has locations assigned to non-existing region \"{k}\"")
 
-            addedstart = False
             if "start" in svjson:
                 for v in svjson["start"]:
                     if v in newmap.regions:
                         newmap.regions[v]["startcandidate"] = True
-                        addedstart = True
                     else:
                         warnings.append(f"map {map} from {gr} has starts defined for non-existing region \"{v}\"")
-
-            if not addedstart and not newmap.entrances:
-                warnings.append(f"Map {map} from {gr} has no valid entrances or start points and was discarded.")
-                continue
 
             if "item" in cljson:
                 mapitems = cljson["item"]
