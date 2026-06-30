@@ -186,7 +186,6 @@ local function ApAdvRegisterItemHandlers()
                     handle[itemid] = function(iList)
                         if APADV_ITEMSUSED[itemid] < #iList then
                             local redeem = itemtbl.RedeemCheck()
-                            print(itemtbl.Name,"redeem:",redeem)
                             if redeem == true then
                                 itemtbl.Redeem()
                                 APADV_ITEMSUSED[itemid] = (APADV_ITEMSUSED[itemid] or 0) + 1
