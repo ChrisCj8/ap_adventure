@@ -1,1 +1,68 @@
-{"ver":"v1_1","reg":{"Hospital":{"cond":["Props"],"ammo":{"Props":true}},"Entrance":{"cond":["Props"],"ammo":{"Props":true}},"Street":{"cond":["Props"],"ammo":{"Props":true}}},"info":[],"connect":{"Entrance":{"Street":{"twoway":false}},"Street":{"Hospital":{"twoway":true,"access":{"type":"or","nodes":[{"capab":["DecentMelee"],"type":"capab"},{"capab":["StrongShortRange"],"type":"capab"}]}}}}}
+{
+	"ver": "v1_1",
+	"info": {
+		"requirements": []
+	},
+	"reg": {
+		"Hospital": {
+			"cond": [
+				"Props"
+			],
+			"ammo": {
+				"Props": true
+			}
+		},
+		"Entrance": {
+			"cond": [
+				"Props"
+			],
+			"ammo": {
+				"Props": true
+			}
+		},
+		"Street": {
+			"cond": [
+				"Props"
+			],
+			"ammo": {
+				"Props": true
+			}
+		}
+	},
+	"connect": {
+		"Entrance": {
+			"Street": {
+				"twoway": false
+			}
+		},
+		"Street": {
+			"Hospital": {
+				"twoway": true,
+				"access": {
+					"type": "or",
+					"nodes": [
+						{
+							"capab": [
+								"DecentMelee"
+							],
+							"type": "capab"
+						},
+						{
+							"capab": [
+								"StrongShortRange"
+							],
+							"type": "capab"
+						}
+					]
+				}
+			},
+			"Entrance": {
+				"twoway": false,
+				"access": {
+					"type": "surf",
+					"skill": 0.5
+				}
+			}
+		}
+	}
+}

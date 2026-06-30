@@ -42,6 +42,13 @@
 						}
 					]
 				}
+			},
+			"Entrance": {
+				"twoway": false,
+				"access": {
+					"type": "surf",
+					"skill": 0.5
+				}
 			}
 		}
 	}

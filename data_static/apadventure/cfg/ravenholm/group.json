@@ -5,11 +5,11 @@
 		"requirements": [
 			"gamehl2"
 		],
-		"respawn": false,
 		"hev": true,
-		"runspd": 190,
+		"godmode": false,
 		"stopspd": 100,
-		"frctn": 4,
-		"godmode": false
+		"respawn": false,
+		"runspd": 190,
+		"frctn": 4
 	}
 }
