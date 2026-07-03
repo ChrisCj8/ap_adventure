@@ -46,9 +46,7 @@ function APADV.InitSaveData(saveid)
             end
         end
 
-        if APADV_SAVEDATA._itemsused then
-            APADV_ITEMSUSED = APADV_SAVEDATA._itemsused
-        end
+        APADV_ITEMSUSED = APADV_SAVEDATA._itemsused or {}
 
         if APADV_SAVEDATA._tracker then
             APADV_TRACKER:LoadFromTable(APADV_SAVEDATA._tracker)
@@ -87,9 +85,7 @@ hook.Add("ShutDown","apAdvStoreSaveData",function()
     if !APADV_SAVEID then return end
     local savedir = "apadventure/sav/"..APADV_SAVEID.."/"
 
-    if APADV_ITEMSUSED and next(APADV_ITEMSUSED) != nil then
-        APADV_SAVEDATA._itemsused = APADV_ITEMSUSED
-    end
+    APADV_SAVEDATA._itemsused = APADV_ITEMSUSED
 
     for k,v in pairs(APADV_SAVEDATA) do
         fileW(savedir..k..".json",ToJSON(v))
