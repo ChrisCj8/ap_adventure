@@ -81,7 +81,7 @@ local function StorePlyData(ply)
 
 end
 
-hook.Add("ShutDown","apAdvStoreSaveData",function()
+function APADV.StoreSaveData()
     if !APADV_SAVEID then return end
     local savedir = "apadventure/sav/"..APADV_SAVEID.."/"
 
@@ -101,7 +101,9 @@ hook.Add("ShutDown","apAdvStoreSaveData",function()
     end
 
     APADV_TRACKER:SaveToFile(savedir.."_tracker.json")
-end)
+end
+
+hook.Add("ShutDown","apAdvStoreSaveData",APADV.StoreSaveData)
 
 hook.Add("DoPlayerDeath","apAdvStoreSaveData",function(ply)
     StorePlyData(ply)

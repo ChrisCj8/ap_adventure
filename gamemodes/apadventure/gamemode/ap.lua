@@ -339,6 +339,8 @@ local function OnRunID(packet)
     local saveid = runid.."_"..APADV_SLOT.team.."_"..APADV_SLOT.Nr
     if APADV_SAVEID != saveid then
 
+        APADV.StoreSaveData()
+
         local slotdata = APADV_SLOT.slotData
         local room = APADV_SLOT.Room
 
