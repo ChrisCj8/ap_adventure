@@ -53,8 +53,6 @@ local function ApAdvLocationHandler(slot,id,state)
     end
 end
 
-local handlers_registered = handlers_registered or false
-
 APADV_ITEMSUSED = APADV_ITEMSUSED or {}
 
 function APADV.RegisterMapItems()
@@ -312,8 +310,6 @@ local function ApAdvRegisterItemHandlers()
         end
     end
 
-    handlers_registered = true
-
     local empty = {} -- kinda hacky but this means item handlers don't have to do nil checks
 
     if APADV.MapItemTbl then
@@ -331,8 +327,6 @@ local function ApAdvRegisterItemHandlers()
         v(APADV_SLOT.Items[k] or empty)
     end
 end
-
-local dp_loaded = dp_loaded or false
 
 local function OnRunID(packet)
     local runid = packet.value
@@ -364,8 +358,6 @@ local function OnRunID(packet)
                 APADV.DoMapTransition(slotdata.startmap,slotdata.startgroup)
             end
         end
-
-        handlers_registered = false
 
         ApAdvPly.UpdateBHop(slotdata.bhop == 3)
         game.SetSkillLevel(slotdata.skill)
@@ -400,9 +392,7 @@ local function OnRunID(packet)
         APADV_SAVEID = saveid
     end
 
-    if dp_loaded then
-        ApAdvRegisterItemHandlers()
-    end
+    ApAdvRegisterItemHandlers()
 
     if APADV_TRACKER.runid == saveid then
         APADV_TRACKER:SendTrackerData()
@@ -433,12 +423,8 @@ local function OnDisconnect(self)
 end
 
 local function ApAdvDPLoad(slot,datapackage)
-    dp_loaded = true
     APADV_DATAPACK = datapackage
     APADV_DATAPACK_LOCAL = datapackage.games["GMod - apAdventure"]
-    if APADV_SLOT.slotData and !handlers_registered then
-        ApAdvRegisterItemHandlers()
-    end
 end
 
 local function ApAdvFullData(slot)
@@ -465,9 +451,6 @@ end
 
 function APADV.CreateApSlot(addr,slotn,pw)
     if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
-
-        dp_loaded = false
-        handlers_registered = false
 
         APADV_ITEMHANDLERS = {}
 
