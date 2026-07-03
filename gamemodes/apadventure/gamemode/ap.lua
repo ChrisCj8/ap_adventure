@@ -147,7 +147,11 @@ hook.Add("PlayerInitialSpawn","APADV_SendMcGuffinCount",function(ply)
     end
 end)
 
+local lastregistration
+
 local function ApAdvRegisterItemHandlers()
+
+    local curregistration = CurTime()
 
     if APADV.ItemUnregisterFuncs then
         for k,v in ipairs(APADV.ItemUnregisterFuncs) do v() end
@@ -189,7 +193,12 @@ local function ApAdvRegisterItemHandlers()
                                 APADV_ITEMSUSED[itemid] = iused + 1
                                 handle[itemid](iList)
                             elseif isnumber(redeem) then
-                                timer.Simple(redeem,function() handle[itemid](iList) end)
+                                timer.Simple(redeem,function()
+                                    -- need a better way to detect when the itemhandlers have changed but this works for now
+                                    if APADV_FULLCONNECT and lastregistration == curregistration then
+                                        handle[itemid](iList)
+                                    end
+                                end)
                             end
                         end
                     end
@@ -322,6 +331,8 @@ local function ApAdvRegisterItemHandlers()
     APADV.capabtbl = capabtbl
     APADV.condcapabtbl = condcapabtbl
     APADV.id2capab = id2capab
+
+    lastregistration = curregistration
 
     for k,v in pairs(handle) do
         v(APADV_SLOT.Items[k] or empty)
