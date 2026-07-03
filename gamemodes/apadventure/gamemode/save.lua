@@ -56,6 +56,7 @@ function APADV.InitSaveData(saveid)
         end
 
     else
+        APADV_ITEMSUSED = {}
         file.CreateDir(savedir.."ply/")
         file.Write(savedir.."name.txt",APADV_SLOT.slotName)
     end
