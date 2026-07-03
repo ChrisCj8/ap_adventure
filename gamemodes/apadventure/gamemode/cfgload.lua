@@ -105,7 +105,7 @@ function APADV.LoadCfg(group)
     local dupedata = cfg.sav
 
     if isfunction(APADV_CFGLUA.PreDupe) then
-        local success, out = pcall(APADV_CFGLUA.PreDupe,dupedata)
+        local success, out = pcall(APADV_CFGLUA.PreDupe,APADV_CFGLUA,dupedata)
         if success then
             dupedata = out
         else
