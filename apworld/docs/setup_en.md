@@ -126,3 +126,4 @@ apAdventure allows custom items to be defined through Lua, but this feature is c
     - 2 - Super Admins and Listen Host only
 - `adadv_slot_connect` - If connection info has already been sent to the GMod Server, (re)connects to the Archipelago Server. Does nothing otherwise. Super Admins and Listen Host only.
 - `adadv_slot_disconnect` - Disconnects the GMod Server from the Archipelago Server if it's connected. Does nothing otherwise. Super Admins and Listen Host only.
+- `apadventure_mapiconmat_resolution` - What the resolution for Map Icon Materials should be, as a power of two. (8 = 256, 9 = 512, ...) Map Icons are rarely bigger than 512x512, so there's not much of a benefit to setting this higher than 9. Won't update until you load another map. Clientside.
