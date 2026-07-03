@@ -10,8 +10,8 @@ return {
         end
     end,
     PostCfgLoad = function(self)
-        
-        hook.Add("AcceptInput",self,function(self,ent,input) 
+
+        hook.Add("AcceptInput",self,function(self,ent,input)
             if input == "Enable" and ent:GetClass() == "npc_antlion_template_maker" then
                 enabledspawners[ent] = true
                 return true
