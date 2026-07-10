@@ -48,21 +48,32 @@ local kvloggers = {
         local cID = ent:MapCreationID()
         areaportalinfo[cID] = areaportalinfo[cID] or {}
         areaportalinfo[cID][key] = val
+        return val
     end,
-    trigger_changelevel = function(ent,key,val)
+    trigger_changelevel = playingApAdv and function(ent,key,val)
         changelevelinfo[ent] = changelevelinfo[ent] or {}
         changelevelinfo[ent][key] = val
+        -- this feels gross but this is the best way i could find to prevent an issue that could occasionally cause
+        -- unintended level transitions because a trigger_changelevel was triggered before it could be cleaned up
+        if key == "startdisabled" then return 1 end
+        if key == "classname" then ent:SetKeyValue("StartDisabled",1) end
+        return val
+    end or function(ent,key,val)
+        changelevelinfo[ent] = changelevelinfo[ent] or {}
+        changelevelinfo[ent][key] = val
+        return val
     end,
     player_loadsaved = function(ent,key,val)
         loadsavedinfo[ent] = loadsavedinfo[ent] or {}
         loadsavedinfo[ent][key] = val
+        return val
     end
 }
 
 hook.Add("EntityKeyValue","ApAdvKeyValLogger",function(ent,key,val)
     local logger = kvloggers[ent:GetClass()]
     if isfunction(logger) then
-        logger(ent,key,val)
+        return logger(ent,key,val)
     end
 end)
 
