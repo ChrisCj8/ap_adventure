@@ -4,7 +4,9 @@ APADV_ITEMHANDLERS = APADV_ITEMHANDLERS or {}
 APADV_CFGITEMHANDLERS = APADV_CFGITEMHANDLERS or {}
 
 timer.Create("APAdvTrackerQuery",1,0,function()
-    APADV_TRACKER:Query()
+    if APADV_TRACKER.query then
+        APADV_TRACKER:Query()
+    end
 end)
 timer.Stop("APAdvTrackerQuery")
 
