@@ -342,6 +342,10 @@ local function ApAdvRegisterItemHandlers()
 end
 
 local function OnRunID(packet)
+    if !packet then
+        APADV_SLOT:Disconnect()
+        return
+    end
     local runid = packet.value
     local saveid = runid.."_"..APADV_SLOT.team.."_"..APADV_SLOT.Nr
     if APADV_SAVEID != saveid then
