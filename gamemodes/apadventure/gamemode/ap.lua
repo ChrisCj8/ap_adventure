@@ -444,6 +444,44 @@ local function ApAdvDPLoad(slot,datapackage)
     APADV_DATAPACK_LOCAL = datapackage.games["GMod - apAdventure"]
 end
 
+APADV.WantsLocationInfo = {}
+
+local function sendLocInfoRequests()
+    local reqlist = APADV.WantsLocationInfo
+    if !next(reqlist) then return end
+    local reqbyloc = {}
+    local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+    for k,v in pairs(reqlist) do
+        if isstring(k) or IsValid(k) then
+            local loc = v.l
+            if !isnumber(loc) then
+                loc = locnametoid[loc]
+            end
+            if loc then
+                local reqtbl = reqbyloc[loc]
+                local newentry = {
+                    f = v.f,
+                    n = k
+                }
+                if reqtbl then
+                    reqtbl[#reqtbl+1] = newentry
+                else
+                    reqbyloc[loc] = {newentry}
+                end
+            end
+        end
+    end
+    for k,v in pairs(reqbyloc) do
+        APADV_SLOT:GetLocationInfo(k,0,function(info)
+            if !info then return end
+            for ik,iv in ipairs(v) do
+                ProtectedCall(iv.f,info)
+                APADV.WantsLocationInfo[iv.n] = nil
+            end
+        end)
+    end
+end
+
 local function ApAdvFullData(slot)
     if APADV_UNCHECKED_LOCS then
         local loclist = APADV_SLOT.Locations
@@ -461,6 +499,8 @@ local function ApAdvFullData(slot)
         end
         APADV_UNCHECKED_LOCS = nil
     end
+
+    sendLocInfoRequests()
 
     local room = slot.Room
     slot:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
@@ -522,6 +562,27 @@ function APADV.SendMapLocation(lctn)
     if !ID then return end
     APADV_SLOT:SendLocation(ID)
     return APADV_SLOT.Locations[ID]
+end
+
+timer.Create("APADVLocInfoRequestQueueTimer",1,0,function()
+    if APADV_SLOT.FullData then sendLocInfoRequests() end
+    timer.Stop("APADVLocInfoRequestQueueTimer")
+end)
+timer.Stop("APADVLocInfoRequestQueueTimer")
+
+-- don't use this for your custom content, i'm not super happy with how this works and might remove it in the future
+function APADV.LocationInfoRequest(reqnm,lctn,cb)
+    if APADV_SLOT then
+        if APADV_SLOT.LocationInfo then
+            if !isnumber(lctn) and APADV_SLOT.location_name_to_id then lctn = APADV_SLOT.location_name_to_id[lctn] end
+            if isnumber(lctn) then
+                local info = APADV_SLOT.LocationInfo[lctn]
+                if info then cb(info) return end
+            end
+        end
+        if APADV_SLOT.FullData then timer.Start("APADVLocInfoRequestQueueTimer") end
+    end
+    APADV.WantsLocationInfo[reqnm] = {l=lctn,f=cb}
 end
 
 function APADV.AddTracker(type,trackedID,hookID,method)
