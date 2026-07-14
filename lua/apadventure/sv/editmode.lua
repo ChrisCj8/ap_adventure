@@ -479,11 +479,19 @@ local function ProcessItemGroup(groupname)
                 condcapab = deftbl.ConditionalCapabilities,
                 capab = deftbl.Capabilities,
                 starttag = deftbl.StartGroup,
+                neveruseful = deftbl.NeverUseful == true and !deftbl.ForceUseful or nil,
                 file = string.sub(v,0,-5)
             }
             if deftbl.RequireCondition then
                 curitem.req_cond = true
             end
+            local flag = deftbl.ForceProgression and 1 or 0
+            if deftbl.ForceUseful then flag = flag + 2 end
+            if deftbl.Trap then flag = flag + 4 end
+            if deftbl.SkipProgressionBalancing then flag = flag + 8 end
+            if deftbl.Deprioritize then flag = flag + 16 end
+            curitem.flag = flag != 0 and flag or nil
+
             itemtbl[deftbl.Name] = curitem
         else
             print(grouppath.."/"..v.." did not return a table")

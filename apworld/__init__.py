@@ -185,23 +185,28 @@ class APADVWorld(World):
         item = data[2]
         if flags == None:
             if item.info:
-                flags = ItemClassification.filler
                 info = item.info
+                flags = "flag" in info and info["flag"] or ItemClassification.filler
+                if flags & ItemClassification.progression:
+                    return flags
                 if self.usedcapabs_known:
                     if "capab" in info:
                         capab = info["capab"]
                         if self.usedcapabs.intersection(capab):
-                            return ItemClassification.progression
-                        else:
-                            flags = ItemClassification.useful
-                    if not flags == ItemClassification.progression and "condcapab" in info:
+                            flags |= ItemClassification.progression
+                    if not flags & ItemClassification.progression and "condcapab" in info:
                         if not self.regconds_known:
                             return None
-                        flags = ItemClassification.useful
                         condcapab = info["condcapab"]
+                        foundcapab = False
                         for k,v in condcapab.items():
                             if k in self.regconds and self.usedcapabs.intersection(v):
-                                return ItemClassification.progression
+                                foundcapab = True
+                                break
+                        if foundcapab: flags |= ItemClassification.progression
+                    if (not "neveruseful" in info and not flags & ItemClassification.progression
+                        and ("capab" in info or "condcapab" in info)):
+                        flags |= ItemClassification.useful
                 else:
                     return None
             else:
@@ -335,7 +340,11 @@ class APADVWorld(World):
             name = item.long_name # move this into the last if condition when implementing short item names
             info = item.info
 
-            self.item_table[name] = (self.item_name_to_id[name],None,item)
+            baseflags = "flag" in info and ItemClassification(info["flag"]) or ItemClassification.filler
+            flags = (not ("capab" in info or "condcapab" in info) or baseflags & ItemClassification.progression) and baseflags or None
+
+            self.item_table[name] = (self.item_name_to_id[name],flags,item)
+            if flags != None: item.baseflags = baseflags
 
             if "wgt" in info:
                 self.fillers[name] = info["wgt"]
