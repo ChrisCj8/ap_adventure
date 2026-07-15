@@ -185,11 +185,30 @@ local function ApAdvRegisterItemHandlers()
             local handler = itemtbl.Handle
             if !isfunction(handler) then handler = nil end
             if itype == "OneUse" then
-                if itemtbl.RedeemCheck then
+                local redeemcheck = itemtbl.RedeemCheck
+                if redeemcheck == true then
                     handle[itemid] = function(iList)
                         local iused = APADV_ITEMSUSED[itemid] or 0
                         if iused < #iList then
-                            local redeem = itemtbl.RedeemCheck()
+                            local redeem = itemtbl.Redeem()
+                            if redeem == true then
+                                APADV_ITEMSUSED[itemid] = iused + 1
+                                handle[itemid](iList)
+                            elseif isnumber(redeem) then
+                                timer.Simple(redeem,function()
+                                    -- need a better way to detect when the itemhandlers have changed but this works for now
+                                    if APADV_FULLCONNECT and lastregistration == curregistration then
+                                        handle[itemid](iList)
+                                    end
+                                end)
+                            end
+                        end
+                    end
+                elseif isfunction(redeemcheck) then
+                    handle[itemid] = function(iList)
+                        local iused = APADV_ITEMSUSED[itemid] or 0
+                        if iused < #iList then
+                            local redeem = redeemcheck()
                             if redeem == true then
                                 itemtbl.Redeem()
                                 APADV_ITEMSUSED[itemid] = iused + 1
