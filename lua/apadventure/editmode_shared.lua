@@ -33,7 +33,7 @@ end
 function apAdventure.ClCfgToLogic(cfg)
 
     if !next(cfg.reg) then return end
-    
+
     local reg = {}
 
     for k,v in pairs(cfg.reg) do
