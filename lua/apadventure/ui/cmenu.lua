@@ -377,7 +377,6 @@ return function(window)
             end
         end
 
-        local oldlayout = mapcfgpnl.PerformLayout
         function mapcfgcanvas:PerformLayout(w,h)
             for k,v in ipairs(helppnls) do
                 local x,y = v:GetPos()
