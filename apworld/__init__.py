@@ -126,11 +126,11 @@ class APADVWorld(World):
     item_set_table = processout[0]
     item_name_to_id = processout[1]
     base_item_table = processout[2]
-    duplicate_item_names = processout[3]
-    map_table = processout[4]
-    location_name_to_id = processout[5]
-    group_data = processout[6]
-    warncount = processout[7]
+    #duplicate_item_names = processout[3]
+    map_table = processout[3]
+    location_name_to_id = processout[4]
+    group_data = processout[5]
+    warncount = processout[6]
 
     locs = int(0)
     itemtypes = int(1)
@@ -324,7 +324,7 @@ class APADVWorld(World):
         items_to_load = dict()
         items_dontload = dict()
         item_blacklist = options.item_blacklist
-        duplicate_item_names = set()
+        #duplicate_item_names = set()
 
         starttags = set(options.start_item_groups)
         starttags.add("Melee")
@@ -334,9 +334,9 @@ class APADVWorld(World):
         startweights = dict()
 
         def register_item(item):
-            name = item.name
-            if name in self.duplicate_item_names:
-                duplicate_item_names.add(name)
+            #name = item.name
+            #if name in self.duplicate_item_names:
+            #    duplicate_item_names.add(name)
             name = item.long_name # move this into the last if condition when implementing short item names
             info = item.info
 

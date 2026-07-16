@@ -101,7 +101,7 @@ def ProcessCfgs():
         item_name_to_id[item] = base_item_table[item][0]
         itemtypes += 1
 
-    duplicate_item_names = set()
+    #duplicate_item_names = set()
 
     item_set_table = dict()
 
@@ -116,11 +116,11 @@ def ProcessCfgs():
                 for iname, idef in setjson["items"].items():
                     #print(f"processing {iname}")
                     newitem = SetItem(iname,newiset,idef)
-                    if iname in item_name_to_id:
-                        duplicate_item_names.add(iname)
-                    else:
-                        itemtypes += 1
-                        item_name_to_id[iname] = itemtypes
+                    #if iname in item_name_to_id:
+                    #    duplicate_item_names.add(iname)
+                    #else:
+                    #    itemtypes += 1
+                    #    item_name_to_id[iname] = itemtypes
 
                     itemtypes += 1
                     item_name_to_id[newitem.long_name] = itemtypes
@@ -282,4 +282,11 @@ def ProcessCfgs():
     elif warnpath.is_file():
         warnpath.unlink()
 
-    return (item_set_table, item_name_to_id, base_item_table, duplicate_item_names, map_table, location_name_to_id, group_data, len(warnings)) # this sucks !
+    return ( item_set_table,
+        item_name_to_id,
+        base_item_table,
+        #duplicate_item_names,
+        map_table,
+        location_name_to_id,
+        group_data,
+        len(warnings)) # this sucks !
