@@ -1043,7 +1043,7 @@ class APADVWorld(World):
             last = unconnectedtwoways.popitem()
             last_data = last[1]
             if entrsleft > exitsleft:
-                last_data = (last_data[1],last_data[3])
+                last_data = (last_data[0],last_data[1],last_data[3])
                 unconnectedexits[last[0]] = last_data
                 exitsleft += 1
             else:
