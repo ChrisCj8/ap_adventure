@@ -247,6 +247,7 @@ class APADVWorld(World):
         #    self.dodebug = False
 
         self.bhop = options.bhop
+        self.customparams = options.custom_parameters
 
         if self.bhop ==  1:
             self.bhop_logic = 0
@@ -1113,6 +1114,7 @@ class APADVWorld(World):
             "startgroup":self.startpick.map.group,
             "startregion":self.startpick.regname,
             "ammomerge":self.ammomerge_out,
+            "customparams":dict(self.customparams), #ap shits itself if this isn't converted into a dict
             "ver":1,
         }
 

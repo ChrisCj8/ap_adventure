@@ -159,6 +159,11 @@ class StartItemGroups(OptionSet):
     display_name = "Starting Item Groups"
     default = {"Pistol"}
 
+class CustomParams(OptionDict):
+    """This option allows you to set custom parameters which Item Sets or Map Configs may use for various purposes."""
+    display_name = "Custom Parameters"
+    default = {}
+
 class AmmoMerge(OptionList):
     """This option allows ammo types to be merged together.
 
@@ -253,6 +258,7 @@ class APADVGameOptions(PerGameCommonOptions):
     item_cherrypick: ItemCherryPick
     item_blacklist: ItemBlacklist
     start_item_groups: StartItemGroups
+    custom_parameters: CustomParams
     ammo_merge: AmmoMerge
     generate_puml: GeneratePUML
     #write_debug: WriteDebug

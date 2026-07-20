@@ -384,7 +384,9 @@ return function(window)
             end
             mapcfgpnl:InvalidateLayout()
         end
-
+	local modpnl = UImake("DPanel")
+	newtab = tabs:AddSheet("#apadventure.editor.tab.mod",modpnl)
+	newtab.Tab.guide = "modtab"
     local regpnl = UImake("DPanel")
     newtab = tabs:AddSheet("#apadventure.editor.tab.reg",regpnl)
     newtab.Tab.guide = "regiontab"

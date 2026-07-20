@@ -564,7 +564,56 @@ function APADV_TRACKER:Query()
                     end
                 end
                 return 3
-            end
+            end,
+			["cparam"] = function(node)
+				local param = APADV_CUSTOMPARAMS[node.n]
+				if !param then
+					local m = node.m or 3
+					return m,m
+				end
+				local val = node.v
+				local invalout = node.i
+				local opfunc = {
+					["=="] = function()
+						if param == val then return 1,1 end
+						val = tonumber(val)
+						param = tonumber(param)
+						if val != nil and param != nil and param == val then return 1,1 end
+						return 3,3
+					end,
+					[">"] = function()
+						param = tonumber(param)
+						if param == nil then return invalout,invalout end
+						if !isnumber(val) then return invalout,invalout end
+						if param > val then return 1,1 end
+						return 3,3
+					end,
+					["<"] = function()
+						param = tonumber(param)
+						if param == nil then return invalout,invalout end
+						if !isnumber(val) then return invalout,invalout end
+						if param < val then return 1,1 end
+						return 3,3
+					end,
+					[">="] = function()
+						param = tonumber(param)
+						if param == nil then return invalout,invalout end
+						if !isnumber(val) then return invalout,invalout end
+						if param >= val then return 1,1 end
+						return 3,3
+					end,
+					["<="] = function()
+						param = tonumber(param)
+						if param == nil then return invalout,invalout end
+						if !isnumber(val) then return invalout,invalout end
+						if param <= val then return 1,1 end
+						return 3,3
+					end
+				}
+				local func = opfunc[node.o]
+				if !func then return 3,3 end
+				return func()
+			end
         }
         setmetatable(nodeeval,evalmeta)
         --print("evaluating rule:")

@@ -205,5 +205,39 @@ def preprocess_json_rule(rule,world,region):
             rule["type"] = "has"
             rule["item"] = f"{region.mapgroup} - {region.mapname} - {rule["item"]}"
             return rule
+        case "cparam":
+            cparams = world.customparams
+            name = rule["n"]
+            if name in cparams:
+                param = cparams[name]
+            else:
+                return rule["m"] <= 1 and alwaysnode or nevernode
+            val = rule["v"]
+            match rule["o"]:
+                case "==":
+                    if param == val: return alwaysnode
+                    try:
+                        return float(param) == float(val) and alwaysnode or nevernode
+                    except:
+                        return nevernode
+                case ">":
+                    try:
+                        if param > val: return alwaysnode
+                    except: pass
+                case "<":
+                    try: 
+                        if param < val: return alwaysnode
+                    except: pass
+                case ">=":
+                    try:
+                        if param >= val: return alwaysnode
+                    except: pass
+                case "<=":
+                    try:
+                        if param <= val: return alwaysnode
+                    except: pass
+                case _:
+                    return nevernode
+            return rule["i"] <= 1 and alwaysnode or nevernode
         case _:
             return rule

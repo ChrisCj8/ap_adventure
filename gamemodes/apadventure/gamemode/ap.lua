@@ -414,6 +414,7 @@ local function OnRunID(packet)
 
         APADV_AMMOMERGE = ammotbl
         APADV_ENTRANCES = slotdata.connections
+		APADV_CUSTOMPARAMS = slotdata.customparams or {}
 
         if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] then
             local mapexits = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]
@@ -470,13 +471,14 @@ local function sendLocInfoRequests()
     if !next(reqlist) then return end
     local reqbyloc = {}
     local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+	local locs = APADV_SLOT.Locations
     for k,v in pairs(reqlist) do
         if isstring(k) or IsValid(k) then
             local loc = v.l
             if !isnumber(loc) then
                 loc = locnametoid[loc]
             end
-            if loc then
+            if loc and locs[loc] != nil then
                 local reqtbl = reqbyloc[loc]
                 local newentry = {
                     f = v.f,
