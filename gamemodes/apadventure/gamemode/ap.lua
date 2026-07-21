@@ -371,6 +371,9 @@ local function OnRunID(packet)
 
         APADV.StoreSaveData()
 
+		local oldsaveid = APADV_SAVEID
+		APADV_SAVEID = saveid
+
         local slotdata = APADV_SLOT.slotData
         local room = APADV_SLOT.Room
 
@@ -380,7 +383,7 @@ local function OnRunID(packet)
 
         APADV.InitSaveData(saveid)
 
-        if APADV_SAVEID or !next(APADV_LASTMAPTBL) then
+        if oldsaveid or !next(APADV_LASTMAPTBL) then
             local map = game.GetMap()
             if map == slotdata.startmap then
                 APADV_USESTART = slotdata.startregion
@@ -425,8 +428,6 @@ local function OnRunID(packet)
                 end
             end
         end
-
-        APADV_SAVEID = saveid
     end
 
     ApAdvRegisterItemHandlers()
