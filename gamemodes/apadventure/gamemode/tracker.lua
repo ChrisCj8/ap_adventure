@@ -784,6 +784,6 @@ function APADV_TRACKER:LoadFromTable(data)
     self.regs = data.regs
     self.query = data.query
     self.locnametomap = data.locnametomap
-    self.ammo = data.ammomerge
+    self.ammomerge = data.ammo
     self.runid = APADV_SAVEID
 end
