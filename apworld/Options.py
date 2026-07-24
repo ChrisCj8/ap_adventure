@@ -159,6 +159,17 @@ class StartItemGroups(OptionSet):
     display_name = "Starting Item Groups"
     default = {"Pistol"}
 
+class TrapVision(Choice):
+    """Archipelago Items that physically exist in apAdventure will give off particles depending on
+    what flags have been set on them. This setting controls whether or not the player will be able
+    to see these particles on trap items. The "item" option also allows this ability to be enabled
+    after receiving an Item for it."""
+    display_name = "Trap Vision"
+    option_never = 1
+    option_item = 2
+    option_always = 3
+    default = 2
+
 class CustomParams(OptionDict):
     """This option allows you to set custom parameters which Item Sets or Map Configs may use for various purposes."""
     display_name = "Custom Parameters"
@@ -257,6 +268,7 @@ class APADVGameOptions(PerGameCommonOptions):
     item_sets: ItemSets
     item_cherrypick: ItemCherryPick
     item_blacklist: ItemBlacklist
+    trap_vision: TrapVision
     start_item_groups: StartItemGroups
     custom_parameters: CustomParams
     ammo_merge: AmmoMerge

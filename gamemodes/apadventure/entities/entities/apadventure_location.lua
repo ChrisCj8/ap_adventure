@@ -81,7 +81,9 @@ local IsCollector = APADV.IsCollector
 function ENT:UpdateInfo(info)
     if !info then return end
     self.LocationInfo = info
-    self:SetItemFlags(info.flags)
+	local flag = info.flags
+	if !APADV_TRAPVISION and bit.band(flag,4) == 4 then flag = flag - 4 end
+    self:SetItemFlags(flag)
 end
 
 function ENT:StartTouch(ent)

@@ -325,6 +325,17 @@ local function ApAdvRegisterItemHandlers()
         end
     end
 
+	if slotdata.trapvision == 2 then
+		handle[toID["Trap Vision"]] = function(iList)
+			if !iList[1] then return end
+			APADV_TRAPVISION = true
+			for k,v in ipairs(ents.FindByClass("apadventure_location")) do
+				local info = v.LocationInfo
+				if info then v:SetItemFlags(info.flags) end
+			end
+		end
+	end
+
     local blacklist = slotdata.items_dontload
 
     for k,v in ipairs(slotdata.itemsets) do
@@ -409,8 +420,6 @@ local function OnRunID(packet)
         ApAdvPly.UpdateBHop(slotdata.bhop == 3)
         game.SetSkillLevel(slotdata.skill)
 
-        APADV_ENTRANCES = {}
-
         local ammotbl = {}
 
         local ammoID = game.GetAmmoID
@@ -424,8 +433,9 @@ local function OnRunID(packet)
         end
 
         APADV_AMMOMERGE = ammotbl
-        APADV_ENTRANCES = slotdata.connections
+        APADV_ENTRANCES = slotdata.connections or {}
 		APADV_CUSTOMPARAMS = slotdata.customparams or {}
+		APADV_TRAPVISION = slotdata.trapvision == 3 or nil
 
         if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] then
             local mapexits = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]

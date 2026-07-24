@@ -89,7 +89,8 @@ def ProcessCfgs():
     base_item_table = {
         "Nothing":( 1, ItemClassification.filler, None , None),
         "McGuffin":( 2, ItemClassification.progression, None , None),
-        "Bunnyhop":( 3, ItemClassification.progression, None , None)
+        "Bunnyhop":( 3, ItemClassification.progression, None , None),
+        "Trap Vision":( 4, ItemClassification.useful, None, None),
     }
 
     item_name_to_id = dict()

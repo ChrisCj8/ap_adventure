@@ -690,6 +690,11 @@ class APADVWorld(World):
             if not self.bhop_logic:
                 usefuls.append(bhop)
 
+        if self.options.trap_vision:
+            tv = self.create_item("Trap Vision")
+            itempool.append(tv)
+            usefuls.append(tv)
+
         for iname,info in self.map_items.items():
             item_table[iname] = (self.item_name_to_id[iname],ItemClassification(info["fl"]),None)
             i = 0
@@ -1114,6 +1119,7 @@ class APADVWorld(World):
             "startgroup":self.startpick.map.group,
             "startregion":self.startpick.regname,
             "ammomerge":self.ammomerge_out,
+            "trapvision":int(self.options.trap_vision),
             "customparams":dict(self.customparams), #ap shits itself if this isn't converted into a dict
             "ver":1,
         }
