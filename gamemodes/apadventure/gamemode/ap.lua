@@ -195,6 +195,10 @@ local function ApAdvRegisterItemHandlers()
                                 APADV_ITEMSUSED[itemid] = iused + 1
                                 handle[itemid](iList)
                             elseif isnumber(redeem) then
+								if redeem < 1 then
+									ErrorNoHalt("Redeem returned a number lower than 1 ("..redeem.."), setting it to 1 to prevent Lag/Freezing.")
+									redeem = 5
+								end
                                 timer.Simple(redeem,function()
                                     -- need a better way to detect when the itemhandlers have changed but this works for now
                                     if APADV_FULLCONNECT and lastregistration == curregistration then
@@ -214,6 +218,10 @@ local function ApAdvRegisterItemHandlers()
                                 APADV_ITEMSUSED[itemid] = iused + 1
                                 handle[itemid](iList)
                             elseif isnumber(redeem) then
+								if redeem < 1 then
+									ErrorNoHalt("Redeemcheck returned a number lower than 1 ("..redeem.."), setting it to 1 to prevent Lag/Freezing.")
+									redeem = 5
+								end
                                 timer.Simple(redeem,function()
                                     -- need a better way to detect when the itemhandlers have changed but this works for now
                                     if APADV_FULLCONNECT and lastregistration == curregistration then
