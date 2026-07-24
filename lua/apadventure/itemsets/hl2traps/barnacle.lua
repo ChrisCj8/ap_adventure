@@ -23,9 +23,9 @@ local trtbl = {
 }
 
 local lastredeem = 0
-function ITEM:Redeem()
+function ITEM.Redeem()
 	local sinceredeem = CurTime() - lastredeem
-	if sinceredeem < 10 then return 5.5 - sinceredeem end
+	if sinceredeem < 10 then return 10.5 - sinceredeem end
 	local victims, cnt  = {}, 0
 	for k,v in player.Iterator() do
 		if v:Alive() and v:GetObserverMode() == OBS_MODE_NONE then
