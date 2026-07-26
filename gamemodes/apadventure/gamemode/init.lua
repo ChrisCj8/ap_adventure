@@ -5,6 +5,7 @@ AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 AddCSLuaFile("ui/connect.lua")
 AddCSLuaFile("ui/tracker.lua")
+AddCSLuaFile("ui/require.lua")
 
 include("player.lua")
 include("shared.lua")
