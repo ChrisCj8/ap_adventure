@@ -53,7 +53,7 @@
 
 ### Recommendations
 
-I recommend disabling all unneeded GMod addons while playing apAdventure. While apAdventure is designed to be playable alongside as many addons as possible, you will be changing between maps quite often and loading times can get very long if the player has too many addons installed.
+I recommend disabling all unneeded GMod addons while playing apAdventure. While apAdventure is designed to be playable alongside as many addons as possible, you will be changing between maps quite often and loading times can get very long if the player has too many addons enabled.
 
 ## Hosting
 
