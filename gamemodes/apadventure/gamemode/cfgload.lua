@@ -3,6 +3,7 @@ APADV_CFGLUA = APADV_CFGLUA or {}
 
 local fromJSON = util.JSONToTable
 local fileR = file.Read
+local entbyID = ents.GetMapCreatedEntity
 
 local function CfgLuaValid(self)
     return self == APADV_CFGLUA
@@ -91,7 +92,8 @@ function APADV.LoadCfg(group)
     end
 
     for k,v in ipairs(cfg.del) do
-        ents.GetMapCreatedEntity(v):Remove()
+		local e = entbyID(v)
+		if IsValid(e) then e:Remove() end
     end
 
     local delnames = cfg.delname
