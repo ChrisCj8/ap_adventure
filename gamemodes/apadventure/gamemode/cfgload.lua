@@ -115,9 +115,12 @@ function APADV.LoadCfg(group)
         end
     end
 
-    if dupedata and next(dupedata) then
-        duplicator.Paste(nil,cfg.sav.Entities,cfg.sav.Constraints)
-    end
+	if istable(dupedata) then
+		local dupeent, dupeconstr = dupedata.Entities, dupedata.Constraints
+		if istable(dupeent) and istable(dupeconstr) then
+			duplicator.Paste(nil,dupeent,dupeconstr)
+		end
+	end
 
     APADV_SPAWNS = {}
 
