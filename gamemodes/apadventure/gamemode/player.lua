@@ -167,9 +167,7 @@ for k,v in ipairs(permhooks) do
             return ogfunc(self,ply,...)
         end
     else
-        GM[v] = function (self,ply)
-            if !sv_cheats:GetBool() then return false end
-        end
+		GM[v] = function (self,ply) return sv_cheats:GetBool() end
     end
 end
 
