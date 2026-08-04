@@ -42,13 +42,14 @@ local capabs = {
     "AntlionFriendly",
     "AntlionControl",
     "BugbaitTrigger",
-    "MediumSizeOrSmallerExplosion", 
+    "MediumSizeOrSmallerExplosion",
     "SmallOrSmallerExplosion",
-    "LargeOrSmallerExplosion", 
+    "LargeOrSmallerExplosion",
     "MediumOrSmallerExplosion",
-    "TinyOrLargerExplosion", 
+    "TinyOrLargerExplosion",
     "SmallOrLargerExplosion",
     "MediumSizeOrLargerExplosion",
+	"GravityGun"
 }
 
 function NODE.Panel(parent)
@@ -132,7 +133,7 @@ function NODE.Panel(parent)
         for k,v in ipairs(caplist:GetSelected()) do
             local val = v:GetValue(1)
             for ik,iv in ipairs(captbl) do
-                if iv == val then 
+                if iv == val then
                     captbl[ik] = nil
                     changed = true
                 end
