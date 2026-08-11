@@ -8,6 +8,7 @@ function ENT:Initialize()
     BaseClass.Initialize(self)
     self:SetModel("models/apadventure/frame.mdl")
     self:PhysicsInitStatic(SOLID_VPHYSICS)
+	self:SetCustomCollisionCheck(true)
     if CLIENT then return end
     self:SetUseType(SIMPLE_USE)
 end
@@ -16,13 +17,15 @@ function ENT:ResetIcon()
     self:SetSubMaterial(1,self:GetSubMaterial(1))
 end
 
+function ENT:ApAdvCustomCollision(ent)
+	return ent:IsPlayer()
+end
+
 if CLIENT then return end
 
 function ENT:Use(activator,caller,usetype,val)
-    --print(self,"used by",activator,caller)
     if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][self.ExitName] then
         local entrtbl = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][self.ExitName]
-        --PrintTable(entrtbl)
         APADV.DoMapTransition(entrtbl.map,entrtbl.group,entrtbl.entr)
         return
     elseif APADV_SLOT and APADV_SLOT.Connected then
