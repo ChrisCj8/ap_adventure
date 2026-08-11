@@ -53,4 +53,17 @@ function GM:SetupMove(ply,mv,cmd)
 
 end
 
+function GM:ShouldCollide(ent1,ent2)
+	local ent1func, ent1prio, ent2func, ent2prio = ent1.ApAdvCustomCollision, ent1.ApAdvCustomCollisionPrio or 0, ent2.ApAdvCustomCollision, ent2.ApAdvCustomCollisionPrio or 0
+	if isfunction(ent2func) and ent2prio > ent1prio then
+		local out = ent2func(ent2,ent1)
+		if isbool(out) then return out end
+	end
+	if isfunction(ent1func) then
+		local out = ent1func(ent1,ent2)
+		if isbool(out) then return out end
+	end
+	return true
+end
+
 include("player_class/player_apadv.lua")
