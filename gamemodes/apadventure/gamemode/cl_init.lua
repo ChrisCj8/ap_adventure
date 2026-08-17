@@ -1,5 +1,8 @@
+APADV = APADV or {}
+
 include("shared.lua")
 include("apadventure/gamemode/ui/tracker.lua")
+include("cl/bind.lua")
 
 net.Receive("apAdv_BHopUpdate", function()
     APADV_BHOP = net.ReadBool()
@@ -14,6 +17,8 @@ list.Set("DesktopWindows","apAdventureConnect",{
         include("apadventure/gamemode/ui/connect.lua")(window)
     end
 })
+
+include("ui/bind.lua")
 
 local json = ""
 net.Receive("ApAdvRequirements",function()
@@ -85,4 +90,28 @@ local sv_cheats = GetConVar("sv_cheats")
 
 function GM:SpawnMenuOpen()
     return sv_cheats:GetBool()
+end
+
+net.Receive("ApAdvRunIDUpdate",function()
+	local newid = net.ReadString()
+	if newid == APADV_RUNID then return end
+	if APADV_RUNID then APADV.SaveRunBinds() end
+	local json = file.Read("apadventure/runbinds/"..newid..".json")
+	APADV_RUNBINDS = json and util.JSONToTable(json) or {}
+	APADV.RunBindsChanged = nil
+	APADV_RUNID = newid
+	APADV.slotName = net.ReadString()
+end)
+
+-- might move this somewhere else at some point, but this currently isn't used for much else so it's probably ok
+function GM:ShutDown()
+	if APADV.GLBindsChanged then
+		if next(APADV_GLBINDS) then
+			file.CreateDir("apadventure/")
+			file.Write("apadventure/gamemodebinds.json",util.TableToJSON(APADV_GLBINDS))
+		elseif file.Exists("apadventure/gamemodebinds.json","DATA") then
+			file.Delete("apadventure/gamemodebinds.json")
+		end
+	end
+	APADV.SaveRunBinds()
 end

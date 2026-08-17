@@ -446,6 +446,11 @@ local function OnRunID(packet)
                 end
             end
         end
+
+		net.Start("ApAdvRunIDUpdate")
+			net.WriteString(saveid)
+			net.WriteString(APADV_SLOT.slotName)
+		net.Broadcast()
     end
 
     ApAdvRegisterItemHandlers()

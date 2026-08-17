@@ -83,6 +83,13 @@ function GM:PlayerInitialSpawn(ply)
             net.WriteFloat(APADV_DESIREDTICK.v)
         net.Send(ply)
     end
+
+	if APADV_SAVEID then
+		net.Start("ApAdvRunIDUpdate")
+			net.WriteString(APADV_SAVEID)
+			net.WriteString(APADV_SLOT.slotName)
+		net.Send(ply)
+	end
 end
 
 local resettext_color = Color(222,44,44)
