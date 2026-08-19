@@ -8,6 +8,7 @@ AddCSLuaFile("ui/tracker.lua")
 AddCSLuaFile("ui/require.lua")
 AddCSLuaFile("ui/bind.lua")
 AddCSLuaFile("cl/bind.lua")
+AddCSLuaFile("ui/mapmismatch.lua")
 
 include("player.lua")
 include("shared.lua")
@@ -22,6 +23,7 @@ util.AddNetworkString("ApAdvConnectionState")
 util.AddNetworkString("ApAdvRequirements")
 util.AddNetworkString("ApAdvTickrateNotif")
 util.AddNetworkString("ApAdvRunIDUpdate")
+util.AddNetworkString("ApAdvMapMismatch")
 
 APADV_LASTMAPTBL = APADV_LASTMAPTBL or {}
 APADV_NEXTMAPTBL = APADV_NEXTMAPTBL or {}

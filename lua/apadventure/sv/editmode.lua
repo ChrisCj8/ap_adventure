@@ -304,8 +304,10 @@ function apAdventure.StoreCfg(groupn)
             exitaccess[k] = nil
         end
     end
+	local maprev = game.GetMapVersion()
     local outtbl = {
         ver = "v1",
+		maprev = maprev,
         sav = sav,
         del = del,
         delname = srctbl.DelName,

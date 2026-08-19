@@ -3,6 +3,7 @@ APADV = APADV or {}
 include("shared.lua")
 include("apadventure/gamemode/ui/tracker.lua")
 include("cl/bind.lua")
+include("ui/mapmismatch.lua")
 
 net.Receive("apAdv_BHopUpdate", function()
     APADV_BHOP = net.ReadBool()

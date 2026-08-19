@@ -90,6 +90,16 @@ function GM:PlayerInitialSpawn(ply)
 			net.WriteString(APADV_SLOT.slotName)
 		net.Send(ply)
 	end
+
+	local mismatchinfo = APADV.MapRevMismatchInfo
+	if mismatchinfo then
+		net.Start("ApAdvMapMismatch")
+			net.WriteFloat(mismatchinfo.cfg)
+			net.WriteFloat(APADV.MapRev)
+			net.WriteBool(mismatchinfo.delid)
+			net.WriteBool(mismatchinfo.force)
+		net.Send(ply)
+	end
 end
 
 local resettext_color = Color(222,44,44)

@@ -75,6 +75,10 @@ local settings = {
         name = "godmode",
         type = "check"
     },
+	{
+		name = "forcerevcheck",
+		type = "check"
+	},
     {
         name = "requirements",
         type = "requi",

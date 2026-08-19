@@ -5,6 +5,9 @@ local fromJSON = util.JSONToTable
 local fileR = file.Read
 local entbyID = ents.GetMapCreatedEntity
 
+local maprev = game.GetMapVersion()
+APADV.MapRev = maprev
+
 local function CfgLuaValid(self)
     return self == APADV_CFGLUA
 end
@@ -75,6 +78,27 @@ function APADV.LoadCfg(group)
     ApAdvPly.SetJumpPower(cfginfo("jump"))
     APADV.PermaDeath = !cfginfo("respawn")
     APADV_GODMODE = cfginfo("godmode")
+
+	local maprevmismatch = cfg.maprev and cfg.maprev != maprev
+	local hasdelid = !!next(cfg.del)
+	local forcerevcheck = cfginfo("forcerevcheck")
+
+	if maprevmismatch and ( hasdelid or forcerevcheck ) then
+		local info = {
+			cfg = cfg.maprev,
+			delid = hasdelid,
+			force = forcerevcheck
+		}
+		net.Start("ApAdvMapMismatch")
+			net.WriteFloat(cfg.maprev)
+			net.WriteFloat(maprev)
+			net.WriteBool(hasdelid)
+			net.WriteBool(forcerevcheck)
+		net.Broadcast()
+		APADV.MapRevMismatchInfo = info
+	else
+		APADV.MapRevMismatchInfo = nil
+	end
 
     local tick = cfginfo("tickrate")
 
