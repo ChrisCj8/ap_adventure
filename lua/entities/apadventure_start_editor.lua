@@ -13,7 +13,7 @@ end
 
 function ENT:Initialize()
     BaseClass.Initialize(self)
-    self:SetModel("models/apapdventure/spawnpoint.mdl")
+    self:SetModel("models/apadventure/spawnpoint.mdl")
     self:SetSkin(1)
     self:SetCollisionGroup( COLLISION_GROUP_WORLD )
     self:PhysicsInitStatic( SOLID_VPHYSICS )

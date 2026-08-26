@@ -1,4 +1,4 @@
-$modelname "apapdventure/spawnpoint.mdl"
+$modelname "apadventure/spawnpoint.mdl"
 $cdmaterials "apadventure/models/"
 
 $texturegroup Main
