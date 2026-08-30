@@ -147,6 +147,13 @@ function GM:SendDeathNotice(attacker,inflictor,victim,flags)
     end
 end
 
+function GM:DoPlayerDeath(ply,attckr,dmg)
+	if APADV_SLOT and APADV_SLOT.FullData and APADV_SLOT.deathlink then
+		APADV.DLDeathHandler(ply,attckr,dmg)
+	end
+	BASEGM.DoPlayerDeath(self,ply,attckr,dmg)
+end
+
 local strstart = string.StartsWith
 local checksayperms
 

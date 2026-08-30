@@ -14,5 +14,21 @@
             "help" "The Gamemode will try to load a connection preset with this name when starting."
             "singleplayer" ""
         }
+
+		2 {
+			"name" "apadv_deathlink"
+			"type" "CheckBox"
+			"text" "Death Link"
+			"help" "When you die, everyone who enabled death link dies. Of course, the reverse is true too."
+			"singleplayer" ""
+		}
+
+		3 {
+			"name" "apadv_deathlink_group"
+			"type" "Text"
+			"text" "Death Link Group"
+			"help" ""
+			"singleplayer" ""
+		}
     }
 }

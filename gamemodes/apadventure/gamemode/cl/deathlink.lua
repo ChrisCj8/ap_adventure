@@ -1,0 +1,5 @@
+local light, dark = Color(255,0,0), Color(150,0,0)
+net.Receive("APAdvDeathLinkMessage",function()
+	local iscause, str = net.ReadBool(), net.ReadString()
+	chat.AddText(light,"[DeathLink] ",dark,iscause and str or (str.." has died."))
+end)

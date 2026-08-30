@@ -3,6 +3,32 @@ APADV = APADV or {}
 APADV_ITEMHANDLERS = APADV_ITEMHANDLERS or {}
 APADV_CFGITEMHANDLERS = APADV_CFGITEMHANDLERS or {}
 
+local dlcvar = GetConVar("apadv_deathlink")
+local dlgroupcvar = GetConVar("apadv_deathlink_group")
+
+if dlcvar:GetBool() then
+	include("apadventure/gamemode/deathlink.lua")
+	AddCSLuaFile("apadventure/gamemode/cl/deathlink.lua")
+end
+
+cvars.AddChangeCallback("apadv_deathlink",function(_,old,new)
+	if !APADV_SLOT or !APADV_SLOT.FullData or new == old then return end
+	local bool = tobool(new)
+	if bool and !APADV.DLDeathHandler then
+		include("apadventure/gamemode/deathlink.lua")
+		AddCSLuaFile("apadventure/gamemode/cl/deathlink.lua")
+	end
+	local gr = dlgroupcvar:GetString()
+	APADV_SLOT:SetDeathLink(bool and (gr == "" or gr))
+	APADV_SLOT:UpdateTags()
+end,"APADV_DeathLinkUpdate")
+
+cvars.AddChangeCallback("apadv_deathlink_group",function(_,old,new)
+	if !APADV_SLOT or !APADV_SLOT.FullData or !dlcvar:GetBool() or new == old then return end
+	APADV_SLOT:SetDeathLink(new != "" and new or true)
+	APADV_SLOT:UpdateTags()
+end,"APADV_DeathLinkGroupUpdate")
+
 timer.Create("APAdvTrackerQuery",1,0,function()
     if APADV_TRACKER.query then
         APADV_TRACKER:Query()
@@ -551,10 +577,28 @@ local function ApAdvFullData(slot)
     slot:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
 end
 
+local function BounceHandler(self,packet)
+	local tags = packet.tags
+	if istable(tags) then
+		local tbl = {}
+		for k,v in ipairs(tags) do
+			tbl[v] = true
+		end
+		packet._tags = tbl
+		if tbl[self.deathlinktag] then
+			APADV.DLPacketHandler(packet)
+		end
+	end
+end
+
 function APADV.CreateApSlot(addr,slotn,pw)
     if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
 
         APADV_ITEMHANDLERS = {}
+
+		local dl = dlcvar:GetBool()
+		local dlgr = dlgroupcvar:GetString()
+		if dl and dlgr != "" then dl = dlgr end
 
         APADV_SLOT = GMAP.NewSlot({
             ID = "APADV",
@@ -565,7 +609,7 @@ function APADV.CreateApSlot(addr,slotn,pw)
             receiveAPchat = true,
             forwardAPchat = true,
             forwardGMODchat = true,
-            deathlink = false,
+            deathlink = dl,
             dontStore = true
         })
 
@@ -575,6 +619,7 @@ function APADV.CreateApSlot(addr,slotn,pw)
         APADV_SLOT.OnLocationUpdate = ApAdvLocationHandler
         APADV_SLOT.OnConnect = OnConnect
         APADV_SLOT.OnDisconnect = OnDisconnect
+		APADV_SLOT.OnBounce = BounceHandler
 
         APADV_SLOT:Connect()
     end
