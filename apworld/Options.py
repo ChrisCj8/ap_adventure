@@ -143,7 +143,9 @@ class ItemBlacklist(OptionDict):
 
     Check the options guide for more information on how this option works."""
     display_name = "Item Blacklist"
-    default = {}
+    default = {
+        "funny": ["Stalker Scream"]
+	}
     schema = singlepickschema
 
 class StartItemGroups(OptionSet):

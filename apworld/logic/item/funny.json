@@ -1,10 +1,1 @@
-{
-	"name": "Funny",
-	"items": {
-		"Funny": {
-			"file": "funny",
-			"wgt": 5,
-			"min": 0
-		}
-	}
-}
+{"items":{"Stalker Scream":{"flag":4,"file":"stalker","min":0,"wgt":2},"Funny":{"file":"funny","min":0,"wgt":5}},"name":"Funny"}
