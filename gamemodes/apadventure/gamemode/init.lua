@@ -192,9 +192,8 @@ function GM:PlayerSay(ply,txt)
     return txt
 end
 
-concommand.Add("apadv_apsay",function(ply,_,_,txt)
-    print(ply)
-    if ply == NULL or checksayperms(ply) then apsay(txt) end
+concommand.Add("apadv_apsay",function(ply,_,args)
+    if ply == NULL or checksayperms(ply) then apsay(args[1]) end
 end)
 
 function APADV.ProcessRequirements(reqs)
