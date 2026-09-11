@@ -32,7 +32,6 @@ function ENT:SetupDataTables()
         end)
 		self:NetworkVarNotify("HintStatus",function(self,_,old,new)
 			if old == new then return end
-			print("hintstatus",new)
 			self:UpdateHintParticles(new)
 		end)
     end
@@ -42,14 +41,14 @@ end
 function ENT:Initialize()
     BaseClass.Initialize(self)
     self:SetModel("models/apadventure/location_pickup.mdl")
-    self:PhysicsInitStatic(SOLID_BBOX)
-    self:SetCollisionBounds(bboxmins,bboxmaxs)
-    self:SetSolidFlags(bit.bor(FSOLID_NOT_SOLID,FSOLID_TRIGGER))
     if CLIENT then
         self:UpdateFlagParticles()
 		self:UpdateHintParticles()
         return
     end
+	self:PhysicsInitStatic(SOLID_BBOX)
+    self:SetCollisionBounds(bboxmins,bboxmaxs)
+    self:SetSolidFlags(bit.bor(FSOLID_NOT_SOLID,FSOLID_TRIGGER))
     local spin = self:AddLayeredSequence(self:LookupSequence("rotate"),1)
     local bob = self:AddLayeredSequence(self:LookupSequence("bob"),2)
     self:SetLayerPlaybackRate(spin,math.Rand(.3,.7))

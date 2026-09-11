@@ -116,10 +116,6 @@ function APADV.DLDeathHandler(ply,attckr,dmg)
 	local dmgtype = dmg:GetDamageType()
 	local wep = dmg:GetWeapon()
 	local killername = namegetter(attckr)
-	print("victim",ply,"attckr",attckr,"inflctr",inflctr,"dmgtype",dmgtype,
-		"\nreportedposition",dmg:GetReportedPosition(),"dmgcustom",dmg:GetDamageCustom(),
-		"\ndmg",dmg:GetDamage(),"basedmg",dmg:GetBaseDamage(),"dmgforce",dmg:GetDamageForce(),
-		"\nammo",dmg:GetAmmoType(),"maxdmg",dmg:GetMaxDamage(),"wpn",wep)
 
 	if !IsValid(attckr) then
 		SendDL(evaldmgtbl(genericmsgs,dmgtype,{p=plyname}) or (plyname.." died."),plyname)

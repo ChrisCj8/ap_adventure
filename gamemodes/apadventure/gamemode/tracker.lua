@@ -855,7 +855,6 @@ function APADV_TRACKER:SendHintUpdate(hnt,ply)
 	local loc,itm = hnt.location, hnt.item
 	local slotinfo = APADV_SLOT.Room.SlotInfo
 	local dp = APADV_DATAPACK.games
-	AutoPrint(slotinfo)
 	netstart("APAdvTrackerHintUpdate")
 		netuint(fndr,plyint)
 		netstring(dp[slotinfo[fndr].game].location_id_to_name[hnt.location] or "?")
