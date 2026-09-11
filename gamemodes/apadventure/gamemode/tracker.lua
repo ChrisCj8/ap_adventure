@@ -4,19 +4,35 @@ APADV_TRACKER = APADV_TRACKER or {}
 util.AddNetworkString("APAdvTrackerReset")
 util.AddNetworkString("APAdvTrackerLocation")
 util.AddNetworkString("APAdvTrackerExit")
+util.AddNetworkString("APAdvTrackerHintUpdate")
+util.AddNetworkString("APAdvTrackerMiscInfo")
+util.AddNetworkString("APAdvTrackerHintStatus")
+util.AddNetworkString("APAdvTrackerHintable")
 
 local netstart = net.Start
 local netstring = net.WriteString
 local netuint = net.WriteUInt
+local netbool = net.WriteBool
 local netsend = net.Send
 local netbroadcast = net.Broadcast
 
 local fromJSON = util.JSONToTable
 local rfile = file.Read
 
+local plyint = 16
+local namessent = {}
+
 local function trackerreset(ply)
+	if !ply then
+		namessent = {}
+	end
     netstart("APAdvTrackerReset")
         netstring(APADV_MAPGROUP or "")
+		netuint(APADV_SLOT.Nr or 0,plyint)
+		netuint(APADV_SLOT.team or 0,plyint)
+		local room = APADV_SLOT.Room
+		local loccount = APADV_SLOT.Locations and table.Count(APADV_SLOT.Locations)
+		netuint(room and loccount and math.max(1,math.floor(room.hint_cost * .01 * loccount)) or 0,16)
     if ply then
         netsend(ply)
     else
@@ -79,6 +95,23 @@ function APADV_TRACKER:SendTrackerData(ply)
             end
         end
     end
+	local toname = APADV_SLOT.item_id_to_name
+	for k,v in ipairs(APADV.ActiveItems) do
+		self:SendHintable(toname[v],1,ply)
+	end
+	for k,v in ipairs(self.mapitems) do
+		self:SendHintable(v,2,ply)
+	end
+	self:UpdateHintPoints(APADV_SLOT.hintPoints or 0,ply)
+	local hints  = APADV_SLOT.Hints
+	if !hints then return end
+	for k,v in ipairs(hints) do
+		self:SendHintUpdate(v,ply)
+	end
+	if !ply then return end
+	for k,v in pairs(namessent) do
+		self:UpdateSlotInfo(k,ply)
+	end	
 end
 
 function APADV_TRACKER:ApplyAmmomerge(tbl)
@@ -103,7 +136,7 @@ function APADV_TRACKER:Build()
 
     local grouptbls = {}
     local regs = {}
-    local mapitems = {}
+	local mapitms, mapitmcnt = {}, 0
     local entrs = {}
     local locnametomap = {}
 
@@ -248,6 +281,15 @@ function APADV_TRACKER:Build()
             mapregs[k] = reg
         end
 
+		local items = clcfg.item
+		if items and next(items) then
+			local pre = groupn.." - "..mapn.." - "
+			for k,v in pairs(items) do
+				mapitmcnt = mapitmcnt + 1
+				mapitms[mapitmcnt] = pre..k
+			end
+		end
+
         return {
             reg = mapregs,
             entr = entrtbl,
@@ -294,6 +336,8 @@ function APADV_TRACKER:Build()
             reg = slotdata.startregion
         }
     }
+
+	self.mapitems = mapitms
 
     self.locnametomap = locnametomap
     self.runid = APADV_SAVEID
@@ -776,6 +820,7 @@ function APADV_TRACKER:SaveToFile(path)
         query = self.query,
         ammo = self.ammomerge,
         locnametomap = self.locnametomap,
+		mapitms = self.mapitems
     })
 end
 
@@ -786,4 +831,78 @@ function APADV_TRACKER:LoadFromTable(data)
     self.locnametomap = data.locnametomap
     self.ammomerge = data.ammo
     self.runid = APADV_SAVEID
+	self.mapitems = data.mapitms
 end
+
+local function broadcastorsend(ply)
+	if !ply then
+		netbroadcast()
+	elseif IsValid(ply) and isentity(ply) and ply:IsPlayer() then
+		netsend(ply)
+	else
+		net.Abort()
+		error("Invalid Player passed to broadcastorsend")
+	end
+end
+
+function APADV_TRACKER:SendHintUpdate(hnt,ply)
+	local rcvr = hnt.receiving_player
+	local fndr = hnt.finding_player
+	if !ply then
+		if !namessent[rcvr] then self:UpdateSlotInfo(rcvr,ply) end
+		if !namessent[fndr] then self:UpdateSlotInfo(fndr,ply) end
+	end
+	local loc,itm = hnt.location, hnt.item
+	local slotinfo = APADV_SLOT.Room.SlotInfo
+	local dp = APADV_DATAPACK.games
+	AutoPrint(slotinfo)
+	netstart("APAdvTrackerHintUpdate")
+		netuint(fndr,plyint)
+		netstring(dp[slotinfo[fndr].game].location_id_to_name[hnt.location] or "?")
+		netuint(rcvr,plyint)
+		netstring(dp[slotinfo[rcvr].game].item_id_to_name[hnt.item] or "?")
+		netuint(hnt.item_flags,3)
+		netuint(hnt.status,6)
+		local entr = hnt.entrance
+		if entr and entr != "" then
+			netbool(true)
+			netstring(entr)
+		else
+			netbool(false)
+		end
+	broadcastorsend(ply)
+end
+
+local misctypebits = 2
+
+function APADV_TRACKER:UpdateSlotInfo(nr,ply)
+	local name = APADV_SLOT.Room.Players[APADV_SLOT.team][nr].name or "?"
+	print("nr: ",nr,"type: ",type(nr))
+	netstart("APAdvTrackerMiscInfo")
+		netuint(0,misctypebits)
+		netuint(nr,plyint)
+		netstring(name)
+	broadcastorsend(ply)
+	if !ply then namessent[nr] = true end
+end
+
+function APADV_TRACKER:SendHintable(str,gr,ply)
+	netstart("APAdvTrackerHintable")
+		netuint(gr,2)
+		netstring(str)
+	broadcastorsend(ply)
+end
+
+function APADV_TRACKER:UpdateHintPoints(val,ply)
+	netstart("APAdvTrackerMiscInfo")
+		netuint(1,misctypebits)
+		netuint(val,16)
+	broadcastorsend(ply)
+end
+
+net.Receive("APAdvTrackerHintStatus",function()
+	local fndr = net.ReadUInt(plyint)
+	local loc = net.ReadString()
+	local status = net.ReadUInt(6)
+	APADV_SLOT:SendHintUpdate(fndr,loc,status)
+end)

@@ -1,9 +1,13 @@
 AddCSLuaFile()
 
 game.AddParticles("particles/archipelago/itemflags.pcf")
+game.AddParticles("particles/archipelago/hint.pcf")
 PrecacheParticleSystem("gmap_itemflag_progression")
 PrecacheParticleSystem("gmap_itemflag_useful")
 PrecacheParticleSystem("gmap_itemflag_trap")
+PrecacheParticleSystem("gmap_hint_avoid")
+PrecacheParticleSystem("gmap_hint_no_prio")
+PrecacheParticleSystem("gmap_hint_prio")
 
 ENT.PrintName = "apAdventure Location"
 ENT.AutomaticFrameAdvance = true
@@ -19,12 +23,18 @@ local band = bit.band
 function ENT:SetupDataTables()
 
     self:NetworkVar("Int",0,"ItemFlags")
+	self:NetworkVar("Int",1,"HintStatus")
 
     if CLIENT then
         self:NetworkVarNotify("ItemFlags",function(self,_,old,new)
             if old == new then return end
             self:UpdateFlagParticles(new)
         end)
+		self:NetworkVarNotify("HintStatus",function(self,_,old,new)
+			if old == new then return end
+			print("hintstatus",new)
+			self:UpdateHintParticles(new)
+		end)
     end
 
 end
@@ -37,6 +47,7 @@ function ENT:Initialize()
     self:SetSolidFlags(bit.bor(FSOLID_NOT_SOLID,FSOLID_TRIGGER))
     if CLIENT then
         self:UpdateFlagParticles()
+		self:UpdateHintParticles()
         return
     end
     local spin = self:AddLayeredSequence(self:LookupSequence("rotate"),1)
@@ -72,6 +83,26 @@ if CLIENT then
             end
         end
     end
+
+	local hintparticles = {
+		[10] = "gmap_hint_no_prio",
+		[20] = "gmap_hint_avoid",
+		[30] = "gmap_hint_prio"
+	}
+
+	function ENT:UpdateHintParticles(val)
+		local val = val or self:GetHintStatus()
+		local part = self.HintParticle
+		if IsValid(part) then part:StopEmissionAndDestroyImmediately() end
+		local partn = hintparticles[val]
+		if !partn then return end
+		part = self:CreateParticleEffect(partn,0)
+		self.HintParticle = part
+	end
+
+	function ENT:OnRemove()
+		self:StopAndDestroyParticles()
+	end
 
     return
 end
@@ -113,6 +144,12 @@ function ENT:SetupLocation(lctnname)
     APADV_LOCENTS[lctnname] = APADV_LOCENTS[lctnname] or {}
     APADV_LOCENTS[lctnname][self] = true
     APADV.LocationInfoRequest(self,lctnname,function(info) self:UpdateInfo(info) end)
+	local locnametoid = APADV_SLOT.location_name_to_id
+	if !locnametoid then return end
+	local id = locnametoid[lctnname]
+	if !id then return end
+	local hint = APADV_SLOT.HintsByLocation[id]
+	self:SetHintStatus(hint and hint.status or 0)
 end
 
 function ENT:OnRemove()

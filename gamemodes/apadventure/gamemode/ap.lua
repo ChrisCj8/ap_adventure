@@ -201,11 +201,14 @@ local function ApAdvRegisterItemHandlers()
     local capabtbl = {}
     local condcapabtbl = {}
     local id2capab = {}
+	local itms, itmcnt = {},0
 
     local function RegisterItem(setpath,name,setdata)
         local itemtbl = include(setpath.."/"..name)
         local itemname = itemtbl.Name.." - "..setdata.Name
         local itemid = toID[itemname]
+		itmcnt = itmcnt + 1
+		itms[itmcnt] = itemid
         if itemid then
             local itype = itemtbl.Type
             local handler = itemtbl.Handle
@@ -335,6 +338,8 @@ local function ApAdvRegisterItemHandlers()
             end
         end
     end
+
+	APADV.ActiveItems = itms
 
     mcguffingoal = APADV_SLOT.slotData.mcguffin_goal
     handle[toID["McGuffin"]] = function(iList)
@@ -591,6 +596,27 @@ local function BounceHandler(self,packet)
 	end
 end
 
+local function OnLocationHintUpdate(self,hnt)
+	local locn = self.location_id_to_name[hnt.location]
+	if !locn then return end
+	local locents = APADV_LOCENTS[locn]
+	if !locents then return end
+	local status = hnt.status
+	for k,v in pairs(locents) do
+		if IsValid(k) then
+			k:SetHintStatus(status)
+		end
+	end
+end
+
+local function AnyHintUpdate(self,hnt)
+	APADV_TRACKER:SendHintUpdate(hnt)
+end
+
+local function HintPointUpdate(self,val)
+	APADV_TRACKER:UpdateHintPoints(val)
+end
+
 function APADV.CreateApSlot(addr,slotn,pw)
     if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
 
@@ -610,7 +636,8 @@ function APADV.CreateApSlot(addr,slotn,pw)
             forwardAPchat = true,
             forwardGMODchat = true,
             deathlink = dl,
-            dontStore = true
+            dontStore = true,
+			receiveHints = true
         })
 
         APADV_SLOT.OnItemUpdate = ApAdvItemHandler
@@ -620,6 +647,9 @@ function APADV.CreateApSlot(addr,slotn,pw)
         APADV_SLOT.OnConnect = OnConnect
         APADV_SLOT.OnDisconnect = OnDisconnect
 		APADV_SLOT.OnBounce = BounceHandler
+		APADV_SLOT.OnLocationHintUpdate = OnLocationHintUpdate
+		APADV_SLOT.OnAnyHintUpdate = AnyHintUpdate
+		APADV_SLOT.OnHintPointUpdate = HintPointUpdate
 
         APADV_SLOT:Connect()
     end
