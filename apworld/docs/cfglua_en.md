@@ -31,7 +31,7 @@ return {
 
 ### Testing your Scripts
 
-The gamemode (re)loads your Config Script every time the Config is (re)loaded, so you don't have to reload the entire map whenever you want to test your changes you've made to your config script. The `apadv_loadcfg` console command can be used to reload your config instantly. You can also pass the name of a specific config group to load that groups config for the current map, but keep in mind that configs that are not part of your current run won't have locations on them and may not behave correctly in other ways.
+The gamemode (re)loads your Config Script every time the Config is (re)loaded, so you don't have to reload the entire map whenever you want to test changes you've made to your config script. The `apadv_loadcfg` console command can be used to reload your config instantly. You can also pass the name of a specific config group to load that groups config for the current map, but keep in mind that configs that are not part of your current run won't have locations on them and may not behave correctly in other ways.
 
 Note: If you're reading this before the release of version 0.4.0, the `apadv_loadcfg` command is still called `apadventure_loadcfg` and uses the wrong path to check if a config exists for the current map, so it will only work if you use it without passing arguments.
 
