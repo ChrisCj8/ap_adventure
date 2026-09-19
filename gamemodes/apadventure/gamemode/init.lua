@@ -83,11 +83,11 @@ function APADV.DoMapTransition(map,group,entrname)
         e = entrname
     }
 
-    if entrname then
-        APADV.MarkEntrance(map,group,entrname)
-    elseif slotdata and slotdata.start == curmap then
-        APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
-    end
+	if entrname then
+		APADV.MarkEntrance(map,group,entrname)
+	elseif slotdata and slotdata.start == curmap then
+		APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
+	end
 
     game.SetGlobalCounter("ApAdvLevelTrans",checknum)
     file.Write("apadventure/leveltransdata.json",util.TableToJSON(APADV_NEXTMAPTBL))

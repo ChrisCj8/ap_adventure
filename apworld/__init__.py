@@ -1095,6 +1095,7 @@ class APADVWorld(World):
 
     def fill_slot_data(self):
 
+        options = self.options
         cfgs = dict()
 
         for k,v in self.maps.items():
@@ -1108,7 +1109,7 @@ class APADVWorld(World):
             "bhop":int(self.bhop),
             "bhop_logic":self.bhop_logic,
             "surf_logic":self.surf_logic,
-            "skill":int(self.options.skill),
+            "skill":int(options.skill),
             "connections":self.connectinfo,
             "cfgs":cfgs,
             "itemsets":self.loadeditemsets,
@@ -1119,10 +1120,13 @@ class APADVWorld(World):
             "startgroup":self.startpick.map.group,
             "startregion":self.startpick.regname,
             "ammomerge":self.ammomerge_out,
-            "trapvision":int(self.options.trap_vision),
+            "trapvision":int(options.trap_vision),
             "customparams":dict(self.customparams), #ap shits itself if this isn't converted into a dict
             "ver":1,
         }
+
+        if options.test_mode:
+            slotdata["testmode"] = True
 
         return slotdata
 

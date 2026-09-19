@@ -442,6 +442,20 @@ local function OnRunID(packet)
                 local groupname, grouptbl = next(APADV_SAVEDATA._visited[map])
                 APADV_ENTRNAME = next(grouptbl)
                 APADV.LoadCfg(groupname)
+			elseif APADV_TESTMODE then
+				-- not great, but we only to this for testing mode so it should be fine
+				for k,gr in pairs(slotdata.connections) do
+					for ik,emap in pairs(gr) do
+						for iik,exit in pairs(emap) do
+							if exit.map == map then
+								APADV_ENTRNAME = exit.entr
+								APADV.LoadCfg(exit.group)
+								goto done
+							end
+						end
+					end
+				end
+				::done::
             else
                 APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
                 APADV.DoMapTransition(slotdata.startmap,slotdata.startgroup)
@@ -559,6 +573,7 @@ local function sendLocInfoRequests()
 end
 
 local function ApAdvFullData(slot)
+	APADV_TESTMODE = slot.slotData.testmode
     if APADV_UNCHECKED_LOCS then
         local loclist = APADV_SLOT.Locations
         local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id

@@ -249,6 +249,18 @@ class GeneratePUML(Toggle):
     which may be helpful for debugging configs you've made."""
     display_name = "Generate PUML"
 
+class TestMode(Toggle):
+    """Removes some restrictions the gamemode normally places on you to make testing easier:
+
+    - Entering a map you haven't accessed through a map transition before
+      will not send you back to your starting map.
+    - While sv_cheats is enabled, you may pick up weapons normally,
+      even if you have not received an item to unlock them yet.
+
+    More functionality may be added to this option in the future.
+    """
+    display_name =  "Testing Mode"
+
 #class WriteDebug(Toggle):
 #    """Saves some debug info."""
 #    visibility = Visibility.none
@@ -275,6 +287,7 @@ class APADVGameOptions(PerGameCommonOptions):
     custom_parameters: CustomParams
     ammo_merge: AmmoMerge
     generate_puml: GeneratePUML
+    test_mode: TestMode
     #write_debug: WriteDebug
     start_inventory_from_pool: StartInventoryPool
 
