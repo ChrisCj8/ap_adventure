@@ -1133,11 +1133,33 @@ class APADVWorld(World):
     def generate_output(self, output_directory: str):
         filenamestart = f"{output_directory}/AP_{self.multiworld.seed_name}_{self.player_name}_"
         if self.options.generate_puml:
+            import re
             from Utils import visualize_regions
             state = self.multiworld.get_all_state(False)
             state.update_reachable_regions(self.player)
-            visualize_regions(self.get_region("Menu"), filenamestart+"regions.puml", show_entrance_names=True,
+            puml_filename = f"{filenamestart}regions.puml"
+            visualize_regions(
+                self.get_region("Menu"), puml_filename, show_entrance_names=True,
                             regions_to_highlight=state.reachable_regions[self.player])
+            # `visualize_regions()` uses full location and connection names; diagram unreadable with long connection names, shortened here using regex
+            puml = open(puml_filename, "r").read()
+            connection_regex = re.compile(  # Across-map connections
+                r'^"([^\s\r\n]+?) - ([^\s\r\n]+?) - ([^\r\n]+?)" --> "([^\s\r\n]+?) - ([^\s\r\n]+?) - ([^\r\n]+?)" : "\1 - \2 - \3 - ([^\r\n]+?) -> \4 - \5 - \6 - ([^\r\n]+?)"$',
+                re.MULTILINE
+            )
+            puml = re.sub(
+                connection_regex, r'"\1 - \2 - \3" --> "\4 - \5 - \6" : "\7 -> \8"',
+                puml
+            )
+            connection_regex = re.compile(  # Within-map connections
+                r'^"([^\s\r\n]+?) - ([^\s\r\n]+?) - ([^\r\n]+?)" --> "\1 - \2 - ([^\r\n]+?)" : "\2 - \3 -> \4"$',
+                re.MULTILINE
+            )
+            puml = re.sub(
+                connection_regex, r'"\1 - \2 - \3" --> "\1 - \2 - \4" : "\3 -> \4"',
+                puml
+            )
+            open(puml_filename, "w").write(puml)
         if len(self.warnings) > 0:
             warnlog = open(filenamestart+"warnings.txt","x")
             for warn in self.warnings:
