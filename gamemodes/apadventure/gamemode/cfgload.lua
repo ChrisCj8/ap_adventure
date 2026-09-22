@@ -190,15 +190,7 @@ function APADV.LoadCfg(group)
     end
 
     local loclist = APADV_SLOT.Locations
-    local locnametoid
-    if APADV_DATAPACK_LOCAL and APADV_SLOT.Connected then
-        if loclist then
-            locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
-        end
-        APADV.RegisterMapItems(clcfg.item)
-    else
-        APADV.MapItemTbl = clcfg.item
-    end
+    local locnametoid = APADV_SLOT.location_name_to_id
 
     APADV_UNCHECKED_LOCS = {}
     local uncheckedloccnt = 0
@@ -240,6 +232,12 @@ function APADV.LoadCfg(group)
             ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
             APADV_CFGLUA.OnFullConnect = nil
         end
+    end
+
+	if APADV_SLOT.FullData then
+        APADV.RegisterMapItems()
+    else
+        APADV.DelayedMapItemRegister = true
     end
 
 end

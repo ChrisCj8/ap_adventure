@@ -392,8 +392,9 @@ local function ApAdvRegisterItemHandlers()
 
     local empty = {} -- kinda hacky but this means item handlers don't have to do nil checks
 
-    if APADV.MapItemTbl then
+    if APADV.DelayedMapItemRegister then
         APADV.RegisterMapItems()
+		APADV.DelayedMapItemRegister = nil
     end
 
     ApAdvWeps.OnEquip = onequiptbl
@@ -498,18 +499,18 @@ local function OnRunID(packet)
 		net.Broadcast()
     end
 
-    ApAdvRegisterItemHandlers()
+    if isfunction(APADV_CFGLUA.OnFullConnect) then
+        ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
+        APADV_CFGLUA.OnFullConnect = nil
+    end
 
-    if APADV_TRACKER.runid == saveid then
+	ApAdvRegisterItemHandlers()
+
+	if APADV_TRACKER.runid == saveid then
         APADV_TRACKER:SendTrackerData()
         APADV_TRACKER:Query()
     else
         APADV_TRACKER:Build()
-    end
-
-    if isfunction(APADV_CFGLUA.OnFullConnect) then
-        ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
-        APADV_CFGLUA.OnFullConnect = nil
     end
 
     APADV_FULLCONNECT = true
