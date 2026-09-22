@@ -185,8 +185,7 @@ local function ApAdvRegisterItemHandlers()
         for k,v in ipairs(APADV.ItemUnregisterFuncs) do v() end
     end
 
-    local dp = APADV_SLOT.Room.DataPackage.games["GMod - apAdventure"]
-    local toID = dp.item_name_to_id
+    local toID = APADV_SLOT.item_name_to_id
 
     local handle = APADV_ITEMHANDLERS
 
