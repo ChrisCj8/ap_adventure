@@ -8,7 +8,7 @@ ITEM.Groups = {
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
     ["Ammo_SMG1"] = {"HitScan","DecentShortRange","DecentMidRange","BulletDamage"},
-    ["Ammo_SMG1_Grenade"] = {"DecentAOE","BlastDamage","MediumSizeProjectile","MediumArcProjectile","MediumDamageExplosion"}
+    ["Ammo_SMG1_Grenade"] = {"MediumAOE","BlastDamage","MediumSizeProjectile","MediumArcProjectile","MediumDamageExplosion"}
 }
 ITEM.StartGroup = { SMG = 10 }
 

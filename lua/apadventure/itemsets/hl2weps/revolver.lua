@@ -8,7 +8,7 @@ ITEM.Groups = {
 }
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-    ["Ammo_357"] = {"HitScan","StrongShortRange","StrongMidRange","BulletDamage"}
+    ["Ammo_357"] = {"HitScan","StrongShortRange","StrongMidRange","DecentLongRange","BulletDamage"}
 }
 ITEM.StartGroup = { Magnum = 10 }
 
