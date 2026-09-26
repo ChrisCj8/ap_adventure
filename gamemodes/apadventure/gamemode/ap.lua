@@ -581,7 +581,8 @@ local function ApAdvFullData(slot)
             if IsValid(v) then
                 local locid = locnametoid[v.LocationName]
                 if !locid then
-                    ErrorNoHalt("Map Config contained a Location that was not in the DataPackage. Was this run generated with the same config as the one that's being used by GMod?")
+                    ErrorNoHalt("Map Config contained a Location named "..(v.LocationName).." that was not in the DataPackage."..
+					"This may be caused by the Config Creator putting Locations into Regions that do not exist or your run not being generated with the same Config that GMod is currently loading.\n")
                     v:Remove()
                 elseif loclist[locid] != false then
                     v:Remove()
