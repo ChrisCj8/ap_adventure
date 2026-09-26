@@ -701,26 +701,30 @@ function APADV_TRACKER:Query()
         if conntbl then
             for ik,iv in pairs(conntbl) do
                 local tgtreg = mapregs[ik]
-                if tgtreg.reach > basereach then
-                    if !next(iv) then
-                        tgtreg.reach = basereach
-                        queryregion(group,map,ik)
-                    else
-                        local out, override = evalrule(iv,reg.cond,map,group)
-                        tgtreg.reach = out
-                        if override then
-                            conntbl[ik] = !isnumber(override) and override or nil
-                        elseif out == 1 then
-                            conntbl[ik] = nil
-                        end
-                        if out > 1 then
-                            requery = true
-                        end
-                        if out < 3 then
-                            queryregion(group,map,ik)
-                        end
-                    end
-                end
+				if tgtreg then
+					if tgtreg.reach > basereach then
+						if !next(iv) then
+							tgtreg.reach = basereach
+							queryregion(group,map,ik)
+						else
+							local out, override = evalrule(iv,reg.cond,map,group)
+							tgtreg.reach = out
+							if override then
+								conntbl[ik] = !isnumber(override) and override or nil
+							elseif out == 1 then
+								conntbl[ik] = nil
+							end
+							if out > 1 then
+								requery = true
+							end
+							if out < 3 then
+								queryregion(group,map,ik)
+							end
+						end
+					end
+				else
+					ErrorNoHalt("Config for map "..map.." in group "..group.." tried to make a connection between region "..regn.." to region "..ik..", which does not exist.\n")
+				end
             end
         end
 
