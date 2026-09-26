@@ -189,6 +189,8 @@ def preprocess_json_rule(rule,world,region):
                 return nevernode
 
             world.usedcapabs.update(capab)
+            if "override" in rule:
+                world.regconds.update(conds)
             if len(candidates) == 1:
                 return {
                     "type":"has",
