@@ -1,0 +1,1 @@
+{"ver":"v1_1","info":{"requirements":[]},"reg":{"Entrance":{"ammo":{"Ammo_Buckshot":true,"Ammo_AR2":true}},"Exit":{"ammo":[]}},"connect":{"Entrance":{"Exit":{"twoway":false,"access":{"type":"and","nodes":[{"capab":["DecentMidRange"],"type":"capab"},{"capab":["StrongShortRange"],"type":"capab"}]}}}}}

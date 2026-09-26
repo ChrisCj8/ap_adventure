@@ -1,0 +1,1 @@
+{"reg":{"Entrance":{"cond":["Ammo_Buckshot","Ammo_AR2"]},"Exit":{"cond":[]}},"connect":{"Entrance":{"Exit":{"twoway":false,"access":{"type":"and","nodes":[{"capab":["DecentMidRange"],"type":"capab"},{"capab":["StrongShortRange"],"type":"capab"}]}}}}}

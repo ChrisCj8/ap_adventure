@@ -1,0 +1,1 @@
+{"exit":{"Entrance":{"reg":"Entrance"},"Exit":{"reg":"Exit"}},"entr":{"Entrance":{"reg":"Entrance","access":{"capab":["GravityGun"],"type":"capab"}},"Exit":{"reg":"Exit","access":{"capab":["GravityGun"],"type":"capab"}}},"lctn":{"Entrance":{"Lambda Cache":[]},"Exit":{"End of the contaminated Tunnel":[]}}}

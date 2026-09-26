@@ -1,0 +1,1 @@
+{"exit":{"Exit":{"reg":"Exit"},"Entrance":{"reg":"Entrance"}},"entr":{"Exit":{"reg":"Exit","access":{"type":"or","nodes":[]}},"Entrance":{"reg":"Entrance"}},"lctn":{"Exit":{"Lambda Cache":[]},"First Apartments":{"Combine-Occupied Apartment":[]},"Entrance":{"On Corpse near Entrance":[]},"After Barricade":{"Top of Staircase in Apartments after Barricade":[]}}}

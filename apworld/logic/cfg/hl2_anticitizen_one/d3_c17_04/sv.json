@@ -1,0 +1,1 @@
+{"exit":{"Main Exit":{"reg":"Main"},"Main Entrance":{"reg":"Main"}},"entr":{"Main Exit":{"reg":"Main","access":{"capab":["GravityGun"],"type":"capab"}},"Main Entrance":{"reg":"Entrance","access":{"capab":["GravityGun"],"type":"capab"}}},"lctn":{"Main":{"Lambda Cache":[]}}}

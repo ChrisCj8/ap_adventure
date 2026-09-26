@@ -1,0 +1,1 @@
+{"ver":"v1_1","info":{"requirements":[]},"reg":{"Entrance":{"ammo":{"Props":true,"Props_Explosive":true}},"Exit":{"ammo":{"Props":true,"Props_Sharp":true}}},"connect":{"Entrance":{"Exit":{"twoway":false}}}}
