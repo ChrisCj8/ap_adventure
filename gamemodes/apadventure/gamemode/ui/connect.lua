@@ -27,7 +27,7 @@ return function(window)
     local presetdel = UImake("DImageButton",background)
     presetdel:SetImage("icon16/bin.png")
     presetdel:SetSize(16,16)
-    presetlbl.HoverHint,presetselect.HoverHint = "preset","preset"
+    presetselect.HoverHint = "preset"
 
     function presetselect:LoadPresets()
         self:Clear()
@@ -54,20 +54,20 @@ return function(window)
     local adrin = UImake("DTextEntry",background)
     adrin:SetPos(90,35)
     adrin:SetPlaceholderText("ws://localhost:38281")
-    adrlbl.HoverHint,adrin.HoverHint = "adress","address"
+    adrin.HoverHint = "address"
 
     local namelbl = Label(background,"#apadventure.connect.slotname")
     namelbl:SetPos(5,65)
     local namein = UImake("DTextEntry",background)
     namein:SetPos(90,65)
-    namelbl.HoverHint,namein.HoverHint = "slotname","slotname"
+    namein.HoverHint = "slotname"
 
     local pwlbl = Label(background,"#apadventure.connect.password")
     pwlbl:SetPos(5,95)
     local pwin = UImake("DTextEntry",background)
     pwin:SetPos(90,95)
     pwin:SetTextHidden(true)
-    pwlbl.HoverHint,pwin.HoverHint = "password","password"
+    pwin.HoverHint = "password"
 
     local sendbtn = UImake("DButton",background)
     sendbtn:SetPos(5,125)
