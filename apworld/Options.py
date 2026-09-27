@@ -48,7 +48,7 @@ class ConfigGroups(OptionSet):
     and the maps in them.
     """
     display_name = "Config Groups"
-    default = {"orange_hub","canals_walk","ravenholm","coast_walk","nova_prospekt","lost_coast"}
+    default = {"orange_hub","hl2_canals_walk","hl2_ravenholm","hl2_coast_walk","hl2_nova_prospekt","hl2_lost_coast"}
 
 singlepickschema = Schema(Or({
         str: list
@@ -74,8 +74,8 @@ class ConfigBlacklist(OptionDict):
     Check the options guide for more information on how this option works."""
     display_name = "Config Blacklist"
     default = {
-        "ravenholm": ["d1_town_02a","d1_town_04"],
-        "nova_prospekt": ["d2_prison_06"],
+        "hl2_ravenholm": ["d1_town_02a","d1_town_04"],
+        "hl2_nova_prospekt": ["d2_prison_06"],
         "hls_unforeseen_consequences": ["c1a1g"],
     }
     schema = singlepickschema
@@ -128,7 +128,7 @@ class ItemSets(OptionSet):
     that rule, so if multiple items exist that can pass the same conditions the generator will
     keep all of then, even if the run could be beaten with only one of them."""
     display_name = "Item Sets"
-    default = {"hl2weps","generic_filler","funny"}
+    default = {"hl2weps","generic_filler","funny","hl2traps"}
 
 class ItemCherryPick(OptionDict):
     """This option allows you to cherrypick single items from an Item Set.

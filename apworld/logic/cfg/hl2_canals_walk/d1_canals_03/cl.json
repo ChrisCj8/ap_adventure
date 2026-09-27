@@ -1,0 +1,1 @@
+{"reg":{"Pre-Ambush":{"cond":["Props"]},"Post-Ambush":{"cond":["Props","Ammo_SMG1"]}},"connect":{"Pre-Ambush":{"Post-Ambush":{"twoway":false,"access":{"capab":["DecentMidRange"],"override":{"Props":true,"Ammo_SMG1":true},"type":"capab"}}}}}

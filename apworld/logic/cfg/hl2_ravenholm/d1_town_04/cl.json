@@ -1,0 +1,1 @@
+{"reg":{"Entrance":{"cond":[]},"Exit":{"cond":[]}},"connect":{"Entrance":{"Exit":{"twoway":false,"access":{"capab":["WimpyMelee"],"type":"capab"}}}}}

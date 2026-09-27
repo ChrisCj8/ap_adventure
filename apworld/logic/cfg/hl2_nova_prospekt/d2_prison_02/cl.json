@@ -1,0 +1,1 @@
+{"reg":{"Exit":{"cond":[]},"Entrance":{"cond":[]},"Prison Cells":{"cond":[]}},"connect":{"Entrance":{"Prison Cells":{"twoway":true,"access":{"capab":["WeakMelee"],"type":"capab"}}},"Prison Cells":{"Exit":{"twoway":true}}}}
