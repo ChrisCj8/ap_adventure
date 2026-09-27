@@ -65,7 +65,7 @@ Whenever a Map Config is saved or Item Set is processed, GMod will write logic d
 
 Logic data from different players can be "merged" together, as long as all Map Groups and Item Sets using the same name are identical between all players.
 
-Note that if the host DOES have the GMod path set up in their `host.yaml` and is also loading logic data from `gmod_apadv/logic/`, the generator will prioritize loading the files from the GMod folder over the ones in the Archipelago folder. Logic data in these folders can also override the logic data included in the apworld.
+Note that if the host DOES have the GMod path set in their `gmodpath.txt` file and is also loading logic data from `gmod_apadv/logic/`, the generator will prioritize loading the files from the GMod folder over the ones in the Archipelago folder. Logic data in these folders can also override the logic data included in the apworld.
 
 ## Playing
 
