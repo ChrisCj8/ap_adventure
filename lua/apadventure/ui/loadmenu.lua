@@ -246,8 +246,8 @@ return function()
                 end
                 grfile = filer("data_static/"..grpath,"GAME")
             end
-            if grfile then 
-                filew(newgr,grfile)
+            if grfile then
+                filew(newpath.."group.json",grfile)
             end
         end
 
