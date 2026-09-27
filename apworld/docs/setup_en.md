@@ -59,7 +59,7 @@ Logic data from different players can be "merged" together, as long as all map g
 
 1. Once the Archipelago server is hosting, start Garry's Mod and select the **apAdventure** gamemode by clicking the button in the bottom right (which should say 'Sandbox' by default, but may say something else if you've been playing a different gamemode). This does not work while in-game, it must be done on the main menu.
 2. Click **Start New Game**.
-3. If you know what your starting map is (`ap_orange` with the default YAML settings), select it. Otherwise, select any map. (Leave 'Connection Preset' blank for now, or refer to step 6.)
+3. If you know what your starting map is (`ap_orange` with the default YAML settings), select it. Otherwise, select any map. (Leave 'Connection Preset' blank unless you've saved one previously.)
 4. Once you're in-game, open the Context Menu (hold `C` or whatever you've bound it to) and click the Archipelago icon on the left side of the screen labelled **Connection**.
 5. Enter your connection info into the window that just opened.
 6. *Optional:* Save your connection info as a preset by entering a name for it at the bottom then clicking **Save Preset**. You can select presets in the **Connection** window and in GMod's map select (by typing the preset name).
