@@ -1,19 +1,19 @@
 "apadventure"
 {
-    "base"  "sandbox"
-    "title" "apAdventure"
-    "maps" "^ap_"
-    "category"  "pve"
-    "menusystem" "1"
+	"base"  "sandbox"
+	"title" "apAdventure"
+	"maps" "^ap_"
+	"category"  "pve"
+	"menusystem" "1"
 
-    "settings" {
-        1 {
-            "name" "apadv_connection_preset"
-            "type" "Text"
-            "text" "Connection Preset"
-            "help" "The Gamemode will try to load a connection preset with this name when starting."
-            "singleplayer" ""
-        }
+	"settings" {
+		1 {
+			"name" "apadv_connection_preset"
+			"type" "Text"
+			"text" "Connection Preset"
+			"help" "The Gamemode will try to load a connection preset with this name when starting."
+			"singleplayer" ""
+		}
 
 		2 {
 			"name" "apadv_deathlink"
@@ -30,5 +30,5 @@
 			"help" ""
 			"singleplayer" ""
 		}
-    }
+	}
 }

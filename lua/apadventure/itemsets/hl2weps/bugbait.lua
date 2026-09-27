@@ -5,7 +5,7 @@ ITEM.Type = "Weapon"
 ITEM.MinAmt = 1
 ITEM.Capabilities = {"AntlionFriendly","AntlionControl","BugbaitTrigger"}
 ITEM.ConditionalCapabilities = {
-    ["Antlions_Controllable"] = {}
+	["Antlions_Controllable"] = {}
 }
 ITEM.RequireCondition = true
 
@@ -14,22 +14,22 @@ ITEM.Class = "weapon_bugbait"
 local oldstate = game.GetGlobalState("antlion_allied")
 
 function ITEM.Handle(iList)
-    local val = iList[1] != nil
-    game.SetGlobalState("antlion_allied",val and 1 or 0)
-    APADV.AntlionFriendly = val
-    if isfunction(APADV_CFGLUA.OnAntlionStatusUpdate) then
-        ProtectedCall(APADV_CFGLUA.OnAntlionStatusUpdate,APADV_CFGLUA,val)
-    end
+	local val = iList[1] != nil
+	game.SetGlobalState("antlion_allied",val and 1 or 0)
+	APADV.AntlionFriendly = val
+	if isfunction(APADV_CFGLUA.OnAntlionStatusUpdate) then
+		ProtectedCall(APADV_CFGLUA.OnAntlionStatusUpdate,APADV_CFGLUA,val)
+	end
 end
 
 function ITEM.Unregister()
-    APADV.AntlionFriendly = nil
-    game.SetGlobalState("antlion_allied",oldstate)
+	APADV.AntlionFriendly = nil
+	game.SetGlobalState("antlion_allied",oldstate)
 end
 
 -- might just have the gamemode always do this
 hook.Add("ShutDown","APADV_KillAntlionGlobal",function() 
-    game.SetGlobalState("antlion_allied",GLOBAL_DEAD)
+	game.SetGlobalState("antlion_allied",GLOBAL_DEAD)
 end)
 
 return ITEM

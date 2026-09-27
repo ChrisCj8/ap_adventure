@@ -1,3 +1,3 @@
 return {
-    Name = "HL2 Weapons"
+	Name = "HL2 Weapons"
 }

@@ -1,3 +1,3 @@
 return {
-    Name = "Funny"
+	Name = "Funny"
 }

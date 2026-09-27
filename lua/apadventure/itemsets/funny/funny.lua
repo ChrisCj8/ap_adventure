@@ -7,89 +7,89 @@ ITEM.FillWeight = 5
 ITEM.MinAmt = 0
 
 local allfunnies = {
-    {
-        {audio="player/voice/whiskey_passwhiskey2.wav",wait=0,}
-    },
-    {
-        {audio="vo/eli_lab/eli_handle_b.wav",wait=0,}
-    },
-    {
-        {audio="hgrunt/my.wav",wait=0,},
-        {audio="hgrunt/ass.wav",wait=0,},
-        {audio="hgrunt/is.wav",wait=0,},
-        {audio="hgrunt/heavy.wav",wait=0,},
-    },
-    {
-        {audio="vox/ass.wav",wait=0,},
-        {audio="vox/blast.wav",wait=0,},
-        {audio="vox/usa.wav",wait=0,}
-    },
-    {
-        {audio="scientist/donuteater.wav",wait=0,}
-    },
-    {
-        {audio="scientist/weartie.wav",wait=0,}
-    },
-    {
-        {audio="vo/npc/male01/question06.wav",wait=0,}
-    },
-    {
-        {audio="npc/metropolice/vo/pickupthecan1.wav",wait=0,}
-    },
-    {
-        {audio="vo/engineer_no01.mp3",wait=0,}
-    },
-    {
-        {audio="vo/engineer_moveup01.mp3",wait=0,}
-    },
-    {
-        {audio="vo/heavy_needdispenser01.mp3",wait=0,}
-    },
-    {
-        {audio="vo/soldier_jeers07.mp3",wait=0,}
-    },
+	{
+		{audio="player/voice/whiskey_passwhiskey2.wav",wait=0,}
+	},
+	{
+		{audio="vo/eli_lab/eli_handle_b.wav",wait=0,}
+	},
+	{
+		{audio="hgrunt/my.wav",wait=0,},
+		{audio="hgrunt/ass.wav",wait=0,},
+		{audio="hgrunt/is.wav",wait=0,},
+		{audio="hgrunt/heavy.wav",wait=0,},
+	},
+	{
+		{audio="vox/ass.wav",wait=0,},
+		{audio="vox/blast.wav",wait=0,},
+		{audio="vox/usa.wav",wait=0,}
+	},
+	{
+		{audio="scientist/donuteater.wav",wait=0,}
+	},
+	{
+		{audio="scientist/weartie.wav",wait=0,}
+	},
+	{
+		{audio="vo/npc/male01/question06.wav",wait=0,}
+	},
+	{
+		{audio="npc/metropolice/vo/pickupthecan1.wav",wait=0,}
+	},
+	{
+		{audio="vo/engineer_no01.mp3",wait=0,}
+	},
+	{
+		{audio="vo/engineer_moveup01.mp3",wait=0,}
+	},
+	{
+		{audio="vo/heavy_needdispenser01.mp3",wait=0,}
+	},
+	{
+		{audio="vo/soldier_jeers07.mp3",wait=0,}
+	},
 }
 
 local funnies = {}
 local i = 1
 
 for k,v in ipairs(allfunnies) do
-    -- just checking if the first one exists since all sounds in sequences come from the same source
-    if file.Exists("sound/"..v[1].audio,"GAME") then
-        funnies[i] = v
-        i = i+1
-    end
+	-- just checking if the first one exists since all sounds in sequences come from the same source
+	if file.Exists("sound/"..v[1].audio,"GAME") then
+		funnies[i] = v
+		i = i+1
+	end
 end
 
 local function DoFunny(funny,index)
-    local audio = funny[index].audio
-    EmitSound(audio,vector_origin,0,CHAN_STATIC,1,0)
-    nextfunny = funny[index+1]
-    if nextfunny then
-        local delay = SoundDuration(audio)
-        if nextfunny.wait then
-            delay = delay + nextfunny.wait
-        end
-        timer.Simple(delay,function() DoFunny(funny,index+1) end)
-    end
+	local audio = funny[index].audio
+	EmitSound(audio,vector_origin,0,CHAN_STATIC,1,0)
+	nextfunny = funny[index+1]
+	if nextfunny then
+		local delay = SoundDuration(audio)
+		if nextfunny.wait then
+			delay = delay + nextfunny.wait
+		end
+		timer.Simple(delay,function() DoFunny(funny,index+1) end)
+	end
 end
 
 local lastredeem = 0
 
 function ITEM.RedeemCheck()
-    local sinceredeem = CurTime() - lastredeem
-    if sinceredeem < 5 then
-        return 5.5 - sinceredeem
-    else 
-        return true
-    end
+	local sinceredeem = CurTime() - lastredeem
+	if sinceredeem < 5 then
+		return 5.5 - sinceredeem
+	else 
+		return true
+	end
 end
 
 local funnyamt = #funnies
 
 function ITEM.Redeem()
-    lastredeem = CurTime()
-    DoFunny(funnies[math.random(1,funnyamt)],1)
+	lastredeem = CurTime()
+	DoFunny(funnies[math.random(1,funnyamt)],1)
 end
 
 return ITEM

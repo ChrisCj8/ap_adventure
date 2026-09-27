@@ -1,3 +1,3 @@
 return {
-    Name = "HL2 Traps"
+	Name = "HL2 Traps"
 }

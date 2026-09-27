@@ -1,5 +1,5 @@
 VertexLitGeneric {
-    $basetexture "apadventure/models/startpoint"
-    $selfillum 1
-    $selfillummask "apadventure/models/selfillum_10"
+	$basetexture "apadventure/models/startpoint"
+	$selfillum 1
+	$selfillummask "apadventure/models/selfillum_10"
 }

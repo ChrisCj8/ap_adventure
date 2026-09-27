@@ -30,103 +30,103 @@ cvars.AddChangeCallback("apadv_deathlink_group",function(_,old,new)
 end,"APADV_DeathLinkGroupUpdate")
 
 timer.Create("APAdvTrackerQuery",1,0,function()
-    if APADV_TRACKER.query then
-        APADV_TRACKER:Query()
-    end
+	if APADV_TRACKER.query then
+		APADV_TRACKER:Query()
+	end
 end)
 timer.Stop("APAdvTrackerQuery")
 
 local function ApAdvItemHandler(slot,id,itemlist)
-    if APADV_ITEMHANDLERS[id] then
-        APADV_ITEMHANDLERS[id](itemlist)
-    end
+	if APADV_ITEMHANDLERS[id] then
+		APADV_ITEMHANDLERS[id](itemlist)
+	end
 
-    if APADV_MAPITEMCOUNTERS[id] then
-        for k,v in pairs(APADV_MAPITEMCOUNTERS[id]) do
-            for ik,iv in ipairs(ents.FindByName(v.target)) do
-                iv:Fire(v.input,#itemlist,v.delay)
-            end
-        end
-    end
+	if APADV_MAPITEMCOUNTERS[id] then
+		for k,v in pairs(APADV_MAPITEMCOUNTERS[id]) do
+			for ik,iv in ipairs(ents.FindByName(v.target)) do
+				iv:Fire(v.input,#itemlist,v.delay)
+			end
+		end
+	end
 
-    if APADV_CFGITEMHANDLERS[id] then
-        APADV_CFGITEMHANDLERS[id](itemlist)
-    end
+	if APADV_CFGITEMHANDLERS[id] then
+		APADV_CFGITEMHANDLERS[id](itemlist)
+	end
 
-    timer.Start("APAdvTrackerQuery")
+	timer.Start("APAdvTrackerQuery")
 end
 
 APADV_LOCENTS = APADV_LOCENTS or {}
 
 local function ApAdvLocationHandler(slot,id,state)
-    local locn = APADV_DATAPACK_LOCAL.location_id_to_name[id]
-    if !locn then
-        ErrorNoHalt("Received a Location update for an ID that's not in the DataPackage")
-        return
-    end
-    if state then
-        local loctbl = APADV_LOCENTS[locn]
-        if loctbl then
-            for k,v in pairs(loctbl) do
-                if IsValid(k) then
-                    k:Remove()
-                end
-                loctbl[k] = nil
-            end
-            if !next(loctbl) then
-                APADV_LOCENTS[locn] = nil
-            end
-        end
-        APADV_TRACKER:UpdateLocationByName(locn,0)
-    end
+	local locn = APADV_DATAPACK_LOCAL.location_id_to_name[id]
+	if !locn then
+		ErrorNoHalt("Received a Location update for an ID that's not in the DataPackage")
+		return
+	end
+	if state then
+		local loctbl = APADV_LOCENTS[locn]
+		if loctbl then
+			for k,v in pairs(loctbl) do
+				if IsValid(k) then
+					k:Remove()
+				end
+				loctbl[k] = nil
+			end
+			if !next(loctbl) then
+				APADV_LOCENTS[locn] = nil
+			end
+		end
+		APADV_TRACKER:UpdateLocationByName(locn,0)
+	end
 end
 
 APADV_ITEMSUSED = APADV_ITEMSUSED or {}
 
 function APADV.RegisterMapItems()
-    local toID = APADV_DATAPACK_LOCAL.item_name_to_id
-    local itemlist = APADV_SLOT.Items
-    local nameprefix = APADV_MAPGROUP.." - "..APADV_MAP.." - "
-    APADV_MAPITEMCOUNTERS = {}
-    for k,v in pairs(APADV.MapItemCounters) do
-        local id = toID[nameprefix..k]
-        if id then
-            local outtbl = {}
-            for ik,iv in ipairs(v) do
-                outtbl[ik] = iv
-                local itemtbl = itemlist[id]
-                local itemamt = itemtbl and #itemtbl or 0
-                for iik,iiv in ipairs(ents.FindByName(iv.target)) do
-                    iiv:Fire(iv.input,itemamt,iv.delay)
-                end
-            end
-            if next(outtbl) then
-                APADV_MAPITEMCOUNTERS[id] = outtbl
-            end
-        end
-    end
+	local toID = APADV_DATAPACK_LOCAL.item_name_to_id
+	local itemlist = APADV_SLOT.Items
+	local nameprefix = APADV_MAPGROUP.." - "..APADV_MAP.." - "
+	APADV_MAPITEMCOUNTERS = {}
+	for k,v in pairs(APADV.MapItemCounters) do
+		local id = toID[nameprefix..k]
+		if id then
+			local outtbl = {}
+			for ik,iv in ipairs(v) do
+				outtbl[ik] = iv
+				local itemtbl = itemlist[id]
+				local itemamt = itemtbl and #itemtbl or 0
+				for iik,iiv in ipairs(ents.FindByName(iv.target)) do
+					iiv:Fire(iv.input,itemamt,iv.delay)
+				end
+			end
+			if next(outtbl) then
+				APADV_MAPITEMCOUNTERS[id] = outtbl
+			end
+		end
+	end
 
-    local cfghandlers = {}
+	local cfghandlers = {}
 
-    if APADV_CFGLUA.ItemFuncs then
-        for k,v in pairs(APADV_CFGLUA.ItemFuncs) do
-            local id = toID[k]
-            if id then cfghandlers[id] = v end
-        end
-    end
+	if APADV_CFGLUA.ItemFuncs then
+		for k,v in pairs(APADV_CFGLUA.ItemFuncs) do
+			local id = toID[k]
+			if id then cfghandlers[id] = v end
+		end
+	end
 
-    if APADV_CFGLUA.MapItemFuncs then
-        for k,v in pairs(APADV_CFGLUA.MapItemFuncs) do
-            local id = toID[nameprefix..k]
-            if id then cfghandlers[id] = v end
-        end
-    end
+	if APADV_CFGLUA.MapItemFuncs then
+		for k,v in pairs(APADV_CFGLUA.MapItemFuncs) do
+			local id = toID[nameprefix..k]
+			if id then cfghandlers[id] = v end
+		end
+	end
 
-    for k,v in pairs(cfghandlers) do
-        ProtectedCall(v,itemlist[k] or {})
-    end
+	for k,v in pairs(cfghandlers) do
+		ProtectedCall(v,itemlist[k] or {})
+	end
 
-    APADV_CFGITEMHANDLERS = cfghandlers
+	APADV_CFGITEMHANDLERS = cfghandlers
 end
 
 local tolookup = apAdventure.ListToLookUp
@@ -134,23 +134,23 @@ local tolookup = apAdventure.ListToLookUp
 local impliedcapabilities = util.JSONToTable(file.Read("data_static/apadventure/impliedcapabilities.json","GAME"))
 
 local function processcapabs(capabs)
-    repeat
-        local new = 0
+	repeat
+		local new = 0
 
-        for k,v in pairs(capabs) do
-            if impliedcapabilities[k] then
-                for ik,iv in ipairs(impliedcapabilities[k]) do
-                    if !capabs[iv] then
-                        capabs[iv] = true
-                        new = new + 1
-                    end
-                end
-            end
-        end
+		for k,v in pairs(capabs) do
+			if impliedcapabilities[k] then
+				for ik,iv in ipairs(impliedcapabilities[k]) do
+					if !capabs[iv] then
+						capabs[iv] = true
+						new = new + 1
+					end
+				end
+			end
+		end
 
-    until new == 0
+	until new == 0
 
-    return capabs
+	return capabs
 end
 
 local mcguffincount
@@ -159,201 +159,201 @@ local mcguffingoal
 util.AddNetworkString("APAdvMcGuffinInfo")
 
 local function updatemcguffininfo(ply)
-    net.Start("APAdvMcGuffinInfo")
-        net.WriteFloat(mcguffincount)
-        net.WriteFloat(mcguffingoal)
-    if ply then
-        net.Send(ply)
-    else
-        net.Broadcast()
-    end
+	net.Start("APAdvMcGuffinInfo")
+		net.WriteFloat(mcguffincount)
+		net.WriteFloat(mcguffingoal)
+	if ply then
+		net.Send(ply)
+	else
+		net.Broadcast()
+	end
 end
 
 hook.Add("PlayerInitialSpawn","APADV_SendMcGuffinCount",function(ply)
-    if mcguffingoal then
-        updatemcguffininfo(ply)
-    end
+	if mcguffingoal then
+		updatemcguffininfo(ply)
+	end
 end)
 
 local lastregistration
 
 local function ApAdvRegisterItemHandlers()
 
-    local curregistration = CurTime()
+	local curregistration = CurTime()
 
-    if APADV.ItemUnregisterFuncs then
-        for k,v in ipairs(APADV.ItemUnregisterFuncs) do v() end
-    end
+	if APADV.ItemUnregisterFuncs then
+		for k,v in ipairs(APADV.ItemUnregisterFuncs) do v() end
+	end
 
-    local toID = APADV_SLOT.item_name_to_id
+	local toID = APADV_SLOT.item_name_to_id
 
-    local handle = APADV_ITEMHANDLERS
+	local handle = APADV_ITEMHANDLERS
 
-    local slotdata = APADV_SLOT.slotData
-    local unregisterfuncs = {}
-    local unregisteramt = 0
+	local slotdata = APADV_SLOT.slotData
+	local unregisterfuncs = {}
+	local unregisteramt = 0
 
-    onequiptbl = {}
+	onequiptbl = {}
 
-    local setwepavailable = ApAdvWeps.SetAvailable
+	local setwepavailable = ApAdvWeps.SetAvailable
 
-    local capabtbl = {}
-    local condcapabtbl = {}
-    local id2capab = {}
+	local capabtbl = {}
+	local condcapabtbl = {}
+	local id2capab = {}
 	local itms, itmcnt = {},0
 
-    local function RegisterItem(setpath,name,setdata)
-        local itemtbl = include(setpath.."/"..name)
-        local itemname = itemtbl.Name.." - "..setdata.Name
-        local itemid = toID[itemname]
+	local function RegisterItem(setpath,name,setdata)
+		local itemtbl = include(setpath.."/"..name)
+		local itemname = itemtbl.Name.." - "..setdata.Name
+		local itemid = toID[itemname]
 		itmcnt = itmcnt + 1
 		itms[itmcnt] = itemid
-        if itemid then
-            local itype = itemtbl.Type
-            local handler = itemtbl.Handle
-            if !isfunction(handler) then handler = nil end
-            if itype == "OneUse" then
-                local redeemcheck = itemtbl.RedeemCheck
-                if redeemcheck == true then
-                    handle[itemid] = function(iList)
-                        local iused = APADV_ITEMSUSED[itemid] or 0
-                        if iused < #iList then
-                            local redeem = itemtbl.Redeem()
-                            if redeem == true then
-                                APADV_ITEMSUSED[itemid] = iused + 1
-                                handle[itemid](iList)
-                            elseif isnumber(redeem) then
+		if itemid then
+			local itype = itemtbl.Type
+			local handler = itemtbl.Handle
+			if !isfunction(handler) then handler = nil end
+			if itype == "OneUse" then
+				local redeemcheck = itemtbl.RedeemCheck
+				if redeemcheck == true then
+					handle[itemid] = function(iList)
+						local iused = APADV_ITEMSUSED[itemid] or 0
+						if iused < #iList then
+							local redeem = itemtbl.Redeem()
+							if redeem == true then
+								APADV_ITEMSUSED[itemid] = iused + 1
+								handle[itemid](iList)
+							elseif isnumber(redeem) then
 								if redeem < 1 then
 									ErrorNoHalt("Redeem returned a number lower than 1 ("..redeem.."), setting it to 1 to prevent Lag/Freezing.")
 									redeem = 5
 								end
-                                timer.Simple(redeem,function()
-                                    -- need a better way to detect when the itemhandlers have changed but this works for now
-                                    if APADV_FULLCONNECT and lastregistration == curregistration then
-                                        handle[itemid](iList)
-                                    end
-                                end)
-                            end
-                        end
-                    end
-                elseif isfunction(redeemcheck) then
-                    handle[itemid] = function(iList)
-                        local iused = APADV_ITEMSUSED[itemid] or 0
-                        if iused < #iList then
-                            local redeem = redeemcheck()
-                            if redeem == true then
-                                itemtbl.Redeem()
-                                APADV_ITEMSUSED[itemid] = iused + 1
-                                handle[itemid](iList)
-                            elseif isnumber(redeem) then
+								timer.Simple(redeem,function()
+									-- need a better way to detect when the itemhandlers have changed but this works for now
+									if APADV_FULLCONNECT and lastregistration == curregistration then
+										handle[itemid](iList)
+									end
+								end)
+							end
+						end
+					end
+				elseif isfunction(redeemcheck) then
+					handle[itemid] = function(iList)
+						local iused = APADV_ITEMSUSED[itemid] or 0
+						if iused < #iList then
+							local redeem = redeemcheck()
+							if redeem == true then
+								itemtbl.Redeem()
+								APADV_ITEMSUSED[itemid] = iused + 1
+								handle[itemid](iList)
+							elseif isnumber(redeem) then
 								if redeem < 1 then
 									ErrorNoHalt("Redeemcheck returned a number lower than 1 ("..redeem.."), setting it to 1 to prevent Lag/Freezing.")
 									redeem = 5
 								end
-                                timer.Simple(redeem,function()
-                                    -- need a better way to detect when the itemhandlers have changed but this works for now
-                                    if APADV_FULLCONNECT and lastregistration == curregistration then
-                                        handle[itemid](iList)
-                                    end
-                                end)
-                            end
-                        end
-                    end
-                else
-                    handle[itemid] = function(iList)
-                        local iused = APADV_ITEMSUSED[itemid] or 0
-                        if iused < #iList then
-                            itemtbl.Redeem()
-                            APADV_ITEMSUSED[itemid] = iused + 1
-                            handle[itemid](iList)
-                        end
-                    end
-                end
-            elseif itype == "Weapon" then
-                local class = itemtbl.Class
-                if handler then
-                    handle[itemid] = function(iList)
-                        handler(iList)
-                        setwepavailable(class,iList[1] != nil)
-                    end
-                else
-                    handle[itemid] = function(iList)
-                        setwepavailable(class,iList[1] != nil)
-                    end
-                end
-                if isfunction(itemtbl.OnEquip) then
-                    onequiptbl[itemtbl.Class] = itemtbl.OnEquip
-                end
-            else
-                if isfunction(handler) then
-                    handle[itemid] = handler
-                end
-            end
+								timer.Simple(redeem,function()
+									-- need a better way to detect when the itemhandlers have changed but this works for now
+									if APADV_FULLCONNECT and lastregistration == curregistration then
+										handle[itemid](iList)
+									end
+								end)
+							end
+						end
+					end
+				else
+					handle[itemid] = function(iList)
+						local iused = APADV_ITEMSUSED[itemid] or 0
+						if iused < #iList then
+							itemtbl.Redeem()
+							APADV_ITEMSUSED[itemid] = iused + 1
+							handle[itemid](iList)
+						end
+					end
+				end
+			elseif itype == "Weapon" then
+				local class = itemtbl.Class
+				if handler then
+					handle[itemid] = function(iList)
+						handler(iList)
+						setwepavailable(class,iList[1] != nil)
+					end
+				else
+					handle[itemid] = function(iList)
+						setwepavailable(class,iList[1] != nil)
+					end
+				end
+				if isfunction(itemtbl.OnEquip) then
+					onequiptbl[itemtbl.Class] = itemtbl.OnEquip
+				end
+			else
+				if isfunction(handler) then
+					handle[itemid] = handler
+				end
+			end
 
-            local itemcapabs = itemtbl.Capabilities
-            if istable(itemcapabs) then
-                local itemcapablookup = processcapabs(tolookup(itemcapabs))
-                for k,v in pairs(itemcapablookup) do
-                    capabtbl[k] = capabtbl[k] or {}
-                    local curcaptbl = capabtbl[k]
-                    curcaptbl[#curcaptbl+1] = itemid
-                end
+			local itemcapabs = itemtbl.Capabilities
+			if istable(itemcapabs) then
+				local itemcapablookup = processcapabs(tolookup(itemcapabs))
+				for k,v in pairs(itemcapablookup) do
+					capabtbl[k] = capabtbl[k] or {}
+					local curcaptbl = capabtbl[k]
+					curcaptbl[#curcaptbl+1] = itemid
+				end
 
-                id2capab[itemid] = {
-                    cap = itemcapablookup
-                }
-            end
+				id2capab[itemid] = {
+					cap = itemcapablookup
+				}
+			end
 
-            local itemcapabs = itemtbl.ConditionalCapabilities
-            if istable(itemcapabs) then
-                local condlookup = {}
-                for k,v in pairs(itemcapabs) do
-                    condcapabtbl[k] = condcapabtbl[k] or {}
-                    local condtbl = condcapabtbl[k]
-                    local lookup = {}
+			local itemcapabs = itemtbl.ConditionalCapabilities
+			if istable(itemcapabs) then
+				local condlookup = {}
+				for k,v in pairs(itemcapabs) do
+					condcapabtbl[k] = condcapabtbl[k] or {}
+					local condtbl = condcapabtbl[k]
+					local lookup = {}
 
-                    for ik, iv in ipairs(v) do
-                        condtbl[iv] = condtbl[iv] or {}
-                        local curcaptbl = condtbl[iv]
-                        curcaptbl[#curcaptbl+1] = itemid
+					for ik, iv in ipairs(v) do
+						condtbl[iv] = condtbl[iv] or {}
+						local curcaptbl = condtbl[iv]
+						curcaptbl[#curcaptbl+1] = itemid
 
-                        lookup[iv] = true
-                    end
-                    condlookup[k] = processcapabs(lookup)
-                end
+						lookup[iv] = true
+					end
+					condlookup[k] = processcapabs(lookup)
+				end
 
-                if id2capab[itemid] then
-                    id2capab[itemid].cond = condlookup
-                else
-                    id2capab[itemid] = {
-                        cond = condlookup
-                    }
-                end
-            end
+				if id2capab[itemid] then
+					id2capab[itemid].cond = condlookup
+				else
+					id2capab[itemid] = {
+						cond = condlookup
+					}
+				end
+			end
 
-            if isfunction(itemtbl.Unregister) then
-                unregisteramt = unregisteramt + 1
-                unregisterfuncs[unregisteramt] = itemtbl.Unregister
-            end
-        end
-    end
+			if isfunction(itemtbl.Unregister) then
+				unregisteramt = unregisteramt + 1
+				unregisterfuncs[unregisteramt] = itemtbl.Unregister
+			end
+		end
+	end
 
 	APADV.ActiveItems = itms
 
-    mcguffingoal = APADV_SLOT.slotData.mcguffin_goal
-    handle[toID["McGuffin"]] = function(iList)
-        if iList[mcguffingoal] != nil then
-            APADV_SLOT:SendGoal()
-        end
-        mcguffincount = #iList
-        updatemcguffininfo()
-    end
+	mcguffingoal = APADV_SLOT.slotData.mcguffin_goal
+	handle[toID["McGuffin"]] = function(iList)
+		if iList[mcguffingoal] != nil then
+			APADV_SLOT:SendGoal()
+		end
+		mcguffincount = #iList
+		updatemcguffininfo()
+	end
 
-    if slotdata.bhop == 2 then
-        handle[toID["Bunnyhop"]] = function(iList)
-            ApAdvPly.UpdateBHop(iList[1] != nil)
-        end
-    end
+	if slotdata.bhop == 2 then
+		handle[toID["Bunnyhop"]] = function(iList)
+			ApAdvPly.UpdateBHop(iList[1] != nil)
+		end
+	end
 
 	if slotdata.trapvision == 2 then
 		handle[toID["Trap Vision"]] = function(iList)
@@ -366,82 +366,82 @@ local function ApAdvRegisterItemHandlers()
 		end
 	end
 
-    local blacklist = slotdata.items_dontload
+	local blacklist = slotdata.items_dontload
 
-    for k,v in ipairs(slotdata.itemsets) do
-        local setpath = "apadventure/itemsets/"..v
-        local setdata = include(setpath..".lua")
-        local setfiles = file.Find(setpath.."/*.lua","LUA")
-        local setbl
-        if blacklist[v] then setbl = tolookup(blacklist[v]) end
-        for ik,iv in ipairs(setfiles) do
-            if !setbl or !setbl[iv] then
-                RegisterItem(setpath,iv,setdata)
-            end
-        end
-    end
+	for k,v in ipairs(slotdata.itemsets) do
+		local setpath = "apadventure/itemsets/"..v
+		local setdata = include(setpath..".lua")
+		local setfiles = file.Find(setpath.."/*.lua","LUA")
+		local setbl
+		if blacklist[v] then setbl = tolookup(blacklist[v]) end
+		for ik,iv in ipairs(setfiles) do
+			if !setbl or !setbl[iv] then
+				RegisterItem(setpath,iv,setdata)
+			end
+		end
+	end
 
-    for k,v in pairs(slotdata.items_to_load) do
-        local setpath = "apadventure/itemsets/"..k
-        local setdata = include(setpath..".lua")
-        for ik,iv in ipairs(v) do
-            RegisterItem(setpath,iv..".lua",setdata)
-        end
-    end
+	for k,v in pairs(slotdata.items_to_load) do
+		local setpath = "apadventure/itemsets/"..k
+		local setdata = include(setpath..".lua")
+		for ik,iv in ipairs(v) do
+			RegisterItem(setpath,iv..".lua",setdata)
+		end
+	end
 
-    local empty = {} -- kinda hacky but this means item handlers don't have to do nil checks
+	local empty = {} -- kinda hacky but this means item handlers don't have to do nil checks
 
-    if APADV.DelayedMapItemRegister then
-        APADV.RegisterMapItems()
+	if APADV.DelayedMapItemRegister then
+		APADV.RegisterMapItems()
 		APADV.DelayedMapItemRegister = nil
-    end
+	end
 
-    ApAdvWeps.OnEquip = onequiptbl
-    APADV.ItemUnregisterFuncs = unregisterfuncs
+	ApAdvWeps.OnEquip = onequiptbl
+	APADV.ItemUnregisterFuncs = unregisterfuncs
 
-    APADV.capabtbl = capabtbl
-    APADV.condcapabtbl = condcapabtbl
-    APADV.id2capab = id2capab
+	APADV.capabtbl = capabtbl
+	APADV.condcapabtbl = condcapabtbl
+	APADV.id2capab = id2capab
 
-    lastregistration = curregistration
+	lastregistration = curregistration
 
-    for k,v in pairs(handle) do
-        v(APADV_SLOT.Items[k] or empty)
-    end
+	for k,v in pairs(handle) do
+		v(APADV_SLOT.Items[k] or empty)
+	end
 end
 
 local function OnRunID(packet)
-    if !packet then
-        APADV_SLOT:Disconnect()
-        return
-    end
-    local runid = packet.value
-    local saveid = runid.."_"..APADV_SLOT.team.."_"..APADV_SLOT.Nr
-    if APADV_SAVEID != saveid then
+	if !packet then
+		APADV_SLOT:Disconnect()
+		return
+	end
+	local runid = packet.value
+	local saveid = runid.."_"..APADV_SLOT.team.."_"..APADV_SLOT.Nr
+	if APADV_SAVEID != saveid then
 
-        APADV.StoreSaveData()
+		APADV.StoreSaveData()
 
 		local oldsaveid = APADV_SAVEID
 		APADV_SAVEID = saveid
 
-        local slotdata = APADV_SLOT.slotData
-        local room = APADV_SLOT.Room
+		local slotdata = APADV_SLOT.slotData
+		local room = APADV_SLOT.Room
 
-        if slotdata.ver > 1 then
-            ErrorNoHalt("The version of apAdventure this slot was generated for is newer than the one this server is running. This will most likely cause issues.")
-        end
+		if slotdata.ver > 1 then
+			ErrorNoHalt("The version of apAdventure this slot was generated for is newer than the one this server is running. This will most likely cause issues.")
+		end
 
-        APADV.InitSaveData(saveid)
+		APADV.InitSaveData(saveid)
 
-        if oldsaveid or !next(APADV_LASTMAPTBL) then
-            local map = game.GetMap()
-            if map == slotdata.startmap then
-                APADV_USESTART = slotdata.startregion
-                APADV.LoadCfg(slotdata.startgroup)
-            elseif APADV_SAVEDATA._visited and APADV_SAVEDATA._visited[map] then
-                local groupname, grouptbl = next(APADV_SAVEDATA._visited[map])
-                APADV_ENTRNAME = next(grouptbl)
-                APADV.LoadCfg(groupname)
+		if oldsaveid or !next(APADV_LASTMAPTBL) then
+			local map = game.GetMap()
+			if map == slotdata.startmap then
+				APADV_USESTART = slotdata.startregion
+				APADV.LoadCfg(slotdata.startgroup)
+			elseif APADV_SAVEDATA._visited and APADV_SAVEDATA._visited[map] then
+				local groupname, grouptbl = next(APADV_SAVEDATA._visited[map])
+				APADV_ENTRNAME = next(grouptbl)
+				APADV.LoadCfg(groupname)
 			elseif APADV_TESTMODE then
 				-- not great, but we only to this for testing mode so it should be fine
 				for k,gr in pairs(slotdata.connections) do
@@ -456,146 +456,146 @@ local function OnRunID(packet)
 					end
 				end
 				::done::
-            else
-                APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
-                APADV.DoMapTransition(slotdata.startmap,slotdata.startgroup)
-            end
-        end
+			else
+				APADV_NEXTMAPTBL.SentToStart = slotdata.startregion
+				APADV.DoMapTransition(slotdata.startmap,slotdata.startgroup)
+			end
+		end
 
-        ApAdvPly.UpdateBHop(slotdata.bhop == 3)
-        game.SetSkillLevel(slotdata.skill)
+		ApAdvPly.UpdateBHop(slotdata.bhop == 3)
+		game.SetSkillLevel(slotdata.skill)
 
-        local ammotbl = {}
+		local ammotbl = {}
 
-        local ammoID = game.GetAmmoID
+		local ammoID = game.GetAmmoID
 
-        for k,v in pairs(slotdata.ammomerge) do
-            local newdata = {}
-            for ik,iv in ipairs(v) do
-                newdata[ik] = ammoID(iv)
-            end
-            ammotbl[ammoID(k)] = newdata
-        end
+		for k,v in pairs(slotdata.ammomerge) do
+			local newdata = {}
+			for ik,iv in ipairs(v) do
+				newdata[ik] = ammoID(iv)
+			end
+			ammotbl[ammoID(k)] = newdata
+		end
 
-        APADV_AMMOMERGE = ammotbl
-        APADV_ENTRANCES = slotdata.connections or {}
+		APADV_AMMOMERGE = ammotbl
+		APADV_ENTRANCES = slotdata.connections or {}
 		APADV_CUSTOMPARAMS = slotdata.customparams or {}
 		APADV_TRAPVISION = slotdata.trapvision == 3 or nil
 
-        if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] then
-            local mapexits = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]
-            for k,v in pairs(APADV_EXITENTS) do
-                if mapexits[v] then
-                    -- the Advanced Color Tool throws errors if this isn't wrapped in a timer
-                    timer.Simple(1,function() k:SetMapIcon(mapexits[v].map) end)
-                end
-            end
-        end
+		if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] then
+			local mapexits = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]
+			for k,v in pairs(APADV_EXITENTS) do
+				if mapexits[v] then
+					-- the Advanced Color Tool throws errors if this isn't wrapped in a timer
+					timer.Simple(1,function() k:SetMapIcon(mapexits[v].map) end)
+				end
+			end
+		end
 
 		net.Start("ApAdvRunIDUpdate")
 			net.WriteString(saveid)
 			net.WriteString(APADV_SLOT.slotName)
 		net.Broadcast()
-    end
+	end
 
-    if isfunction(APADV_CFGLUA.OnFullConnect) then
-        ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
-        APADV_CFGLUA.OnFullConnect = nil
-    end
+	if isfunction(APADV_CFGLUA.OnFullConnect) then
+		ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
+		APADV_CFGLUA.OnFullConnect = nil
+	end
 
 	ApAdvRegisterItemHandlers()
 
 	if APADV_TRACKER.runid == saveid then
-        APADV_TRACKER:SendTrackerData()
-        APADV_TRACKER:Query()
-    else
-        APADV_TRACKER:Build()
-    end
+		APADV_TRACKER:SendTrackerData()
+		APADV_TRACKER:Query()
+	else
+		APADV_TRACKER:Build()
+	end
 
-    APADV_FULLCONNECT = true
+	APADV_FULLCONNECT = true
 end
 
 local function OnConnect(self)
-    net.Start("ApAdvConnectionState")
-        net.WriteBool(true)
-    net.Broadcast()
+	net.Start("ApAdvConnectionState")
+		net.WriteBool(true)
+	net.Broadcast()
 end
 
 local function OnDisconnect(self)
-    APADV_FULLCONNECT = false
-    net.Start("ApAdvConnectionState")
-        net.WriteBool(false)
-    net.Broadcast()
+	APADV_FULLCONNECT = false
+	net.Start("ApAdvConnectionState")
+		net.WriteBool(false)
+	net.Broadcast()
 end
 
 local function ApAdvDPLoad(slot,datapackage)
-    APADV_DATAPACK = datapackage
-    APADV_DATAPACK_LOCAL = datapackage.games["GMod - apAdventure"]
+	APADV_DATAPACK = datapackage
+	APADV_DATAPACK_LOCAL = datapackage.games["GMod - apAdventure"]
 end
 
 APADV.WantsLocationInfo = {}
 
 local function sendLocInfoRequests()
-    local reqlist = APADV.WantsLocationInfo
-    if !next(reqlist) then return end
-    local reqbyloc = {}
-    local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+	local reqlist = APADV.WantsLocationInfo
+	if !next(reqlist) then return end
+	local reqbyloc = {}
+	local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
 	local locs = APADV_SLOT.Locations
-    for k,v in pairs(reqlist) do
-        if isstring(k) or IsValid(k) then
-            local loc = v.l
-            if !isnumber(loc) then
-                loc = locnametoid[loc]
-            end
-            if loc and locs[loc] != nil then
-                local reqtbl = reqbyloc[loc]
-                local newentry = {
-                    f = v.f,
-                    n = k
-                }
-                if reqtbl then
-                    reqtbl[#reqtbl+1] = newentry
-                else
-                    reqbyloc[loc] = {newentry}
-                end
-            end
-        end
-    end
-    for k,v in pairs(reqbyloc) do
-        APADV_SLOT:GetLocationInfo(k,0,function(info)
-            if !info then return end
-            for ik,iv in ipairs(v) do
-                ProtectedCall(iv.f,info)
-                APADV.WantsLocationInfo[iv.n] = nil
-            end
-        end)
-    end
+	for k,v in pairs(reqlist) do
+		if isstring(k) or IsValid(k) then
+			local loc = v.l
+			if !isnumber(loc) then
+				loc = locnametoid[loc]
+			end
+			if loc and locs[loc] != nil then
+				local reqtbl = reqbyloc[loc]
+				local newentry = {
+					f = v.f,
+					n = k
+				}
+				if reqtbl then
+					reqtbl[#reqtbl+1] = newentry
+				else
+					reqbyloc[loc] = {newentry}
+				end
+			end
+		end
+	end
+	for k,v in pairs(reqbyloc) do
+		APADV_SLOT:GetLocationInfo(k,0,function(info)
+			if !info then return end
+			for ik,iv in ipairs(v) do
+				ProtectedCall(iv.f,info)
+				APADV.WantsLocationInfo[iv.n] = nil
+			end
+		end)
+	end
 end
 
 local function ApAdvFullData(slot)
 	APADV_TESTMODE = slot.slotData.testmode
-    if APADV_UNCHECKED_LOCS then
-        local loclist = APADV_SLOT.Locations
-        local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
-        for k,v in ipairs(APADV_UNCHECKED_LOCS) do
-            if IsValid(v) then
-                local locid = locnametoid[v.LocationName]
-                if !locid then
-                    ErrorNoHalt("Map Config contained a Location named "..(v.LocationName).." that was not in the DataPackage."..
+	if APADV_UNCHECKED_LOCS then
+		local loclist = APADV_SLOT.Locations
+		local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+		for k,v in ipairs(APADV_UNCHECKED_LOCS) do
+			if IsValid(v) then
+				local locid = locnametoid[v.LocationName]
+				if !locid then
+					ErrorNoHalt("Map Config contained a Location named "..(v.LocationName).." that was not in the DataPackage."..
 					"This may be caused by the Config Creator putting Locations into Regions that do not exist or your run not being generated with the same Config that GMod is currently loading.\n")
-                    v:Remove()
-                elseif loclist[locid] != false then
-                    v:Remove()
-                end
-            end
-        end
-        APADV_UNCHECKED_LOCS = nil
-    end
+					v:Remove()
+				elseif loclist[locid] != false then
+					v:Remove()
+				end
+			end
+		end
+		APADV_UNCHECKED_LOCS = nil
+	end
 
-    sendLocInfoRequests()
+	sendLocInfoRequests()
 
-    local room = slot.Room
-    slot:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
+	local room = slot.Room
+	slot:DataStoreSet("apadv_runid",math.floor(room.time).."_"..room.seed_name,OnRunID,{{operation="default",value=""}})
 end
 
 local function BounceHandler(self,packet)
@@ -634,116 +634,116 @@ local function HintPointUpdate(self,val)
 end
 
 function APADV.CreateApSlot(addr,slotn,pw)
-    if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
+	if !APADV_SLOT or (!APADV_SLOT.Connected and !APADV_SLOT.Reconnecting) then
 
-        APADV_ITEMHANDLERS = {}
+		APADV_ITEMHANDLERS = {}
 
 		local dl = dlcvar:GetBool()
 		local dlgr = dlgroupcvar:GetString()
 		if dl and dlgr != "" then dl = dlgr end
 
-        APADV_SLOT = GMAP.NewSlot({
-            ID = "APADV",
-            address = addr,
-            slotName = slotn,
-            password = pw,
-            game = "GMod - apAdventure",
-            receiveAPchat = true,
-            forwardAPchat = true,
-            forwardGMODchat = true,
-            deathlink = dl,
-            dontStore = true,
+		APADV_SLOT = GMAP.NewSlot({
+			ID = "APADV",
+			address = addr,
+			slotName = slotn,
+			password = pw,
+			game = "GMod - apAdventure",
+			receiveAPchat = true,
+			forwardAPchat = true,
+			forwardGMODchat = true,
+			deathlink = dl,
+			dontStore = true,
 			receiveHints = true
-        })
+		})
 
-        APADV_SLOT.OnItemUpdate = ApAdvItemHandler
-        APADV_SLOT.OnDataPackageLoad = ApAdvDPLoad
-        APADV_SLOT.OnFullData = ApAdvFullData
-        APADV_SLOT.OnLocationUpdate = ApAdvLocationHandler
-        APADV_SLOT.OnConnect = OnConnect
-        APADV_SLOT.OnDisconnect = OnDisconnect
+		APADV_SLOT.OnItemUpdate = ApAdvItemHandler
+		APADV_SLOT.OnDataPackageLoad = ApAdvDPLoad
+		APADV_SLOT.OnFullData = ApAdvFullData
+		APADV_SLOT.OnLocationUpdate = ApAdvLocationHandler
+		APADV_SLOT.OnConnect = OnConnect
+		APADV_SLOT.OnDisconnect = OnDisconnect
 		APADV_SLOT.OnBounce = BounceHandler
 		APADV_SLOT.OnLocationHintUpdate = OnLocationHintUpdate
 		APADV_SLOT.OnAnyHintUpdate = AnyHintUpdate
 		APADV_SLOT.OnHintPointUpdate = HintPointUpdate
 
-        APADV_SLOT:Connect()
-    end
+		APADV_SLOT:Connect()
+	end
 end
 
 function APADV.SendLocation(lctn)
-    if !APADV_SLOT or !APADV_SLOT.Connected then return false end
-    APADV_SLOT:SendLocation(lctn)
-    return true
+	if !APADV_SLOT or !APADV_SLOT.Connected then return false end
+	APADV_SLOT:SendLocation(lctn)
+	return true
 end
 
 function APADV.MapLocationStatus(lctn)
-    if !APADV_SLOT or !APADV_SLOT.FullData or !APADV_MAPGROUP then
-        ErrorNoHalt("Tried to check the Status of a Location before the connection was established.")
-        return
-    end
-    local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
-    local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]
-    if !ID then
-        ErrorNoHalt("Location "..locname.." could not be matched to an ID.")
-        return
-    end
-    return APADV_SLOT.Locations[ID]
+	if !APADV_SLOT or !APADV_SLOT.FullData or !APADV_MAPGROUP then
+		ErrorNoHalt("Tried to check the Status of a Location before the connection was established.")
+		return
+	end
+	local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
+	local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]
+	if !ID then
+		ErrorNoHalt("Location "..locname.." could not be matched to an ID.")
+		return
+	end
+	return APADV_SLOT.Locations[ID]
 end
 
 function APADV.SendMapLocation(lctn)
-    if !APADV_SLOT or !APADV_SLOT.FullData or !APADV_MAPGROUP then return end
-    local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
-    local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]
-    if !ID then return end
-    APADV_SLOT:SendLocation(ID)
-    return APADV_SLOT.Locations[ID]
+	if !APADV_SLOT or !APADV_SLOT.FullData or !APADV_MAPGROUP then return end
+	local locname = APADV_MAPGROUP.." - "..game.GetMap().." - "..lctn
+	local ID = APADV_DATAPACK_LOCAL.location_name_to_id[locname]
+	if !ID then return end
+	APADV_SLOT:SendLocation(ID)
+	return APADV_SLOT.Locations[ID]
 end
 
 timer.Create("APADVLocInfoRequestQueueTimer",1,0,function()
-    if APADV_SLOT.FullData then sendLocInfoRequests() end
-    timer.Stop("APADVLocInfoRequestQueueTimer")
+	if APADV_SLOT.FullData then sendLocInfoRequests() end
+	timer.Stop("APADVLocInfoRequestQueueTimer")
 end)
 timer.Stop("APADVLocInfoRequestQueueTimer")
 
 -- don't use this for your custom content, i'm not super happy with how this works and might remove it in the future
 function APADV.LocationInfoRequest(reqnm,lctn,cb)
-    if APADV_SLOT then
-        if APADV_SLOT.LocationInfo then
-            if !isnumber(lctn) and APADV_SLOT.location_name_to_id then lctn = APADV_SLOT.location_name_to_id[lctn] end
-            if isnumber(lctn) then
-                local info = APADV_SLOT.LocationInfo[lctn]
-                if info then cb(info) return end
-            end
-        end
-        if APADV_SLOT.FullData then timer.Start("APADVLocInfoRequestQueueTimer") end
-    end
-    APADV.WantsLocationInfo[reqnm] = {l=lctn,f=cb}
+	if APADV_SLOT then
+		if APADV_SLOT.LocationInfo then
+			if !isnumber(lctn) and APADV_SLOT.location_name_to_id then lctn = APADV_SLOT.location_name_to_id[lctn] end
+			if isnumber(lctn) then
+				local info = APADV_SLOT.LocationInfo[lctn]
+				if info then cb(info) return end
+			end
+		end
+		if APADV_SLOT.FullData then timer.Start("APADVLocInfoRequestQueueTimer") end
+	end
+	APADV.WantsLocationInfo[reqnm] = {l=lctn,f=cb}
 end
 
 function APADV.AddTracker(type,trackedID,hookID,method)
-    GMAP.AddTracker("APADV",type,trackedID,hookID,method)
+	GMAP.AddTracker("APADV",type,trackedID,hookID,method)
 end
 
 function APADV.RemoveTracker(type,trackedID,hookID)
-    GMAP.RemoveTracker("APADV",type,trackedID,hookID)
+	GMAP.RemoveTracker("APADV",type,trackedID,hookID)
 end
 
 local editslotperms = {
-    ["superadmin"]  = true
+	["superadmin"]  = true
 }
 
 net.Receive("apAdvConnectionInfo",function(len,ply)
-    if !(ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
-    APADV.CreateApSlot(net.ReadString(),net.ReadString(),net.ReadString())
+	if !(ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
+	APADV.CreateApSlot(net.ReadString(),net.ReadString(),net.ReadString())
 end)
 
 concommand.Add("apadv_slot_connect",function(ply)
-    if !APADV_SLOT or !(ply == NULL or ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin")  then return end
-    APADV_SLOT:Connect()
+	if !APADV_SLOT or !(ply == NULL or ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin")  then return end
+	APADV_SLOT:Connect()
 end,nil,"Connects the apAdventure Slot to the Archipelago Server if possible.")
 
 concommand.Add("apadv_slot_disconnect",function(ply)
-    if !APADV_SLOT or !(ply == NULL or ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
-    APADV_SLOT:Disconnect()
+	if !APADV_SLOT or !(ply == NULL or ply:IsListenServerHost() or ply:GetUserGroup() == "superadmin") then return end
+	APADV_SLOT:Disconnect()
 end,nil,"Disconnects the apAdventure Slot from the Archipelago Server.")

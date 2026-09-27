@@ -26,75 +26,75 @@ local function trackerreset(ply)
 	if !ply then
 		namessent = {}
 	end
-    netstart("APAdvTrackerReset")
-        netstring(APADV_MAPGROUP or "")
+	netstart("APAdvTrackerReset")
+		netstring(APADV_MAPGROUP or "")
 		netuint(APADV_SLOT.Nr or 0,plyint)
 		netuint(APADV_SLOT.team or 0,plyint)
 		local room = APADV_SLOT.Room
 		local loccount = APADV_SLOT.Locations and table.Count(APADV_SLOT.Locations)
 		netuint(room and loccount and math.max(1,math.floor(room.hint_cost * .01 * loccount)) or 0,16)
-    if ply then
-        netsend(ply)
-    else
-        netbroadcast()
-    end
+	if ply then
+		netsend(ply)
+	else
+		netbroadcast()
+	end
 end
 
 function APADV_TRACKER:SendLocationUpdate(group,map,loc,state,ply)
-    netstart("APAdvTrackerLocation")
-        netstring(group)
-        netstring(map)
-        netstring(loc)
-        netuint(state,3)
-    if ply then
-        netsend(ply)
-    else
-        netbroadcast()
-    end
+	netstart("APAdvTrackerLocation")
+		netstring(group)
+		netstring(map)
+		netstring(loc)
+		netuint(state,3)
+	if ply then
+		netsend(ply)
+	else
+		netbroadcast()
+	end
 end
 
 function APADV_TRACKER:SendExitUpdate(group,map,name,tgtgr,tgtmap,tgtentr,ply)
-    netstart("APAdvTrackerExit")
-        netstring(group)
-        netstring(map)
-        netstring(name)
-        netstring(tgtgr)
-        netstring(tgtmap)
-        netstring(tgtentr)
-    if ply then
-        netsend(ply)
-    else
-        netbroadcast()
-    end
+	netstart("APAdvTrackerExit")
+		netstring(group)
+		netstring(map)
+		netstring(name)
+		netstring(tgtgr)
+		netstring(tgtmap)
+		netstring(tgtentr)
+	if ply then
+		netsend(ply)
+	else
+		netbroadcast()
+	end
 end
 
 function APADV_TRACKER:UpdateLocationByName(name,state)
-    if !self.locnametomap then return end
-    local tomap = self.locnametomap[name]
-    local gr, map, reg = tomap.g, tomap.m, tomap.r
-    self.regs[gr][map][reg].locs[name].reach = state
-    self:SendLocationUpdate(gr,map,name,state)
+	if !self.locnametomap then return end
+	local tomap = self.locnametomap[name]
+	local gr, map, reg = tomap.g, tomap.m, tomap.r
+	self.regs[gr][map][reg].locs[name].reach = state
+	self:SendLocationUpdate(gr,map,name,state)
 end
 
 function APADV_TRACKER:SendTrackerData(ply)
-    trackerreset(ply)
-    for grn,gr in pairs(self.regs) do
-        for mapn,map in pairs(gr) do
-            for regn,reg in pairs(map) do
-                if reg.exit then
-                    for k,v in pairs(reg.exit) do
-                        local tgt = v.tgt
-                        self:SendExitUpdate(grn,mapn,k,tgt.group,tgt.map,tgt.entr,ply)
-                    end
-                end
-                if reg.locs then
-                    for k,v in pairs(reg.locs) do
-                        self:SendLocationUpdate(grn,mapn,k,v.reach,ply)
-                    end
-                end
-            end
-        end
-    end
+	trackerreset(ply)
+	for grn,gr in pairs(self.regs) do
+		for mapn,map in pairs(gr) do
+			for regn,reg in pairs(map) do
+				if reg.exit then
+					for k,v in pairs(reg.exit) do
+						local tgt = v.tgt
+						self:SendExitUpdate(grn,mapn,k,tgt.group,tgt.map,tgt.entr,ply)
+					end
+				end
+				if reg.locs then
+					for k,v in pairs(reg.locs) do
+						self:SendLocationUpdate(grn,mapn,k,v.reach,ply)
+					end
+				end
+			end
+		end
+	end
 	local toname = APADV_SLOT.item_id_to_name
 	for k,v in ipairs(APADV.ActiveItems) do
 		self:SendHintable(toname[v],1,ply)
@@ -115,171 +115,171 @@ function APADV_TRACKER:SendTrackerData(ply)
 end
 
 function APADV_TRACKER:ApplyAmmomerge(tbl)
-    for k,v in pairs(tbl) do
-        local match = self.ammomerge[k]
-        if match then
-            for ik,iv in ipairs(match) do
-                tbl[iv] = true
-            end
-        end
-    end
-    return tbl
+	for k,v in pairs(tbl) do
+		local match = self.ammomerge[k]
+		if match then
+			for ik,iv in ipairs(match) do
+				tbl[iv] = true
+			end
+		end
+	end
+	return tbl
 end
 
 function APADV_TRACKER:Build()
-    local starttime = SysTime()
-    local slot = APADV_SLOT
-    local slotdata = slot.slotData
-    local slotlocs = slot.Locations
-    local slotconn = slotdata.connections
-    local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+	local starttime = SysTime()
+	local slot = APADV_SLOT
+	local slotdata = slot.slotData
+	local slotlocs = slot.Locations
+	local slotconn = slotdata.connections
+	local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
 
-    local grouptbls = {}
-    local regs = {}
+	local grouptbls = {}
+	local regs = {}
 	local mapitms, mapitmcnt = {}, 0
-    local entrs = {}
-    local locnametomap = {}
+	local entrs = {}
+	local locnametomap = {}
 
-    trackerreset()
+	trackerreset()
 
-    local ammotbl = {}
+	local ammotbl = {}
 
-    for k,v in pairs(slotdata.ammomerge) do
-        local new = {}
-        for ik,iv in ipairs(v) do
-            new[ik] = "Ammo_"..iv
-        end
-        ammotbl["Ammo_"..k] = new
-    end
+	for k,v in pairs(slotdata.ammomerge) do
+		local new = {}
+		for ik,iv in ipairs(v) do
+			new[ik] = "Ammo_"..iv
+		end
+		ammotbl["Ammo_"..k] = new
+	end
 
-    self.ammomerge = ammotbl
+	self.ammomerge = ammotbl
 
-    local function buildmaptracker(groupn,mapn)
-        --print("building tracker table for "..mapn.." in "..groupn)
-        local maptbl = {}
+	local function buildmaptracker(groupn,mapn)
+		--print("building tracker table for "..mapn.." in "..groupn)
+		local maptbl = {}
 
-        local gtbl = grouptbls[groupn]
+		local gtbl = grouptbls[groupn]
 
-        if !gtbl then
-            gtbl = fromJSON(rfile("apadventure/cfg/"..groupn.."/group.json","DATA") or rfile("data_static/apadventure/cfg/"..groupn.."/group.json","GAME"))
-            grouptbls[groupn] = gtbl
-        end
+		if !gtbl then
+			gtbl = fromJSON(rfile("apadventure/cfg/"..groupn.."/group.json","DATA") or rfile("data_static/apadventure/cfg/"..groupn.."/group.json","GAME"))
+			grouptbls[groupn] = gtbl
+		end
 
-        local path = "apadventure/cfg/"..groupn.."/"..mapn.."/sv.json"
-        local json = assert(rfile(path,"DATA") or rfile("data_static/"..path,"GAME"),"couldn't find config for map "..mapn.." in group "..groupn)
-        local svcfg = fromJSON(json)
-        path = "apadventure/cfg/"..groupn.."/"..mapn.."/cl.json"
-        json = assert(rfile(path,"DATA") or rfile("data_static/"..path,"GAME"),"couldn't find config for map "..mapn.." in group "..groupn)
-        local clcfg = fromJSON(json)
+		local path = "apadventure/cfg/"..groupn.."/"..mapn.."/sv.json"
+		local json = assert(rfile(path,"DATA") or rfile("data_static/"..path,"GAME"),"couldn't find config for map "..mapn.." in group "..groupn)
+		local svcfg = fromJSON(json)
+		path = "apadventure/cfg/"..groupn.."/"..mapn.."/cl.json"
+		json = assert(rfile(path,"DATA") or rfile("data_static/"..path,"GAME"),"couldn't find config for map "..mapn.." in group "..groupn)
+		local clcfg = fromJSON(json)
 
-        local locsbyreg = {}
-        local locacc = svcfg.lctnaccess or {}
-        local locpre = groupn.." - "..mapn.." - "
+		local locsbyreg = {}
+		local locacc = svcfg.lctnaccess or {}
+		local locpre = groupn.." - "..mapn.." - "
 
-        for k,v in pairs(svcfg.lctn) do
-            local locn = locpre..v.name
-            local locid = locnametoid[locn]
-            --print(locn,locid,slotlocs[locid])
-            if slotlocs[locid] != nil then
+		for k,v in pairs(svcfg.lctn) do
+			local locn = locpre..v.name
+			local locid = locnametoid[locn]
+			--print(locn,locid,slotlocs[locid])
+			if slotlocs[locid] != nil then
 
-                local reach = slotlocs[locid] and 0 or 3
-                local loc = {
-                    reach = reach,
-                    acc = locacc[v.name]
-                }
+				local reach = slotlocs[locid] and 0 or 3
+				local loc = {
+					reach = reach,
+					acc = locacc[v.name]
+				}
 
-                local reg = v.reg
+				local reg = v.reg
 
-                if locsbyreg[reg] then
-                    locsbyreg[reg][locn] = loc
-                else
-                    locsbyreg[reg] = {
-                        [locn] = loc
-                    }
-                end
+				if locsbyreg[reg] then
+					locsbyreg[reg][locn] = loc
+				else
+					locsbyreg[reg] = {
+						[locn] = loc
+					}
+				end
 
-                locnametomap[locn] = {
-                    m = mapn,
-                    g = groupn,
-                    r = reg,
-                }
+				locnametomap[locn] = {
+					m = mapn,
+					g = groupn,
+					r = reg,
+				}
 
-                self:SendLocationUpdate(groupn,mapn,locn,reach)
-            end
-        end
+				self:SendLocationUpdate(groupn,mapn,locn,reach)
+			end
+		end
 
-        local conntbl = {}
+		local conntbl = {}
 
-        if clcfg.connect then
-            for k,v in pairs(clcfg.connect) do
-                conntbl[k] = conntbl[k] or {}
-                for ik,iv in pairs(v) do
-                    conntbl[k][ik] = iv.access or {}
-                    if iv.twoway then
-                        conntbl[ik] = conntbl[ik] or {}
-                        conntbl[ik][k] = iv.access or {}
-                    end
-                end
-            end
-        end
+		if clcfg.connect then
+			for k,v in pairs(clcfg.connect) do
+				conntbl[k] = conntbl[k] or {}
+				for ik,iv in pairs(v) do
+					conntbl[k][ik] = iv.access or {}
+					if iv.twoway then
+						conntbl[ik] = conntbl[ik] or {}
+						conntbl[ik][k] = iv.access or {}
+					end
+				end
+			end
+		end
 
-        local exittbl = {}
+		local exittbl = {}
 
-        --print(groupn,mapn)
-        local groupconndata = slotconn[groupn]
-        if groupconndata then
-            local conndata = groupconndata[mapn]
+		--print(groupn,mapn)
+		local groupconndata = slotconn[groupn]
+		if groupconndata then
+			local conndata = groupconndata[mapn]
 
-            if conndata then
-                local exitacc = svcfg.exitaccess or {}
+			if conndata then
+				local exitacc = svcfg.exitaccess or {}
 
-                for k,v in pairs(svcfg.exit) do
-                    local regn = v.reg
-                    exittbl[regn] = exittbl[regn] or {}
-                    local regexits = exittbl[regn]
+				for k,v in pairs(svcfg.exit) do
+					local regn = v.reg
+					exittbl[regn] = exittbl[regn] or {}
+					local regexits = exittbl[regn]
 
-                    local exitn = v.name
-                    local exitdata = conndata[exitn]
-                    if exitdata and !regexits[exitn] then
-                        regexits[exitn] = {
-                            tgt = exitdata,
-                            acc = exitacc[exitn],
-                        }
-                        self:SendExitUpdate(groupn,mapn,exitn,exitdata.group,exitdata.map,exitdata.entr)
-                    end
-                end
-            end
-        end
+					local exitn = v.name
+					local exitdata = conndata[exitn]
+					if exitdata and !regexits[exitn] then
+						regexits[exitn] = {
+							tgt = exitdata,
+							acc = exitacc[exitn],
+						}
+						self:SendExitUpdate(groupn,mapn,exitn,exitdata.group,exitdata.map,exitdata.entr)
+					end
+				end
+			end
+		end
 
-        local entrtbl = {}
-        local entracc = svcfg.entraccess or {}
+		local entrtbl = {}
+		local entracc = svcfg.entraccess or {}
 
-        for k,v in pairs(svcfg.entr) do
-            local entrn = v.name
-            if !entrtbl[entrn] then
-                entrtbl[entrn] = {
-                    reg = v.reg,
-                    acc = entracc[entrn] or {}
-                }
-            end
-        end
+		for k,v in pairs(svcfg.entr) do
+			local entrn = v.name
+			if !entrtbl[entrn] then
+				entrtbl[entrn] = {
+					reg = v.reg,
+					acc = entracc[entrn] or {}
+				}
+			end
+		end
 
-        entrs[groupn] = entrs[groupn] or {}
-        entrs[groupn][mapn] = entrtbl
+		entrs[groupn] = entrs[groupn] or {}
+		entrs[groupn][mapn] = entrtbl
 
-        local mapregs = {}
+		local mapregs = {}
 
-        for k,v in pairs(clcfg.reg) do
-            local reg = {
-                cond = self:ApplyAmmomerge(v.ammo),
-                locs = locsbyreg[k],
-                conn = conntbl[k],
-                exit = exittbl[k],
-                reach = 3
-            }
+		for k,v in pairs(clcfg.reg) do
+			local reg = {
+				cond = self:ApplyAmmomerge(v.ammo),
+				locs = locsbyreg[k],
+				conn = conntbl[k],
+				exit = exittbl[k],
+				reach = 3
+			}
 
-            mapregs[k] = reg
-        end
+			mapregs[k] = reg
+		end
 
 		local items = clcfg.item
 		if items and next(items) then
@@ -290,325 +290,325 @@ function APADV_TRACKER:Build()
 			end
 		end
 
-        return {
-            reg = mapregs,
-            entr = entrtbl,
-        }
+		return {
+			reg = mapregs,
+			entr = entrtbl,
+		}
 
-    end
+	end
 
-    local startgroup = slotdata.startgroup
-    local startmap = buildmaptracker(slotdata.startgroup,slotdata.startmap)
-    startmap.reg[slotdata.startregion].reach = 1
+	local startgroup = slotdata.startgroup
+	local startmap = buildmaptracker(slotdata.startgroup,slotdata.startmap)
+	startmap.reg[slotdata.startregion].reach = 1
 
-    regs[startgroup] = {[slotdata.startmap] = startmap.reg}
+	regs[startgroup] = {[slotdata.startmap] = startmap.reg}
 
-    local function processconnected(curregs)
-        for k,v in pairs(curregs) do
-            if v.exit then
-                for ik,iv in pairs(v.exit) do
-                    local tgt = iv.tgt
-                    if tgt then
-                        local tgtgr = tgt.group
-                        local tgtmap = tgt.map
-                        regs[tgtgr] = regs[tgtgr] or {}
-                        if !regs[tgtgr][tgtmap] then
-                            local map = buildmaptracker(tgtgr,tgtmap)
-                            local mapregs = map.reg
-                            regs[tgtgr] = regs[tgtgr] or {}
-                            regs[tgtgr][tgtmap] = mapregs
-                            processconnected(mapregs)
-                        end
-                    end
-                end
-            end
-        end
-    end
+	local function processconnected(curregs)
+		for k,v in pairs(curregs) do
+			if v.exit then
+				for ik,iv in pairs(v.exit) do
+					local tgt = iv.tgt
+					if tgt then
+						local tgtgr = tgt.group
+						local tgtmap = tgt.map
+						regs[tgtgr] = regs[tgtgr] or {}
+						if !regs[tgtgr][tgtmap] then
+							local map = buildmaptracker(tgtgr,tgtmap)
+							local mapregs = map.reg
+							regs[tgtgr] = regs[tgtgr] or {}
+							regs[tgtgr][tgtmap] = mapregs
+							processconnected(mapregs)
+						end
+					end
+				end
+			end
+		end
+	end
 
-    processconnected(startmap.reg)
+	processconnected(startmap.reg)
 
-    self.regs = regs
-    self.entr = entrs
-    self.query = {
-        {
-            gr = slotdata.startgroup,
-            map = slotdata.startmap,
-            reg = slotdata.startregion
-        }
-    }
+	self.regs = regs
+	self.entr = entrs
+	self.query = {
+		{
+			gr = slotdata.startgroup,
+			map = slotdata.startmap,
+			reg = slotdata.startregion
+		}
+	}
 
 	self.mapitems = mapitms
 
-    self.locnametomap = locnametomap
-    self.runid = APADV_SAVEID
+	self.locnametomap = locnametomap
+	self.runid = APADV_SAVEID
 
-    self:Query()
+	self:Query()
 
-    print("built tracking table in "..tostring(SysTime()-starttime).." seconds")
+	print("built tracking table in "..tostring(SysTime()-starttime).." seconds")
 end
 
 local min = math.min
 local max = math.max
 
 local function resort(tbl)
-    local out = {}
-    local i = 0
-    for k,v in pairs(tbl) do
-        i = i+1
-        out[i] = v
-    end
-    return out
+	local out = {}
+	local i = 0
+	for k,v in pairs(tbl) do
+		i = i+1
+		out[i] = v
+	end
+	return out
 end
 
 local evalmeta = {__index = function()
-    return function()
-        return 3,3
-    end
+	return function()
+		return 3,3
+	end
 end}
 
 function APADV_TRACKER:Query()
-    timer.Stop("APAdvTrackerQuery")
-    local slot = APADV_SLOT
-    local slotdata = slot.slotData
-    local slotitems = slot.Items
-    local slotlocs = slot.Locations
-    local inametoid = APADV_DATAPACK_LOCAL.item_name_to_id
-    local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
-    local newquery = {}
-    local newqueries = 0
-    local regtbl = APADV_TRACKER.regs
-    local entrs = APADV_TRACKER.entr
-    local id2capab = APADV.id2capab
-    local capabtbl = APADV.capabtbl
-    local condcapabtbl = APADV.condcapabtbl
+	timer.Stop("APAdvTrackerQuery")
+	local slot = APADV_SLOT
+	local slotdata = slot.slotData
+	local slotitems = slot.Items
+	local slotlocs = slot.Locations
+	local inametoid = APADV_DATAPACK_LOCAL.item_name_to_id
+	local locnametoid = APADV_DATAPACK_LOCAL.location_name_to_id
+	local newquery = {}
+	local newqueries = 0
+	local regtbl = APADV_TRACKER.regs
+	local entrs = APADV_TRACKER.entr
+	local id2capab = APADV.id2capab
+	local capabtbl = APADV.capabtbl
+	local condcapabtbl = APADV.condcapabtbl
 
-    local function evalrule(rule,conds,map,group)
-        local nodeeval
-        nodeeval = {
-            ["or"] = function(node)
-                local out = node.min or 8
-                local sub = node.nodes
-                local doresort
-                if !sub[1] then return 3 end
-                for k,v in ipairs(sub) do
-                    --print("testing type",v.type)
-                    local subout, override = nodeeval[v.type](v)
-                    if subout == 1 then return 1,1 end
-                    if override then
-                        if isnumber(override) then
-                            sub[k] = nil
-                            node.min = !node.min and override or min(node.min,override)
-                            doresort = true
-                        else
-                            sub[k] = override
-                        end
-                    end
-                    out = min(out,subout)
-                end
-                if doresort then
-                    if !next(sub) then return out,out end
-                    node.nodes = resort(sub)
-                end
-                return out
-            end,
-            ["and"] = function(node)
-                local out = node.min or 1
-                local sub = node.nodes
-                local doresort
-                if !sub[1] then return out,out end
-                for k,v in ipairs(sub) do
-                    local subout, override = nodeeval[v.type](v)
-                    out = max(out,subout)
-                    if override then
-                        if override == 3 then return 3,3 end
-                        if isnumber(override) then
-                            sub[k] = nil
-                            node.min = !node.min and override or max(node.min,override)
-                            doresort = true
-                        else
-                            sub[k] = override
-                        end
-                    end
-                end
-                if out == 1 then return 1,1 end
-                if doresort then
-                    if !next(sub) then return out,out end
-                    node.nodes = resort(sub)
-                end
-                return out
-            end,
-            ["min"] = function(node)
-                local sub, min, fix = node.nodes, node.amt, node.fix
-                local count = {}
-                if fix then
-                    for k,v in pairs(fix) do count[k] = v end
-                else
-                    fix = {}
-                    node.fix = fix
-                end
-                local doresort
-                if !sub[1] then return 3 end
-                for k,v in ipairs(sub) do
-                    local subout, override = nodeeval[v.type](v)
-                    local add = true
-                    if override then
-                        if isnumber(override) then
-                            if override < 2 then
-                                min = min-1
-                                if min < 1 then return 1,1 end
-                                add = false
-                            else
-                                fix[override] = (fix[override] or 0) + 1
-                            end
-                            sub[k] = nil
-                            doresort = true
-                        else
-                            sub[k] = override
-                        end
-                    end
-                    if add then
-                        subout = subout < 1 and 1 or subout
-                        local tgt = count[subout]
-                        count[subout] = (tgt or 0) + 1
-                    end
-                end
+	local function evalrule(rule,conds,map,group)
+		local nodeeval
+		nodeeval = {
+			["or"] = function(node)
+				local out = node.min or 8
+				local sub = node.nodes
+				local doresort
+				if !sub[1] then return 3 end
+				for k,v in ipairs(sub) do
+					--print("testing type",v.type)
+					local subout, override = nodeeval[v.type](v)
+					if subout == 1 then return 1,1 end
+					if override then
+						if isnumber(override) then
+							sub[k] = nil
+							node.min = !node.min and override or min(node.min,override)
+							doresort = true
+						else
+							sub[k] = override
+						end
+					end
+					out = min(out,subout)
+				end
+				if doresort then
+					if !next(sub) then return out,out end
+					node.nodes = resort(sub)
+				end
+				return out
+			end,
+			["and"] = function(node)
+				local out = node.min or 1
+				local sub = node.nodes
+				local doresort
+				if !sub[1] then return out,out end
+				for k,v in ipairs(sub) do
+					local subout, override = nodeeval[v.type](v)
+					out = max(out,subout)
+					if override then
+						if override == 3 then return 3,3 end
+						if isnumber(override) then
+							sub[k] = nil
+							node.min = !node.min and override or max(node.min,override)
+							doresort = true
+						else
+							sub[k] = override
+						end
+					end
+				end
+				if out == 1 then return 1,1 end
+				if doresort then
+					if !next(sub) then return out,out end
+					node.nodes = resort(sub)
+				end
+				return out
+			end,
+			["min"] = function(node)
+				local sub, min, fix = node.nodes, node.amt, node.fix
+				local count = {}
+				if fix then
+					for k,v in pairs(fix) do count[k] = v end
+				else
+					fix = {}
+					node.fix = fix
+				end
+				local doresort
+				if !sub[1] then return 3 end
+				for k,v in ipairs(sub) do
+					local subout, override = nodeeval[v.type](v)
+					local add = true
+					if override then
+						if isnumber(override) then
+							if override < 2 then
+								min = min-1
+								if min < 1 then return 1,1 end
+								add = false
+							else
+								fix[override] = (fix[override] or 0) + 1
+							end
+							sub[k] = nil
+							doresort = true
+						else
+							sub[k] = override
+						end
+					end
+					if add then
+						subout = subout < 1 and 1 or subout
+						local tgt = count[subout]
+						count[subout] = (tgt or 0) + 1
+					end
+				end
 
-                local out,total = -1,0
-                repeat
-                    out=out+1
-                    total = (count[out] or 0) + total
-                until out == 3 or total >= min
+				local out,total = -1,0
+				repeat
+					out=out+1
+					total = (count[out] or 0) + total
+				until out == 3 or total >= min
 
-                if out < 2 then return out,out end
+				if out < 2 then return out,out end
 
-                if doresort then
-                    if !next(sub) then return out,out end
-                    node.nodes = resort(sub)
-                end
+				if doresort then
+					if !next(sub) then return out,out end
+					node.nodes = resort(sub)
+				end
 
-                if min < 2 then
-                    local maxn = 1
-                    for k,v in pairs(fix) do
-                        maxn = max(k,maxn)
-                    end
-                    return out, {
-                        type = "or",
-                        nodes = node.nodes,
-                        min = maxn
-                    }
-                end
-                local nodecount = table.Count(sub)
-                if nodecount == min then
-                    local minn = 8
-                    for k,v in pairs(fix) do
-                        minn = min(k,minn)
-                    end
-                    return out, {
-                        type = "and",
-                        nodes = node.nodes,
-                        min = minn
-                    }
-                elseif nodecount < min then
-                    return out,out
-                end
+				if min < 2 then
+					local maxn = 1
+					for k,v in pairs(fix) do
+						maxn = max(k,maxn)
+					end
+					return out, {
+						type = "or",
+						nodes = node.nodes,
+						min = maxn
+					}
+				end
+				local nodecount = table.Count(sub)
+				if nodecount == min then
+					local minn = 8
+					for k,v in pairs(fix) do
+						minn = min(k,minn)
+					end
+					return out, {
+						type = "and",
+						nodes = node.nodes,
+						min = minn
+					}
+				elseif nodecount < min then
+					return out,out
+				end
 
-                node.amt = min
-                return out
-            end,
-            ["fix"] = function(node)
-                return node.val
-            end,
-            ["bhop"] = function(node)
-                --[[
-                    might be able to improve this even more by replacing the bhop function in the nodeeval table before analyzing
-                    all nodes depending on what the "bhop" value in slotdata is set to instead of checking for it inside the function,
-                    but that's gonna require a bit of restructuring and idk how much of an improvement it would be
-                ]]--
-                if slotdata.bhop == 1 then return 3,3 end
-                if APADV_BHOP then
-                    local logic = slotdata.bhop_logic
-                    if logic == 0 or node.skill and isnumber(logic) and logic < node.skill then return 2,2 end
-                    return 1,1
-                end
-                return 3
-            end,
-            ["surf"] = function(node)
-                local logic = slotdata.surf_logic
-                if logic == 0 or node.skill and isnumber(logic) and logic < node.skill then return 2,2 end
-                return 1,1
-            end,
-            ["has"] = function(node)
-                local ilist = slotitems[node.id]
-                if !ilist then return 3 end
-                if #ilist >= node.amt then return 1,1 end
-                return 3
-            end,
-            ["mapitem"] = function(node)
-                local id = inametoid[group.." - "..map.." - "..node.item]
-                if !id then return 3,3 end
-                local newnode = {
-                    type = "has",
-                    id = id,
-                    amt = node.count,
-                }
-                local eval = nodeeval["has"](newnode)
-                if eval == 1 then return 1,1 end
-                return eval, newnode
-            end,
-            ["capab"] = function(node)
-                local capabs = node.capab
-                local first = capabs[1]
-                if node.override then
-                    node.cond = self:ApplyAmmomerge(node.override)
-                    node.override = nil
-                end
-                local cond = node.cond or conds
-                if !first then return 1,1 end
+				node.amt = min
+				return out
+			end,
+			["fix"] = function(node)
+				return node.val
+			end,
+			["bhop"] = function(node)
+				--[[
+					might be able to improve this even more by replacing the bhop function in the nodeeval table before analyzing
+					all nodes depending on what the "bhop" value in slotdata is set to instead of checking for it inside the function,
+					but that's gonna require a bit of restructuring and idk how much of an improvement it would be
+				]]--
+				if slotdata.bhop == 1 then return 3,3 end
+				if APADV_BHOP then
+					local logic = slotdata.bhop_logic
+					if logic == 0 or node.skill and isnumber(logic) and logic < node.skill then return 2,2 end
+					return 1,1
+				end
+				return 3
+			end,
+			["surf"] = function(node)
+				local logic = slotdata.surf_logic
+				if logic == 0 or node.skill and isnumber(logic) and logic < node.skill then return 2,2 end
+				return 1,1
+			end,
+			["has"] = function(node)
+				local ilist = slotitems[node.id]
+				if !ilist then return 3 end
+				if #ilist >= node.amt then return 1,1 end
+				return 3
+			end,
+			["mapitem"] = function(node)
+				local id = inametoid[group.." - "..map.." - "..node.item]
+				if !id then return 3,3 end
+				local newnode = {
+					type = "has",
+					id = id,
+					amt = node.count,
+				}
+				local eval = nodeeval["has"](newnode)
+				if eval == 1 then return 1,1 end
+				return eval, newnode
+			end,
+			["capab"] = function(node)
+				local capabs = node.capab
+				local first = capabs[1]
+				if node.override then
+					node.cond = self:ApplyAmmomerge(node.override)
+					node.override = nil
+				end
+				local cond = node.cond or conds
+				if !first then return 1,1 end
 
-                local function checkitem(id)
-                    local itemtbl = id2capab[id]
-                    local itemcap = itemtbl.cap
-                    local itemcond = itemtbl.cond
-                    for k,v in ipairs(capabs) do
-                        if !itemcap or !itemcap[v] then
-                            if !itemcond then return false end
-                            local missing = true
-                            for ik,iv in pairs(itemcond) do
-                                if iv[v] and cond[ik] then
-                                    missing = false
-                                    break
-                                end
-                            end
-                            if missing then return false end
-                        end
-                    end
-                    return true
-                end
+				local function checkitem(id)
+					local itemtbl = id2capab[id]
+					local itemcap = itemtbl.cap
+					local itemcond = itemtbl.cond
+					for k,v in ipairs(capabs) do
+						if !itemcap or !itemcap[v] then
+							if !itemcond then return false end
+							local missing = true
+							for ik,iv in pairs(itemcond) do
+								if iv[v] and cond[ik] then
+									missing = false
+									break
+								end
+							end
+							if missing then return false end
+						end
+					end
+					return true
+				end
 
-                local candidates = capabtbl[first]
-                --print("candidates for the first capability",first)
-                if candidates then
-                    --PrintTable(candidates)
-                    for k,v in ipairs(candidates) do
-                        --print(slotitems[v])
-                        --print(checkitem(v))
-                        if slotitems[v] and checkitem(v) then return 1,1 end
-                    end
-                end
+				local candidates = capabtbl[first]
+				--print("candidates for the first capability",first)
+				if candidates then
+					--PrintTable(candidates)
+					for k,v in ipairs(candidates) do
+						--print(slotitems[v])
+						--print(checkitem(v))
+						if slotitems[v] and checkitem(v) then return 1,1 end
+					end
+				end
 
-                for k,v in pairs(cond) do
-                    local condtbl = condcapabtbl[k]
-                    if condtbl then
-                        local candidates = condtbl[first]
-                        if candidates then
-                            for ik,iv in ipairs(candidates) do
-                                if slotitems[iv] and checkitem(iv) then return 1,1 end
-                            end
-                        end
-                    end
-                end
-                return 3
-            end,
+				for k,v in pairs(cond) do
+					local condtbl = condcapabtbl[k]
+					if condtbl then
+						local candidates = condtbl[first]
+						if candidates then
+							for ik,iv in ipairs(candidates) do
+								if slotitems[iv] and checkitem(iv) then return 1,1 end
+							end
+						end
+					end
+				end
+				return 3
+			end,
 			["cparam"] = function(node)
 				local param = APADV_CUSTOMPARAMS[node.n]
 				if !param then
@@ -658,49 +658,49 @@ function APADV_TRACKER:Query()
 				if !func then return 3,3 end
 				return func()
 			end
-        }
-        setmetatable(nodeeval,evalmeta)
-        --print("evaluating rule:")
-        --PrintTable(rule)
-        return nodeeval[rule.type](rule)
-    end
+		}
+		setmetatable(nodeeval,evalmeta)
+		--print("evaluating rule:")
+		--PrintTable(rule)
+		return nodeeval[rule.type](rule)
+	end
 
-    local function queryregion(group,map,regn)
-        local mapregs = regtbl[group][map]
-        local reg = mapregs[regn]
-        local basereach = reg.reach
-        local requery
+	local function queryregion(group,map,regn)
+		local mapregs = regtbl[group][map]
+		local reg = mapregs[regn]
+		local basereach = reg.reach
+		local requery
 
-        if reg.locs then
-            for ik,iv in pairs(reg.locs) do
-                if iv.reach > 1 and iv.reach > basereach then
-                    local reach
-                    if slotlocs[locnametoid[ik]] then
-                        reach = 0
-                    else
-                        if istable(iv.acc) then
-                            local out, override = evalrule(iv.acc,reg.cond,map,group)
-                            reach = min(max(out,basereach),3)
-                            if override then
-                                iv.acc = override
-                            end
-                        else
-                            reach = iv.acc or basereach
-                        end
-                    end
-                    if reach > 1 then requery = true end
-                    if iv.reach != reach then
-                        iv.reach = reach
-                        self:SendLocationUpdate(group,map,ik,reach)
-                    end
-                end
-            end
-        end
+		if reg.locs then
+			for ik,iv in pairs(reg.locs) do
+				if iv.reach > 1 and iv.reach > basereach then
+					local reach
+					if slotlocs[locnametoid[ik]] then
+						reach = 0
+					else
+						if istable(iv.acc) then
+							local out, override = evalrule(iv.acc,reg.cond,map,group)
+							reach = min(max(out,basereach),3)
+							if override then
+								iv.acc = override
+							end
+						else
+							reach = iv.acc or basereach
+						end
+					end
+					if reach > 1 then requery = true end
+					if iv.reach != reach then
+						iv.reach = reach
+						self:SendLocationUpdate(group,map,ik,reach)
+					end
+				end
+			end
+		end
 
-        local conntbl = reg.conn
-        if conntbl then
-            for ik,iv in pairs(conntbl) do
-                local tgtreg = mapregs[ik]
+		local conntbl = reg.conn
+		if conntbl then
+			for ik,iv in pairs(conntbl) do
+				local tgtreg = mapregs[ik]
 				if tgtreg then
 					if tgtreg.reach > basereach then
 						if !next(iv) then
@@ -725,116 +725,116 @@ function APADV_TRACKER:Query()
 				else
 					ErrorNoHalt("Config for map "..map.." in group "..group.." tried to make a connection between region "..regn.." to region "..ik..", which does not exist.\n")
 				end
-            end
-        end
+			end
+		end
 
-        local exittbl = reg.exit
+		local exittbl = reg.exit
 
-        if exittbl then
-            for ik,iv in pairs(exittbl) do
-                local tgt = iv.tgt
-                local tgtgr = tgt.group
-                local tgtmap = tgt.map
-                local tgtentr = entrs[tgtgr][tgtmap][tgt.entr]
-                local tgtregn = tgtentr.reg
-                local tgtreg = regtbl[tgtgr][tgtmap][tgtregn]
-                if tgtreg.reach > basereach then
+		if exittbl then
+			for ik,iv in pairs(exittbl) do
+				local tgt = iv.tgt
+				local tgtgr = tgt.group
+				local tgtmap = tgt.map
+				local tgtentr = entrs[tgtgr][tgtmap][tgt.entr]
+				local tgtregn = tgtentr.reg
+				local tgtreg = regtbl[tgtgr][tgtmap][tgtregn]
+				if tgtreg.reach > basereach then
 
-                    local reachinner, override
+					local reachinner, override
 
-                    if !iv.acc or !next(iv.acc) then
-                        reachinner = 1
-                    else
-                        reachinner, override = evalrule(iv.acc,reg.cond,map,group)
-                    end
+					if !iv.acc or !next(iv.acc) then
+						reachinner = 1
+					else
+						reachinner, override = evalrule(iv.acc,reg.cond,map,group)
+					end
 
-                    if override then
-                        if isnumber(override) then
-                            if override > 2 then
-                                exittbl[ik] = nil
-                            else
-                                iv.acc = nil
-                            end
-                        else
-                            iv.acc = override
-                        end
-                    end
+					if override then
+						if isnumber(override) then
+							if override > 2 then
+								exittbl[ik] = nil
+							else
+								iv.acc = nil
+							end
+						else
+							iv.acc = override
+						end
+					end
 
-                    if reachinner < 3 then
-                        local reachouter
+					if reachinner < 3 then
+						local reachouter
 
-                        if !tgtentr.acc or !next(tgtentr.acc) then
-                            reachouter = 1
-                        else
-                            reachouter, override = evalrule(tgtentr.acc,tgtreg.cond,tgtmap,tgtgr)
-                        end
+						if !tgtentr.acc or !next(tgtentr.acc) then
+							reachouter = 1
+						else
+							reachouter, override = evalrule(tgtentr.acc,tgtreg.cond,tgtmap,tgtgr)
+						end
 
-                        if override then
-                            if isnumber(override) then
-                                if override > 2 then
-                                    exittbl[ik] = nil
-                                else
-                                    tgtentr.acc = nil
-                                end
-                            else
-                                tgtentr.acc = override
-                            end
-                        end
+						if override then
+							if isnumber(override) then
+								if override > 2 then
+									exittbl[ik] = nil
+								else
+									tgtentr.acc = nil
+								end
+							else
+								tgtentr.acc = override
+							end
+						end
 
-                        local finalreach = max(reachinner,reachouter,basereach)
+						local finalreach = max(reachinner,reachouter,basereach)
 
-                        tgtreg.reach = min(finalreach,tgtreg.reach)
+						tgtreg.reach = min(finalreach,tgtreg.reach)
 
-                        if finalreach < 3 then
-                            queryregion(tgtgr,tgtmap,tgtregn)
-                        end
+						if finalreach < 3 then
+							queryregion(tgtgr,tgtmap,tgtregn)
+						end
 
-                        if finalreach > 1 then
-                            requery = true
-                        end
-                    end
-                end
-            end
+						if finalreach > 1 then
+							requery = true
+						end
+					end
+				end
+			end
 
-            if !next(exittbl) then reg.exit = nil end
-        end
+			if !next(exittbl) then reg.exit = nil end
+		end
 
-        if requery then
-            newqueries = newqueries + 1
-            newquery[newqueries] = {
-                gr = group,
-                map = map,
-                reg = regn
-            }
-        end
+		if requery then
+			newqueries = newqueries + 1
+			newquery[newqueries] = {
+				gr = group,
+				map = map,
+				reg = regn
+			}
+		end
 
-    end
+	end
 
-    for k,v in ipairs(self.query) do
-        queryregion(v.gr,v.map,v.reg)
-    end
+	for k,v in ipairs(self.query) do
+		queryregion(v.gr,v.map,v.reg)
+	end
 
-    self.query = newquery
+	self.query = newquery
 end
 
 function APADV_TRACKER:SaveToFile(path)
-    file.Write(path,util.TableToJSON{
-        entr = self.entr,
-        regs = self.regs,
-        query = self.query,
-        ammo = self.ammomerge,
-        locnametomap = self.locnametomap,
+	file.Write(path,util.TableToJSON{
+		entr = self.entr,
+		regs = self.regs,
+		query = self.query,
+		ammo = self.ammomerge,
+		locnametomap = self.locnametomap,
 		mapitms = self.mapitems
-    })
+	})
 end
 
 function APADV_TRACKER:LoadFromTable(data)
-    self.entr = data.entr
-    self.regs = data.regs
-    self.query = data.query
-    self.locnametomap = data.locnametomap
-    self.ammomerge = data.ammo
-    self.runid = APADV_SAVEID
+	self.entr = data.entr
+	self.regs = data.regs
+	self.query = data.query
+	self.locnametomap = data.locnametomap
+	self.ammomerge = data.ammo
+	self.runid = APADV_SAVEID
 	self.mapitems = data.mapitms
 end
 

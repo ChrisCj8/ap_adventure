@@ -7,5 +7,5 @@ $staticprop
 $sequence Idle "frame.smd"
 $collisionmodel "frame phys.smd"
 {
-    $automass
+	$automass
 }

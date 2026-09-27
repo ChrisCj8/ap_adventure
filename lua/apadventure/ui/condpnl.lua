@@ -52,18 +52,18 @@ local ammo2icon = {
 }
 
 for k,v in ipairs(game.GetAmmoTypes()) do
-    condselect:AddChoice("Ammo_"..v,nil,nil,ammo2icon[v] or "icon16/cog.png")
+	condselect:AddChoice("Ammo_"..v,nil,nil,ammo2icon[v] or "icon16/cog.png")
 end
 
 local otherconds = {
-    "Props",
-    "Props_Sharp",
-    "Props_Explosive",
-    "Antlions_Controllable"
+	"Props",
+	"Props_Sharp",
+	"Props_Explosive",
+	"Antlions_Controllable"
 }
 
 for k,v in ipairs(otherconds) do
-    condselect:AddChoice(v,nil,nil,"icon16/star.png")
+	condselect:AddChoice(v,nil,nil,"icon16/star.png")
 end
 
 local addbtn = vgui.Create("DImageButton",condpnl)
@@ -79,41 +79,41 @@ condlist:SetPos(5,52)
 condlist:AddColumn("#apadventure.editor.reg.condcol")
 
 function addbtn:DoClick()
-    local newcondtext, newconddata = condselect:GetSelected()
-    local newcond = newcondtext or newconddata
-    if newcond and !targettbl[newcond] then
-        condlist:AddLine(newcond)
-        targettbl[newcond] = true
-    end
+	local newcondtext, newconddata = condselect:GetSelected()
+	local newcond = newcondtext or newconddata
+	if newcond and !targettbl[newcond] then
+		condlist:AddLine(newcond)
+		targettbl[newcond] = true
+	end
 end
 
 function delbtn:DoClick()
-    for k,v in ipairs(condlist:GetSelected()) do
-        local cond = v:GetValue(1)
-        condlist:RemoveLine(v:GetID())
-        targettbl[cond] = nil
-    end
+	for k,v in ipairs(condlist:GetSelected()) do
+		local cond = v:GetValue(1)
+		condlist:RemoveLine(v:GetID())
+		targettbl[cond] = nil
+	end
 end
 
 function condpnl:SetTargetTbl(tbl)
-    targettbl = tbl
-    for k,v in pairs(condlist:GetLines()) do
-        condlist:RemoveLine(v:GetID())
-    end
-    for k,v in pairs(tbl) do
-        condlist:AddLine(k)
-    end
+	targettbl = tbl
+	for k,v in pairs(condlist:GetLines()) do
+		condlist:RemoveLine(v:GetID())
+	end
+	for k,v in pairs(tbl) do
+		condlist:AddLine(k)
+	end
 end
 condpnl:SetTargetTbl(targettbl or {})
 
 local oldlayout = condpnl.PerformLayout
 function condpnl:PerformLayout(w,h)
-    oldlayout(self,w,h)
+	oldlayout(self,w,h)
 
-    addbtn:SetPos(w-26-18,28)
-    delbtn:SetPos(w-26,28)
-    condselect:SetSize(w-52,22)
-    condlist:SetSize(w-10,desiredh)
+	addbtn:SetPos(w-26-18,28)
+	delbtn:SetPos(w-26,28)
+	condselect:SetSize(w-52,22)
+	condlist:SetSize(w-10,desiredh)
 end
 
 return condpnl end

@@ -3,11 +3,11 @@ local ITEM = {}
 ITEM.Name = "Shotgun"
 ITEM.Type = "Weapon"
 ITEM.Groups = {
-    "Shotgun"
+	"Shotgun"
 }
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-    ["Ammo_Buckshot"] = {"HitScan","StrongShortRange","BulletDamage","BuckshotDamage"}
+	["Ammo_Buckshot"] = {"HitScan","StrongShortRange","BulletDamage","BuckshotDamage"}
 }
 ITEM.StartGroup = { Shotgun = 5 }
 

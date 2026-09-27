@@ -9,75 +9,75 @@ local maprev = game.GetMapVersion()
 APADV.MapRev = maprev
 
 local function CfgLuaValid(self)
-    return self == APADV_CFGLUA
+	return self == APADV_CFGLUA
 end
 
 function APADV.LoadCfg(group)
-    if group then
-        APADV_MAPGROUP = group
-    else
-        group = APADV_MAPGROUP
-    end
-    assert(group,"Cfg Loader was not passed a Group Name and could not find a previously used Map Group")
-    if isfunction(APADV_CFGLUA.CfgUnload) then
-        ProtectedCall(APADV_CFGLUA.CfgUnload,APADV_CFGLUA)
-    end
-    APADV.DeadPlys = {}
-    game.CleanUpMap()
-    local map = game.GetMap()
-    APADV_MAP = map
+	if group then
+		APADV_MAPGROUP = group
+	else
+		group = APADV_MAPGROUP
+	end
+	assert(group,"Cfg Loader was not passed a Group Name and could not find a previously used Map Group")
+	if isfunction(APADV_CFGLUA.CfgUnload) then
+		ProtectedCall(APADV_CFGLUA.CfgUnload,APADV_CFGLUA)
+	end
+	APADV.DeadPlys = {}
+	game.CleanUpMap()
+	local map = game.GetMap()
+	APADV_MAP = map
 
-    local path = "apadventure/cfg/"..group.."/group.json"
+	local path = "apadventure/cfg/"..group.."/group.json"
 
-    local groupcfg
-    local json = fileR(path,"DATA")
-    if !json then json = fileR("data_static/"..path,"GAME") end
-    if json then groupcfg = fromJSON(json) end
+	local groupcfg
+	local json = fileR(path,"DATA")
+	if !json then json = fileR("data_static/"..path,"GAME") end
+	if json then groupcfg = fromJSON(json) end
 
-    path = "apadventure/cfg/"..group.."/"..map.."/sv.json"
-    local json = fileR(path,"DATA")
-    if !json then json = fileR("data_static/"..path,"GAME") end
-    if !json then ErrorNoHalt("Could not find a serverside config for map"..map.." in group "..group) return end
-    local cfg = fromJSON(json)
+	path = "apadventure/cfg/"..group.."/"..map.."/sv.json"
+	local json = fileR(path,"DATA")
+	if !json then json = fileR("data_static/"..path,"GAME") end
+	if !json then ErrorNoHalt("Could not find a serverside config for map"..map.." in group "..group) return end
+	local cfg = fromJSON(json)
 
-    path = "apadventure/cfg/"..group.."/"..map.."/cl.json"
-    local json = fileR(path,"DATA")
-    if !json then json = fileR("data_static/"..path,"GAME") end
-    if !json then ErrorNoHalt("Could not find a clientside config for map"..map.." in group "..group) return end
-    local clcfg = fromJSON(json)
+	path = "apadventure/cfg/"..group.."/"..map.."/cl.json"
+	local json = fileR(path,"DATA")
+	if !json then json = fileR("data_static/"..path,"GAME") end
+	if !json then ErrorNoHalt("Could not find a clientside config for map"..map.." in group "..group) return end
+	local clcfg = fromJSON(json)
 
-    local scriptpath = "apadventure/cfglua/"..group.."/"..map..".lua"
-    APADV_CFGLUA = file.Exists(scriptpath,"lsv") and include(scriptpath) or {}
-    APADV_CFGLUA.IsValid = CfgLuaValid
+	local scriptpath = "apadventure/cfglua/"..group.."/"..map..".lua"
+	APADV_CFGLUA = file.Exists(scriptpath,"lsv") and include(scriptpath) or {}
+	APADV_CFGLUA.IsValid = CfgLuaValid
 
-    local infotbl = clcfg.info
-    local grouprules = groupcfg and groupcfg.rules or {}
+	local infotbl = clcfg.info
+	local grouprules = groupcfg and groupcfg.rules or {}
 
-    local settingstbl = apAdventure.CfgSettings
+	local settingstbl = apAdventure.CfgSettings
 
-    function cfginfo(valname)
-        local val = infotbl[valname]
-        if val != nil then return val end
-        val = grouprules[valname]
-        if val != nil then return val end
-        local settinginfo = settingstbl[valname]
-        if settinginfo then
-            return settinginfo.default
-        end
-    end
+	function cfginfo(valname)
+		local val = infotbl[valname]
+		if val != nil then return val end
+		val = grouprules[valname]
+		if val != nil then return val end
+		local settinginfo = settingstbl[valname]
+		if settinginfo then
+			return settinginfo.default
+		end
+	end
 
-    RunConsoleCommand("sv_gravity",cfginfo("grav"))
-    RunConsoleCommand("sv_accelerate",cfginfo("accel"))
-    RunConsoleCommand("sv_airaccelerate",cfginfo("airaccel"))
-    RunConsoleCommand("sv_friction",cfginfo("frctn"))
-    RunConsoleCommand("sv_stopspeed",cfginfo("stopspd"))
-    RunConsoleCommand("gmod_suit",cfginfo("hev") and 1 or 0)
-    ApAdvPly.SetWalkSpeed(cfginfo("walkspd"))
-    ApAdvPly.SetRunSpeed(cfginfo("runspd"))
-    ApAdvPly.SetSprintSpeed(cfginfo("sprintspd"))
-    ApAdvPly.SetJumpPower(cfginfo("jump"))
-    APADV.PermaDeath = !cfginfo("respawn")
-    APADV_GODMODE = cfginfo("godmode")
+	RunConsoleCommand("sv_gravity",cfginfo("grav"))
+	RunConsoleCommand("sv_accelerate",cfginfo("accel"))
+	RunConsoleCommand("sv_airaccelerate",cfginfo("airaccel"))
+	RunConsoleCommand("sv_friction",cfginfo("frctn"))
+	RunConsoleCommand("sv_stopspeed",cfginfo("stopspd"))
+	RunConsoleCommand("gmod_suit",cfginfo("hev") and 1 or 0)
+	ApAdvPly.SetWalkSpeed(cfginfo("walkspd"))
+	ApAdvPly.SetRunSpeed(cfginfo("runspd"))
+	ApAdvPly.SetSprintSpeed(cfginfo("sprintspd"))
+	ApAdvPly.SetJumpPower(cfginfo("jump"))
+	APADV.PermaDeath = !cfginfo("respawn")
+	APADV_GODMODE = cfginfo("godmode")
 
 	local maprevmismatch = cfg.maprev and cfg.maprev != maprev
 	local hasdelid = !!next(cfg.del)
@@ -100,44 +100,44 @@ function APADV.LoadCfg(group)
 		APADV.MapRevMismatchInfo = nil
 	end
 
-    local tick = cfginfo("tickrate")
+	local tick = cfginfo("tickrate")
 
-    if tick >= 30 and math.abs(tick-1/engine.TickInterval()) > 1 then
-        net.Start("ApAdvTickrateNotif")
-            net.WriteString(group)
-            net.WriteFloat(tick)
-        net.Broadcast()
-        APADV_DESIREDTICK = {
-            g = group,
-            v = tick
-        }
-    else
-        APADV_DESIREDTICK = nil
-    end
+	if tick >= 30 and math.abs(tick-1/engine.TickInterval()) > 1 then
+		net.Start("ApAdvTickrateNotif")
+			net.WriteString(group)
+			net.WriteFloat(tick)
+		net.Broadcast()
+		APADV_DESIREDTICK = {
+			g = group,
+			v = tick
+		}
+	else
+		APADV_DESIREDTICK = nil
+	end
 
-    for k,v in ipairs(cfg.del) do
+	for k,v in ipairs(cfg.del) do
 		local e = entbyID(v)
 		if IsValid(e) then e:Remove() end
-    end
+	end
 
-    local delnames = cfg.delname
+	local delnames = cfg.delname
 
-    for k,v in ents.Iterator() do
-        if delnames[v:GetName()] then
-            v:Remove()
-        end
-    end
+	for k,v in ents.Iterator() do
+		if delnames[v:GetName()] then
+			v:Remove()
+		end
+	end
 
-    local dupedata = cfg.sav
+	local dupedata = cfg.sav
 
-    if isfunction(APADV_CFGLUA.PreDupe) then
-        local success, out = pcall(APADV_CFGLUA.PreDupe,APADV_CFGLUA,dupedata)
-        if success then
-            dupedata = out
-        else
-            ErrorNoHalt("Config Script Function PreDupe for "..map.." in "..group.." caused an Error: \n"..out)
-        end
-    end
+	if isfunction(APADV_CFGLUA.PreDupe) then
+		local success, out = pcall(APADV_CFGLUA.PreDupe,APADV_CFGLUA,dupedata)
+		if success then
+			dupedata = out
+		else
+			ErrorNoHalt("Config Script Function PreDupe for "..map.." in "..group.." caused an Error: \n"..out)
+		end
+	end
 
 	if istable(dupedata) then
 		local dupeent, dupeconstr = dupedata.Entities, dupedata.Constraints
@@ -146,123 +146,123 @@ function APADV.LoadCfg(group)
 		end
 	end
 
-    APADV_SPAWNS = {}
+	APADV_SPAWNS = {}
 
-    if APADV_USESTART then
-        if cfg.start then
-            local i = 1
-            for k,v in ipairs(cfg.start) do
-                if v.reg == APADV_USESTART then
-                    APADV_SPAWNS[i] = v
-                    APADV_SPAWNS[i].reg = nil
-                    i = i+1
-                end
-            end
-        end
-    else
-        local i = 1
-        for k,v in ipairs(cfg.entr) do
-            if APADV_ENTRNAME == v.name then
-                APADV_SPAWNS[i] = {
-                    pos = v.pos,
-                    ang = v.ang
-                }
-                i = i+1
-            end
-        end
-    end
+	if APADV_USESTART then
+		if cfg.start then
+			local i = 1
+			for k,v in ipairs(cfg.start) do
+				if v.reg == APADV_USESTART then
+					APADV_SPAWNS[i] = v
+					APADV_SPAWNS[i].reg = nil
+					i = i+1
+				end
+			end
+		end
+	else
+		local i = 1
+		for k,v in ipairs(cfg.entr) do
+			if APADV_ENTRNAME == v.name then
+				APADV_SPAWNS[i] = {
+					pos = v.pos,
+					ang = v.ang
+				}
+				i = i+1
+			end
+		end
+	end
 
-    APADV_EXITENTS = {}
+	APADV_EXITENTS = {}
 
-    for k,v in pairs(cfg.exit) do
-        local exit = ents.Create("apadventure_exit")
-        exit:SetPos(v.pos)
-        exit:SetAngles(v.ang)
-        exit.ExitName = v.name
-        exit:Spawn()
-        APADV_EXITENTS[exit] = v.name
-        if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name] then
-            timer.Simple(2,function()
-                if !IsValid(exit) then return end
-                exit:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name].map)
-            end)
-        end
-    end
+	for k,v in pairs(cfg.exit) do
+		local exit = ents.Create("apadventure_exit")
+		exit:SetPos(v.pos)
+		exit:SetAngles(v.ang)
+		exit.ExitName = v.name
+		exit:Spawn()
+		APADV_EXITENTS[exit] = v.name
+		if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name] then
+			timer.Simple(2,function()
+				if !IsValid(exit) then return end
+				exit:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name].map)
+			end)
+		end
+	end
 
-    local loclist = APADV_SLOT.Locations
-    local locnametoid = APADV_SLOT.location_name_to_id
+	local loclist = APADV_SLOT.Locations
+	local locnametoid = APADV_SLOT.location_name_to_id
 
-    APADV_UNCHECKED_LOCS = {}
-    local uncheckedloccnt = 0
+	APADV_UNCHECKED_LOCS = {}
+	local uncheckedloccnt = 0
 
-    for k,v in pairs(cfg.lctn) do
-        if !v.dummy then
-            local locname = group .. " - " .. map .. " - " .. v.name
-            -- prevents already checked locations from being placed, but this only works if we're connected when the config is loaded
-            -- so this doesn't work all the time since the gamemode doesn't wait for the slot to reconnect when doing a map transition
-            if !locnametoid or loclist[locnametoid[locname]] == false then
-                local loc = ents.Create("apadventure_location")
-                loc:SetPos(v.pos)
-                loc:SetAngles(v.ang)
-                loc:SetupLocation(locname)
-                loc:Spawn()
-                if !locnametoid then
-                    uncheckedloccnt = uncheckedloccnt + 1
-                    APADV_UNCHECKED_LOCS[uncheckedloccnt] = loc
-                end
-            end
-        end
-    end
+	for k,v in pairs(cfg.lctn) do
+		if !v.dummy then
+			local locname = group .. " - " .. map .. " - " .. v.name
+			-- prevents already checked locations from being placed, but this only works if we're connected when the config is loaded
+			-- so this doesn't work all the time since the gamemode doesn't wait for the slot to reconnect when doing a map transition
+			if !locnametoid or loclist[locnametoid[locname]] == false then
+				local loc = ents.Create("apadventure_location")
+				loc:SetPos(v.pos)
+				loc:SetAngles(v.ang)
+				loc:SetupLocation(locname)
+				loc:Spawn()
+				if !locnametoid then
+					uncheckedloccnt = uncheckedloccnt + 1
+					APADV_UNCHECKED_LOCS[uncheckedloccnt] = loc
+				end
+			end
+		end
+	end
 
-    if !APADV_UNCHECKED_LOCS[1] then
-        APADV_UNCHECKED_LOCS = nil
-    end
+	if !APADV_UNCHECKED_LOCS[1] then
+		APADV_UNCHECKED_LOCS = nil
+	end
 
-    for k,v in player.Iterator() do
-        --v:KillSilent()
-        v:Spawn()
-    end
+	for k,v in player.Iterator() do
+		--v:KillSilent()
+		v:Spawn()
+	end
 
-    if isfunction(APADV_CFGLUA.PostCfgLoad) then
-        ProtectedCall(APADV_CFGLUA.PostCfgLoad,APADV_CFGLUA)
-    end
+	if isfunction(APADV_CFGLUA.PostCfgLoad) then
+		ProtectedCall(APADV_CFGLUA.PostCfgLoad,APADV_CFGLUA)
+	end
 
-    if isfunction(APADV_CFGLUA.OnFullConnect) then
-        if APADV_SLOT.FullData then
-            ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
-            APADV_CFGLUA.OnFullConnect = nil
-        end
-    end
+	if isfunction(APADV_CFGLUA.OnFullConnect) then
+		if APADV_SLOT.FullData then
+			ProtectedCall(APADV_CFGLUA.OnFullConnect,APADV_CFGLUA)
+			APADV_CFGLUA.OnFullConnect = nil
+		end
+	end
 
 	if APADV_SLOT.FullData then
-        APADV.RegisterMapItems()
-    else
-        APADV.DelayedMapItemRegister = true
-    end
+		APADV.RegisterMapItems()
+	else
+		APADV.DelayedMapItemRegister = true
+	end
 
 end
 
 concommand.Add("apadv_loadcfg",function(ply,cmd,args)
-    if !(ply == NULL or ply:IsListenServerHost() or ply:IsUserGroup("superadmin")) then return end
-    local gr = args[1]
+	if !(ply == NULL or ply:IsListenServerHost() or ply:IsUserGroup("superadmin")) then return end
+	local gr = args[1]
 
-    if gr != nil then
-        if gr == "" then
-            gr = nil
-        else
-            local grdir = "apadventure/cfg/"..gr.."/"
-            if !(file.IsDir(grdir,"DATA") or file.IsDir("data_static/"..grdir,"GAME")) then
+	if gr != nil then
+		if gr == "" then
+			gr = nil
+		else
+			local grdir = "apadventure/cfg/"..gr.."/"
+			if !(file.IsDir(grdir,"DATA") or file.IsDir("data_static/"..grdir,"GAME")) then
 				print("group \""..gr.."\" does not exist!")
 				return
 			end
-            local mapdir = grdir..game.GetMap()
-            if !(file.Exists(mapdir.."/cl.json","DATA") or file.Exists("data_static/"..mapdir.."/cl.json","GAME")) or
+			local mapdir = grdir..game.GetMap()
+			if !(file.Exists(mapdir.."/cl.json","DATA") or file.Exists("data_static/"..mapdir.."/cl.json","GAME")) or
 				!(file.Exists(mapdir.."/sv.json","DATA") or file.Exists("data_static/"..mapdir.."/sv.json","GAME")) then
-                print("group \""..gr.."\" does not have a config for this map!")
-                return
-            end
-        end
-    end
+				print("group \""..gr.."\" does not have a config for this map!")
+				return
+			end
+		end
+	end
 
-    APADV.LoadCfg(gr)
+	APADV.LoadCfg(gr)
 end,nil,"Loads a config for this map by its group name, if it exists. If a config has already been loaded then this command can be used without any arguments to reload the current config.")

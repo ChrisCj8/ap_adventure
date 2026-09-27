@@ -5,7 +5,7 @@ ITEM.Type = "Weapon"
 ITEM.MinAmt = 1
 ITEM.Capabilities = {"WimpyShortRange","GravityGun"}
 ITEM.ConditionalCapabilities = {
-    ["Props"] = {"StrongShortRange","DecentMidRange"}
+	["Props"] = {"StrongShortRange","DecentMidRange"}
 }
 
 ITEM.Class = "weapon_physcannon"

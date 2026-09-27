@@ -23,7 +23,7 @@ end
 
 function PLY:StartMove( move )
 
-    if APADV_BHOP then return end
+	if APADV_BHOP then return end
 
 	BaseClass.StartMove(self,move)
 
@@ -31,7 +31,7 @@ end
 
 function PLY:FinishMove( move )
 
-    if APADV_BHOP then return end
+	if APADV_BHOP then return end
 
 	BaseClass.FinishMove(self,move)
 
