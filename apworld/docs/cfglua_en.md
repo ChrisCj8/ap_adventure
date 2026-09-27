@@ -1,72 +1,97 @@
 # Config Scripts
 
 Config Scripts can be used to add additional functionality to your configs using Lua.
-Whenever a config is loaded, the gamemode checks for a lua file at `lua/apadventure/cfglua/[config group containing your config]/[name of the map your config is for].lua` and tries to run it if it can find it.
 
-In case you don't know, all addon folders, workshop addons and mounted games are combined into a single file system when the game loads, so you should **NOT** put your config scripts in the base `lua` folder (`GarrysMod\garrysmod\lua\...`) or apAdventures `lua` folder (`addons\ap_adventure\lua\...`), as this is likely to cause problems when GMod or apAdventure updates. You should create a new addon folder for your config scripts instead. (e.g. `addons\my_cfglua\lua\apadventure\cfglua\my_epic_group\gm_construct.lua`)
+## Organization
 
-While you could theoretically just run any code you want to run whenever your config is loaded straight into the config file, you may not want all code to execute immediately, because if your config is loaded after a map transition, GMAP may not have reestablished the connection to the Archipelago Server yet. Instead, your config can return a table containing a bunch of functions which will be ran at different times during or after the process of loading your config.
+Whenever a config is loaded, the apAdventure gamemode checks for a Lua file at `**/lua/apadventure/cfglua/<config_group_name>/<map_name>.lua` and runs it if it can find it.
 
-For the sake of these tutorials, we're going to assume that your config is structed like this:
-```
+> [!NOTE]
+> Because all addon folders, workshop addons and mounted games are combined into a single file system when the game loads, you should **NOT** put your config scripts into the base Lua folder (`GarrysMod/garrysmod/lua/`) or apAdventure's Lua folder (`GarrysMod/garrysmod/addons/ap_adventure/lua/`), as this will cause problems when GMod or apAdventure updates. Instead, create a new addon folder for your config scripts (e.g., `GarrysMod/garrysmod/addons/<addon_name>/lua/apadventure/cfglua/<config_group_name>/<map_name>.lua`).
+
+## Execution
+
+While you could theoretically run any code you want when your script is loaded into the config file, you most likely don't want your code to execute immediately, because if your config is loaded after a map transition, GMAP may not have re-established the connection to the Archipelago Server yet. Instead, your config can return a table containing the functions that will be run at different times during and after the config loading process.
+
+The below code snippets are functionally identical. It is recommended you use the second snippet as a base, unless you know what you're doing.
+
+```lua
 local CFGLUA = {}
 
 function CFGLUA:OnFullConnect()
-    print("some code to run")
+  print('Run your code here')
 end
 
 return CFGLUA
 ```
 
-You can theoretically achieve the same thing by structuring your config like this:
-```
+```lua
 return {
-    OnFullConnect = function(self)
-        print("some code to run")
-    end
+  OnFullConnect = function(self)
+    print('Run your code here')
+  end
 }
 ```
 
-...which saves some space, but I chose the former method for these examples as it functions more closely to how entity definitions work.
+## Testing your Scripts
 
-### Testing your Scripts
+The gamemode loads your config script every time the config is loaded or reloaded, so you don't have to restart the map to test changes you've made to your script. The `apadv_loadcfg` console command reloads your config instantly. You can also pass the name of a specific config group to load that group's config for the current map, but keep in mind that configs that aren't part of your current run won't have locations on them and may not behave correctly in other ways.
 
-The gamemode (re)loads your Config Script every time the Config is (re)loaded, so you don't have to reload the entire map whenever you want to test changes you've made to your config script. The `apadv_loadcfg` console command can be used to reload your config instantly. You can also pass the name of a specific config group to load that groups config for the current map, but keep in mind that configs that are not part of your current run won't have locations on them and may not behave correctly in other ways.
-
-Note: If you're reading this before the release of version 0.4.0, the `apadv_loadcfg` command is still called `apadventure_loadcfg` and uses the wrong path to check if a config exists for the current map, so it will only work if you use it without passing arguments.
+> [!NOTE]
+> If you're reading this before the release of version 0.4.0, `apadv_loadcfg` is actually `apadventure_loadcfg`, and it uses the wrong path to check if a config exists for the current map, so it will only work if you don't pass in any arguments.
 
 ## Available Events
 
-### CFGLUA:PreDupe( dupedata )
+### `CFGLUA:PreDupe( dupedata )`
 
-The first function to run after your script has been been loaded in, after the rules (convars, player movement speed, etc.) have been applied and all entities that were marked with the Deletion Marker Tool when making the config have been deleted. The `dupedata` value passes a table containing a `Entities` and `Constraints` field, which are later passed to [`duplicator.Paste`](https://wiki.facepunch.com/gmod/duplicator.Paste) to load in the entities that were saved using the Save Marker Tool. Unless you want to prevent these entities from being created, make sure to return this table (or another table containing different duplication data) in this function, otherwise the config loader will skip the duplication step.
+This is the first apAdventure config script function that is run. It occurs after your config has initially loaded, its rules (convars, player movement speed, etc.) have been applied, and all entities that were marked with the Deletion Marker Tool are deleted. Importantly, saved entities have not been placed at this point in time.
 
-Note that you are not guaranteed to be connected to the AP Server at this point, so functions that require a connection should not be used here.
+The `dupedata` argument is a table containing an `Entities` and `Constraints` field, which are later passed to [`duplicator.Paste()`](https://wiki.facepunch.com/gmod/duplicator.Paste) to load in the entities that were saved using the Save Marker Tool.
 
-### CFGLUA:PostCfgLoad()
+The function should return `dupedata`, unless you want to prevent these entities from being created or want to return a different table containing different duplication data. If nothing is returned, the config loader will skip the duplication step.
 
-This function is the second to last function to run when the config is loaded. Unlike OnFullConnect, it is guaranteed to run on the same tick as when the map has been reset and the entities saved into your config have been created and doesn't wait for a connection to be established, so this is mainly intended to be used for code that needs to be run as soon as possible.
+> [!NOTE]
+> You are not guaranteed to be connected to the AP Server at this point, so functions that require a connection should not be used here.
 
-### CFGLUA:OnFullConnect()
+### `CFGLUA:PostCfgLoad()`
 
-This function runs after the config has been loaded and the gamemode has connected to Archipelago. If the gamemode is already connected to Archipelago it will run on the same tick as PostCfgLoad, but otherwise it will be delayed until a connection is established.
+This is the second config script function run. Unlike `OnFullConnect()`, it is guaranteed to run on the same tick as when the map is reset and the entities saved into your config have been created. It doesn't wait for a connection to be established, so this is intended to be used for code that needs to run as soon as possible. Use `APADV.SendMapLocation()` inside hooks within this function.
 
-### CFGLUA:CfgUnload()
+### `CFGLUA:OnFullConnect()`
 
-This function runs whenever your config is being unloaded, to either change maps, change to another config or reload your config. It's a good place to clean up any hooks you registered for your config. Note that this function is also run when the player connects to a different slot, so you shouldn't try to interact with the AP Slot in here as you may interact with the new slot.
+This function runs after the config has been loaded and the gamemode has connected to Archipelago. If the gamemode is already connected to Archipelago, it will run on the same tick as `PostCfgLoad()`, otherwise it will be delayed until a connection is established. Use `APADV.GetMapLocationStatus()` within this function.
 
-### The ItemFuncs and MapItemFuncs tables
+### `CFGLUA:CfgUnload()`
 
-You can also add 
+This function runs whenever your config is being unloaded, to either change map or config, or reload the current config. It's a good place to clean up any hooks and variables you registered for your config.
+
+> [!NOTE]
+> This function also runs when the player connects to a different slot, so don't try to interact with the AP Slot in here, as you may be interacting with the new slot.
+
+### `ItemFuncs` and `MapItemFuncs`
+
+These are tables of functions that are run for each set item and map item on load or when their quantity changes, where `iList` is an integer-indexed table (array) of the relevant received items.
+
+> [!NOTE]
+> These functions can run when the received quantity of an item is 0, so you can use the length of `iList` to stop execution if nothing should happen.
+
+```lua
+MapItemFuncs = {
+  ['<map item name>'] = function(iList)
+    if #iList == 0 then return end
+    print(#iList, 'of the map item has been received, run your code here')
+  end
+}
+```
 
 ## Functions
 
-apAdventure offers some functions to make interacting with Locations easier:
+apAdventure provides some functions that make interacting with locations easier:
 
-### APADV.SendMapLocation( lctn )
+### `APADV.SendMapLocation( lctn )`
 
-The most straightforward way to send locations. The `lctn` parameter should be the name of the Location without prefixing the Map or Group Name, as this function will automatically build the full name for you, meaning that your code will still work if the way Location Names are structured is changed in the future.
+Sends a map location, where `lctn` is the name of the location. Do not add the group/map name prefixes, as this function will automatically build the full name for you, thus your code will still work if the way location names are structured changes in the future.
 
-### ADADV.GetMapLocationStatus( lctn )
+### `APADV.GetMapLocationStatus( lctn )`
 
-Gets the current collection status of a location. This will return true if the location has already been collected, false if it hasn't, or nil if the location doesn't exist in this run. Similarly to SendMapLocation, this automatically builds the full name for you, so using this should prevent your code from breaking in the future. If you register any hooks for your scripted locations, you should run this to check if registering the hook is actually needed.
+Gets whether a map location has been collected, where `lctn` is the name of the location (uses the same naming convention as `APADV.SendMapLocation()`). Returns `true`/`false` if the location exists in the current run and `nil` if it doesn't. If you register any hooks for your scripted locations, discard those that aren't needed using this as the conditional.
