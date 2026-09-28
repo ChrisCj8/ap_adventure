@@ -48,7 +48,7 @@ class ConfigGroups(OptionSet):
     and the maps in them.
     """
     display_name = "Config Groups"
-    default = {"orange_hub","hl2_canals_walk","hl2_ravenholm","hl2_coast_walk","hl2_nova_prospekt","hl2_lost_coast"}
+    default = {"orange_hub","hl2_canals_walk","hl2_ravenholm","hl2_coast_walk","hl2_nova_prospekt","hl2_lost_coast","hl2_anticitizen_one"}
 
 singlepickschema = Schema(Or({
         str: list
