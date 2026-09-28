@@ -88,6 +88,10 @@ function NODE.Panel(parent)
 		parent.nodetbl.m = data
 	end
 
+	function invalidselect:OnSelect(nr,val,data)
+		parent.nodetbl.i = data
+	end
+
 	function parent:PerformLayout(w,h)
 		local lblspace = w > 200 and 100 or w-100
 		local valpos = lblspace + 10
