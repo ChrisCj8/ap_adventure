@@ -6,6 +6,7 @@
     - Knowing how to edit YAMLs manually is a hard requirement, as this implementation features some non-standard YAML settings which the Web UI and Options Creator cannot handle.
 - Garry's Mod
 - Half-Life 2 (Not strictly required, but the default configs included are mainly made for HL2 maps, so you'll want it for your test run.)
+    - You specifically need the maps from the Anniversary Update, if you're not on the default public branch you may need to switch back to it.
 - [GWSockets](https://github.com/FredyH/GWSockets/releases) - More information on which version to grab can be found further down.
 - [GMAP](https://github.com/ChrisCj8/gm_ap/releases)
 - [apAdventure itself](https://github.com/ChrisCj8/ap_adventure/releases)
