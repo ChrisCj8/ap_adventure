@@ -45,6 +45,8 @@ def eval_json_rule(rule,state : CollectionState,world,region):
 nevernode = {"type":"never"}
 alwaysnode = {"type":"always"}
 
+needstypematch = {"<",">","<=",">="}
+
 def preprocess_json_rule(rule,world,region):
     rule = rule.copy()
     match rule["type"]:
@@ -123,10 +125,10 @@ def preprocess_json_rule(rule,world,region):
             min = rule["amt"]
             for v in rule["nodes"]:
                 pr = preprocess_json_rule(v,world,region)
-                type = pr["type"]
-                if type == "always":
+                ntype = pr["type"]
+                if ntype == "always":
                     min -= 1
-                elif type != "never":
+                elif ntype != "never":
                     newnodes.append(pr)
 
             if min < 1:
@@ -208,6 +210,7 @@ def preprocess_json_rule(rule,world,region):
             rule["item"] = f"{region.mapgroup} - {region.mapname} - {rule["item"]}"
             return rule
         case "cparam":
+            print("evaluating cparam")
             cparams = world.customparams
             name = rule["n"]
             if name in cparams:
@@ -215,10 +218,12 @@ def preprocess_json_rule(rule,world,region):
             else:
                 return rule["m"] <= 1 and alwaysnode or nevernode
             val = rule["v"]
-            match rule["o"]:
+            op = rule["o"]
+            if op in needstypematch and type(param) != type(val):
+                return rule["i"] <= 1 and alwaysnode or nevernode
+            match op:
                 case "==":
-                    if type(param) != type(val):
-                        return nevernode
+                    if type(param) != type(val): return nevernode
                     if param == val: return alwaysnode
                     try:
                         return float(param) == float(val) and alwaysnode or nevernode
