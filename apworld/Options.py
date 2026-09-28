@@ -175,7 +175,9 @@ class TrapVision(Choice):
 class CustomParams(OptionDict):
     """This option allows you to set custom parameters which Item Sets or Map Configs may use for various purposes."""
     display_name = "Custom Parameters"
-    default = {}
+    default = {
+        "hl2_enable_janky_backtracks": False
+    }
 
 class AmmoMerge(OptionList):
     """This option allows ammo types to be merged together.
