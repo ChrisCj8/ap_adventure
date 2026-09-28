@@ -217,6 +217,8 @@ def preprocess_json_rule(rule,world,region):
             val = rule["v"]
             match rule["o"]:
                 case "==":
+                    if type(param) != type(val):
+                        return nevernode
                     if param == val: return alwaysnode
                     try:
                         return float(param) == float(val) and alwaysnode or nevernode
