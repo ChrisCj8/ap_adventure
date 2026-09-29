@@ -210,7 +210,6 @@ def preprocess_json_rule(rule,world,region):
             rule["item"] = f"{region.mapgroup} - {region.mapname} - {rule["item"]}"
             return rule
         case "cparam":
-            print("evaluating cparam")
             cparams = world.customparams
             name = rule["n"]
             if name in cparams:
