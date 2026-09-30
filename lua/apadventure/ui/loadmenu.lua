@@ -309,7 +309,7 @@ return function()
 		end
 		_,cfgs = filef("apadventure/cfg/"..gr.."/*","DATA")
 		for k,v in ipairs(cfgs) do
-			newentries[v] = newentries[v] or 0 + 2
+			newentries[v] = (newentries[v] or 0) + 2
 		end
 		_,cfgs = filef("apadventure/logic/cfg/"..gr.."/*","DATA")
 		for k,v in ipairs(cfgs) do
