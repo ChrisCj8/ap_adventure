@@ -310,16 +310,15 @@ local function ApAdvRegisterItemHandlers()
 				for k,v in pairs(itemcapabs) do
 					condcapabtbl[k] = condcapabtbl[k] or {}
 					local condtbl = condcapabtbl[k]
-					local lookup = {}
+					local lookup = processcapabs(tolookup(v))
 
-					for ik, iv in ipairs(v) do
-						condtbl[iv] = condtbl[iv] or {}
-						local curcaptbl = condtbl[iv]
+					for ik, iv in pairs(lookup) do
+						condtbl[ik] = condtbl[ik] or {}
+						local curcaptbl = condtbl[ik]
 						curcaptbl[#curcaptbl+1] = itemid
-
-						lookup[iv] = true
 					end
-					condlookup[k] = processcapabs(lookup)
+
+					condlookup[k] = lookup
 				end
 
 				if id2capab[itemid] then
