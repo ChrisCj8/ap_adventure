@@ -44,6 +44,23 @@ def ProcessCfgs():
                 warnings.append(f"gmod path \"{gmodpath}\" does not seem to lead to a gmod install directory, make sure you have set your path properly")
                 gmodpath = False
 
+    addonitemfiles = dict()
+    addoncfgdirs = dict()
+    if gmodpath:
+        addonpath = gmodpath.joinpath("addons/")
+        for addon in addonpath.iterdir():
+            addonlogic = addon.joinpath("apadv_logic/")
+            if addonlogic.is_dir():
+                addonitems = addonlogic.joinpath("item/")
+                if addonitems.is_dir():
+                    for file in addonitems.iterdir():
+                        if file.name[-5:] == ".json":
+                            addonitemfiles[file.name] = file
+                addoncfgs = addonlogic.joinpath("cfg/")
+                if addoncfgs.is_dir():
+                    for dir in addoncfgs.iterdir():
+                        addoncfgdirs[dir.name] = dir
+
     aplogicdir = apdir.joinpath("logic")
     if not aplogicdir.is_dir():
         aplogicdir.mkdir()
@@ -59,6 +76,9 @@ def ProcessCfgs():
     for gr in worlditemdir.iterdir():
         if gr.name[-5:] == ".json":
             itempaths[gr.name] = gr
+
+    for file in addonitemfiles.values():
+        itempaths[file.name] = file
 
     for gr in apitemdir.iterdir():
         if gr.name[-5:] == ".json":
@@ -139,6 +159,12 @@ def ProcessCfgs():
 
     for gr in worldcfgdir.iterdir():
         grouppaths[gr.name] = [gr]
+
+    for gr in addoncfgdirs.values():
+        if gr.name in grouppaths:
+            grouppaths[gr.name].append(gr)
+        else:
+            grouppaths[gr.name] = [gr]
 
     for gr in apcfgdir.iterdir():
         if gr.name in grouppaths:
