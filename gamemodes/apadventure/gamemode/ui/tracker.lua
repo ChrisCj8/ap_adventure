@@ -1,9 +1,3 @@
-APADV.TrackerData = APADV.TrackerData or {}
-APADV.GroupLocCount = APADV.GroupLocCount or {}
-APADV.HintData = APADV.HintData or {}
-APADV.SlotLookUp = APADV.SlotLookUp or {}
-APADV.Hintables = APADV.Hintables or {{},{}}
-
 local netrstring = net.ReadString
 local netruint = net.ReadUInt
 local netrbool = net.ReadBool
@@ -896,6 +890,12 @@ end
 
 local function opentracker(window)
 
+	if !APADV.TrackerData then
+		notification.AddLegacy("#apadventure.tracker.nodata",NOTIFY_ERROR,5)
+		surface.PlaySound("buttons/button10.wav")
+		window:Remove()
+		return
+	end
 	APADV.TrackWindow  = window
 	setwindowtitle()
 
