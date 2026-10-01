@@ -11,7 +11,7 @@ if APADV_ENTRNAME == "Sewer" then
 	local trigger = entbyid(1460) --beach entrance trigger
 
 	trigger = entbyid(1532) -- turret 1 -> 2 trigger
-	
+
 	trigger:Fire("AddOutput","OnTrigger patrol_1_assault1_relay:Trigger")
 
 	trigger = entbyid(1547) -- turret 2 -> 3 trigger
@@ -63,7 +63,7 @@ if APADV_ENTRNAME == "Sewer" then
 	entsbyname("zombie_template")[1]:Fire("ForceSpawn")
 	entsbyname("pipes_soldiers")[1]:Fire("ForceSpawn")
 	entsbyname("assault_template_spawner")[1]:Fire("ForceSpawn")
-	--[[ timer.Simple(.3,function() 
+	--[[ timer.Simple(.3,function()
 		for k,v in ipairs(entsbyname("field_spawner_1")) do
 			v:Fire("Disable")
 		end
@@ -74,7 +74,7 @@ if APADV_ENTRNAME == "Sewer" then
 
 	--[[ inhook["crack_crabs"] = {
 		input = "Spawn",
-		func = function() 
+		func = function()
 			print("guh")
 			entsbyname("zombie_template")[1]:Fire("ForceSpawn")
 			entsbyname("pipes_soldiers")[1]:Fire("ForceSpawn")
@@ -86,21 +86,21 @@ if APADV_ENTRNAME == "Sewer" then
 	}
 	inhook["overwatch_4"] = {
 		input = "PlaySound",
-		func = function() 
+		func = function()
 			entsbyname("manhack2_template")[1]:Fire("ForceSpawn")
 			--entsbyname("manhack_suprise_spawner")[1]:Fire("ForceSpawn")
 		end
 	}
 	inhook["idk"] = {
 		input = "PlaySound",
-		func = function() 
+		func = function()
 			entsbyname("flare1")[1]:Fire("Launch")
 			entsbyname("bigbunker_soldier_template_spawner")[1]:Fire("ForceSpawn")
 		end
 	}
 	inhook["antspawn_nodes_10"] = {
 		input = "EnableHint",
-		func = function() 
+		func = function()
 			entsbyname("flare1")[1]:Fire("Launch")
 			entsbyname("bunker_3_spawner")[1]:Fire("Spawn")
 			for k,v in ipairs(entsbyname("bunker_4_spawner")) do v:Fire("Spawn") end
@@ -108,7 +108,7 @@ if APADV_ENTRNAME == "Sewer" then
 	}
 	inhook["antspawn_nodes_8"] = {
 		input = "EnableHint",
-		func = function() 
+		func = function()
 			--entsbyname("bigbunker_soldier_template_spawner")[1]:Fire("ForceSpawn")
 		end
 	} ]]
@@ -129,7 +129,7 @@ return {
 	PostCfgLoad = function(self)
 		self:OnAntlionStatusUpdate(APADV.AntlionFriendly)
 
-		--[[ hook.Add("AcceptInput",self,function(self,ent,input) 
+		--[[ hook.Add("AcceptInput",self,function(self,ent,input)
 			local entry = inhook[ent:GetName()]
 			if entry and entry.input == input then
 				entry.func()
@@ -138,7 +138,7 @@ return {
 			end
 		end) ]]
 
-		
+
 	end,
 	OnFullConnect = function(self)
 		if APADV.MapLocationStatus("Disable All Thumpers") then return end

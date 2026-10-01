@@ -275,7 +275,7 @@ net.Receive("APAdvTrackerHintUpdate",function()
 		local locpnls = trackwindow.locpnls
 		local pnl = locpnls and locpnls[loc]
 		if pnl then
-			local hntbtn = pnl.hntbtn 
+			local hntbtn = pnl.hntbtn
 			local rcvr = hnt.rcvr
 			if hntbtn then
 				if rcvr != APADV.CurSlot then
@@ -871,7 +871,6 @@ local function hintpanel(window)
 		local lnend = w-6
 		drawcol(0,0,0,20)
 		for i=1,hntcnt,2 do
-			
 			local curh = i*27
 			drawrect(0,curh,w,27)
 		end
@@ -896,7 +895,7 @@ local function opentracker(window)
 		window:Remove()
 		return
 	end
-	APADV.TrackWindow  = window
+	APADV.TrackWindow = window
 	setwindowtitle()
 
 	local tabs = uimake("DPropertySheet",window)

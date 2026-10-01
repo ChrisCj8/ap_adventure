@@ -21,7 +21,7 @@ end
 
 
 
-hook.Add("PlayerInitialSpawn","apAdventureLoadMapIconMats",function(ply) 
+hook.Add("PlayerInitialSpawn","apAdventureLoadMapIconMats",function(ply)
 	for k,v in pairs(apAdventure.MapIconMats) do
 		net.Start("APAdvMapIconMat")
 			net.WriteString(k)

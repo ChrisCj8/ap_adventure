@@ -22,7 +22,7 @@ if CLIENT then
 		point_template = Material("editor/point_template")
 	}
 	local obsolete = Material("editor/obsolete")
-	net.Receive("APAdvInspectorInfo",function() 
+	net.Receive("APAdvInspectorInfo",function()
 		if net.ReadBool() then
 			apAdventure.InspectorInfo = {}
 			inspectorinfo = apAdventure.InspectorInfo
@@ -75,7 +75,7 @@ if CLIENT then
 				end
 			end3d2d()
 		end
-		
+
 	end)
 
 	if game.SinglePlayer() then
@@ -117,6 +117,6 @@ if SERVER then
 			net.Start("APAdvInspectorToggleInfo")
 			net.Broadcast()
 		end
-	
+
 	end
 end

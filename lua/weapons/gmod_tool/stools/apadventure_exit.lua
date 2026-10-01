@@ -29,13 +29,13 @@ if CLIENT then
 		apAdventure.ExitAccessPnl = accesspnl
 	end
 
-	cvars.AddChangeCallback("apadventure_exit_region",function(cvar,old,new) 
+	cvars.AddChangeCallback("apadventure_exit_region",function(cvar,old,new)
 		if IsValid(apAdventure.exitregnamepnl) then
 			apAdventure.exitregnamepnl:SetText(new)
 		end
 	end,"apadventure_exit_tool_region")
 
-	cvars.AddChangeCallback("apadventure_exit_name",function(cvar,old,new) 
+	cvars.AddChangeCallback("apadventure_exit_name",function(cvar,old,new)
 		if IsValid(apAdventure.exitnamepnl) then
 			apAdventure.exitnamepnl:SetText(new)
 		end

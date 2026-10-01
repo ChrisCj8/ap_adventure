@@ -2,7 +2,7 @@ return function(parent,targettbl,desiredh)
 
 desiredh = desiredh or 250
 
-local condpnl = vgui.Create("DCollapsibleCategory",parent) 
+local condpnl = vgui.Create("DCollapsibleCategory",parent)
 condpnl:SetPos(5,5)
 condpnl:SetLabel("#apadventure.editor.condpnl")
 

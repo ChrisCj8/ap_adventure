@@ -1,4 +1,4 @@
-local function ImageButton(parent,image) 
+local function ImageButton(parent,image)
 	local btn = vgui.Create("DImageButton",parent)
 	btn:SetImage(image)
 	btn:SetSize(16,16)
@@ -145,7 +145,7 @@ return function(parent,targetheight)
 			i = 1
 			for k,v in ipairs(parenttbl.nodes) do
 				if k != curnodekey then
-					newtbl[i] = v 
+					newtbl[i] = v
 					i = i + 1
 				end
 			end

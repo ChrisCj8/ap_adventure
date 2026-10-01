@@ -31,7 +31,7 @@ local function ShowContents(self,show)
 	self.ContentsVisible = show
 end
 
-local function ImageButton(parent,image) 
+local function ImageButton(parent,image)
 	local btn = UImake("DImageButton",parent)
 	btn:SetImage(image)
 	btn:SetSize(16,16)
@@ -299,7 +299,7 @@ return function(window)
 				numw:SetMinMax(tbl.min,tbl.max)
 				numwdefaultcolor = numwdefaultcolor or numw:GetTextColor()
 				local laststate
-				function numw:OnValueChanged(val) 
+				function numw:OnValueChanged(val)
 					local groupval = grouptbl[valname]
 					if val == groupval or (groupval == nil and val == default ) then
 						infotbl[valname] = nil
@@ -553,7 +553,7 @@ return function(window)
 			for k,v in ipairs(connlist:GetSelected()) do
 				local from = v:GetValue(1)
 				local to = v:GetValue(2)
-				conntbl[from][to] = nil 
+				conntbl[from][to] = nil
 
 				if !next(conntbl[from]) then
 					conntbl[from] = nil
@@ -649,7 +649,7 @@ return function(window)
 
 		function mapitemlist:LoadMapItems(tbl)
 			mapitemtbl = tbl
-			for k,v in pairs(self:GetLines()) do 
+			for k,v in pairs(self:GetLines()) do
 				self:RemoveLine(v:GetID())
 			end
 			for k,v in pairs(tbl) do

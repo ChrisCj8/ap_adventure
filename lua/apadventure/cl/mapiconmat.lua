@@ -1,7 +1,7 @@
 
 apAdventure.MapIconMats = apAdventure.MapIconMats or {}
 
-timer.Create("ApAdvMapIconMatReload",2,0, function() 
+timer.Create("ApAdvMapIconMatReload",2,0, function()
 	timer.Stop("ApAdvMapIconMatReload")
 	for k,v in ipairs(ents.FindByClass("apadventure_exit")) do
 		v:ResetIcon()
@@ -39,7 +39,7 @@ function apAdventure.GetMapIconMat(map,loadedcb)
 						font-family: titlefont;
 						src: url(asset://garrysmod/resource/fonts/Roboto-Medium.ttf);
 					}
-					
+
 					h1 {
 						font-family: titlefont;
 						position: fixed;
@@ -63,7 +63,7 @@ function apAdventure.GetMapIconMat(map,loadedcb)
 		html:SetHTML(htmlcontent)
 		local olddocready = html.OnDocumentReady
 		function html:OnFinishLoadingDocument()
-			--print("html loaded") 
+			--print("html loaded")
 			html:UpdateHTMLTexture()
 			local timername = "apadventure_mapiconmat_"..map
 			timer.Create(timername,.5,0, function()
@@ -93,7 +93,7 @@ function apAdventure.GetMapIconMat(map,loadedcb)
 	end
 end
 
-net.Receive("APAdvMapIconMat",function() 
+net.Receive("APAdvMapIconMat",function()
 	local map = net.ReadString()
 	apAdventure.GetMapIconMat(map)
 end)

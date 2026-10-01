@@ -40,7 +40,7 @@ function NODE.Panel(parent)
 	oplbl:SetDark(true)
 
 	local opselect = mkUI("DComboBox",parent)
-	
+
 	local curop = nodetbl.o
 	for k,v in ipairs(ops) do
 		opselect:AddChoice(v.op.." - "..locstr("apadventure.node.cparam.op."..v.n),v.op,v.op == curop)

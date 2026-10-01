@@ -21,7 +21,7 @@ if CLIENT then
 		cPnl:AddItem(idlistcontainer)
 
 			local cIdList = vgui.Create("DListView",idlistcontainer)
-			
+
 			local idcol = cIdList:AddColumn("#tool.apadventure_delete.idlist.cid")
 			cIdList:SetPos(5,25)
 			cIdList:SetHeight(300)
@@ -91,7 +91,7 @@ if CLIENT then
 				local id = idmarkin:GetFloat()
 				if !id or id < 1 then
 					surface.PlaySound("buttons/button10.wav")
-					return 
+					return
 				end
 				local id = math.floor(id)
 				net.Start("APAdvDelMark")
@@ -163,9 +163,9 @@ if CLIENT then
 
 			local function addnamemark()
 				local name = namemarkin:GetValue()
-				if name == "" then 
+				if name == "" then
 					surface.PlaySound("buttons/button10.wav")
-					return 
+					return
 				end
 				net.Start("APAdvDelNameMark")
 					net.WriteString(name)

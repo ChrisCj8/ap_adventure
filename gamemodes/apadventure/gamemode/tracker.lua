@@ -111,7 +111,7 @@ function APADV_TRACKER:SendTrackerData(ply)
 	if !ply then return end
 	for k,v in pairs(namessent) do
 		self:UpdateSlotInfo(k,ply)
-	end	
+	end
 end
 
 function APADV_TRACKER:ApplyAmmomerge(tbl)

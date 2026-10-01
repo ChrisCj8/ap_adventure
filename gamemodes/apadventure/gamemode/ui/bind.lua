@@ -47,7 +47,7 @@ end
 local function bindpnl(pnl,id,tbl,parent,parenttbl)
 	pnl:SetHeight(32)
 	pnl.btnID = id
-	
+
 	local btnlbl = mkUI("DLabel",pnl)
 	btnlbl:SetText(input.GetKeyName(id))
 	btnlbl:SetDark(true)
@@ -140,7 +140,7 @@ local function savedatawindow()
 		local files = file.Find("apadventure/runbinds/*.json","DATA")
 		for k,v in ipairs(files) do
 			local fn = string.sub(v,0,-6)
-			if fn != APADV_RUNID then 
+			if fn != APADV_RUNID then
 				local spl= string.Explode("_",fn)
 				local ln = datalist:AddLine(
 					file.Read("apadventure/runbinds/"..fn..".txt","DATA") or "?",

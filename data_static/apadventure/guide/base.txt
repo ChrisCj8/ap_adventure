@@ -39,7 +39,7 @@
 	<div id="c">
 	</div>
 	<script>
-		
+
 		const container = document.getElementById("c")
 
 		function loadcontent(content) {

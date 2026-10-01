@@ -40,7 +40,7 @@ local apAdvSaveHalos = {}
 
 net.Receive("APAdvActiveCfgClear",function()
 	local gname = net.ReadString()
-	print("loading "..gname) 
+	print("loading "..gname)
 	apAdventure.EditCfg = {
 		Saved = {},
 		DelMark = {},
@@ -68,7 +68,7 @@ net.Receive("APAdvActiveCfgClear",function()
 	local json = fRead(path,"DATA") or fRead("data_static/"..path,"GAME")
 	if json then
 		local tbl = fromJSON(json)
-		if tbl then 
+		if tbl then
 			editcfg.Regions = tbl.reg or {}
 			editcfg.Connections = tbl.connect or {}
 			editcfg.MapItems = tbl.item or {}
@@ -82,7 +82,7 @@ net.Receive("APAdvActiveCfgClear",function()
 	timer.Start("APAdvUpdateDelNameMark")
 end)
 
-net.Receive("APAdvSaveCfg",function() 
+net.Receive("APAdvSaveCfg",function()
 	local gname = net.ReadString()
 	editcfg.Group = gname
 	print("storing "..gname)
@@ -174,10 +174,9 @@ function apAdventure.UpdateGroup(gname)
 			else
 				print("group file for group "..gname.."could not be processed into a table")
 			end
-		else 
+		else
 			print("group file for group "..gname.."could not be read")
 		end
-		
 	end
 end
 
@@ -240,7 +239,7 @@ function apAdventure.ProcessAllLogic()
 	end
 end
 
-timer.Create("APAdvProcessDelHalos",1,0,function() 
+timer.Create("APAdvProcessDelHalos",1,0,function()
 	apAdvDelHalos = {}
 	local i=1
 	for k,v in pairs(apAdventure.EditCfg.DelMark) do
@@ -253,7 +252,7 @@ timer.Create("APAdvProcessDelHalos",1,0,function()
 				apAdventure.EditCfg.DelMark[k].ent = idcheck
 				apAdvDelHalos[i] = idcheck
 				i=i+1
-			end 
+			end
 		end
 	end
 	timer.Stop("APAdvProcessDelHalos")
@@ -283,23 +282,23 @@ net.Receive("APAdvClearDelMark", function()
 	timer.Start("APAdvUpdateDelNameMark")
 end)
 
-net.Receive("APAdvDelMark",function() 
+net.Receive("APAdvDelMark",function()
 	local id = net.ReadUInt(14)
 	local class = net.ReadString()
 	local name = net.ReadString()
 	local mark = net.ReadBool()
-	if mark then 
-		local ent = ents.GetMapCreatedEntity(id) 
-		if !ent then 
-			mark = NULL 
+	if mark then
+		local ent = ents.GetMapCreatedEntity(id)
+		if !ent then
+			mark = NULL
 		else
 			mark = ent
 		end
-	else 
-		mark = nil 
+	else
+		mark = nil
 	end
 	local entry
-	if mark then 
+	if mark then
 		entry = {
 			ent = mark,
 			class = class,
@@ -318,7 +317,7 @@ net.Receive("APAdvDelNameMark",function()
 	timer.Start("APAdvUpdateDelNameMark")
 end)
 
-timer.Create("APAdvProcessSaveHalos",1,0,function() 
+timer.Create("APAdvProcessSaveHalos",1,0,function()
 	apAdvSaveHalos = {}
 	local i=1
 	for k,v in pairs(apAdventure.EditCfg.Saved) do
@@ -409,7 +408,7 @@ local delhaloconv = CreateClientConVar("apadventure_editor_show_delete_halos",1,
 
 local doDelHalos = delhaloconv:GetBool()
 
-cvars.AddChangeCallback("apadventure_editor_show_delete_halos",function(_,_,val) 
+cvars.AddChangeCallback("apadventure_editor_show_delete_halos",function(_,_,val)
 	doDelHalos = tobool(val)
 end)
 
@@ -418,11 +417,11 @@ local savehaloconv = CreateClientConVar("apadventure_editor_show_save_halos",1,t
 
 local doSaveHalos = savehaloconv:GetBool()
 
-cvars.AddChangeCallback("apadventure_editor_show_save_halos",function(_,_,val) 
+cvars.AddChangeCallback("apadventure_editor_show_save_halos",function(_,_,val)
 	doSaveHalos = tobool(val)
 end)
 
-hook.Add("PreDrawHalos","apAdventure",function() 
+hook.Add("PreDrawHalos","apAdventure",function()
 	if doDelHalos then
 		addhalo(apAdvDelHalos,delmarkhalo,2,2,1,true,true)
 	end
@@ -435,7 +434,7 @@ apAdventure.TextFacing = Angle(0,0,90)
 
 local textfacing = apAdventure.TextFacing
 
-hook.Add("Think","ApAdvPlayerView",function() 
+hook.Add("Think","ApAdvPlayerView",function()
 	textfacing = LocalPlayer():EyeAngles()
 	textfacing.x = 0
 	textfacing.y = textfacing.y - 90

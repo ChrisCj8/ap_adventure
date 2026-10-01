@@ -64,18 +64,18 @@ end
 function apAdventure.DelMark(ent,state)
 	local cID
 	if isnumber(ent) then
-		cID = ent 
+		cID = ent
 		ent = ents.GetMapCreatedEntity(cID)
 	else
 		cID = ent:MapCreationID()
 	end
 	if cID == -1 then return false end
-	if state == false then 
-		state = nil 
+	if state == false then
+		state = nil
 	else
 		state = ent
 	end
-	
+
 	local delmarktbl = apAdventure.EditCfg.DelMark
 	if delmarktbl[cID] == state then return false end
 	delmarktbl[cID] = state
@@ -136,7 +136,7 @@ end
 
 function apAdventure.SaveMark(ent,state)
 	if ent:MapCreationID() != -1 then return end
-	if state == false then 
+	if state == false then
 		state = nil
 	end
 	local savtbl = apAdventure.EditCfg.Saved
@@ -163,7 +163,7 @@ end
 --[[ function apAdventure.SendRegion(name)
 	local region = editcfg.Regions[name]
 	if !region then return end
-	net.Start("APAdvRegion", function() 
+	net.Start("APAdvRegion", function()
 		net.WriteString(name)
 	end)
 end
@@ -180,7 +180,7 @@ function apAdventure.CreateRegion(name)
 end ]]
 
 function apAdventure.SetCfgTbl(tbl)
-	apAdventure.EditCfg = tbl  
+	apAdventure.EditCfg = tbl
 end
 
 function apAdventure.LoadClientTbl(name)
@@ -198,7 +198,7 @@ local savenagcvar = CreateConVar("apadventure_editor_save_warnings",1,FCVAR_ARCH
 
 function apAdventure.StoreCfg(groupn)
 	local srctbl = apAdventure.EditCfg
-	if !isstring(groupn) or groupn == "" then 
+	if !isstring(groupn) or groupn == "" then
 		groupn = srctbl.Group
 	else
 		srctbl.Group = groupn
@@ -341,7 +341,7 @@ end
 function apAdventure.LoadCfg(gname,dodelete)
 	assert(!(gname == "" or !isstring(gname)),"Invalid Group Name")
 	local path = "apadventure/cfg/"..gname.."/"..game.GetMap().."/sv.json"
-	local json = file.Read(path,"DATA") or file.Read("data_static/"..path,"GAME") 
+	local json = file.Read(path,"DATA") or file.Read("data_static/"..path,"GAME")
 
 	game.CleanUpMap()
 	apAdventure.LoadClientTbl(gname)
@@ -359,7 +359,7 @@ function apAdventure.LoadCfg(gname,dodelete)
 			EntrAccess = {},
 			ExitAccess = {},
 		})
-		return 
+		return
 	end
 
 	local gtbl = util.JSONToTable(json)
@@ -398,7 +398,7 @@ function apAdventure.LoadCfg(gname,dodelete)
 
 	local delname = cfgtab.DelName
 	if dodelete then
-		timer.Simple(.2,function() 
+		timer.Simple(.2,function()
 			for k,v in ents.Iterator() do
 				if newdelname[v:GetName()] then
 					v:Remove()
@@ -497,7 +497,7 @@ local function ProcessItemGroup(groupname)
 			itemtbl[deftbl.Name] = curitem
 		else
 			print(grouppath.."/"..v.." did not return a table")
-		end 
+		end
 	end
 
 	file.Write("apadventure/logic/item/"..groupname..".json",util.TableToJSON(out,prettyprintcvar:GetBool()))
@@ -505,7 +505,7 @@ end
 
 if !file.IsDir("apadventure/logic/item/","DATA") then
 	file.CreateDir("apadventure/logic/item/")
-end 
+end
 
 local jsonmsg = ""
 local reqname
@@ -516,7 +516,7 @@ local accesstbls = {
 	[2] = "ExitAccess"
 }
 
-net.Receive("APAdvAccess",function() 
+net.Receive("APAdvAccess",function()
 	jsonmsg = jsonmsg..net.ReadString()
 	if net.ReadBool() then
 		if reqname then
@@ -600,7 +600,7 @@ else
 	end)
 end
 
-concommand.Add("apadventure_editor_loadcfg",function(ply,_,args) 
+concommand.Add("apadventure_editor_loadcfg",function(ply,_,args)
 	local arg = args[1]
 	if !ply:IsListenServerHost() then return end
 	if arg == "" or !isstring(arg) then arg = apAdventure.EditCfg.Group end
@@ -608,7 +608,7 @@ concommand.Add("apadventure_editor_loadcfg",function(ply,_,args)
 	apAdventure.LoadCfg(arg)
 end)
 
-concommand.Add("apadventure_editor_savecfg",function(ply,_,args) 
+concommand.Add("apadventure_editor_savecfg",function(ply,_,args)
 	local arg = args[1]
 	if !ply:IsListenServerHost() then return end
 	if arg == "" or !isstring(arg) then arg = apAdventure.EditCfg.Group end
@@ -616,19 +616,19 @@ concommand.Add("apadventure_editor_savecfg",function(ply,_,args)
 	apAdventure.StoreCfg(arg)
 end)
 
-concommand.Add("apadventure_editor_processitemdefs",function(ply,_,args) 
+concommand.Add("apadventure_editor_processitemdefs",function(ply,_,args)
 	local arg = args[1]
 	if !ply:IsListenServerHost() or arg == "" then return end
 	apAdventure.ProcessItemdefs(arg)
 end)
 
-concommand.Add("apadventure_editor_delete_mark_by_creationid",function(ply,_,args) 
+concommand.Add("apadventure_editor_delete_mark_by_creationid",function(ply,_,args)
 	local arg = tonumber(args[1])
 	if !ply:IsListenServerHost() or !arg then return end
 	apAdventure.DelMark(arg,true)
 end)
 
-concommand.Add("apadventure_editor_remove_delete_mark_by_creationid",function(ply,_,args) 
+concommand.Add("apadventure_editor_remove_delete_mark_by_creationid",function(ply,_,args)
 	local arg = tonumber(args[1])
 	if !ply:IsListenServerHost() or !arg then return end
 	apAdventure.DelMark(arg,false)

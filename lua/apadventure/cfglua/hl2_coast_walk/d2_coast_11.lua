@@ -9,7 +9,7 @@ return {
 		--if APADV.MapLocationStatus("Inside Antlion Guard") then return end
 		local vortgoal = entsbyname("leadgoal_vortigaunt")[1]
 
-		hook.Add("AcceptInput",self,function(self,ent,input) 
+		hook.Add("AcceptInput",self,function(self,ent,input)
 			--doubt there's anything else with an input called ExtractBugbait so just checking the input name should be fine
 			if ent == vortgoal and input == "Activate" then
 				--kinda sucks to have to do this through a timer but i couldn't find a better event to attach it to

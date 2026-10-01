@@ -13,7 +13,7 @@ if CLIENT then
 		{name="left"},
 		{name="right"}
 	}
-	
+
 	apAdventure.LocationAccessTbl = apAdventure.LocationAccessTbl or {}
 
 	function TOOL.BuildCPanel(cPnl)
@@ -63,7 +63,7 @@ function TOOL:LeftClick(tr)
 		undo.Create("apadventure.entity.location")
 			undo.AddEntity(ent)
 			undo.SetPlayer(self:GetOwner())
-		undo.Finish()	
+		undo.Finish()
 	end
 	-- kinda sucks that were sending an entire json table every time the user wants to place or update a location
 	-- but in theory i don't think people will be editing their configs in multiplayer much so this *should* be fine

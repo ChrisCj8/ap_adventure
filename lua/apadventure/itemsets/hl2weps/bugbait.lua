@@ -28,7 +28,7 @@ function ITEM.Unregister()
 end
 
 -- might just have the gamemode always do this
-hook.Add("ShutDown","APADV_KillAntlionGlobal",function() 
+hook.Add("ShutDown","APADV_KillAntlionGlobal",function()
 	game.SetGlobalState("antlion_allied",GLOBAL_DEAD)
 end)
 

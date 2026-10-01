@@ -8,7 +8,7 @@ return {
 			door:Fire("Open")
 			entsbyname("trigger_close_door")[1]:Remove()
 			for k,v in ipairs(entsbyname("warehouse_gunfire")) do v:Remove() end
-			
+
 			if player.GetCount() > 0 then
 				entsbyname("warehouse_standoff_template")[1]:Fire("ForceSpawn")
 			else

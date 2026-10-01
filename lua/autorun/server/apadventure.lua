@@ -83,7 +83,7 @@ end)
 
 local captured = {}
 
---[[ hook.Add("EntityKeyValue","ApAdvKeyValCapture",function(ent,key,val) 
+--[[ hook.Add("EntityKeyValue","ApAdvKeyValCapture",function(ent,key,val)
 	if capturekeyvals[ent:GetClass()] then
 		captured[ent] = captured[ent] or {}
 		captured[ent][key] = val
@@ -114,7 +114,7 @@ local function UseCapturedKeyVals()
 			newtrig:Spawn()
 		end
 	end
-	
+
 	changelevelinfo = {}
 
 	if patchloadsavedcvar:GetBool() or playingApAdv then
@@ -153,7 +153,7 @@ end
 hook.Add("InitPostEntity","ApAdvUseCapturedKeyVals",UseCapturedKeyVals)
 hook.Add("PostCleanupMap","ApAdvUseCapturedKeyVals",UseCapturedKeyVals)
 
-local function deldir(path) 
+local function deldir(path)
 	local files, dirs = file.Find(path.."/*","DATA")
 	for k,v in ipairs(files) do
 		file.Delete(path.."/"..v)
@@ -187,7 +187,7 @@ end)
 function apAdventure.SendNotification(text,type,len,snd,ply)
 	if !type then
 		type = 0
-	elseif type % 1 != 0 or type > 4 or type < 0 then 
+	elseif type % 1 != 0 or type > 4 or type < 0 then
 		ErrorNoHalt("Invalid Notification Type "..type.." passed to SendNotification")
 	end
 	net.Start("ApAdvNotif")

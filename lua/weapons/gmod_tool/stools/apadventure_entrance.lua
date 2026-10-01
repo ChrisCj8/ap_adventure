@@ -30,13 +30,13 @@ if CLIENT then
 		apAdventure.EntrAccessPnl = accesspnl
 	end
 
-	cvars.AddChangeCallback("apadventure_entrance_region",function(cvar,old,new) 
+	cvars.AddChangeCallback("apadventure_entrance_region",function(cvar,old,new)
 		if IsValid(apAdventure.entrregnamepnl) then
 			apAdventure.entrregnamepnl:SetText(new)
 		end
 	end,"apadventure_entrance_tool_region")
 
-	cvars.AddChangeCallback("apadventure_entrance_name",function(cvar,old,new) 
+	cvars.AddChangeCallback("apadventure_entrance_name",function(cvar,old,new)
 		if IsValid(apAdventure.entrnamepnl) then
 			apAdventure.entrnamepnl:SetText(new)
 		end

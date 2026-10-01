@@ -1,4 +1,4 @@
-return function() 
+return function()
 	local window = vgui.Create("DFrame")
 	window:SetSize(650,600)
 	window:Center()
@@ -219,7 +219,7 @@ return function()
 					notification.AddLegacy(string.Interpolate(language.GetPhrase("#apadventure.loadmenu.error.cantmakesvlogic"),{m=map}),NOTIFY_ERROR,3)
 					errorsnd = true
 				end
-				
+
 			end
 
 			if move and copied then

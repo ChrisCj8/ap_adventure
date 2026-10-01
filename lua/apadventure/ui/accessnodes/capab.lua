@@ -60,7 +60,7 @@ function NODE.Panel(parent)
 	capselectiontypebtn:SetSize(16,16)
 	capselectiontypebtn:SetImage("icon16/pencil.png")
 	capselectiontypebtn:SetPos(5,7)
-	
+
 	local textinputactive = false
 
 	local capselect = UImake("DComboBox",parent)

@@ -47,7 +47,7 @@ return {
 
 		local croomfinished_logic = entsbyname("logic_croom2_finished")[1]
 
-		hook.Add("AcceptInput",croomfinished_logic,function(self,ent,input) 
+		hook.Add("AcceptInput",croomfinished_logic,function(self,ent,input)
 			if ent == self and input == "Trigger" then
 				APADV.SendMapLocation("Defended Control Room")
 				croomgate:Fire("Open")
@@ -66,7 +66,7 @@ return {
 
 		local cellsfinished_logic = entsbyname("logic_room5_assault_finished")[1]
 
-		hook.Add("AcceptInput",cellsfinished_logic,function(self,_,_,_,caller) 
+		hook.Add("AcceptInput",cellsfinished_logic,function(self,_,_,_,caller)
 			if caller == self then
 				APADV.SendMapLocation("Defended Cell Block")
 				cellsfieldstate(false)
@@ -98,12 +98,12 @@ return {
 			entsbyname("lcs_message_croom2_entry")[1]:Remove()
 		end
 
-		if croomclear then 
+		if croomclear then
 			croomgate:Fire("Open")
 			croomfieldstate(false)
 		end
 
-		if cellsclear then 
+		if cellsclear then
 			cellsfieldstate(false)
 			exitgate:Fire("Open")
 		end

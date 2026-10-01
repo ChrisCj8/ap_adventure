@@ -1,4 +1,4 @@
-return function() 
+return function()
 	local window = vgui.Create("DFrame")
 	window:SetSize(300,450)
 	window:Center()

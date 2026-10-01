@@ -2,8 +2,8 @@ local doaccess
 function doaccess(node)
 	if !node or !next(node) then return node end
 	if node.nodes then
-		for k,v in ipairs(node.nodes) do 
-			v = doaccess(v) 
+		for k,v in ipairs(node.nodes) do
+			v = doaccess(v)
 		end
 	elseif node.type == "capab" then
 		node.capab = apAdventure.LookUpToList(node.capab)

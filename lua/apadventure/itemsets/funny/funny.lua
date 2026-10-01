@@ -80,7 +80,7 @@ function ITEM.RedeemCheck()
 	local sinceredeem = CurTime() - lastredeem
 	if sinceredeem < 5 then
 		return 5.5 - sinceredeem
-	else 
+	else
 		return true
 	end
 end
