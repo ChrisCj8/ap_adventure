@@ -97,6 +97,13 @@ class APADVWebWorld(WebWorld):
         "options_en.md",
         "options/en",
         ["ChrisCj"]
+    ),Tutorial(
+        "Using and Packing Custom Content",
+        "Guide on how to pack and use custom content for apAdventure.",
+        "English",
+        "packing_custom_content_en.md",
+        "packing_custom_content/en",
+        ["ChrisCj"]
     )]
     options_presets = option_presets
 
