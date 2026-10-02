@@ -33,6 +33,8 @@ APADV_MAPITEMCOUNTERS = APADV_MAPITEMCOUNTERS or {}
 
 RunConsoleCommand("gmod_maxammo",0)
 RunConsoleCommand("ai_disabled",0)
+RunConsoleCommand("ai_ignoreplayers",0)
+RunConsoleCommand("npc_citizen_auto_player_squad",1)
 
 local BASEGM = baseclass.Get("gamemode_base")
 
