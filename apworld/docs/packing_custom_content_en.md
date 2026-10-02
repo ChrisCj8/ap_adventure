@@ -90,6 +90,8 @@ my_addon_folder/
 
 ### Config Files and Logic Files
 
+Note: Config and logic files will be loaded from your data folder if you've set up your GMod Path properly, and while you should make your own addon folder for other types of files like config scripts or the lua files for your custom itemsets, there's no need to move your config/logic files to an addon folder until you actually decide to publish your stuff.
+
 Configs you make in the editor mode are saved in two forms: The actual configs themselves and logic files.
 
 The configs contain everything the gamemode needs to know about your map, while the logic files only contain information relevant to the Archipelago generator so it doesn't need to process a bunch of irrelevant data.
@@ -99,3 +101,9 @@ Config files you make are stored in your GMod folder under `GarrysMod\garrysmod\
 Since addon folders can not add files to the data folder, packed configs need to be put into the `data_static` directory instead, so simply move the configs you want to pack from `GarrysMod\garrysmod\data\apadventure\cfg\` to `GarrysMod\garrysmod\addons\[your addon folder]\data\apadventure\cfg\`.
 
 For the logic files, make a new folder in your addon folder called `apadv_logic`, and put them in there. This is mainly intended to make it easier for hosts (who only need the logic files) to find the logic data, and is where the generator will check for logic files.
+
+The generator loads logic files in this order, with files that have been loaded later overriding earlier files (so files in `data` are given priority over everything else):
+1. Logic files packed into the `.apworld`
+2. GMod `addons` folder
+3. Archipelago `logic` folder
+4. GMod `data` folder
