@@ -177,7 +177,12 @@ end)
 
 local lastregistration
 
+local unloadfuncs = {}
+
 local function ApAdvRegisterItemHandlers()
+
+	for k,v in ipairs(unloadfuncs) do ProtectedCall(v.OnUnload,v) end
+	unloadfuncs = {}
 
 	local curregistration = CurTime()
 
@@ -366,17 +371,23 @@ local function ApAdvRegisterItemHandlers()
 	end
 
 	local blacklist = slotdata.items_dontload
+	local unloadcnt = 0
 
 	for k,v in ipairs(slotdata.itemsets) do
 		local setpath = "apadventure/itemsets/"..v
 		local setdata = include(setpath..".lua")
 		local setfiles = file.Find(setpath.."/*.lua","LUA")
 		local setbl
+		if isfunction(setdata.OnLoad) then ProtectedCall(setdata.OnLoad,setdata) end
 		if blacklist[v] then setbl = tolookup(blacklist[v]) end
 		for ik,iv in ipairs(setfiles) do
 			if !setbl or !setbl[iv] then
 				RegisterItem(setpath,iv,setdata)
 			end
+		end
+		if isfunction(setdata.OnUnload) then
+			unloadcnt = unloadcnt + 1
+			unloadfuncs[unloadcnt] = setdata
 		end
 	end
 
