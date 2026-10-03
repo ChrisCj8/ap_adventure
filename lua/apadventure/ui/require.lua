@@ -152,7 +152,9 @@ end
 function list:OnRowRightClick(ln,pnl)
 	local tag = pnl:GetValue(1)
 	local menu = DermaMenu()
-	menu:AddOption("#apadventure.editor.require.copytag")
+	menu:AddOption("#apadventure.editor.require.copytag",function()
+		SetClipboardText(tag)
+	end)
 	local taginfo = apAdventure.RequireTags[tag]
 	if taginfo then
 		if taginfo.WSPages then
