@@ -307,5 +307,20 @@ option_presets = {
         "config_groups": {"orange_hub","bhop_pcpie","bhop_phaze"},
 
         "start_item_groups": set(),
+    },
+    "HL2 with HL1 SWEPs": {
+        "item_sets": {"hl1sweps","generic_filler","funny","hl2traps"},
+        "item_cherrypick": {
+            "hl2weps": ["Gravity Gun","Bugbait"]
+        },
+        "ammo_merge": [
+            ['Pistol', '9mmRound', "SMG1"],
+            ['Buckshot', 'BuckshotHL1'],
+            ['357', '357Round'],
+            ['Grenade', 'GrenadeHL1'],
+            ['SMG1_Grenade', 'MP5_Grenade'],
+            ['RPG_Round', 'RPG_Rocket'],
+            ["AR2", "Uranium"]
+        ],
     }
 }
