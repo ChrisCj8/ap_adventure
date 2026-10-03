@@ -199,13 +199,20 @@ concommand.Add("apadv_apsay",function(ply,_,args)
 end)
 
 function APADV.ProcessRequirements(reqs)
-	local games, addons, addonlookup, miscinfo, unknown = {},{},{},{},{}
+	local games, addons, gamelookup, addonlookup, miscinfo, unknown = {},{},{},{},{},{}
 	local info = {
-		addons = addonlookup
+		addons = addonlookup,
+		games = gamelookup
 	}
+
+	local gamelist = engine.GetGames()
 
 	for k,v in ipairs(engine.GetAddons()) do
 		addonlookup[v.wsid] = v
+	end
+
+	for k,v in ipairs(gamelist) do
+		gamelookup[v.folder] = v
 	end
 
 	local tagfuncs = {}
@@ -271,7 +278,7 @@ function APADV.ProcessRequirements(reqs)
 		end
 	end
 
-	for k,v in ipairs(engine.GetGames()) do
+	for k,v in ipairs(gamelist) do
 		if games[v.folder] != nil then
 			games[v.folder] = v.mounted
 		end
