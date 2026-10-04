@@ -8,7 +8,16 @@ AddCSLuaFile("ui/tracker.lua")
 AddCSLuaFile("ui/require.lua")
 AddCSLuaFile("ui/bind.lua")
 AddCSLuaFile("cl/bind.lua")
+AddCSLuaFile("cl/deathlink.lua")
 AddCSLuaFile("ui/mapmismatch.lua")
+
+for k,v in ipairs(file.Find("gamemodes/apadventure/gamemode/ui/binds/*.lua","GAME")) do
+	AddCSLuaFile("gamemodes/apadventure/gamemode/ui/binds/"..v)
+end
+
+for k,v in ipairs(file.Find("gamemodes/apadventure/gamemode/ui/bindpresets/*.lua","GAME")) do
+	AddCSLuaFile("gamemodes/apadventure/gamemode/ui/bindpresets/"..v)
+end
 
 include("player.lua")
 include("shared.lua")
