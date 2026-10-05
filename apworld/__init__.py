@@ -3,7 +3,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type as CompType
 from BaseClasses import Item, ItemClassification, Region, Location, Tutorial
 from Options import OptionError
-from .Options import APADVGameOptions, option_presets
+from .Options import APADVGameOptions, option_presets, option_groups
 from .JsonRule import eval_json_rule, preprocess_json_rule
 from .ImpliedCapabilities import ProcessCapabs
 from .CfgProcessor import ProcessCfgs
@@ -106,6 +106,7 @@ class APADVWebWorld(WebWorld):
         ["ChrisCj"]
     )]
     options_presets = option_presets
+    option_groups = option_groups
 
 processout = ProcessCfgs()
 

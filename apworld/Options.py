@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool, OptionDict, OptionList, FreeText
+from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool, OptionDict, OptionList, FreeText, OptionGroup, ProgressionBalancing, Accessibility
 from schema import Schema, Or
 
 class McGuffinCount(FreeText):
@@ -292,6 +292,41 @@ class APADVGameOptions(PerGameCommonOptions):
     test_mode: TestMode
     #write_debug: WriteDebug
     start_inventory_from_pool: StartInventoryPool
+
+option_groups = [
+    OptionGroup("General",[
+        ProgressionBalancing,
+        Accessibility,
+        McGuffinCount,
+        Skill,
+        CustomParams,
+    ]),
+    OptionGroup("Schmovement",[
+        BunnyHop,
+        BunnyHopLogic,
+        SurfLogic,
+    ]),
+    OptionGroup("Maps",[
+        ConfigGroups,
+        ConfigCherryPick,
+        ConfigBlacklist,
+        StartGroup,
+        StartMap,
+        StartRegion
+    ]),
+    OptionGroup("Items",[
+        ItemSets,
+        ItemCherryPick,
+        ItemBlacklist,
+        StartItemGroups,
+        AmmoMerge,
+        TrapVision
+    ]),
+    OptionGroup("Debugging",[
+        TestMode,
+        GeneratePUML
+    ]),
+]
 
 option_presets = {
     "BHop Sampler": {
