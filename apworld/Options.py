@@ -36,9 +36,9 @@ class Skill(Choice):
 class ConfigGroups(OptionSet):
     """Config Groups to use for generation.
 
-    Map Configs are used by apAdventure to tell the generator what the maps the player wants to play on contain
+    Map configs are used by apAdventure to tell the generator what the maps the player wants to play on contain
     and where the gamemode should place exits, locations and whatever else the config creator wants to include
-    in their Config.
+    in their config.
 
     Configs are organized into groups so maps related to each other (such as maps from the same chapter in HL2)
     can be grouped together and share certain settings.
@@ -55,7 +55,7 @@ singlepickschema = Schema(Or({
     },{}))
 
 class ConfigCherryPick(OptionDict):
-    """This option allows you to cherrypick single maps from a Config Group.
+    """This option allows you to cherrypick single maps from a config group.
 
     Check the options guide for more information on how this option works."""
     display_name = "Config Cherrypicking"
@@ -113,15 +113,15 @@ class StartRegion(FreeText):
     default = ""
 
 class ItemSets(OptionSet):
-    """Item Sets to use for generation.
+    """Item sets to use for generation.
 
-    Similarly to Map Configs, Items related to each other are grouped together in Item Sets.
+    Similarly to map configs, items related to each other are grouped together in item sets.
 
-    Not all Item Sets are enabled by default. If you want to see what sets are available, you can use the
+    Not all item sets are enabled by default. If you want to see what sets are available, you can use the
     "apAdventure - Generate Item Index" tool in your launcher to get a list of all available item sets
     and the items in them.
 
-    The Generator will automatically check which of the items chosen are relevant to progression
+    The generator will automatically check which of the items chosen are relevant to progression
     and remove items that are not logically required if there is not enough space for them.
     This process is not perfect though, the generator just checks if the item can fullfill
     any logic rule, but it doesn't check if there is another item that could also satisfy
@@ -131,7 +131,7 @@ class ItemSets(OptionSet):
     default = {"hl2weps","generic_filler","funny","hl2traps"}
 
 class ItemCherryPick(OptionDict):
-    """This option allows you to cherrypick single items from an Item Set.
+    """This option allows you to cherrypick single items from an item set.
 
     Check the options guide for more information on how this option works."""
     display_name = "Item Cherrypicking"
@@ -139,13 +139,13 @@ class ItemCherryPick(OptionDict):
     schema = singlepickschema
 
 class ItemBlacklist(OptionDict):
-    """This option allows you to blacklist single items from an Item Set.
+    """This option allows you to blacklist single items from an item set.
 
     Check the options guide for more information on how this option works."""
     display_name = "Item Blacklist"
     default = {
         "funny": ["Stalker Scream"]
-	}
+    }
     schema = singlepickschema
 
 class StartItemGroups(OptionSet):
@@ -162,10 +162,10 @@ class StartItemGroups(OptionSet):
     default = {"Pistol"}
 
 class TrapVision(Choice):
-    """Archipelago Items that physically exist in apAdventure will give off particles depending on
+    """Archipelago items that physically exist in apAdventure will give off particles depending on
     what flags have been set on them. This setting controls whether or not the player will be able
     to see these particles on trap items. The "item" option also allows this ability to be enabled
-    after receiving an Item for it."""
+    after receiving an item for it."""
     display_name = "Trap Vision"
     option_never = 1
     option_item = 2
@@ -173,7 +173,7 @@ class TrapVision(Choice):
     default = 2
 
 class CustomParams(OptionDict):
-    """This option allows you to set custom parameters which Item Sets or Map Configs may use for various purposes."""
+    """This option allows you to set custom parameters which item sets or map configs may use for various purposes."""
     display_name = "Custom Parameters"
     default = {
         "hl2_enable_janky_backtracks": False
@@ -235,19 +235,19 @@ class BunnyHopLogic(FreeText):
     default = 0
 
 class SurfLogic(FreeText):
-    """Determines how hard Surfs are allowed to be before they are considered out of logic.
+    """Determines how hard surfs are allowed to be before they are considered out of logic.
 
     This difficulty rating is oriented around Momentum Mods tier system, with 1 being the easiest
     and 10 being the hardest. Although unlike Momentum Mod, apAdventure allows fractional values for
     more granularity.
 
     Setting this to 0, lower or any other value that can not be converted into a number
-    puts all Surfs out of logic."""
+    puts all surfs out of logic."""
     display_name = "Surf Logic"
     default = 0
 
 class GeneratePUML(Toggle):
-    """Generates a PlantUML Diagram showing all of the worlds regions and locations,
+    """Generates a PlantUML diagram showing all of the worlds regions and locations,
     which may be helpful for debugging configs you've made."""
     display_name = "Generate PUML"
 
