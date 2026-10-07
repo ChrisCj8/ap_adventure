@@ -1,4 +1,5 @@
 import typing
+from numbers import Number
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type as CompType
 from BaseClasses import Item, ItemClassification, Region, Location, Tutorial
@@ -329,6 +330,7 @@ class APADVWorld(World):
         self.chosen_maps = maps
 
         chosenisets = options.item_sets
+        filloverride = options.filler_weight_override
 
         items_to_load = dict()
         items_dontload = dict()
@@ -342,7 +344,7 @@ class APADVWorld(World):
         starterpool = dict()
         startweights = dict()
 
-        def register_item(item):
+        def register_item(item,setname):
             #name = item.name
             #if name in self.duplicate_item_names:
             #    duplicate_item_names.add(name)
@@ -356,8 +358,14 @@ class APADVWorld(World):
             if flags != None: item.baseflags = baseflags
 
             if "wgt" in info:
-                self.fillers[name] = info["wgt"]
-                self.filleramt += 1
+                wgt = info["wgt"]
+                if isinstance(wgt, Number) and wgt >= 0:
+                    if setname in filloverride:
+                        setor = filloverride[setname]
+                        if item.name in setor:
+                            wgt = setor[item.name]
+                    self.fillers[name] = wgt
+                    self.filleramt += 1
             if "min" in info and info["min"] > 0:
                 itempool[name] = info["min"]
             if "capab" in info:
@@ -398,7 +406,7 @@ class APADVWorld(World):
                             items_dontload[isetname] = set()
                         items_dontload[isetname].add(item.info["file"])
                         continue
-                    register_item(item)
+                    register_item(item,isetname)
                 self.loadeditemsets.append(isetname)
             else:
                 raise OptionError(f"Slot {self.player_name} tried to add item set {isetname} to their run, which could not be found.{self.cfgprocesserrormsg()}")
@@ -413,7 +421,7 @@ class APADVWorld(World):
                 for iname in picks:
                     if iname in iset.items and not (bl and iname in bl):
                         item = iset.items[iname]
-                        register_item(item)
+                        register_item(item,isetname)
                         load.add(item.info["file"])
                 if load:
                     items_to_load[isetname] = load

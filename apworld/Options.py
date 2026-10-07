@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Visibility, StartInventoryPool, OptionDict, OptionList, FreeText, OptionGroup, ProgressionBalancing, Accessibility
 from schema import Schema, Or
+from numbers import Number
 
 class McGuffinCount(FreeText):
     """Currently, the main goal of apAdventure is to collect all McGuffin items.
@@ -161,6 +162,38 @@ class StartItemGroups(OptionSet):
     display_name = "Starting Item Groups"
     default = {"Pistol"}
 
+class FillerWeightOverride(OptionDict):
+    """You can adjust how likely the generator is to pick certain items when
+    the remaining space in the item pool is being filled here.
+
+    Consult the item index to see which items are filler items,
+    filler items will have their default weight listed next to them.
+    This option has no effect on non-filler items.
+
+    Trying to override weights of items that haven't been loaded will not cause errors.
+    You also don't have to define these for all filler items you've loaded,
+    the defaults here only exist to illustrate how this option should be used."""
+    display_name = "Filler Weight Override"
+    schema = Schema(Or({str:
+        Or({str: Number},{})
+    },{}))
+    default = {
+        "funny": {
+            "Funny": 5,
+            "Stalker Scream": 2
+        },
+        "generic_filler": {
+            "Full Ammo": 10,
+            "Full Restore": 10
+        },
+        "hl2traps": {
+            "Barnacle Trap": 5,
+            "Rollermine Trap": 5,
+            "Manhack Trap": 5,
+            "Headcrab Poison": 5
+        }
+    }
+
 class TrapVision(Choice):
     """Archipelago items that physically exist in apAdventure will give off particles depending on
     what flags have been set on them. This setting controls whether or not the player will be able
@@ -285,6 +318,7 @@ class APADVGameOptions(PerGameCommonOptions):
     item_cherrypick: ItemCherryPick
     item_blacklist: ItemBlacklist
     trap_vision: TrapVision
+    filler_weight_override: FillerWeightOverride
     start_item_groups: StartItemGroups
     custom_parameters: CustomParams
     ammo_merge: AmmoMerge
@@ -318,6 +352,7 @@ option_groups = [
         ItemSets,
         ItemCherryPick,
         ItemBlacklist,
+        FillerWeightOverride,
         StartItemGroups,
         AmmoMerge,
         TrapVision
