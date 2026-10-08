@@ -296,6 +296,16 @@ class TestMode(Toggle):
     """
     display_name =  "Testing Mode"
 
+class InaccessibleWarning(Toggle):
+    """The apworld for apAdventure preprocesses access rules to determine if they can even
+    be fulfilled by the player with their current settings and removes whatever they're
+    attached to if they can't.
+
+    While config makers can use this to have their configs adjust to YAML options,
+    they may unintentionally make things inaccessible because of this, so this option can be
+    used to have the generator write a warning into [seed name]_[slot name]_warnings.txt
+    in the generator output whenever an access rule is determined to be inaccessible."""
+
 #class WriteDebug(Toggle):
 #    """Saves some debug info."""
 #    visibility = Visibility.none
@@ -324,6 +334,7 @@ class APADVGameOptions(PerGameCommonOptions):
     ammo_merge: AmmoMerge
     generate_puml: GeneratePUML
     test_mode: TestMode
+    inaccessible_warning: InaccessibleWarning
     #write_debug: WriteDebug
     start_inventory_from_pool: StartInventoryPool
 
@@ -359,6 +370,7 @@ option_groups = [
     ]),
     OptionGroup("Debugging",[
         TestMode,
+        InaccessibleWarning,
         GeneratePUML
     ]),
 ]

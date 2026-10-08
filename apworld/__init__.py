@@ -510,9 +510,11 @@ class APADVWorld(World):
 
         maps = self.chosen_maps
 
-        groupstartfilter = self.options.start_group
-        mapstartfilter = self.options.start_map
-        regionstartfilter = self.options.start_region
+        options = self.options
+        groupstartfilter = options.start_group
+        mapstartfilter = options.start_map
+        regionstartfilter = options.start_region
+        inaccwarn = options.inaccessible_warning
 
         for groupname,groupmaps in maps.items():
 
@@ -564,16 +566,19 @@ class APADVWorld(World):
 
                 for k,v in map.entrances.items():
                     reg = mapregs[v["reg"]]
+                    name = reg.name+" - "+k
                     access = None
                     if "access" in v:
                         access = preprocess_json_rule(v["access"],self,reg)
                         acctype = access["type"]
                         if acctype == "never":
+                            if inaccwarn:
+                                self.add_warning(f"entrance {name} can never be reached with current options and was removed"+
+                                    f"\n\trule: {v["access"]}\n\tconditions: {reg.conditions or "none"}")
                             continue
                         elif acctype == "always":
                             access = None
                     reg.has_entr = True
-                    name = reg.name+" - "+k
                     entrdata = (k,reg,access)
                     entrs[name] = entrdata
                     reg.onewayins[name] = entrdata
@@ -581,16 +586,19 @@ class APADVWorld(World):
 
                 for k,v in map.exits.items():
                     reg = mapregs[v["reg"]]
+                    name = reg.name+" - "+k
                     access = None
                     if "access" in v:
                         access = preprocess_json_rule(v["access"],self,reg)
                         acctype = access["type"]
                         if acctype == "never":
+                            if inaccwarn:
+                                self.add_warning(f"exit {name} can never be reached with current options and was removed"+
+                                                f"\n\trule: {v["access"]}\n\tconditions: {reg.conditions or "none"}")
                             continue
                         elif acctype == "always":
                             access = None
                     reg.has_exit = True
-                    name = reg.name+" - "+k
                     if name in reg.onewayins:
                         newdata = (k,reg,reg.onewayins[name][2],access)
                         reg.twoways[name] = newdata
@@ -619,7 +627,9 @@ class APADVWorld(World):
                             acctype = acctbl["type"]
                             if acctype == "never":
                                 rule_a = False
-                                self.add_warning(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed")
+                                if inaccwarn:
+                                    self.add_warning(f"access rule between {ik} and {k} can never be fullfilled with current options and was removed"+
+                                                    f"\n\trule: {iv["access"]}\n\tconditions: {reg_a.conditions or "none"}")
                             elif acctype != "always":
                                 rule_a = lambda state, acctbl=acctbl, world=self, region=reg_a: eval_json_rule(acctbl,state,world,region)
                                 #self.debuglog(f"registering access rule for {ik} and {k} with table {acctbl}" )
@@ -630,7 +640,9 @@ class APADVWorld(World):
                                 acctype = acctbl["type"]
                                 if acctype == "never":
                                     rule_b = False
-                                    self.add_warning(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed")
+                                    if inaccwarn:
+                                        self.add_warning(f"access rule between {k} and {ik} can never be fullfilled with current options and was removed"+
+                                                        f"\n\trule: {iv["access"]}\n\tconditions: {reg_b.conditions or "none"}")
                                 elif acctype != "always":
                                     rule_b = lambda state, acctbl=acctbl, world=self, region=reg_b: eval_json_rule(acctbl,state,world,region)
                                     #self.debuglog(f"registering access rule for {k} and {ik} with table {acctbl}" )
@@ -657,6 +669,9 @@ class APADVWorld(World):
                                 acctbl = preprocess_json_rule(iv["access"],self,v)
                                 acctype = acctbl["type"]
                                 if acctype == "never":
+                                    if inaccwarn:
+                                        self.add_warning(f"location {newlocname} can never be reached with current options and was removed"+
+                                                        f"\n\trule: {iv["access"]}\n\tconditions: {v.conditions or "none"}")
                                     continue
                                 elif acctype != "always":
                                     newloc.access_rule = lambda state, acctbl=acctbl, world=self, region=v: eval_json_rule(acctbl,state,world,region)
@@ -668,7 +683,7 @@ class APADVWorld(World):
                         if hasattr(v,"startcandidate"):
                             startcandidates.append(StartRegion(v,map,k))
                         cfgadded = True
-                    else:
+                    elif inaccwarn:
                         self.add_warning(f"Region {v.name} was removed because it was impossible to reach")
 
                 if cfgadded:
