@@ -64,8 +64,12 @@ local capabs = {
 	"FlyingProjectile",
 	"TinyExplosion",
 	"SmallExplosion",
-	"MediumExplosion",
+	"MediumSizeExplosion",
 	"LargeExplosion",
+	"WimpyExplosion",
+	"WeakExplosion",
+	"MediumDamageExplosion",
+	"StrongExplosion",
 	"WeakSpam",
 	"MidSpam",
 	"StrongSpam",
@@ -81,6 +85,12 @@ local capabs = {
 	"TinyOrLargerExplosion",
 	"SmallOrLargerExplosion",
 	"MediumSizeOrLargerExplosion",
+	"WimpyOrStrongerExplosion",
+	"WeakOrStrongerExplosion",
+	"MediumDamageOrStrongerExplosion",
+	"WeakOrWeakerExplosion",
+	"MediumDamageOrWeakerExplosion",
+	"StrongOrWeakerExplosion",
 	"GravityGun"
 }
 
