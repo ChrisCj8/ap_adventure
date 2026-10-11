@@ -105,6 +105,13 @@ class APADVWebWorld(WebWorld):
         "packing_custom_content_en.md",
         "packing_custom_content/en",
         ["ChrisCj"]
+    ),Tutorial(
+        "Capabilities",
+        "An explanation on how apAdventures capability system works.",
+        "English",
+        "capabs_en.md",
+        "capabs/en",
+        ["ChrisCj"]
     )]
     options_presets = option_presets
     option_groups = option_groups
