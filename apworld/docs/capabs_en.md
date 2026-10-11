@@ -6,11 +6,11 @@ Currently, this system employs two different types of tags, capabilities and reg
 
 Capabilities tell the generator what an item is capabable of, while conditions tell it under which conditions these capabilities are available. For example, a shotgun may provide the StrongShortRange capabilitity under the Ammo_Buckshot condition.
 
-Capabilities and conditions can be any arbitrary string. While you should use the ones documented here when appropriate to maximize compatibility with other custom content, you can add your own for your own purposes if you need to. Keep in mind that this also means that you won't receive any warnings if you accidentally make a typo though.
+Capabilities and conditions can be any arbitrary string. While you should use the ones documented here or suggested by the editor UI when appropriate to maximize compatibility with other custom content, you can add your own for your own purposes if you need to. Keep in mind that this also means that you won't receive any warnings if you accidentally make a typo though.
 
 ### Implied Capabilities
 
-Since there are many cases where a certain capability would also imply that an item would also be able to fulfill other capabilities, the generator will automatically add certain capabilities based on other capabilities it already has. The item index will show you what implied capabilities items are able to fulfill on top of their already assigned capabilities.
+Since there are many cases where a certain capability would also imply that an item would be able to fulfill other capabilities, the generator will automatically add certain capabilities based on the ones it already has. The item index will show you what implied capabilities items are able to fulfill on top of their already assigned capabilities.
 
 There is currently no way to make custom capabilities imply other capabilities.
 
