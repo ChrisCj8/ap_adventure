@@ -5,8 +5,8 @@ apdir = Path(user_path("gmod_apadv/"))
 
 def MapIndex(processout):
 
-    mapgroups = processout[4]
-    groupdata = processout[6]
+    mapgroups = processout[3]
+    groupdata = processout[5]
 
     file = apdir.joinpath("mapindex.txt").open("w")
 
