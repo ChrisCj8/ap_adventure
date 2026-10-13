@@ -196,28 +196,32 @@ local EntFilter = {
 	worldspawn=true
 }
 
+function TOOL:FailSound()
+	self:GetWeapon():EmitSound("weapons/pistol/pistol_empty.wav")
+end
+
 function TOOL:LeftClick(tr)
 	local hitent = tr.Entity
-	if !hitent or EntFilter[hitent:GetClass()] then return end
+	if !hitent or EntFilter[hitent:GetClass()] then self:FailSound() return end
 	local op = self:GetOperation()
 	if op == 0 then
-		if !apAdventure.DelMark(hitent,true) then return end
+		if !apAdventure.DelMark(hitent,true) then self:FailSound() return end
 	else
 		local name = hitent:GetName()
-		if !apAdventure.NameDelMark(name,true) then return end
+		if !apAdventure.NameDelMark(name,true) then self:FailSound() return end
 	end
 	return apAdventure.SpoofToolShot(self,tr)
 end
 
 function TOOL:RightClick(tr)
 	local hitent = tr.Entity
-	if !hitent or EntFilter[hitent:GetClass()] or hitent:MapCreationID() == -1 then return end
+	if !hitent or EntFilter[hitent:GetClass()] or hitent:MapCreationID() == -1 then self:FailSound() return end
 	local op = self:GetOperation()
 	if op == 0 then
-		if !apAdventure.DelMark(hitent,false) then return end
+		if !apAdventure.DelMark(hitent,false) then self:FailSound() return end
 	else
 		local name = hitent:GetName()
-		if !apAdventure.NameDelMark(name,false) then return end
+		if !apAdventure.NameDelMark(name,false) then self:FailSound() return end
 	end
 	return apAdventure.SpoofToolShot(self,tr)
 end

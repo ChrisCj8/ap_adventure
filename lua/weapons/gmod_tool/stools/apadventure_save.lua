@@ -19,19 +19,27 @@ if CLIENT then
 end
 
 local EntFilter = {
-	worldspawn=true
+	worldspawn=true,
+	apadventure_entrance_editor=true,
+	apadventure_exit_editor=true,
+	apadventure_location_editor=true,
+	apadventure_start_editor=true,
 }
+
+function TOOL:FailSound()
+	self:GetWeapon():EmitSound("weapons/pistol/pistol_empty.wav")
+end
 
 function TOOL:LeftClick(tr)
 	local hitent = tr.Entity
-	if !hitent or EntFilter[hitent:GetClass()] then return end
-	if !apAdventure.SaveMark(hitent,true) then return end
+	if !hitent or EntFilter[hitent:GetClass()] then self:FailSound() return end
+	if !apAdventure.SaveMark(hitent,true) then self:FailSound() return end
 	return apAdventure.SpoofToolShot(self,tr)
 end
 
 function TOOL:RightClick(tr)
 	local hitent = tr.Entity
-	if !hitent or EntFilter[hitent:GetClass()] then return end
-	if !apAdventure.SaveMark(hitent,false) then return end
+	if !hitent or EntFilter[hitent:GetClass()] then self:FailSound() return end
+	if !apAdventure.SaveMark(hitent,false) then self:FailSound() return end
 	return apAdventure.SpoofToolShot(self,tr)
 end
