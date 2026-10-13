@@ -50,7 +50,10 @@ local function ApAdvItemHandler(slot,id,itemlist)
 	end
 
 	if APADV_CFGITEMHANDLERS[id] then
-		APADV_CFGITEMHANDLERS[id](itemlist)
+		local out = APADV_CFGITEMHANDLERS[id](itemlist)
+		if out == true then
+			APADV_CFGITEMHANDLERS[id] = nil
+		end
 	end
 
 	timer.Start("APAdvTrackerQuery")
