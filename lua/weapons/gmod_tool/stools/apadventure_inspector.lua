@@ -57,12 +57,19 @@ if CLIENT then
 	local drawtexrect = surface.DrawTexturedRect
 	local start3d2d = cam.Start3D2D
 	local end3d2d = cam.End3D2D
+	local texfilt = TEXFILTER.POINT
+	local pushminfilter = render.PushFilterMin
+	local pushmagfilter = render.PushFilterMag
+	local popminfilter = render.PopFilterMin
+	local popmagfilter = render.PopFilterMag
 
 	hook.Add("PreDrawEffects","APAdvInspector",function()
 		if apAdventureHideInspectorInfo then return end
 		local textfacing = apAdventure.TextFacing
 		for k,v in ipairs(inspectorinfo) do
 			start3d2d(v.pos,textfacing,.5)
+				pushminfilter(texfilt)
+				pushmagfilter(texfilt)
 				setmat(v.icon)
 				drawtexrect(-16,-16,32,32)
 				drawtext(v.class..
@@ -73,6 +80,8 @@ if CLIENT then
 					setmat(deletedicon)
 					drawtexrect(-8,-130,16,16)
 				end
+				popminfilter()
+				popmagfilter()
 			end3d2d()
 		end
 

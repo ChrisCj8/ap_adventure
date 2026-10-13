@@ -41,6 +41,11 @@ if CLIENT then
 	local end3d2d = cam.End3D2D
 	local drawtext = draw.DrawText
 	local drawwirebox = render.DrawWireframeBox
+	local texfilt = TEXFILTER.POINT
+	local pushminfilter = render.PushFilterMin
+	local pushmagfilter = render.PushFilterMag
+	local popminfilter = render.PopFilterMin
+	local popmagfilter = render.PopFilterMag
 
 	function ENT:Draw(fl)
 		local textfacing = apAdventure.TextFacing
@@ -48,7 +53,11 @@ if CLIENT then
 		local pos = self:GetPos()
 		local dummy = self:GetIsDummy()
 		start3d2d(pos,textfacing,.5)
+			pushminfilter(texfilt)
+			pushmagfilter(texfilt)
 			drawtext("Region: "..self:GetRegion().."\n Name: "..self:GetLctnName()..( dummy and "\nDUMMY" or ""),"BudgetLabel",0,-100,color_white,TEXT_ALIGN_CENTER)
+			popminfilter()
+			popmagfilter()
 		end3d2d()
 		if dummy then return end
 		drawwirebox(pos,angle_zero,bboxmins,bboxmaxs,color_white)

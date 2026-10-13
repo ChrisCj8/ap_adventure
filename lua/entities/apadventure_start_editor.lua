@@ -28,13 +28,22 @@ if CLIENT then
 	local drawbox = render.DrawWireframeBox
 	local mins, maxs = Vector(-16,-16,0), Vector(16,16,72)
 	local col = Color(50,255,50)
+	local texfilt = TEXFILTER.POINT
+	local pushminfilter = render.PushFilterMin
+	local pushmagfilter = render.PushFilterMag
+	local popminfilter = render.PopFilterMin
+	local popmagfilter = render.PopFilterMag
 
 	function ENT:Draw(fl)
 		self:DrawModel(fl)
 		local pos = self:GetPos()
 		drawbox(pos,angle_zero,mins,maxs,col)
 		start3d2d(pos,apAdventure.TextFacing,.5)
+			pushminfilter(texfilt)
+			pushmagfilter(texfilt)
 			drawtext("Region: "..self:GetRegion(),"BudgetLabel",0,-100,color_white,TEXT_ALIGN_CENTER)
+			popminfilter()
+			popmagfilter()
 		end3d2d()
 	end
 
