@@ -17,9 +17,9 @@ net.Receive("APAdvTrackerReset",function()
 	APADV.CurGroup = netrstring()
 	APADV.TrackerData = {}
 	APADV.GroupLocCount = {}
-	APADV.HintData = {}
 	APADV.SlotLookUp = {}
 	APADV.CurSlot, APADV.CurTeam = netruint(plyint),netruint(plyint)
+	APADV.HintData = {[APADV.CurSlot] = {}}
 	APADV.HintCost = netruint(16)
 	APADV.Hintables = {{},{}}
 	local trackwindow = APADV.TrackWindow
