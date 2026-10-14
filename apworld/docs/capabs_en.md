@@ -61,6 +61,8 @@ Unlike the ranged damage capabilities, these do not automatically imply their we
 
 - __HeliKiller__ - Good for destroying Helicopters, Combine Gunships, etc. (mainly used on the Half-Life RPGs)
 - __Waterproof__ - Put this on a weapon to signify that it can be used underwater. Not necessary on melee weapons.
+- __HitScan__ - For weapons that use hitscan. Does not automatically imply that it can pass grates.
+- __GratePass__ - Is able to attack through or otherwise pass entities/brushes using the CONTENTS_GRATE contents flag (used by most grate materials and wire fence props). Should be combined with other tags. 
 - __AntlionFriendly__ - Makes antlions friendly to you. You probably shouldn't use this on your custom items and just rely on the base bugbait.
 - __AntlionControl__ - Allows antlions to be commanded. You probably shouldn't use this on your custom items and just rely on the base bugbait.
 - __BugbaitTrigger__ - Triggers [`point_bugbait`](https://developer.valvesoftware.com/wiki/Point_bugbait) entities. You probably shouldn't use this on your custom items and just rely on the base bugbait.
