@@ -7,7 +7,7 @@ ITEM.Groups = {
 }
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-	["Ammo_9mmRound"] = {"HitScan","DecentShortRange","WeakMidRange","WimpyLongRange","BulletDamage","WeakDamage","NeverGibDamage"}
+	["Ammo_9mmRound"] = {"HitScan","DecentShortRange","WeakMidRange","WimpyLongRange","BulletDamage","WeakDamage","NeverGibDamage","GratePass"}
 }
 ITEM.StartGroup = { Pistol = 50 }
 

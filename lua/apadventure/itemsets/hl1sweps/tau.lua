@@ -8,7 +8,7 @@ ITEM.Groups = {
 }
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-	["Ammo_Uranium"] = {"EnergyBeamDamage","StrongLongRange","StrongMidRange"}
+	["Ammo_Uranium"] = {"EnergyBeamDamage","StrongLongRange","StrongMidRange","GratePass"}
 }
 
 ITEM.Class = "weapon_hl1_gauss"

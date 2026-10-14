@@ -9,7 +9,7 @@ ITEM.Groups = {
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
 	-- yes, it deals both nevergib and alwaysgib damage for some reason
-	["Ammo_357"] = {"HitScan","StrongShortRange","StrongMidRange","DecentLongRange","BulletDamage","NeverGibDamage","AlwaysGibDamage"}
+	["Ammo_357"] = {"HitScan","StrongShortRange","StrongMidRange","DecentLongRange","BulletDamage","NeverGibDamage","AlwaysGibDamage","GratePass"}
 }
 ITEM.StartGroup = { Magnum = 10 }
 

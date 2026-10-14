@@ -7,7 +7,7 @@ ITEM.Groups = {
 }
 ITEM.MinAmt = 1
 ITEM.ConditionalCapabilities = {
-	["Ammo_Buckshot"] = {"HitScan","StrongShortRange","BulletDamage","BuckshotDamage"}
+	["Ammo_Buckshot"] = {"HitScan","StrongShortRange","BulletDamage","BuckshotDamage","GratePass"}
 }
 ITEM.StartGroup = { Shotgun = 5 }
 
