@@ -298,6 +298,12 @@ local function ApAdvRegisterItemHandlers()
 				end
 			end
 
+			if isfunction(itemtbl.OnLoad) then ProtectedCall(itemtbl.OnLoad,itembtl) end
+			if isfunction(itemtbl.OnUnload) then
+				unloadcnt = unloadcnt + 1
+				unloadfuncs[unloadcnt] = itemtbl
+			end
+
 			local itemcapabs = itemtbl.Capabilities
 			if istable(itemcapabs) then
 				local itemcapablookup = processcapabs(tolookup(itemcapabs))
