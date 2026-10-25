@@ -177,7 +177,87 @@ local function savedatawindow()
 	end
 end
 
+local curpopup
+function APADV.BindPopup(bind,msg)
+	if IsValid(curpopup) then curpopup:Close() end
+	local frame = mkUI("DFrame")
+	curpopup = frame
+	frame:MakePopup()
+	--so people don't notice the frame repostion/resize itself, Hide() stops some other functions from working properly
+	frame:SetPos(-999,-999)
+	frame:SetSize(300,200)
+	frame:SetTitle("#apadventure.bindpopup.title")
+
+	local lblback = mkUI("DPanel",frame)
+	lblback:SetPos(6,30)
+	lblback:SetSize(288,100)
+	lblback:DockPadding(5,5,5,5)
+
+	local msglbl
+	if msg then
+		msglbl = mkUI("DLabel",lblback)
+		msglbl:SetText(msg)
+		msglbl:Dock(TOP)
+		msglbl:DockMargin(0,0,0,5)
+		msglbl:SetDark(true)
+		msglbl:SetWrap(true)
+		msglbl:SetAutoStretchVertical(true)
+	end
+
+	local help = mkUI("DLabel",lblback)
+	help:SetText("#apadventure.bindpopup.help")
+	help:Dock(TOP)
+	help:SetDark(true)
+	help:SetWrap(true)
+	help:SetAutoStretchVertical(true)
+
+	local binder = mkUI("DBinder",frame)
+	binder:SetSize(135,55)
+
+	local function dobind(tgt)
+		local key = binder:GetValue()
+		if key == 0 then return end
+		tgt[key] = bind
+		frame:Close()
+		if IsValid(APADV.BindWindow) then APADV.BindWindow:ReloadBinds() end
+	end
+
+	local runbindbtn = mkUI("DButton",frame)
+	runbindbtn:SetSize(150,25)
+	runbindbtn:SetText("#apadventure.bindpopup.run")
+	function runbindbtn:DoClick() dobind(APADV_RUNBINDS) end
+
+	local glbindbtn = mkUI("DButton",frame)
+	glbindbtn:SetSize(150,25)
+	glbindbtn:SetText("#apadventure.bindpopup.gl")
+	function glbindbtn:DoClick() dobind(APADV_GLBINDS) end
+
+	-- i have no idea why, but doing this with a 0 timer randomly causes it to consider
+	-- the labels to be way taller than they actually are, so i'm using .01 instead
+	timer.Simple(.01,function()
+		if !IsValid(frame) then return end
+		local h = 10 + help:GetTall()
+		if msglbl then
+			h = h + 5 + msglbl:GetTall()
+		end
+		lblback:SetTall(h)
+
+		print("label height",h,help:GetTall())
+		h = h + 35
+
+		binder:SetPos(5,h)
+		runbindbtn:SetPos(145,h)
+		glbindbtn:SetPos(145,h+30)
+
+		h = h+60
+		frame:SetTall(h)
+		frame:SetPos(ScrW()/2-150,ScrH()/2-h/2)
+	end)
+end
+
 local function BindWindow(icon,frame)
+	if IsValid(APADV.BindWindow) then APADV.BindWindow:Close() end
+	APADV.BindWindow = frame
 	frame:SetSizable(true)
 
 	local binder = mkUI("DBinder",frame)
@@ -209,6 +289,10 @@ local function BindWindow(icon,frame)
 
 	bindlistcanvas.LoadBinds = loadbinds
 	loadbinds(bindlistcanvas)
+
+	function frame:ReloadBinds()
+		loadbinds(bindlistcanvas)
+	end
 
 	function glbindbtn:DoClick()
 		local key = binder:GetValue()
