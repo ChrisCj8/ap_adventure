@@ -190,7 +190,7 @@ end
 
 local plymeta = FindMetaTable("Player")
 
-plymeta.ApAdvCollector = true
+plymeta.ApAdvIsCollector = true
 plymeta.ApAdvDoKillFeed = true
 
 APADV_PLYSTATS = APADV_PLYSTATS or {}
