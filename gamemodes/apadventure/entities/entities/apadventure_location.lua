@@ -142,7 +142,10 @@ function ENT:SetupLocation(lctnname)
 	self.LocationName = lctnname
 	APADV_LOCENTS[lctnname] = APADV_LOCENTS[lctnname] or {}
 	APADV_LOCENTS[lctnname][self] = true
-	APADV.LocationInfoRequest(self,lctnname,function(info) self:UpdateInfo(info) end)
+	APADV.LocationInfoRequest(self,lctnname,function(info)
+		if !IsValid(self) then return end
+		self:UpdateInfo(info)
+	end)
 	local locnametoid = APADV_SLOT.location_name_to_id
 	if !locnametoid then return end
 	local id = locnametoid[lctnname]
