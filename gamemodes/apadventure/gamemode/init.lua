@@ -307,6 +307,11 @@ function APADV.ProcessRequirements(reqs)
 	}
 end
 
+function GM:ShutDown()
+	game.SetGlobalState("antlion_allied",GLOBAL_DEAD)
+	game.SetGlobalState("super_phys_gun",GLOBAL_DEAD)
+end
+
 local substr = string.sub
 net.Receive("ApAdvRequirements",function(len,ply)
 	local clreqs = net.ReadString()

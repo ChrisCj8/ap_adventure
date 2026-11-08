@@ -26,11 +26,6 @@ if SERVER then
 		APADV.AntlionFriendly = nil
 		game.SetGlobalState("antlion_allied",oldstate)
 	end
-
-	-- might just have the gamemode always do this
-	hook.Add("ShutDown","APADV_KillAntlionGlobal",function()
-		game.SetGlobalState("antlion_allied",GLOBAL_DEAD)
-	end)
 end
 
 return ITEM
