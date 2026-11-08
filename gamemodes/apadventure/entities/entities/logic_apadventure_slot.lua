@@ -5,13 +5,19 @@ function ENT:Initialize()
 end
 
 local inputs = {
-		SendMapLocation = function(_,_,param)
-			APADV.SendMapLocation(param)
-		end,
-		SendChat = function(_,_,param)
-			APADV_SLOT:SendChatMessage(param)
-		end
-	}
+	SendMapLocation = function(_,_,param)
+		APADV.SendMapLocation(param)
+	end,
+	SendChat = function(_,_,param)
+		APADV_SLOT:SendChatMessage(param)
+	end,
+	UseExit = function(_,_,param)
+		APADV.UseExit(param,false)
+	end,
+	UseExitOrGoHome = function(_,_,param)
+		APADV.UseExit(param,true)
+	end
+}
 
 function ENT:AcceptInput(inName,activator,caller,param)
 	if !APADV_SLOT or !APADV_SLOT.Connected then return end

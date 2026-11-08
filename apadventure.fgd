@@ -11,5 +11,7 @@
 [
 	input SendMapLocation(string) : "Send a location from this map"
 	input SendChat(string) : "Send a chat message to the Archipelago server"
+	input UseExit(string) : "Send players to the entrance connected to the exit of this name if it exists and was connected during generation."
+	input UseExitOrGoHome(string) : "Like UseExit, but sends players back to the start point of their run if the exit named wasn't connected to something or doesn't exist."
 	//input SendDeathLink(string) : "Send a DeathLink signal"
 ]
