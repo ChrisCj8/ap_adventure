@@ -24,16 +24,8 @@ end
 if CLIENT then return end
 
 function ENT:Use(activator,caller,usetype,val)
-	if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][self.ExitName] then
-		local entrtbl = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][self.ExitName]
-		APADV.DoMapTransition(entrtbl.map,entrtbl.group,entrtbl.entr)
-		return
-	elseif APADV_SLOT and APADV_SLOT.Connected then
-		local slotdata = APADV_SLOT.slotData
-		local start = slotdata.startmap
-		local startgr = slotdata.startgroup
-		APADV.DoMapTransition(start,startgr)
-	end
+	local exitn = self.ExitName
+	if exitn then APADV.UseExit(exitn,true) end
 end
 
 function ENT:SetMapIcon(map)

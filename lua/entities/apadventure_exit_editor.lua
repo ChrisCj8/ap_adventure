@@ -11,6 +11,8 @@ DEFINE_BASECLASS("base_gmodentity")
 function ENT:SetupDataTables()
 	self:NetworkVar("String",0,"Region",{KeyName="region",Edit={type="String",waitforenter=true}})
 	self:NetworkVar("String",1,"ExitName",{KeyName="exitname",Edit={type="String",waitforenter=true}})
+	self:NetworkVar("Bool",0,"IsDummy",{KeyName="isdummy",Edit={type="Boolean"}})
+	self:NetworkVar("Bool",1,"RemoveUnconnected",{KeyName="removeunconnected",Edit={type="Boolean"}})
 end
 
 function ENT:Initialize()

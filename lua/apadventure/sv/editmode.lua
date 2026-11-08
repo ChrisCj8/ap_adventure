@@ -236,12 +236,14 @@ function apAdventure.StoreCfg(groupn)
 	local exitnames = {}
 	i=1
 	for k,v in ipairs(ents.FindByClass("apadventure_exit_editor")) do
-		local reg, name = v:GetRegion(), v:GetExitName()
+		local reg, name, isdummy = v:GetRegion(), v:GetExitName(), v:GetIsDummy()
 		exit[i] = {
 			pos = v:GetPos(),
 			ang = v:GetAngles(),
 			reg = reg,
-			name = name
+			name = name,
+			dummy = isdummy or nil,
+			delunconnect = !isdummy and v:GetRemoveUnconnected() or nil
 		}
 		exitnames[name] = true
 		i=i+1
@@ -417,6 +419,8 @@ function apAdventure.LoadCfg(gname,dodelete)
 		ent:SetAngles(v.ang)
 		ent:SetRegion(v.reg)
 		ent:SetExitName(v.name)
+		ent:SetIsDummy(v.dummy)
+		ent:SetRemoveUnconnected(v.delunconnect)
 		ent:Spawn()
 	end
 

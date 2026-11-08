@@ -1,5 +1,5 @@
 VertexLitGeneric {
-	$color2 "[1 1 1]"
+	$basetexture "apadventure/models/exit_editor"
 	//$lightwarptexture "apadventure/models/frame_lightwarp"
 	$selfillum 1
 	$selfillummask "apadventure/models/selfillum_10"

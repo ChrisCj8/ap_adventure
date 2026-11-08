@@ -497,16 +497,23 @@ local function OnRunID(packet)
 		end
 
 		APADV_AMMOMERGE = ammotbl
-		APADV_ENTRANCES = slotdata.connections or {}
+		local connections = slotdata.connections or {}
+		APADV_ENTRANCES = connections
 		APADV_CUSTOMPARAMS = slotdata.customparams or {}
 		APADV_TRAPVISION = slotdata.trapvision == 3 or nil
 
-		if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] then
-			local mapexits = APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]
-			for k,v in pairs(APADV_EXITENTS) do
-				if mapexits[v] then
-					-- the Advanced Color Tool throws errors if this isn't wrapped in a timer
-					timer.Simple(1,function() k:SetMapIcon(mapexits[v].map) end)
+		local curgr = connections[APADV_MAPGROUP]
+		if curgr then
+			local mapexits = curgr[APADV_MAP]
+			if mapexits then
+				for k,v in pairs(APADV_EXITENTS) do
+					print("exitent",k,v,mapexits[v],k.RemoveUnconnected)
+					if mapexits[v] then
+						-- the Advanced Color Tool throws errors if this isn't wrapped in a timer
+						timer.Simple(1,function() k:SetMapIcon(mapexits[v].map) end)
+					elseif k.RemoveUnconnected then
+						k:Remove()
+					end
 				end
 			end
 		end
@@ -717,6 +724,32 @@ function APADV.SendMapLocation(lctn)
 	if !ID then return end
 	APADV_SLOT:SendLocation(ID)
 	return APADV_SLOT.Locations[ID]
+end
+
+function APADV.GetExitInfo(exitn,grn,mapn)
+	if !isstring(exitn) then return end
+	if !grn then grn = APADV_MAPGROUP end
+	if !grn then return end
+	if !mapn then mapn = APADV_MAP or game.GetMap() end
+	local gr = APADV_ENTRANCES and APADV_ENTRANCES[grn or APADV_MAPGROUP]
+	if !gr then return end
+	local map = gr[mapn]
+	if !map then return end
+	return map[exitn]
+end
+
+function APADV.UseExit(exitn,tostart,grn,mapn)
+	local entr = APADV.GetExitInfo(exitn,grn,mapn)
+	if entr then
+		APADV.DoMapTransition(entr.map,entr.group,entr.entr)
+		return true
+	else
+		if !tostart then return false end
+		local slotdata = APADV_SLOT and APADV_SLOT.slotData
+		if slotdata then
+			APADV.DoMapTransition(slotdata.startmap,slotdata.startgroup)
+		end
+	end
 end
 
 timer.Create("APADVLocInfoRequestQueueTimer",1,0,function()

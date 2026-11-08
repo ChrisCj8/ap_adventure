@@ -174,18 +174,27 @@ function APADV.LoadCfg(group)
 
 	APADV_EXITENTS = {}
 
+	local exitinfo = APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP]
+
 	for k,v in pairs(cfg.exit) do
-		local exit = ents.Create("apadventure_exit")
-		exit:SetPos(v.pos)
-		exit:SetAngles(v.ang)
-		exit.ExitName = v.name
-		exit:Spawn()
-		APADV_EXITENTS[exit] = v.name
-		if APADV_ENTRANCES and APADV_ENTRANCES[APADV_MAPGROUP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP] and APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name] then
-			timer.Simple(2,function()
-				if !IsValid(exit) then return end
-				exit:SetMapIcon(APADV_ENTRANCES[APADV_MAPGROUP][APADV_MAP][v.name].map)
-			end)
+		if !v.dummy then
+			local curexitinfo = exitinfo and exitinfo[v.name]
+			local delunconnect = v.delunconnect
+			if !(delunconnect and exitinfo and !curexitinfo) then
+				local exit = ents.Create("apadventure_exit")
+				exit:SetPos(v.pos)
+				exit:SetAngles(v.ang)
+				exit.ExitName = v.name
+				exit:Spawn()
+				APADV_EXITENTS[exit] = v.name
+				if curexitinfo then
+					timer.Simple(2,function()
+						if !IsValid(exit) then return end
+						exit:SetMapIcon(curexitinfo.map)
+					end)
+				end
+				if !curexitinfo and delunconnect then exit.RemoveUnconnected = true end
+			end
 		end
 	end
 
