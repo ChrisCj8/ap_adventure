@@ -22,5 +22,10 @@ local inputs = {
 function ENT:AcceptInput(inName,activator,caller,param)
 	if !APADV_SLOT or !APADV_SLOT.Connected then return end
 	local infunc = inputs[inName]
-	if infunc then infunc(activator,caller,param) end
+	if infunc then
+		infunc(activator,caller,param)
+		return true
+	else
+		return false
+	end
 end
